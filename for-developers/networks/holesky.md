@@ -1,0 +1,14 @@
+# Holesky
+
+**Stakewise App:** [https://app.stakewise.io/?networkId=holesky](https://app.stakewise.io/?networkId=holesky)
+
+**Faucets:**
+
+* [holesky-faucet.pk910.de](https://holesky-faucet.pk910.de/)
+* [QuickNode Faucet](https://faucet.quicknode.com/ethereum/holesky)
+* [Chainstack Faucet](https://faucet.chainstack.com/holesky-faucet)
+* [Automata Holesky Faucet](https://holeskyfaucet.io/)
+
+### Contracts
+
+<table><thead><tr><th width="290">Contract Name</th><th>Address</th></tr></thead><tbody><tr><td>VaultsRegistry</td><td><code>0xAa773c035Af95721C518eCd8250CadAC0AAB7ed0</code></td></tr><tr><td>Keeper</td><td><code>0xB580799Bf7d62721D1a523f0FDF2f5Ed7BA4e259</code></td></tr><tr><td>DepositDataRegistry</td><td><code>0xf25f9A254F38aF10Dc352bF8F446Dc09a820ca76</code></td></tr><tr><td>EthValidatorsChecker</td><td><code>0x23FCd08f2e85f765d329027AB6D4323a0BC057A7</code></td></tr><tr><td>EthGenesisVault</td><td><code>0xf42cEAFa21Beb670573f32C31485E84233AFDB6b</code></td></tr><tr><td>EthVaultFactory</td><td><code>0xd68ef965D4E32b99Fd2D014Fc35304f3C273277E</code></td></tr><tr><td>EthPrivVaultFactory</td><td><code>0x09fD091483d64b3b9d5474F374ddFE6039F79aAd</code></td></tr><tr><td>EthBlocklistVaultFactory</td><td><code>0x473a94aBe8f173cac48A6213f61335E21B913875</code></td></tr><tr><td>EthErc20VaultFactory</td><td><code>0x10C5066FB5DA1C0D7eb189DE4dfA26d23e8e4aDa</code></td></tr><tr><td>EthPrivErc20VaultFactory</td><td><code>0x5da7d1De2e84047De2A7988a7E01B494d54284e7</code></td></tr><tr><td>EthBlocklistErc20VaultFactory</td><td><code>0x3A945FD94A1d810B5e1c4536747F0de358d32854</code></td></tr><tr><td>EthRestakeVaultFactory</td><td><code>0x390C320Ae2B001C7CB31A690e2500b55313aC986</code></td></tr><tr><td>EthRestakePrivVaultFactory</td><td><code>0x2a7FBFAaa33CFDB9E0EB3eb3F6aB01eA985354F2</code></td></tr><tr><td>EthRestakeBlocklistVaultFactory</td><td><code>0x9e345cFa4A00aA2714264E9072800B89787aa826</code></td></tr><tr><td>EthRestakeErc20VaultFactory</td><td><code>0x67E134aa61ee3903665a8045EC32886bfdf0B2B5</code></td></tr><tr><td>EthRestakePrivErc20VaultFactory</td><td><code>0x860c75A594966f78fbd7c07D1748219CE9c42c39</code></td></tr><tr><td>EthRestakeBlocklistErc20VaultFactory</td><td><code>0xd14013F989825037196089A498E8b7D3763B8695</code></td></tr><tr><td>SharedMevEscrow</td><td><code>0xc98F25BcAA6B812a07460f18da77AF8385be7b56</code></td></tr><tr><td>OsToken</td><td><code>0xF603c5A3F774F05d4D848A9bB139809790890864</code></td></tr><tr><td>OsTokenConfig</td><td><code>0x191599BAF9ad40Ae28EeD7ee6F5C38B5325746E7</code></td></tr><tr><td>OsTokenVaultController</td><td>0x7BbC1733ee018f103A9a9052a18fA9273255Cf36</td></tr><tr><td>PriceFeed</td><td><code>0xe31FAf135A6047Cbe595F91B4b6802cDB9B46E2b</code></td></tr><tr><td>RewardSplitterFactory</td><td><code>0x7Fcb1857011BAF51003018e9299deE9012de0967</code></td></tr><tr><td>CumulativeMerkleDrop</td><td><code>0x6737277a4A9071AF88cCa91042d77b4237f368C4</code></td></tr></tbody></table>

@@ -1,0 +1,94 @@
+---
+description: Get started with Vaults using our how-to guides
+cover: ../.gitbook/assets/Frame 27513376 (1).png
+coverY: 0
+---
+
+# Running a Vault
+
+StakeWise V3 enables you to launch your own staking environment, called Vault, and keep the stake in the Vault liquid with osETH, a liquid staking token of StakeWise.
+
+Vaults architecture can be used by solo stakers to access liquid staking, and by individuals and organizations to stake on their terms and offer liquid staking to others.
+
+<table><thead><tr><th width="283">Use case</th><th>Recommended settings</th></tr></thead><tbody><tr><td><strong>Liquid solo staking</strong></td><td>100K ETH capacity, 0% fee, no Vault token, Private Vault, Smoothing Pool enabled</td></tr><tr><td><strong>Community staking pool</strong> </td><td>Capacity and fee according to the business plan, no Vault token, Public Vault, Smoothing Pool enabled</td></tr><tr><td><strong>Liquid staking offered by a node operator</strong></td><td>Capacity and fee according to the business plan, no Vault token, Private Vault for each customer, Smoothing Pool enabled/disabled based on compliance needs</td></tr><tr><td><strong>Staking service with own LST</strong></td><td>Capacity and fee according to the business plan, Vault token, Public Vault, Smoothing Pool enabled/disabled based on compliance needs</td></tr><tr><td><strong>Staking service without LST</strong></td><td>Capacity and fee according to the business plan, no Vault token, Public Vault, Smoothing Pool enabled/disabled, osETH access disabled</td></tr></tbody></table>
+
+If you didn't find your use case for a Vault above, please [reach out to the StakeWise team](mailto:info@stakewise.io) for a personal consultation.&#x20;
+
+Below you can explore the guides for launching and running a Vault with StakeWise.&#x20;
+
+<details>
+
+<summary>Creating your Vault</summary>
+
+A Vault is a customizable smart contract that can be deployed by anyone to stake their own capital and/or offer staking to others, all in a non-custodial way.&#x20;
+
+Each Vault is isolated from others and relies on its own set of validators to produce rewards on the consensus layer. However, a Vault may participate in MEV smoothing to avoid volatility in the execution layer earnings.&#x20;
+
+Staked ETH in any Vault can be made liquid by minting osETH, a liquid staking token.
+
+[<mark style="color:blue;">Read more about Vaults -></mark>](../protocol-overview-in-depth/vaults.md)&#x20;
+
+### How to create a Vault&#x20;
+
+1. Head to the [Operate](https://app.stakewise.io/operate) page in the StakeWise dApp and connect your wallet.
+2. Press on the Create Vault button.
+3. Configure your Vault by setting its parameters according to your needs and press Continue. _**These parameters cannot be changed in the future**_.
+4. Choose whether you would like to join a Smoothing Pool or collect only Personal MEV earnings and press Continue. _**This choice cannot be changed in the future**_.
+5. Add branding to your Vault by specifying the name, logo, and description of the Vault and press Continue.
+6. Review your choices in the Summary section and press Create Vault to deploy your Vault.
+
+</details>
+
+<details>
+
+<summary>Configuring StakeWise Operator Service</summary>
+
+Each Vault requires a node operator, or set of node operators, to stake the ETH deposited into the Vault, with each operator required to run StakeWise Operator Service. The service is designed to run seamlessly alongside any node set-up, giving operators the freedom to run their preferred execution/consensus clients, MEV relay, and distributed validator technology. The Operator Service is responsible for the creation of validators and the distribution of validator exit messages to the Oracle Network, enabling the automatic exiting of validators when required.
+
+Before validators can be created within a Vault, a deposit data file must be uploaded to the Vault. This file contains the pre-generated public validator keys from the operator(s), with the order of the validator keys in the file determining the order in which validators are created. A new deposit data file can be uploaded at any point in time to override any unused validator keys via the Vault settings, allowing new node operators to be easily added to the operator set.&#x20;
+
+Check out the [full guide](https://docs.stakewise.io/for-operators/operator-service) to getting your node connected to your Vault with StakeWise Operator Service and the Vault deposit data file. For more information on the role of Operator Service within StakeWise V3, visit [here](../protocol-overview-in-depth/vaults.md#stakewise-operator-service).
+
+</details>
+
+<details>
+
+<summary>Managing your Vault</summary>
+
+Some parameters of your Vault, like branding and whitelist, are configurable even after the Vault was created.&#x20;
+
+[<mark style="color:blue;">Read more about whitelist -></mark>](../protocol-overview-in-depth/vaults.md#whitelist)&#x20;
+
+### **How to change Vault branding**
+
+1. Open your Vault's page and press the Settings button.
+2. Edit the title, description, and logo of your Vault as desired.
+3. Press Save to confirm changes.
+
+### How to manage whitelist
+
+1. Open your Vault's page and press the Vault access button.
+2. Press Add account, insert the wallet address you want to whitelist, and press on the checkmark icon.
+3. Repeat step 2 for as many addresses as you need.
+4. If you need to remove an address from the whitelist, click on the trash icon next to it. Press on the cross icon to undo removal.&#x20;
+5. Press Save to confirm changes to the whitelist.
+6. Confirm the transaction to change the whitelist in your wallet.&#x20;
+7. Once the transaction is confirmed on the blockchain, your changes will come into effect.
+
+</details>
+
+<details>
+
+<summary>Adding more keys</summary>
+
+Full guide coming up! In the meantime, please refer to the [For operators](broken-reference) section.
+
+</details>
+
+<details>
+
+<summary>Verifying your Vault</summary>
+
+More details to follow, stay tuned!
+
+</details>

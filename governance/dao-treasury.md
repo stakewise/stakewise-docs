@@ -1,3 +1,9 @@
+---
+description: Learn more about the Treasury
+cover: ../.gitbook/assets/Frame 27513376 (1).png
+coverY: 0
+---
+
 # DAO Treasury
 
 DAO Treasury ([**0x144a98cb1CdBb23610501fE6108858D9B7D24934**](https://gnosis-safe.io/app/#/safes/0x144a98cb1CdBb23610501fE6108858D9B7D24934)) is a [Gnosis Safe](https://gnosis-safe.io/) with a committee of 7 persons and a [SafeSnap Module](https://docs.snapshot.org/user-guides/plugins/safesnap-reality) that allows the submission of transactions on behalf of the governance token holders.

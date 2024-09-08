@@ -6,7 +6,7 @@
 
 * [Staking](guides/staking.md)
 * [Running a Vault](guides/running-a-vault.md)
-* [osETH](guides/oseth.md)
+* [osToken](guides/ostoken.md)
 * [DeFi](guides/defi/README.md)
   * [SWISE-ETH Liquidity Pool](guides/defi/swise-eth-liquidity-pool.md)
 * [StakeWise V2](guides/stakewise-v2/README.md)
@@ -22,7 +22,7 @@
 
 * [Introduction](protocol-overview-in-depth/introduction.md)
 * [Vaults](protocol-overview-in-depth/vaults.md)
-* [osETH](protocol-overview-in-depth/oseth.md)
+* [osToken](protocol-overview-in-depth/ostoken.md)
 * [Fees](protocol-overview-in-depth/fees.md)
 * [Oracles](protocol-overview-in-depth/oracles.md)
 

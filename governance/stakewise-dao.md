@@ -1,3 +1,9 @@
+---
+description: Learn the basics of StakeWise DAO governance
+cover: ../.gitbook/assets/Frame 27513376 (1).png
+coverY: 0
+---
+
 # StakeWise DAO
 
 ## Community-first approach

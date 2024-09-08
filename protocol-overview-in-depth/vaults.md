@@ -38,7 +38,7 @@ Amounts less than 32 ETH that are accumulated from new deposits and earned rewar
 
 High amount of unbonded ETH relative to the Vault's total value of staked ETH can cause a dilution in Vault APY, because ETH rewards are distributed among more ETH than what is actively being used for validation. To optimize for performance, StakeWise may use unbonded ETH to process osETH redemptions and liquidations.&#x20;
 
-[<mark style="color:blue;">Read more about osETH redemptions -></mark>](ostoken.md#redeemable-for-eth)
+[<mark style="color:blue;">Read more about osETH redemptions -></mark>](https://docs.stakewise.io/protocol-overview-in-depth/ostoken#redeemable-for-eth-or-gno)
 
 **Unstaking and exit queue**
 
@@ -70,7 +70,7 @@ Amounts less than 1 GNO that are accumulated from new deposits and earned reward
 
 High amount of unbonded GNO relative to the Vault's total value of staked GNO can cause a dilution in Vault APY, because GNO rewards are distributed among more GNO than what is actively being used for validation. To optimize for performance, StakeWise may use unbonded GNO to process osGNO redemptions and liquidations.&#x20;
 
-[<mark style="color:blue;">Read more about osGNO redemptions -></mark>](ostoken.md#redeemable-for-eth)
+[<mark style="color:blue;">Read more about osGNO redemptions -></mark>](https://docs.stakewise.io/protocol-overview-in-depth/ostoken#redeemable-for-eth-or-gno)
 
 **Unstaking and exit queue**
 
@@ -90,13 +90,13 @@ Note that users who requested to unstake GNO from a Vault and were placed into t
 {% tab title="osETH" %}
 Stake in any Vault can be made liquid by minting osETH, a liquid staking token. osETH represents ETH staked in Vaults and earns ETH rewards that accrue from their validators.
 
-[<mark style="color:blue;">Read our guide about minting osETH from Vaults -></mark>](../guides/ostoken.md#minting-oseth-from-vaults-to-start-liquid-staking)&#x20;
+[<mark style="color:blue;">Read our guide about minting osETH from Vaults -></mark> ](https://docs.stakewise.io/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)
 {% endtab %}
 
 {% tab title="osGNO" %}
 Stake in any Vault can be made liquid by minting osGNO, a liquid staking token. osGNO represents GNO staked in Vaults and earns GNO rewards that accrue from their validators.
 
-[<mark style="color:blue;">Read our guide about minting osGNO from Vaults -></mark>](../guides/ostoken.md#minting-oseth-from-vaults-to-start-liquid-staking)&#x20;
+[<mark style="color:blue;">Read our guide about minting osGNO from Vaults -></mark>](https://docs.stakewise.io/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)&#x20;
 {% endtab %}
 {% endtabs %}
 

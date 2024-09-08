@@ -28,8 +28,6 @@ Explore the fee structure of StakeWise V3 below.&#x20;
 
 ### Vault staking fee
 
-{% tabs %}
-{% tab title="" %}
 Every Vault charges stakers its own staking fee, applied to the network rewards earned by the Vault's validators.&#x20;
 
 The fee can range from 0% to 100% of the network rewards. The fee level is set by the Vault creator at the moment of Vault's deployment and cannot be changed after the fact.&#x20;
@@ -41,8 +39,6 @@ The fee is automatically deducted when rewards are distributed, so the amount of
 StakeWise DAO does not charge Vault creators or stakers for the use of Vaults. Instead, Vault infrastructure is provided as a public good.
 
 Stakers must familiarize themselves with the fee set by the Vault in which they plan to stake before depositing the funds.&#x20;
-{% endtab %}
-{% endtabs %}
 
 ### osToken staking fee
 

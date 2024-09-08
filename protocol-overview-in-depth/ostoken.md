@@ -182,7 +182,7 @@ At any time, the value of osETH that can be minted by a staker will not exceed 9
 
 _Example_: a user staked 100 ETH in the Vault. At 1.05 ETH per osETH exchange rate and the 90% minting threshold, the maximum amount of osETH a staker can mint is 100 \* 90% / 1.05 = 85.71429 osETH. The maximum value of osETH minted in this case is 100 ETH \* 90% = 90 ETH, which fits the minting threshold requirement.&#x20;
 
-[<mark style="color:blue;">Read our guide about minting osETH from a Vault -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)
+[<mark style="color:blue;">Read our guide about minting osETH from a Vault -></mark>](https://docs.stakewise.io/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)
 {% endtab %}
 
 {% tab title="osGNO" %}
@@ -202,7 +202,7 @@ At any time, the value of osGNO that can be minted by a staker will not exceed 9
 
 _Example_: a user staked 100 GNO in the Vault. At 1.05 GNO per osGNO exchange rate and the 90% minting threshold, the maximum amount of osGNO a staker can mint is 100 \* 90% / 1.05 = 85.71429 osGNO. The maximum value of osGNO minted in this case is 100 GNO \* 90% = 90 GNO, which fits the minting threshold requirement.&#x20;
 
-[<mark style="color:blue;">Read our guide about minting osGNO from a Vault -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)
+[<mark style="color:blue;">Read our guide about minting osGNO from a Vault -></mark>](https://docs.stakewise.io/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)
 {% endtab %}
 {% endtabs %}
 
@@ -279,7 +279,7 @@ Outperformance is related to charging lower than market fees, excellent attestat
 
 A sudden deterioration in position health may signal a loss of ETH by the Vault due to slashing or MEV theft when using Smoothing Pool. In situations where a staker's position health in the Vault has suddenly deteriorated, StakeWise recommends burning any minted osETH and unstaking from the Vault.&#x20;
 
-[<mark style="color:blue;">Read our guide about maintaining osETH position health -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#maintaining-a-healthy-ostoken-position)
+[<mark style="color:blue;">Read our guide about maintaining osETH position health -></mark>](https://docs.stakewise.io/guides/ostoken#maintaining-a-healthy-ostoken-position)
 {% endtab %}
 
 {% tab title="osGNO" %}
@@ -316,7 +316,7 @@ Outperformance is related to charging lower than market fees, excellent attestat
 
 A sudden deterioration in position health may signal a loss of GNO by the Vault due to slashing or MEV theft when using Smoothing Pool. In situations where a staker's position health in the Vault has suddenly deteriorated, StakeWise recommends burning any minted osGNO and unstaking from the Vault.&#x20;
 
-[<mark style="color:blue;">Read our guide about maintaining osGNO position health -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#maintaining-a-healthy-ostoken-position)
+[<mark style="color:blue;">Read our guide about maintaining osGNO position health -></mark>](https://docs.stakewise.io/guides/ostoken#maintaining-a-healthy-ostoken-position)
 {% endtab %}
 {% endtabs %}
 
@@ -340,7 +340,7 @@ Amount of ETH that can be unstaked = amount of ETH staked - (amount of osETH min
 
 _Example:_ a user has 100 ETH staked in a Vault and 50 osETH minted. At an exchange rate of 1.05 ETH/osETH, the value of minted osETH is 52.5 ETH, so the user's minted osETH value is 52.5/100 = 52.5% of the staked ETH value, making their position healthy. The user must maintain position health at a healthy level, so the maximum amount of ETH that can be unstaked is 100 - (52.5 / 0.9) = 41.667 ETH. To confirm, the value of minted osETH relative to the value of staked ETH after unstaking will be 52.5 / (100-41.667) = 0.9, i.e. the required 90%.&#x20;
 
-[<mark style="color:blue;">Read our guide about burning osETH in the Vault -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#burning-ostoken-to-stop-liquid-staking)
+[<mark style="color:blue;">Read our guide about burning osETH in the Vault -></mark>](https://docs.stakewise.io/guides/ostoken#burning-ostoken-to-stop-liquid-staking)
 {% endtab %}
 
 {% tab title="osGNO" %}
@@ -360,7 +360,7 @@ Amount of GNO that can be unstaked = amount of GNO staked - (amount of osGNO min
 
 _Example:_ a user has 100 GNO staked in a Vault and 50 osGNO minted. At an exchange rate of 1.05 GNO/osGNO, the value of minted osGNO is 52.5 GNO, so the user's minted osGNO value is 52.5/100 = 52.5% of the staked GNO value, making their position healthy. The user must maintain position health at a healthy level, so the maximum amount of GNO that can be unstaked is 100 - (52.5 / 0.9) = 41.667 GNO. To confirm, the value of minted osGNO relative to the value of staked GNO after unstaking will be 52.5 / (100-41.667) = 0.9, i.e. the required 90%.&#x20;
 
-[<mark style="color:blue;">Read our guide about burning osGNO in the Vault -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#burning-ostoken-to-stop-liquid-staking)
+[<mark style="color:blue;">Read our guide about burning osGNO in the Vault -></mark>](https://docs.stakewise.io/guides/ostoken#burning-ostoken-to-stop-liquid-staking)
 {% endtab %}
 {% endtabs %}
 
@@ -388,7 +388,7 @@ The 91.5% level for initiating redemptions is known as the **redemption threshol
 
 Note that users always have the ability to improve their position health to avoid redemption.
 
-[<mark style="color:blue;">Read our guide about maintaining a healthy osETH position -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#maintaining-a-healthy-ostoken-position)
+[<mark style="color:blue;">Read our guide about maintaining a healthy osETH position -></mark>](https://docs.stakewise.io/guides/ostoken#maintaining-a-healthy-ostoken-position)
 
 There is a limit to how much osETH can be burned from any given osETH position. This amount is defined by the amount of osETH that must be redeemed in order to bring a user's osETH position health back to a healthy level (90%). Redemptions also don't incur any fees, have no economic impact on the users in Vaults, and don't expose those who redeem osETH to adverse Vault performance or slashing.
 
@@ -426,7 +426,7 @@ The 91.5% level for initiating redemptions is known as the **redemption threshol
 
 Note that users always have the ability to improve their position health to avoid redemption.
 
-[<mark style="color:blue;">Read our guide about maintaining a healthy osGNO position -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#maintaining-a-healthy-ostoken-position)
+[<mark style="color:blue;">Read our guide about maintaining a healthy osGNO position -></mark>](https://docs.stakewise.io/guides/ostoken#maintaining-a-healthy-ostoken-position)
 
 There is a limit to how much osGNO can be burned from any given osGNO position. This amount is defined by the amount of osGNO that must be redeemed in order to bring a user's osGNO position health back to a healthy level (90%). Redemptions also don't incur any fees, have no economic impact on the users in Vaults, and don't expose those who redeem osGNO to adverse Vault performance or slashing.
 
@@ -458,7 +458,7 @@ The 92% threshold at which the osETH position enters a liquidation is set by the
 
 Note that users always have the ability to improve their position health to avoid liquidation.
 
-[<mark style="color:blue;">Read our guide about maintaining a healthy osETH position -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#maintaining-a-healthy-ostoken-position)
+[<mark style="color:blue;">Read our guide about maintaining a healthy osETH position -></mark>](https://docs.stakewise.io/guides/ostoken#maintaining-a-healthy-ostoken-position)
 
 Liquidators who close others' osETH positions receive the underlying value of osETH they burned plus a 1% liquidation premium in ETH from the Vault. StakeWise Oracles automatically exit enough validators in the Vault to facilitate the liquidation of unhealthy positions. Exited ETH will be used for returning the underlying value of osETH burned by the liquidators and payment of the 1% liquidation premium. Mechanically, this means liquidators can liquidate a position as soon as there is unbonded ETH in the Vault.&#x20;
 
@@ -488,7 +488,7 @@ The 92% threshold at which the osGNO position enters a liquidation is set by the
 
 Note that users always have the ability to improve their position health to avoid liquidation.
 
-[<mark style="color:blue;">Read our guide about maintaining a healthy osGNO position -></mark>](https://app.gitbook.com/o/-MJlSwyxlqvKDxNEUb8O/s/kfJLRvD7S8uv8HOni4t4/\~/changes/139/guides/ostoken#maintaining-a-healthy-ostoken-position)
+[<mark style="color:blue;">Read our guide about maintaining a healthy osGNO position -></mark>](https://docs.stakewise.io/guides/ostoken#maintaining-a-healthy-ostoken-position)
 
 Liquidators who close others' osGNO positions receive the underlying value of osGNO they burned plus a 1% liquidation premium in GNO from the Vault. StakeWise Oracles automatically exit enough validators in the Vault to facilitate the liquidation of unhealthy positions. Exited GNO will be used for returning the underlying value of osGNO burned by the liquidators and payment of the 1% liquidation premium. Mechanically, this means liquidators can liquidate a position as soon as there is unbonded GNO in the Vault.&#x20;
 

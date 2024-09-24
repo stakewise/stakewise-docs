@@ -46,6 +46,7 @@
 
 * [Create a Vault](for-developers/create-a-vault.md)
 * [Stake](for-developers/stake.md)
+* [Unstake](for-developers/unstake.md)
 * [Oracles](for-developers/oracles.md)
 * [Contributions](for-developers/contributions.md)
 * [Networks](for-developers/networks/README.md)

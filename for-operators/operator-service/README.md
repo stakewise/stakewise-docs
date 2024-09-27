@@ -34,6 +34,25 @@ Ensure your execution node is fully synced and running. Any execution client tha
 * [Besu](https://launchpad.ethereum.org/en/besu) (Ethereum)
 * [Erigon](https://launchpad.ethereum.org/en/erigon) (Ethereum, Gnosis)
 * [Geth](https://launchpad.ethereum.org/en/geth) (Ethereum)
+* [Reth](https://github.com/paradigmxyz/reth) (Ethereum)
+
+**Special configuration for Erigon and Reth**
+
+{% tabs %}
+{% tab title="Reth" %}
+The required setting in the `reth.toml` is:
+
+```
+[prune.segments.receipts_log_filter.0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5]
+before = 18470089
+```
+{% endtab %}
+
+{% tab title="Erigon" %}
+The required flags for Erigon:\
+`erigon --prune=receipts --prune.to=18470089`
+{% endtab %}
+{% endtabs %}
 
 #### Consensus client
 

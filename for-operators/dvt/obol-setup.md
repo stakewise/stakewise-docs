@@ -2,6 +2,7 @@
 description: >-
   Setting Up a Distributed Validator Cluster with Obol Network and StakeWise
   Vaults
+hidden: true
 ---
 
 # Obol Setup

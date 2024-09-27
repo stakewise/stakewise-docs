@@ -41,6 +41,7 @@
 * [DVT](for-operators/dvt/README.md)
   * [Obol Setup](for-operators/dvt/obol-setup.md)
   * [SSV Setup](for-operators/dvt/ssv-setup.md)
+  * [Running operator with DVT](for-operators/dvt/running-operator-with-dvt.md)
 
 ## For developers
 

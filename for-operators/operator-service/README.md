@@ -58,25 +58,21 @@ You must have a deployed Vault. You can create a new Vault or use an existing on
 You can find the vault address either in the URL bar or in the "Contract address" field by scrolling to the "Details" at the bottom of the page. The vault address is used in the following sections.
 {% endhint %}
 
-<details>
-
-<summary>Install Operator Service</summary>
+### Install Operator Service
 
 Operator Service can be run via a binary, docker image, deployed on a Kubernetes cluster using the Operator Helm Chart, or built from source. Decide on your preferred method and follow the respective instructions below.
 
-#### Binary
-
+{% tabs %}
+{% tab title="Binary" %}
 Head to the [releases page](https://github.com/stakewise/v3-operator/releases) to find the latest version of Operator Service. Identify the binary file specific to your node hardware, download and decompress it.
 
 You will execute Operator Service commands from within the `v3-operator` folder using the below format (note that the use of flags is optional):
 
-```bash
+```
 ./operator COMMAND --flagA=123 --flagB=xyz
 ```
 
-Head to [Prepare Operator Service](https://docs.stakewise.io/for-operators/operator-service#prepare-operator-service) for the next step.
-
-#### Install script (Linux and macOS)
+**Install script (Linux and macOS)**
 
 To install a binary for the latest release, run:
 
@@ -95,17 +91,9 @@ If you want to install a specific version to a custom location, run:
 ```bash
 curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
 ```
+{% endtab %}
 
-You will execute Operator Service commands using the below format (note that the use of flags is optional):
-
-```bash
-operator COMMAND --flagA=123 --flagB=xyz
-```
-
-Head to [Prepare Operator Service](https://docs.stakewise.io/for-operators/operator-service#prepare-operator-service) for the next step.
-
-#### Docker Image
-
+{% tab title="Docker Image" %}
 _In the context of running an Operator Service through Docker, it is crucial to ensure that the `--data-dir` flag is used in all calls. This flag provides a directory path where essential data for the Operator Service is read from or written to, allowing for a persistent data storage mechanism across Docker container instances._
 
 Pull the latest docker operator docker image:
@@ -132,11 +120,9 @@ src/main.py COMMAND \
 --flagA=123 \
 --flagB=xyz
 ```
+{% endtab %}
 
-Head to [Prepare Operator Service](https://docs.stakewise.io/for-operators/operator-service#prepare-operator-service) for the next step.
-
-#### Source Files
-
+{% tab title="Source Files" %}
 Build requirements:
 
 * [Python 3.10+](https://www.python.org/downloads/)
@@ -153,34 +139,36 @@ You will execute Operator Service commands from within the `v3-operator` folder 
 ```bash
 PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
 ```
+{% endtab %}
 
-Head to [Prepare Operator Service](https://docs.stakewise.io/for-operators/operator-service#prepare-operator-service) for the next step.
-
-#### Kubernetes (advanced)
-
+{% tab title="Kubernetes (advanced)" %}
 A separate guide runs through the set-up of Operator Service via Kubernetes, designed to run large numbers of validators (up to 10,000). Visit the [Kubernetes setup](https://docs.stakewise.io/for-operators/kubernetes-staking-setup) for more details.
+{% endtab %}
+{% endtabs %}
 
-</details>
-
-<details>
-
-<summary>Prepare Operator Service</summary>
+### Prepare Operator Service
 
 In order to run Operator Service, you must first create keystores and deposit data file for your Vault's validators, and set up a hot wallet for Operator Service to handle validator registrations.
 
 Operator Service has in-built functionality to generate all of the above, or you are free to use your preferred methods of generating keystores and deposit data file, such as via [Wagyu Keygen](https://github.com/stake-house/wagyu-key-gen), and your preferred tool for generating the hot wallet, such as [MetaMask](https://metamask.io/) or [MyEtherWallet](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline-current-mew-version-6).
 
-**Note, the deposit data file must be created using the Vault contract as the withdrawal address. You can find the Vault address either via the URL bar of your Vault page or in the "Contract address" field by scrolling to the "Details" section at the bottom of the Vault page.**
+{% hint style="warning" %}
+Note, the deposit data file must be created using the Vault contract as the withdrawal address. You can find the Vault address either via the URL bar of your Vault page or in the "Contract address" field by scrolling to the "Details" section at the bottom of the Vault page.
+{% endhint %}
 
 The below steps walk you through this set-up using Operator Service:
 
-#### Step 1. Create mnemonic
+#### **Step 1. Create mnemonic**
 
 Run the `init` command and follow the steps to set up your mnemonic used to derive validator keys. For example, if running Operator Service from binary, you would use:
 
 ```sh
 ./operator init
 ```
+
+<details>
+
+<summary>Example output</summary>
 
 ```
 Enter the network name (mainnet, holesky) [mainnet]:
@@ -201,13 +189,19 @@ done.
 Successfully initialized configuration for vault 0x3320a...68
 ```
 
-#### Step 2. Create validator keys
+</details>
+
+**Step 2. Create validator keys**
 
 Next, run the `create-keys` command to kickstart the deposit data and validator keystores creation process, making sure you have your newly created mnemonic to hand:
 
 ```bash
 ./operator create-keys
 ```
+
+<details>
+
+<summary>Example output</summary>
 
 ```
 Enter the vault address: 0x3320a...68
@@ -222,11 +216,15 @@ Keystores saved to /home/user/.stakewise/0x3320a...68/keystores file
 Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.json file
 ```
 
+</details>
+
 You may not want the operator service to have direct access to the validator keys. Validator keystores do not need to be present directly in the operator. You can check the [remote signer](https://docs.stakewise.io/for-operators/v3-operator-with-remote-signer) or [Hashicorp Vault](https://docs.stakewise.io/for-operators/v3-operator-with-hashi-vault) guides on how to run Operator Service with them.
 
-**Remember to upload the newly generated validator keys to the validator(s). For that, please follow a guide for your consensus client. The password for your keystores is located in the `password.txt` file in the keystores folder.**
+{% hint style="info" %}
+Remember to upload the newly generated validator keys to the validator(s). For that, please follow a guide for your consensus client. The password for your keystores is located in the `password.txt` file in the keystores folder.
+{% endhint %}
 
-#### Step 3. Create hot wallet
+#### **Step 3. Create hot wallet**
 
 Run the `create-wallet` command to create your hot wallet using your mnemonic (note, this mnemonic can be the same as the one used to generate the validator keys, or a new mnemonic if you desire).
 
@@ -234,34 +232,36 @@ Run the `create-wallet` command to create your hot wallet using your mnemonic (n
 ./operator create-wallet
 ```
 
+<details>
+
+<summary>Example output</summary>
+
 ```
 Enter the vault address: 0x3320a...68
 Enter the mnemonic for generating the wallet: pumpkin anxiety private salon inquiry ...
 Done. The wallet and password saved to /home/user/.stakewise/0x3320a...68/wallet directory. The wallet address is: 0x239B...e3Cc
 ```
 
-**Note, you must send some ETH (or xDAI for Gnosis) to the wallet for gas expenses. Each validator registration costs around 0.01 ETH with 30 Gwei gas price. You must keep an eye on your wallet balance, otherwise validators will stop registering if the balance falls too low.**
-
-Head to [Upload deposit data](https://docs.stakewise.io/for-operators/operator-service#upload-deposit-data-file-to-vault) for the next step.
-
 </details>
 
-<details>
+{% hint style="warning" %}
+Note, you must send some ETH (or xDAI for Gnosis) to the wallet for gas expenses. Each validator registration costs around 0.01 ETH with 30 Gwei gas price. You must keep an eye on your wallet balance, otherwise validators will stop registering if the balance falls too low.
+{% endhint %}
 
-<summary>Upload deposit data file to Vault</summary>
+### Upload deposit data file to Vault
 
 Once you have created your validator keys, deposit data file, and hot wallet, you need to upload the deposit data file to the Vault. This process connects your node to the Vault. Note, if there is more than one node operator in a Vault, you first need to merge all operator deposit data files into a single file (use the merge-deposit-data command). Uploading the deposit data file can be achieved either through the StakeWise UI or via Operator Service and can only be done by the [Vault Admin or Keys Manager](https://docs-v3.stakewise.io/protocol-overview-in-depth/vaults#governance-and-management).
 
-**StakeWise UI**
-
+{% tabs %}
+{% tab title="StakeWise UI" %}
 1. Connect with your wallet and head to the [Operate page](https://app.stakewise.io/operate).
 2. Select the Vault you want to upload the deposit data file to.
 3. In the upper right corner, click on "Settings" and open the "Deposit Data" tab. The "Settings" button is only visible to the Vault Admin or Keys Manager.
 4. Upload the deposit data file either by dragging and dropping the file, or clicking to choose the file via your file browser.
 5. Click Save and a transaction will be created to sign using your wallet. The Vault's deposit data file will be uploaded when the transaction is confirmed on the network.
+{% endtab %}
 
-**Operator Service**
-
+{% tab title="Operator Service" %}
 If for some reason uploading deposit data using UI is not an option. You can calculate deposit data Merkle tree root with the following command:
 
 ```bash
@@ -280,15 +280,11 @@ Finally, upload the Merkle tree root to your Vault contract by calling `setValid
 3. Connect your wallet to Etherscan (note this must be either the Vault Admin or Keys Manager).
 4. Find the `setValidatorsRoot` function and click to reveal the drop-down.
 5. Enter your Merkle tree root returned from the command and click Write.
-6. Confirm the transaction in your wallet to finalize the deposit data upload to your Vault.
+6. Confirm the transaction in your wallet to finalize the deposit data upload to your Vault
+{% endtab %}
+{% endtabs %}
 
-Head to [Run Operator Service](https://docs.stakewise.io/for-operators/operator-service#run-operator-service) to launch your operator service.
-
-</details>
-
-<details>
-
-<summary>Run Operator Service</summary>
+### Run Operator Service
 
 You are ready to run the Operator Service using the `start` command, optionally passing your Vault address and consensus and execution endpoints as flags.
 
@@ -305,15 +301,20 @@ If you **did not** use Operator Service to generate deposit data file, or you us
 
 * `--deposit-data-file` - Path to the deposit data file (Vault directory is default).
 
-#### Binary
-
+{% tabs %}
+{% tab title="Binary" %}
 You can start the operator service using binary with the following command:
 
 ```bash
-./operator start --vault=0x000... --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+./operator start \
+    --vault=0x000... \
+    --consensus-endpoints=http://localhost:5052 \
+    --execution-endpoints=http://localhost:8545
 ```
+{% endtab %}
 
-#### Docker
+{% tab title="Docker" %}
+
 
 For docker, you first need to mount the folder containing validator keystores and deposit data file generated into the docker container. You then need to also include the `--data-dir` flag alongside the `start` command as per the below:
 
@@ -328,41 +329,31 @@ src/main.py start \
 --consensus-endpoints=http://localhost:5052 \
 --execution-endpoints=http://localhost:8545
 ```
+{% endtab %}
 
-You can also run docker containers with `docker-compose`. For that, you need to copy .env.example file to `.env` file and fill it with correct values. Run docker compose with the following command:
-
-```bash
-docker-compose up
+{% tab title="Source Files" %}
 ```
-
-#### Source Files
-
-```bash
 PYTHONPATH=. poetry run python src/main.py start \
 --vault=0x000... \
 --consensus-endpoints=http://localhost:5052 \
 --execution-endpoints=http://localhost:8545
 ```
+{% endtab %}
+{% endtabs %}
 
-**Congratulations, you should now have Operator Service up and running and ready to trigger validator registrations within your Vault!**
-
-</details>
+{% hint style="success" %}
+Congratulations, you should now have Operator Service up and running and ready to trigger validator registrations within your Vault!
+{% endhint %}
 
 ### Other commands <a href="#user-content-misc-commands" id="user-content-misc-commands"></a>
 
 Operator Service has many different commands that are not mandatory but might come in handy.
 
-<details>
+#### Add validator keys to Vault
 
-<summary>Add validator keys to Vault</summary>
+You can always add more validator keys to your Vault. For that, you need to generate new validator keys and deposit data as described in [Step 2. Create validator keys](broken-reference/) and upload the deposit data file to your Vault as described in [Step 3. Upload deposit data file to Vault](broken-reference/). Note, uploading a new deposit data file will overwrite the existing file and consequently overwrite previously un-used validator keys. It can be done at any point, but only by the Vault Admin or Keys Manager.
 
-You can always add more validator keys to your Vault. For that, you need to generate new validator keys and deposit data as described in [Step 2. Create validator keys](broken-reference) and upload the deposit data file to your Vault as described in [Step 3. Upload deposit data file to Vault](broken-reference). Note, uploading a new deposit data file will overwrite the existing file and consequently overwrite previously un-used validator keys. It can be done at any point, but only by the Vault Admin or Keys Manager.&#x20;
-
-</details>
-
-<details>
-
-<summary>Validators voluntary exit</summary>
+#### Validators voluntary exit
 
 The validator exits are handled by oracles, but in case you want to force trigger exit your validators, you can run the following command:
 
@@ -371,6 +362,10 @@ The validator exits are handled by oracles, but in case you want to force trigge
 ```
 
 Follow the steps, confirming your consensus node endpoint, Vault address, and the validator indexes to exit.
+
+<details>
+
+<summary>Example output</summary>
 
 ```
 Enter the comma separated list of API endpoints for consensus nodes: https://example.com
@@ -381,9 +376,7 @@ Validators 513571, 513572, 513861 exits successfully initiated
 
 </details>
 
-<details>
-
-<summary>Update Vault state (Harvest Vault)</summary>
+#### Update Vault state (Harvest Vault)
 
 Updating the _Vault state_ distributes the Vault fee to the Vault fee address and updates each staker's position. If an ERC-20 token was chosen during Vault creation, the Vault specific ERC-20 reprices based on the rewards/penalties since the previous update and the Vault fees are distributed in newly minted ERC-20 tokens.
 
@@ -391,11 +384,7 @@ By default, each _Vault state_ gets updated whenever a user interacts with the V
 
 Harvesting the Vault rewards simplifies the contract calls to the Vault contract and reduces the gas fees for stakers, for example, the Vault does not need to sync rewards before calling deposit when a user stakes.
 
-</details>
-
-<details>
-
-<summary>Merge deposit data files from multiple operators</summary>
+#### Merge deposit data files from multiple operators
 
 You can use the following command to merge deposit data file:
 
@@ -403,17 +392,21 @@ You can use the following command to merge deposit data file:
 ./operator merge-deposit-data
 ```
 
-</details>
+#### Recover validator keystores
 
-<details>
+You can recover validator keystores that are active.&#x20;
 
-<summary>Recover validator keystores</summary>
-
-You can recover validator keystores that are active. **Make sure there are no validators running with recovered validator keystores and 2 epochs have passed, otherwise you can get slashed. For security purposes, make sure to protect your mnemonic as it can be used to generate your validator keys.**
+{% hint style="danger" %}
+Make sure there are no validators running with recovered validator keystores and 2 epochs have passed, otherwise you can get slashed. For security purposes, make sure to protect your mnemonic as it can be used to generate your validator keys.
+{% endhint %}
 
 ```bash
 ./operator recover
 ```
+
+<details>
+
+<summary>Example output</summary>
 
 ```
 Enter the mnemonic for generating the validator keys: [Your Mnemonic Here]
@@ -428,29 +421,9 @@ Keystores for vault {vault} successfully recovered to {keystores_dir}
 
 </details>
 
-<details>
-
-<summary>Max gas fee</summary>
-
-To mitigate excessive gas costs, operators can pass the `--max-fee-per-gas-wei` flag when starting Operator Service (or configure this variable via [Environment Variables](./#environment-variables)) to set the maximum base fee they are happy to pay for both validator registrations and Vault harvests (if Operator is started using the `--harvest-vault` flag).
-
-</details>
-
-<details>
-
-<summary>Reduce Operator Service CPU load</summary>
-
-`--pool-size` can be passed as a flag with both `start` and `create-keys` commands. This flag defines the number of CPU cores that are used to both load keystores and create keystores. By default, Operator Service will use 100% of the CPU cores.
-
-Setting `--pool-size` to `(number of CPU cores) / 2` is a safe way to ensure that Operator Service does not take up too much CPU load and impact node performance during the creation and loading of keystores.
-
-</details>
-
 ### Optional extras
 
-<details>
-
-<summary>Environment variables</summary>
+#### Environment variables
 
 Operator Service can be configured via environment variables instead of CLI flags. Copy [this example file](https://github.com/stakewise/v3-operator/blob/master/.env.example) and save it as `.env`. Run through the file, adjusting as and where necessary based on your node configuration.
 
@@ -462,4 +435,12 @@ export $(grep -v '^#' .env | xargs)
 
 You can check the environment variables are set and loaded correctly by running `env`.
 
-</details>
+#### Max gas fee
+
+To mitigate excessive gas costs, operators can pass the `--max-fee-per-gas-wei` flag when starting Operator Service (or configure this variable via [Environment Variables](./#environment-variables)) to set the maximum base fee they are happy to pay for both validator registrations and Vault harvests (if Operator is started using the `--harvest-vault` flag).
+
+#### Reduce Operator Service CPU load
+
+`--pool-size` can be passed as a flag with both `start` and `create-keys` commands. This flag defines the number of CPU cores that are used to both load keystores and create keystores. By default, Operator Service will use 100% of the CPU cores.
+
+Setting `--pool-size` to `(number of CPU cores) / 2` is a safe way to ensure that Operator Service does not take up too much CPU load and impact node performance during the creation and loading of keystores.

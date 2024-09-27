@@ -2,6 +2,7 @@
 description: >-
   The below is a quick walkthrough on how to setup validators on StakeWise V3
   that run on SSV.
+hidden: true
 ---
 
 # SSV Setup

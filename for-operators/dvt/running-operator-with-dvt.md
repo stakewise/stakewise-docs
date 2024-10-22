@@ -15,7 +15,7 @@ There are 2 ways to create validator keys:
 * create keys alone
 * create keys with a group using Distributed Key Generation (DKG) ceremony
 
-Creating keys alone may be an option if you don't collaborate with anybody. In this case DVT still may be used for additional robustness. When using SSV you can fully delegate validator duties to other entities (SSV operators) and do not mind running validators on your own. See [Obol page](obol-setup.md) and [SSV page](ssv-setup.md) for further instructions if you are creating keys alone.
+Creating keys alone may be an option if you don't collaborate with anybody. In this case DVT may be used for additional robustness. When using SSV you can fully delegate validator duties to other entities (SSV operators) and do not mind running validators on your own. See [Obol page](obol-setup.md) and [SSV page](ssv-setup.md) for further instructions if you are creating keys alone.
 
 DKG is more secure and decentralized way because nobody has full control over validator keys. The document below is dedicated to DKG way.
 
@@ -56,6 +56,8 @@ Instructions how to run single sidecar for a given DVT operator is below.
 {% tab title="Obol" %}
 DVT sidecar should have access to Obol node directory generated on step 1. Node directory contains cluster lock file and validator keys. In example below `~/node0` is used as node directory.
 
+For Obol there is an option to store validator keys in Remote signer. In this case you should upload validator keys into Remote signer. After that you can move validator keys away from Obol node directory.
+
 Fill .env file with environment variables.
 {% endtab %}
 
@@ -93,6 +95,7 @@ POLL_INTERVAL=1
 CLUSTER_TYPE=OBOL
 
 # Path to Obol keystores directory.
+# Not used if REMOTE_SIGNER_URL param is set.
 OBOL_KEYSTORES_DIR=/node0/validator_keys
 
 # Obol cluster lock file path
@@ -101,6 +104,11 @@ OBOL_CLUSTER_LOCK_FILE=/node0/cluster-lock.json
 # Obol node index
 # Usually node index is a part of keystore path: node0, node1...
 OBOL_NODE_INDEX=0
+
+# NB! If you are using the remote signer,
+# uncomment and provide values for the parameters below
+# REMOTE_SIGNER_URL=http://localhost:9000
+# REMOTE_SIGNER_TIMEOUT=10
 ```
 
 </details>
@@ -153,7 +161,7 @@ docker run \
 -u $(id -u):$(id -g) \
 --env-file .env \
 -v ~/node0:/node0 \
-europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.3.1
+europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.0
 ```
 {% endtab %}
 
@@ -163,14 +171,14 @@ docker run \
 -u $(id -u):$(id -g) \
 --env-file .env \
 -v ~/ssv-data:/data \
-europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.3.1
+europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.0
 ```
 {% endtab %}
 {% endtabs %}
 
 ### Step 4. Set up Stakewise Operator
 
-Single operator instance should be set up for DVT cluster.&#x20;
+Single operator instance should be set up for DVT cluster.
 
 #### Step 4.0 Prerequisites
 
@@ -178,7 +186,7 @@ Ensure [prerequisites](https://docs.stakewise.io/for-operators/operator-service#
 
 #### Step 4.1 Generate mnemonic
 
-Run [init](https://docs.stakewise.io/for-operators/operator-service#step-1.-create-mnemonic) command. The command creates mnemonic and creates folders structure. Mnemonic will not be used to generate validator keys because validator keys are already created by DVT tools (step 1). Mnemonic may be used for creating wallet (see below).&#x20;
+Run [init](https://docs.stakewise.io/for-operators/operator-service#step-1.-create-mnemonic) command. The command creates mnemonic and creates folders structure. Mnemonic will not be used to generate validator keys because validator keys are already created by DVT tools (step 1). Mnemonic may be used for creating wallet (see below).
 
 #### Step 4.2 **Create hot wallet**
 
@@ -190,9 +198,9 @@ Note, you must send some ETH (or xDAI for Gnosis) to the wallet for gas expenses
 
 DKG ceremony produces deposit data file in addition to keystores. See [instructions](https://docs.stakewise.io/for-operators/operator-service#upload-deposit-data-file-to-vault) for uploading this file to Vault.
 
-#### Step 4.3 Run Stakewise Operator
+#### Step 4.4 Run Stakewise Operator
 
-See [instructions](https://docs.stakewise.io/for-operators/operator-service#upload-deposit-data-file-to-vault).&#x20;
+See [instructions](https://docs.stakewise.io/for-operators/operator-service#upload-deposit-data-file-to-vault).
 
 There are some changes for DVT case:
 

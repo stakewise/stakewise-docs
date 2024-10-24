@@ -161,7 +161,7 @@ docker run \
 -u $(id -u):$(id -g) \
 --env-file .env \
 -v ~/node0:/node0 \
-europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.0
+europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.2
 ```
 {% endtab %}
 
@@ -171,7 +171,7 @@ docker run \
 -u $(id -u):$(id -g) \
 --env-file .env \
 -v ~/ssv-data:/data \
-europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.0
+europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.2
 ```
 {% endtab %}
 {% endtabs %}

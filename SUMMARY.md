@@ -55,6 +55,7 @@
   * [Mainnet](for-developers/networks/mainnet.md)
   * [Holesky](for-developers/networks/holesky.md)
   * [Chiado](for-developers/networks/chiado.md)
+* [Vault's performance](for-developers/vaults-performance.md)
 
 ## Governance
 

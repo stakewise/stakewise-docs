@@ -54,7 +54,7 @@ Sync committee rewards are ignored in calculations as they constitute 3% CL rewa
 
 ### Scoring formula
 
-<pre><code><strong>score = 8/10 * attestations_score + 2/10 * proposal_score
+<pre><code><strong>score = (8/10 * attestations_score + 2/10 * proposal_score) * 100
 </strong></code></pre>
 
 ### Scoring grades

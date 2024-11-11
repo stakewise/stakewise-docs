@@ -80,9 +80,7 @@ Put these files into `~/ssv-data` directory which will be mapped as docker volum
 NETWORK=mainnet
 
 # LOG_LEVEL=INFO
-# LOG_FORMAT=plai
-# SENTRY_DSN=
-# SENTRY_ENVIRONMENT=
+# LOG_FORMAT=plain
 
 # Relayer API params
 RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io

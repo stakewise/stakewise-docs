@@ -67,7 +67,7 @@ Sidecar should have access to:
 * SSV operator key file and password file generated on step 2
 * keyshares json file generated on step 1
 
-Put these files into `~/ssv-data` directory which will be mapped as docker volume.
+Put these files into `ssv-data` directory which will be mapped as docker volume.
 {% endtab %}
 {% endtabs %}
 
@@ -99,10 +99,10 @@ CLUSTER_TYPE=OBOL
 
 # Path to Obol keystores directory.
 # Not used if REMOTE_SIGNER_URL param is set.
-OBOL_KEYSTORES_DIR=/node0/validator_keys
+OBOL_KEYSTORES_DIR=/node/validator_keys
 
 # Obol cluster lock file path
-OBOL_CLUSTER_LOCK_FILE=/node0/cluster-lock.json
+OBOL_CLUSTER_LOCK_FILE=/node/cluster-lock.json
 
 # Obol node index
 # The node index is the node position number in the cluster.
@@ -164,7 +164,7 @@ Run sidecar:
 docker run \
 -u $(id -u):$(id -g) \
 --env-file .env \
--v ~/node0:/node0 \
+-v $(pwd)/.charon:/node \
 europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.2
 ```
 {% endtab %}
@@ -174,7 +174,7 @@ europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.2
 docker run \
 -u $(id -u):$(id -g) \
 --env-file .env \
--v ~/ssv-data:/data \
+-v $(pwd)/ssv-data:/data \
 europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.2
 ```
 {% endtab %}

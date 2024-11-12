@@ -82,8 +82,13 @@ NETWORK=mainnet
 # LOG_LEVEL=INFO
 # LOG_FORMAT=plain
 
+# SENTRY_DSN=
+# SENTRY_ENVIRONMENT=
+
 # Relayer API params
-RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
+# If you would like to use custom relayer, specify it here
+# By default RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
+# RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
 RELAYER_TIMEOUT=10
 
 # Interval for polling DVT Relayer
@@ -100,7 +105,8 @@ OBOL_KEYSTORES_DIR=/node0/validator_keys
 OBOL_CLUSTER_LOCK_FILE=/node0/cluster-lock.json
 
 # Obol node index
-# Usually node index is a part of keystore path: node0, node1...
+# The node index is the node position number in the cluster.
+# The order is defined during the cluster creation
 OBOL_NODE_INDEX=0
 
 # NB! If you are using the remote signer,
@@ -126,7 +132,7 @@ NETWORK=mainnet
 # SENTRY_ENVIRONMENT=
 
 # Relayer API params
-RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
+# RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
 RELAYER_TIMEOUT=10
 
 # Interval for polling DVT Relayer

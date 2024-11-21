@@ -8,6 +8,10 @@ description: The page will guide you through setting up vault with DVT cluster.
 
 Vault should be created in [Stakewise web UI](https://app.stakewise.io/).
 
+{% hint style="warning" %}
+Please refrain from manually activating validators through the Staking Launchpad or Etherscan as instructed on Obol/SSV sites. These instructions do not pertain to the Operator setup. Validators will be activated by the Operator once there are sufficient assets in the vault balance.
+{% endhint %}
+
 ### Step 1. Generate validator key shares
 
 There are 2 ways to create validator keys:

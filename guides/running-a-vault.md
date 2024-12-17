@@ -105,3 +105,5 @@ Some parameters of your Vault, like branding and whitelist, are configurable eve
 Receiving a Verified status allows the Vault to demonstrate that its branding and description have been reviewed and approved by the StakeWise team. Verification is recommended for Public Vaults.
 
 To verify your Vault, please reach out to the StakeWise team at info@stakewise.io with a request for verification using your corporate email.
+
+When vault metadata (name, description, logo) is changed, the verification status is unset. You need to reapply for verification after editing vault metadata.

@@ -1,10 +1,10 @@
-# Vault's performance
+# Vault performance
 
 ### Vault performance
 
 Vault performance is the average performance of its validators. The goal is to derive a simple and effective formula for calculating vault efficiency by evaluating the ratio of rewards to penalties, minimizing the influence of luck. Efficiency consists of proposer and attester parts.
 
-### Proposer performance
+### Proposer performance§
 
 Block proposals depend on luck, but we should penalize validators who miss MEV opportunities. Since MEV rewards can vary greatly between blocks, we focus only on the number of blocks processed and ignore the reward sizes to avoid relying on chance.
 

@@ -42,7 +42,7 @@
   * [Obol Setup](for-operators/dvt/obol-setup.md)
   * [SSV Setup](for-operators/dvt/ssv-setup.md)
   * [Running operator with DVT](for-operators/dvt/running-operator-with-dvt.md)
-* [Vault's performance](for-operators/vaults-performance.md)
+* [Vault performance](for-operators/vaults-performance.md)
 
 ## For developers
 

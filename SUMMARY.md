@@ -42,6 +42,7 @@
   * [Obol Setup](for-operators/dvt/obol-setup.md)
   * [SSV Setup](for-operators/dvt/ssv-setup.md)
   * [Running operator with DVT](for-operators/dvt/running-operator-with-dvt.md)
+* [Vault's performance](for-operators/vaults-performance.md)
 
 ## For developers
 
@@ -55,7 +56,6 @@
   * [Mainnet](for-developers/networks/mainnet.md)
   * [Holesky](for-developers/networks/holesky.md)
   * [Chiado](for-developers/networks/chiado.md)
-* [Vault's performance](for-developers/vaults-performance.md)
 
 ## Governance
 

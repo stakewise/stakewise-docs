@@ -65,9 +65,3 @@ We show vault grades based on the average vault performance over the last 7 days
 * **Good**: Values approximately between 99.5-99.7. Top 50% percentile. No missed blocks or a very small percentage of them. Validators perform well in attestations.
 * **Moderate**: Values approximately between 97.1-99.5%. The vault has issues, with up to 3% missed attestations and/or blocks.
 * **Bad**: Values between 0-97.09%. Validators are not performing correctly, missing blocks or poorly handling attestations.
-
-### References
-
-Rated Documentation: [Rated Network Methodologies](https://docs.rated.network/methodologies/ethereum/rated-effectiveness-rating)&#x20;
-
-Beaconcha Documentation: [Beaconcha Metric Validator Efficiency](https://kb.beaconcha.in/v2beta/metric-validator-efficiency)

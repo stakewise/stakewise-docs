@@ -6,7 +6,7 @@ coverY: 0
 
 # DAO Treasury
 
-DAO Treasury ([**0x144a98cb1CdBb23610501fE6108858D9B7D24934**](https://gnosis-safe.io/app/#/safes/0x144a98cb1CdBb23610501fE6108858D9B7D24934) **on Ethereum,** [0x8737f638E9af54e89ed9E1234dbC68B115CD169e](https://gnosisscan.io/address/0x8737f638E9af54e89ed9E1234dbC68B115CD169e) **on Gnosis**) is a [Gnosis Safe](https://gnosis-safe.io/) with a committee of 7 persons and a [SafeSnap Module](https://docs.snapshot.org/user-guides/plugins/safesnap-reality) that allows the submission of transactions on behalf of the governance token holders.
+DAO Treasury ([**0x144a98cb1CdBb23610501fE6108858D9B7D24934**](https://gnosis-safe.io/app/#/safes/0x144a98cb1CdBb23610501fE6108858D9B7D24934) **on Ethereum,** [**0x8737f638E9af54e89ed9E1234dbC68B115CD169e**](https://gnosisscan.io/address/0x8737f638E9af54e89ed9E1234dbC68B115CD169e) **on Gnosis**) is a [Gnosis Safe](https://gnosis-safe.io/) with a committee of 7 persons and a [SafeSnap Module](https://docs.snapshot.org/user-guides/plugins/safesnap-reality) that allows the submission of transactions on behalf of the governance token holders.
 
 The goal of the DAO committee is to monitor and reject the transactions that are not supposed to be executed on behalf of the DAO Treasury, since such malicious transactions can be submitted by an arbitrary account. In order to reject the transaction, a threshold of **4 out of 7** committee members must sign the rejection.&#x20;
 

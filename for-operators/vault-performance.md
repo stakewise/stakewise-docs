@@ -4,7 +4,7 @@
 
 Vault performance is the average performance of its validators. The goal is to derive a simple and effective formula for calculating vault efficiency by evaluating the ratio of rewards to penalties, minimizing the influence of luck. Efficiency consists of proposer and attester parts.
 
-### Proposer performance§
+### Proposer performance
 
 Block proposals depend on luck, but we should penalize validators who miss MEV opportunities. Since MEV rewards can vary greatly between blocks, we focus only on the number of blocks processed and ignore the reward sizes to avoid relying on chance.
 
@@ -59,7 +59,7 @@ Sync committee rewards are ignored in calculations as they constitute 3% CL rewa
 
 ### Scoring grades
 
-We show vault grades based on the average vault performance over the last 7 days.
+**We show vault grades based on the average vault performance over the last 7 days.**
 
 * **Excellent**: Values approximately between 99.7-100. Top 10% percentile. No missed blocks or a very small percentage of them. Validators perform excellently in attestations.
 * **Good**: Values approximately between 99.5-99.7. Top 50% percentile. No missed blocks or a very small percentage of them. Validators perform well in attestations.

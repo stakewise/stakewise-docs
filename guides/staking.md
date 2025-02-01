@@ -78,7 +78,7 @@ Your stake in any Vault can be made liquid by minting osETH, a liquid staking to
 1. Head to the Vault page and connect your wallet.
 2. Press the Mint button.
 3. Enter the amount of osETH you want to mint or use the slider to choose the proportion of your stake that will be made liquid.&#x20;
-4. Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault. The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
+4. Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault (99.99% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
 5. Press the Mint button and confirm the transaction in your wallet.&#x20;
 6. Once the transaction is confirmed on the blockchain, you will start liquid staking
 {% endtab %}
@@ -108,7 +108,7 @@ Your stake in any Vault can be made liquid by minting osGNO, a liquid staking to
 1. Head to the Vault page and connect your wallet.
 2. Press the Mint button.
 3. Enter the amount of osGNO you want to mint or use the slider to choose the proportion of your stake that will be made liquid.&#x20;
-4. Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault. The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
+4. Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault (99.95% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
 5. Press the Mint button and confirm the transaction in your wallet.&#x20;
 6. Once the transaction is confirmed on the blockchain, you will start liquid staking.
 {% endtab %}
@@ -146,7 +146,7 @@ Your stake in the Vault can be made liquid by minting osETH, a liquid staking to
 1. Head to your Vault page and connect your wallet.
 2. Press the Mint button.
 3. Enter the amount of osETH you want to mint or use the slider to choose the proportion of your stake that will be made liquid.&#x20;
-4. Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault. The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
+4. Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault (99.99% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
 5. Press the Mint button and confirm the transaction in your wallet.&#x20;
 6. Once the transaction is confirmed on the blockchain, you will start liquid staking.
 {% endtab %}
@@ -180,7 +180,7 @@ Your stake in the Vault can be made liquid by minting osGNO, a liquid staking to
 1. Head to your Vault page and connect your wallet.
 2. Press the Mint button.
 3. Enter the amount of osGNO you want to mint or use the slider to choose the proportion of your stake that will be made liquid.&#x20;
-4. Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault. The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
+4. Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault (99.95% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.&#x20;
 5. Press the Mint button and confirm the transaction in your wallet.&#x20;
 6. Once the transaction is confirmed on the blockchain, you will start liquid staking.
 {% endtab %}

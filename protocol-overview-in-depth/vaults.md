@@ -90,11 +90,31 @@ Note that users who requested to unstake GNO from a Vault and were placed into t
 {% tab title="osETH" %}
 Stake in any Vault can be made liquid by minting osETH, a liquid staking token. osETH represents ETH staked in Vaults and earns ETH rewards that accrue from their validators.
 
+osETH minting is dependent on the Vault LTV level. Most Vaults can mint osETH for up to 90% of the value of their ETH stake. While certain DAO-approved Vaults are eligible for a 99.99% minting threshold for osETH.&#x20;
+
+99.99% LTV Vaults must meet strict requirements set by the StakeWise DAO to ensure the highest standard of performance. Criteria include:
+
+* having at least 10k ETH staked,&#x20;
+* charging a Vault fee of no more than 5%,&#x20;
+* consistently ranking above the median performance for all stakers in the network,&#x20;
+* using the latest version of Vaults,&#x20;
+* and locking 5M SWISE in a DAO-controlled address as a bond (serves as collateral to cover any potential slashing losses).
+
 [<mark style="color:blue;">Read our guide about minting osETH from Vaults -></mark> ](https://docs.stakewise.io/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)
 {% endtab %}
 
 {% tab title="osGNO" %}
 Stake in any Vault can be made liquid by minting osGNO, a liquid staking token. osGNO represents GNO staked in Vaults and earns GNO rewards that accrue from their validators.
+
+osGNO minting is dependent on the Vault LTV level. Most Vaults can mint osGNO for up to 90% of the value of their GNO stake. While certain DAO-approved Vaults are eligible for a 99.95% minting threshold for osGNO.&#x20;
+
+99.95% LTV Vaults must meet strict requirements set by the StakeWise DAO to ensure the highest standard of performance. Criteria include:
+
+* having at least 5k GNO staked,&#x20;
+* charging a Vault fee of no more than 15%,&#x20;
+* consistently ranking above the median performance for all stakers in the network,&#x20;
+* using the latest version of Vaults,&#x20;
+* and locking 1M SWISE in a DAO-controlled address as a bond (serves as collateral to cover any potential slashing losses).
 
 [<mark style="color:blue;">Read our guide about minting osGNO from Vaults -></mark>](https://docs.stakewise.io/guides/ostoken#minting-ostoken-from-vaults-to-start-liquid-staking)&#x20;
 {% endtab %}
@@ -330,7 +350,7 @@ Operator Service periodically checks whether a Vault has accumulated enough asse
 2. Get the next free validator public key from the deposit data file attached to Operator Service. The validators are registered in the same order as specified in the deposit data file.
 3. Obtain BLS signature for exit message using local keystores or remote signer.
 4. Share the exit signature of the validator with StakeWise Oracles:
-   1. Using [Shamir's secret sharing](https://en.wikipedia.org/wiki/Shamir's\_secret\_sharing), split validator's BLS signature. The number of shares is equal to the number of Oracles.
+   1. Using [Shamir's secret sharing](https://en.wikipedia.org/wiki/Shamir's_secret_sharing), split validator's BLS signature. The number of shares is equal to the number of Oracles.
    2. Encrypt exit signatures with Oracles' public keys.
    3. Send encrypted exit signatures to all the Oracles and receive registration signatures from them.
 5. Send transaction to Vault contract to register the validator.
@@ -353,7 +373,7 @@ Operator Service periodically checks whether a Vault has accumulated enough asse
 2. Get the next free validator public key from the deposit data file attached to Operator Service. The validators are registered in the same order as specified in the deposit data file.
 3. Obtain BLS signature for exit message using local keystores or remote signer.
 4. Share the exit signature of the validator with StakeWise Oracles:
-   1. Using [Shamir's secret sharing](https://en.wikipedia.org/wiki/Shamir's\_secret\_sharing), split validator's BLS signature. The number of shares is equal to the number of Oracles.
+   1. Using [Shamir's secret sharing](https://en.wikipedia.org/wiki/Shamir's_secret_sharing), split validator's BLS signature. The number of shares is equal to the number of Oracles.
    2. Encrypt exit signatures with with Oracles' public keys.
    3. Send encrypted exit signatures to all the Oracles and receive registration signatures from them.
 5. Send transaction to Vault contract to register the validator.

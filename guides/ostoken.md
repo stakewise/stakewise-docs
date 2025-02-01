@@ -75,7 +75,7 @@ No matter how much osETH you mint, you will continue to earn the full ETH reward
 1. Head to the Vault page and connect your wallet.
 2. Press the Mint button.
 3. Enter the amount of osETH you want to mint or use the slider to choose the proportion of your stake that will be made liquid.
-4. Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault. The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.
+4. Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault (99.99% for specific Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.
 5. Press the Mint button and confirm the transaction in your wallet.&#x20;
 6. Once the transaction is confirmed on the blockchain, you will start liquid staking.
 {% endtab %}
@@ -92,7 +92,7 @@ No matter how much osGNO you mint, you will continue to earn the full GNO reward
 1. Head to the Vault page and connect your wallet.
 2. Press the Mint button.
 3. Enter the amount of osGNO you want to mint or use the slider to choose the proportion of your stake that will be made liquid.
-4. Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault. The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.
+4. Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault (99.95% for specific Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.
 5. Press the Mint button and confirm the transaction in your wallet.&#x20;
 6. Once the transaction is confirmed on the blockchain, you will start liquid staking.
 {% endtab %}
@@ -102,7 +102,11 @@ No matter how much osGNO you mint, you will continue to earn the full GNO reward
 
 {% tabs %}
 {% tab title="osETH" %}
-Your stake in any Vault can be made liquid by minting osETH for up to 90% of your stake.&#x20;
+StakeWise DAO has the capability to increase or decrease the osETH minting threshold (LTV) based on any given Vault’s risk parameters. By default, Vaults have a 90% LTV threshold, which can be increased to 99.99% with DAOs approval, provided specific criteria are met.
+
+**90% LTV Vaults**
+
+Your stake in a 90% LTV Vault can be made liquid by minting osETH for up to 90% of your stake.&#x20;
 
 This limit is set to ensure that penalties or slashing in your Vault do not affect other osETH holders. Conversely, you will not be affected by the penalties and slashing in other Vaults.&#x20;
 
@@ -112,11 +116,15 @@ At times, your liquid stake value may exceed the 90% limit and reach up to 92% d
 
 Exceeding 92% of your stake value in osETH is considered **Unhealthy**, and will lead to a forced return of your osETH position to a level below 90% through a process called liquidation. Liquidation incurs a 1% penalty on your stake.
 
+**99.99% LTV Vaults**
+
+In a 99.99% LTV Vault, you can mint osETH for up to 99.99% of your staked ETH. Your position is **always considered healthy** because osETH APY matches the APY of the lowest-yielding 99.99% LTV Vault. This ensures that your Vault's APY is never lower than osETH's APY. Thus, maintaining the stability of your position.
+
 [<mark style="color:blue;">Read more about osETH position health -></mark>](../protocol-overview-in-depth/ostoken.md#position-health)
 
 Note that osETH not acquired by minting from a Vault does not require any maintenance and does not impact osETH position health.
 
-### How to maintain your osETH position
+### How to maintain your osETH position in 90% LTV Vaults
 
 1. Head to the Vault page and connect your wallet.
 2. Check the position status in the Mint osETH section: it should be either Healthy, Moderate, Risky, or Unhealthy. Unhealthy positions are subject to liquidation.
@@ -129,7 +137,11 @@ Note that osETH not acquired by minting from a Vault does not require any mainte
 {% endtab %}
 
 {% tab title="osGNO" %}
-Your stake in any Vault can be made liquid by minting osGNO for up to 90% of your stake.&#x20;
+StakeWise DAO has the capability to increase or decrease the osGNO minting threshold (LTV) based on any given Vault’s risk parameters. By default, Vaults have a 90% LTV threshold, which can be increased to 99.95% with DAOs approval, provided specific criteria are met.
+
+**90% LTV Vaults**
+
+Your stake in a 90% LTV Vault can be made liquid by minting osGNO for up to 90% of your stake.&#x20;
 
 This limit is set to ensure that penalties or slashing in your Vault do not affect other osGNO holders. Conversely, you will not be affected by the penalties and slashing in other Vaults.&#x20;
 
@@ -139,11 +151,15 @@ At times, your liquid stake value may exceed the 90% limit and reach up to 92% d
 
 Exceeding 92% of your stake value in osGNO is considered **Unhealthy**, and will lead to a forced return of your osGNO position to a level below 90% through a process called liquidation. Liquidation incurs a 1% penalty on your stake.
 
+**99.95% LTV Vaults**
+
+In a 99.95% LTV Vault, you can mint osGNO for up to 99.95% of your staked GNO. Your position is **always considered healthy** because osGNO APY matches the APY of the lowest-yielding 99.95% LTV Vault. This ensures that your Vault's APY is never lower than osGNO's APY. Thus, maintaining the stability of your position.
+
 [<mark style="color:blue;">Read more about osGNO position health -></mark>](../protocol-overview-in-depth/ostoken.md#position-health)
 
 Note that osGNO not acquired by minting from a Vault does not require any maintenance and does not impact osGNO position health.
 
-### How to maintain your osGNO position
+### How to maintain your osGNO position in 90% LTV Vaults
 
 1. Head to the Vault page and connect your wallet.
 2. Check the position status in the Mint osGNO section: it should be either Healthy, Moderate, Risky, or Unhealthy. Unhealthy positions are subject to liquidation.

@@ -22,11 +22,21 @@ StakeWise is a good fit for you if you are:
 
 {% tabs %}
 {% tab title="osETH" %}
-osETH is the main liquid staking token for the StakeWise ecosystem. With in-built slashing protection and yield accrual from a highly diversified set of node operators, osETH is a simple and secure way to stake ETH while preserving access to DeFi.&#x20;
+osETH is the main liquid staking token for the StakeWise ecosystem. With in-built slashing protection\* and yield accrual from a highly diversified set of node operators, osETH is a simple and secure way to stake ETH while preserving access to DeFi.&#x20;
+
+**In-built slashing protection**
+
+* 90% LTV Vaults are overcollateralized.
+* 99.99% Vault operators are required to place a 5M SWISE bond before such capability is provided by the StakeWise DAO.
 {% endtab %}
 
 {% tab title="osGNO" %}
-osGNO is the main liquid staking token for the StakeWise ecosystem on Gnosis Chain. With in-built slashing protection and yield accrual from a diversified set of node operators, osGNO is a simple and secure way to stake GNO while preserving access to DeFi.&#x20;
+osGNO is the main liquid staking token for the StakeWise ecosystem on Gnosis Chain. With in-built slashing protection\* and yield accrual from a diversified set of node operators, osGNO is a simple and secure way to stake GNO while preserving access to DeFi.&#x20;
+
+**In-built slashing protection**
+
+* 90% LTV Vaults are overcollateralized.
+* 99.95% Vault operators are required to place a 1M SWISE bond before such capability is provided by the StakeWise DAO.
 {% endtab %}
 {% endtabs %}
 

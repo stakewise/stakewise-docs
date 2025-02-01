@@ -58,6 +58,34 @@ Staked GNO in any Vault can be made liquid by minting osGNO, a liquid staking to
 {% endtab %}
 {% endtabs %}
 
+### Granular LTV threshold setting for Vaults
+
+{% tabs %}
+{% tab title="ETH" %}
+StakeWise DAO has the capability to increase or decrease the osETH minting threshold based on any given Vault’s risk parameters. By default, Vaults can mint osETH for up to 90% of the value of their ETH stake, using their stake in the Vault as backing for the osETH token.&#x20;
+
+Certain DAO-approved Vaults are eligible for a 99.99% minting threshold (also known as LTV) for osETH. These Vaults must meet strict requirements set by the StakeWise DAO to ensure the highest standard of performance. Criteria include:
+
+* having at least 10k ETH staked,&#x20;
+* charging a Vault fee of no more than 5%,&#x20;
+* consistently ranking above the median performance for all stakers in the network,&#x20;
+* using the latest version of Vaults,&#x20;
+* and locking 5M SWISE in a DAO-controlled address as a bond that serves as collateral to cover any potential slashing losses.
+{% endtab %}
+
+{% tab title="GNO" %}
+StakeWise DAO has the capability to increase or decrease the osGNO minting threshold based on any given Vault’s risk parameters. By default, Vaults can mint osGNO for up to 90% of the value of their ETH stake, using their stake in the Vault as backing for the osGNO token.&#x20;
+
+Certain DAO-approved Vaults are eligible for a 99.95% minting threshold (also known as LTV) for osGNO. These Vaults must meet strict requirements set by the StakeWise DAO to ensure the highest standard of performance. Criteria include:
+
+* having at least 5k GNO staked,&#x20;
+* charging a Vault fee of no more than 15%,&#x20;
+* consistently ranking above the median performance for all stakers in the network,&#x20;
+* using the latest version of Vaults,&#x20;
+* and locking 1M SWISE in a DAO-controlled address as a bond that serves as collateral to cover any potential slashing losses.
+{% endtab %}
+{% endtabs %}
+
 ### Configuring StakeWise Operator Service
 
 {% tabs %}

@@ -25,6 +25,7 @@
 * [osToken](protocol-overview-in-depth/ostoken.md)
 * [Fees](protocol-overview-in-depth/fees.md)
 * [Oracles](protocol-overview-in-depth/oracles.md)
+* [Vault incentives](protocol-overview-in-depth/vault-incentives.md)
 
 ## For operators
 

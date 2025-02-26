@@ -1,16 +1,22 @@
+---
+description: >-
+  This guide will walk you through the process of allocating incentives directly
+  to your StakeWise vault.
+---
+
 # Vault incentives
 
-You can offer extra incentives to your vault users. The incentives will be distributed over a period of your choosing and for the token you specify. The following tokens are currently available for distribution: SWISE, osETH, SSV, WETH, and USDC. If you would like to distribute a different token, feel free to reach out.&#x20;
+If you would like to add any of the incentives, you can either reach out to the StakeWise development team (e.g., [info@stakewise.io](mailto:info@stakewise.io), [Telegram](https://t.me/stakewise_io), or [Discord](https://discord.gg/2BSdr2g)) and they will submit the allocation for you, or you can write to the [StakeWise Forum](https://forum.stakewise.io/) to request being listed as a distributor for the [Merkle Distributor](https://etherscan.io/address/0xa9dc250df4ee9273d09cfa455da41fb1cac78d34) contract. Once approved by the DAO, you will be able to allocate extra incentives to your vault directly, without an intermediary.
 
-If you would like to add periodic incentives, you can either reach out to the StakeWise development team (e.g., [info@stakewise.io](mailto:info@stakewise.io), [Telegram](https://t.me/stakewise_io), or [Discord](https://discord.gg/2BSdr2g)) and they will submit the allocation for you, or you can write to the [StakeWise Forum](https://forum.stakewise.io/) to request being listed as a distributor for the [Merkle Distributor](https://etherscan.io/address/0xa9dc250df4ee9273d09cfa455da41fb1cac78d34) contract. Once approved by the DAO, you will be able to allocate extra incentives to your vault directly, without an intermediary, by following these steps.
-
-You can perform the following distributions:
+{% hint style="warning" %}
+The following tokens are currently supported for distribution: SWISE, osETH, SSV, Obol, WETH, and USDC. If you would like to distribute a different token, feel free to reach out.&#x20;
+{% endhint %}
 
 ### Periodic distribution to the vault
 
 You can distribute token for any period of time to all the vault stakers. Use periodic distributions when you want to provide consistent and scheduled incentives to all vault stakers over a defined period. For example, you can distribute SSV/Obol tokens to your vault stakers.
 
-Incentives will be allocated every hour to all vault users based on their staked balance, with daily submissions by Oracles DAO. Users can claim their incentives at any time through the StakeWise App:
+Incentives will be allocated every hour to all vault users based on their staked balance, with merkle root    updates by Oracles DAO. Users can claim their incentives at any time through the StakeWise App:
 
 <figure><img src="../.gitbook/assets/ScreenRecording2025-02-26at01.25.31-ezgif.com-video-to-gif-converter.gif" alt=""><figcaption><p>Claiming rewards</p></figcaption></figure>
 
@@ -66,7 +72,7 @@ To proceed with an IPFS-based distribution:
 ]
 ```
 
-1. Upload file to IPFS and obtain has for it. For example, `bafkreig3c7venh7xlbqap2r5idlva73gooflgadilxnmav24bnyvltvouq`
+1. Upload file to IPFS and obtain hash for it. For example, `bafkreig3c7venh7xlbqap2r5idlva73gooflgadilxnmav24bnyvltvouq`
 2. Go to [Merkle Distributor](https://etherscan.io/address/0xa9dc250df4ee9273d09cfa455da41fb1cac78d34) contract.
 3. Click **Contract** → **Write Contract**.
 4. **Connect to Web3** with your approved distributor address.

@@ -9,7 +9,7 @@ description: >-
 If you would like to add any of the incentives, you can either reach out to the StakeWise development team (e.g., [info@stakewise.io](mailto:info@stakewise.io), [Telegram](https://t.me/stakewise_io), or [Discord](https://discord.gg/2BSdr2g)) and they will submit the allocation for you, or you can write to the [StakeWise Forum](https://forum.stakewise.io/) to request being listed as a distributor for the [Merkle Distributor](https://etherscan.io/address/0xa9dc250df4ee9273d09cfa455da41fb1cac78d34) contract. Once approved by the DAO, you will be able to allocate extra incentives to your vault directly, without an intermediary.
 
 {% hint style="warning" %}
-The following tokens are currently supported for distribution: SWISE, osETH, SSV, Obol, WETH, and USDC. If you would like to distribute a different token, feel free to reach out.&#x20;
+The following tokens are currently supported for distribution: SWISE, osETH, SSV, Obol, WETH, and USDC. If you would like to distribute a different token, feel free to reach out. Please note that vault incentives are currently supported only on Ethereum.
 {% endhint %}
 
 ### Periodic distribution to the vault

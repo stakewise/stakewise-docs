@@ -61,7 +61,7 @@ Sync committee rewards are ignored in calculations as they constitute 3% CL rewa
 
 **We show vault grades based on the average vault performance over the last 7 days.**
 
-* **Excellent**: Values approximately between 99.7-100. Top 10% percentile. No missed blocks or a very small percentage of them. Validators perform excellently in attestations.
-* **Good**: Values approximately between 99.5-99.7. Top 50% percentile. No missed blocks or a very small percentage of them. Validators perform well in attestations.
-* **Moderate**: Values approximately between 97.1-99.5%. The vault has issues, with up to 3% missed attestations and/or blocks.
-* **Bad**: Values between 0-97.09%. Validators are not performing correctly, missing blocks or poorly handling attestations.
+* **Excellent**: Values approximately between 99.6-100. No missed blocks or a very small percentage of them. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
+* **Good**: Values approximately between 99.2-99.6. No missed blocks or a very small percentage of them. Validators perform well in attestations, with less than 1% missed attestation rewards.
+* **Moderate**: Values approximately between 97.1-99.2%. The vault has issues, with up to 3% missed attestations and/or blocks.
+* **Bad**: Values between 0-97.1%. Validators are not performing correctly, missing blocks or poorly handling attestations.

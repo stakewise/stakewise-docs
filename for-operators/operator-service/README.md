@@ -292,14 +292,20 @@ Enter the vault address: 0xeEFFFD4C23D2E8c845870e273861e7d60Df49663
 The validator deposit data Merkle tree root: 0x50437ed72066c1a09ee85978f168ac7c58fbc9cd4beb7962c13e68e7faac26d7
 ```
 
-Finally, upload the Merkle tree root to your Vault contract by calling `setValidatorsRoot`. Below shows the steps to do this via Etherscan, but the same can be achieved via CLI if you prefer ( using [eth-cli](https://github.com/protofire/eth-cli) and `eth contract:send` for example). Note, the ABI of the contract can be found [here](https://github.com/stakewise/v3-core/blob/v1.0.0/abi/IVaultValidators.json).
+Find out your Vault version by calling `version` method of Vault contract.
 
-1. Head to your Vault's contract address page on Etherscan in your browser (e.g. replacing 0x000 with your Vault contract address: https://etherscan.io/address/0x000).
-2. Select the Contract tab and then Write as Proxy. If you don't have Write As Proxy option, click on the Code tab, then More Options, Is this a Proxy?, Verify, Save. Now you should have Write As Proxy option.
-3. Connect your wallet to Etherscan (note this must be either the Vault Admin or Keys Manager).
-4. Find the `setValidatorsRoot` function and click to reveal the drop-down.
-5. Enter your Merkle tree root returned from the command and click Write.
-6. Confirm the transaction in your wallet to finalize the deposit data upload to your Vault
+For Vaults version 1 call  `setValidatorsRoot` method of Vault contract.. &#x20;
+
+For Vaults version 2 or higher call `setDepositDataRoot` method of `DepositDataRegistry` contract.
+
+Below shows the steps to do this via Etherscan, but the same can be achieved via CLI if you prefer ( using [eth-cli](https://github.com/protofire/eth-cli) and `eth contract:send` for example). Note, the ABI of the `DepositDataRegistry` contract can be found [here](https://github.com/stakewise/v3-core/blob/v3.0.0/abi/IDepositDataRegistry.json).
+
+1. Head to Deposit Data Registry contract address page on Etherscan in your browser. You will find `DepositDataRegistry` contract [here](https://etherscan.io/address/0x75AB6DdCe07556639333d3Df1eaa684F5735223e) for Ethereum and [here](https://gnosisscan.io/address/0x58e16621B5c0786D6667D2d54E28A20940269E16) for Gnosis.
+2. Select the Contract tab and then Write Contract.
+3. Connect your wallet to Etherscan (note this must be either the Vault Admin or Deposit Data Manager).
+4. Find the `setDepositDataRoot` function and click to reveal the drop-down.
+5. Enter your Vault address. Enter your Merkle tree root returned from the command. Click Write.
+6. Confirm the transaction in your wallet to finalize the deposit data upload to your Vault.
 {% endtab %}
 {% endtabs %}
 
@@ -333,8 +339,6 @@ You can start the operator service using binary with the following command:
 {% endtab %}
 
 {% tab title="Docker" %}
-
-
 For docker, you first need to mount the folder containing validator keystores and deposit data file generated into the docker container. You then need to also include the `--data-dir` flag alongside the `start` command as per the below:
 
 ```bash
@@ -413,7 +417,7 @@ You can use the following command to merge deposit data file:
 
 #### Recover validator keystores
 
-You can recover validator keystores that are active.&#x20;
+You can recover validator keystores that are active.
 
 {% hint style="danger" %}
 Make sure there are no validators running with recovered validator keystores and 2 epochs have passed, otherwise you can get slashed. For security purposes, make sure to protect your mnemonic as it can be used to generate your validator keys.

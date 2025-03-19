@@ -294,7 +294,7 @@ The validator deposit data Merkle tree root: 0x50437ed72066c1a09ee85978f168ac7c5
 
 Find out your Vault version by calling `version` method of Vault contract.
 
-For Vaults version 1 call  `setValidatorsRoot` method of Vault contract.. &#x20;
+For Vaults version 1 call `setValidatorsRoot` method of Vault contract.
 
 For Vaults version 2 or higher call `setDepositDataRoot` method of `DepositDataRegistry` contract.
 

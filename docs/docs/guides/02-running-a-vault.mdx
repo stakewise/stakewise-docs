@@ -1,0 +1,112 @@
+---
+sidebar_position: 2
+---
+
+# Running a Vault
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+#### Get started with Vaults using our how-to guides
+
+StakeWise V3 enables you to launch your own staking environment, called Vault, and keep the stake in the Vault liquid with osToken, a liquid staking token of StakeWise.
+
+Vaults architecture can be used by solo stakers to access liquid staking, and by individuals and organizations to stake on their terms and offer liquid staking to others.
+
+| Use case                                  | Recommended settings                                                                                                                                        |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Liquid solo staking                       | 16K ETH / 1K GNO capacity, 0% fee, no Vault token, Private Vault, and Smoothing Pool enabled                                                                |
+| Community staking pool                    | Capacity and fee according to the business plan, no Vault token, Public Vault, Smoothing Pool enabled                                                       |
+| Liquid staking offered by a node operator | Capacity and fee according to the business plan, no Vault token, Private Vault for each customer, Smoothing Pool enabled/disabled based on compliance needs |
+| Staking service with own LST              | Capacity and fee according to the business plan, Vault token, Public Vault, Smoothing Pool enabled/disabled based on compliance needs                       |
+| Staking service without LST               | Capacity and fee according to the business plan, no Vault token, Public Vault, Smoothing Pool enabled/disabled, osToken access disabled                     |
+
+If you didn't find your use case for a Vault above, please reach out to the [StakeWise team](mailto:info@stakewise.io) for a personal consultation.
+
+Below you can explore the guides for launching and running a Vault with StakeWise.
+
+## Creating your Vault
+
+A Vault is a customizable smart contract that can be deployed by anyone to stake their own capital and/or offer staking to others, all in a non-custodial way.
+
+Each Vault is isolated from others and relies on its own set of validators to produce rewards on the consensus layer. However, a Vault may participate in MEV smoothing to avoid volatility in the execution layer earnings.
+
+Staked ETH/GNO in any Vault can be made liquid by minting osETH/osGNO, a liquid staking token.
+
+[Read more about Vaults →](./intro.mdx)
+
+### How to create a Vault
+
+<ol>
+  <li>
+    Head to the [Operate](https://app.stakewise.io/operate) page in the
+    StakeWise dApp and connect your wallet.
+  </li>
+  <li>Press on the Create Vault button.</li>
+  <li>
+    Configure your Vault by setting its parameters according to your needs and
+    press `Continue`. <b>These parameters cannot be changed in the future.</b>
+  </li>
+  <li>
+    Choose whether you would like to join a Smoothing Pool or collect only
+    Personal MEV earnings and press Continue. This choice cannot be changed in
+    the future.
+  </li>
+  <li>
+    Add branding to your Vault by specifying the name, logo, and description of
+    the Vault and press Continue.
+  </li>
+  <li>
+    Review your choices in the Summary section and press Create Vault to deploy
+    your Vault.
+  </li>
+</ol>
+
+## Granular LTV threshold setting for Vaults
+
+```mdx-code-block
+  <Tabs
+    groupId="token"
+    defaultValue="eth"
+    values={[
+      {label: 'ETH', value: 'eth'},
+      {label: 'GNO', value: 'gno'},
+    ]}>
+    <TabItem value="eth">
+        StakeWise DAO has the capability to increase or decrease the osETH minting threshold based on any given Vault’s risk parameters. By default, Vaults can mint osETH for up to 90% of the value of their ETH stake, using their stake in the Vault as backing for the osETH token.
+
+        Certain DAO-approved Vaults are eligible for a 99.99% minting threshold (also known as LTV) for osETH. These Vaults must meet strict requirements set by the StakeWise DAO to ensure the highest standard of performance. Criteria include:
+
+        <ul>
+          <li>having at least 10k ETH staked,</li>
+          <li>charging a Vault fee of no more than 5%,</li>
+          <li>consistently ranking above the median performance for all stakers in the network,</li>
+          <li>using the latest version of Vaults,</li>
+          <li>and locking 5M SWISE in a DAO-controlled address as a bond that serves as collateral to cover any potential slashing losses.</li>
+        </ul>
+    </TabItem>
+    <TabItem value="gno">
+        StakeWise DAO has the capability to increase or decrease the osGNO minting threshold based on any given Vault’s risk parameters. By default, Vaults can mint osGNO for up to 90% of the value of their ETH stake, using their stake in the Vault as backing for the osGNO token.
+
+        Certain DAO-approved Vaults are eligible for a 99.95% minting threshold (also known as LTV) for osGNO. These Vaults must meet strict requirements set by the StakeWise DAO to ensure the highest standard of performance. Criteria include:
+
+        <ul>
+          <li>having at least 5k GNO staked,</li>
+          <li>charging a Vault fee of no more than 15%,</li>
+          <li>consistently ranking above the median performance for all stakers in the network,</li>
+          <li>using the latest version of Vaults,</li>
+          <li>and locking 1M SWISE in a DAO-controlled address as a bond that serves as collateral to cover any potential slashing losses.</li>
+        </ul>
+    </TabItem>
+  </Tabs>
+```
+
+## Configuring StakeWise Operator Service
+
+Each Vault requires a node operator, or a set of node operators, to stake the ETH/GNO deposited into the Vault, with each operator required to run StakeWise Operator Service. The service is designed to run seamlessly alongside any node setup, giving operators the freedom to run their preferred execution/consensus clients, MEV relay, and distributed validator technology. The Operator Service is responsible for the creation of validators and the distribution of validator exit messages to the Oracle Network, enabling the automatic exiting of validators when required.
+
+Before validators can be created within a Vault, a deposit data file must be uploaded to the Vault. This file contains the pre-generated public validator keys from the operator(s), with the order of the validator keys in the file determining the order in which validators are created. A new deposit data file can be uploaded at any point in time to override any unused validator keys via the Vault settings, allowing new node operators to be easily added to the operator set.
+
+Check out the [full guide](./01-staking.mdx) to getting your node connected to your Vault with StakeWise Operator Service and the Vault deposit data file. For more information on the role of Operator Service within StakeWise V3, [visit here](./01-staking.mdx).

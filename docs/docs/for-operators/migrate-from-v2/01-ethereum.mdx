@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+# Ethereum
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+```mdx-code-block
+  <Tabs
+    groupId="ostoken"
+    defaultValue="oseth"
+    values={[
+      {label: 'osETH', value: 'oseth'},
+    ]}>
+    <TabItem value="oseth">
+        ### Boost feature and liquidation risks
+
+        When using the <b>Boost feature</b> (looped staking with osETH as collateral), the max LTV for borrowing ETH on Aave is 93%, with a liquidation threshold of 95%, leaving a 2% safety buffer. If the LTV reaches 94.5%, anyone can trigger an unboosting transaction to prevent liquidation.
+
+        ### osETH price and borrowing stability
+
+        <ul>
+          <li>The osETH APY follows the APY of the lowest-yielding 99.99% LTV Vault.</li>
+          <li>osETH depegging on secondary markets does not impact these Vaults' borrow positions since Aave relies on StakeWise’s native price feed for osETH.</li>
+        </ul>
+
+        However, prolonged negative yield spread (where ETH borrow APY exceeds osETH staking APY) can erode collateral over time. osETH and ETH borrow APY historic time-series analysis indicates that ETH borrow APY exceeded osETH APY only 10.7% (39 days per year) of the time leading to a temporary rise in LTV. This means that on the rest of the days, your LTV is decreasing because the value of your collateral grows faster than your loan value.
+
+        Given historical data, osETH growth rate matching the APY of the lowest-yielding 99.99% LTV Vault, and Aave using the StakeWise native price feed for osETH, the probability of a Boost position reaching 94.5% LTV is low.
+
+        To prevent liquidation, the StakeWise core team actively monitors boosted positions and triggers exits when LTV reaches 94.5%.
+
+        <b>Further reading</b>
+
+        <ul>
+          <li>[Maximize Your Rewards With StakeWise Boost](./intro.mdx)</li>
+          <li>[How StakeWise Boost Keeps Your Rewards Juicy & Your Stake Safe](./intro.mdx)</li>
+        </ul>
+    </TabItem>
+  </Tabs>
+```

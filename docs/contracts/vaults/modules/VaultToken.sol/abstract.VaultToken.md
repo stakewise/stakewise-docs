@@ -2,7 +2,7 @@
 [Git Source](https://github.com/stakewise/v3-core/blob/c4059a64871829ca60ea58f054baf8eb13d3572a/contracts/vaults/modules/VaultToken.sol)
 
 **Inherits:**
-Initializable, [ERC20Upgradeable](/contracts/base/ERC20Upgradeable.sol/abstract.ERC20Upgradeable.md), [VaultState](/contracts/vaults/modules/VaultState.sol/abstract.VaultState.md), [IVaultToken](/contracts/interfaces/IVaultToken.sol/interface.IVaultToken.md)
+Initializable, [ERC20Upgradeable](/contracts/base/erc20-upgradable.md), [VaultState](/contracts/vaults/modules/VaultState.sol/abstract.VaultState.md), [IVaultToken](/contracts/interfaces/IVaultToken.sol/interface.IVaultToken.md)
 
 **Author:**
 StakeWise
@@ -91,7 +91,7 @@ function _updateExitQueue() internal virtual override returns (uint256 burnedSha
 ### _transfer
 
 *Moves `amount` of tokens from `from` to `to`.
-Emits a {Transfer} event.*
+Emits a Transfer event.*
 
 
 ```solidity

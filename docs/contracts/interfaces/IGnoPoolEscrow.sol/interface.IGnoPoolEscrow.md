@@ -71,7 +71,7 @@ function withdrawTokens(address token, address payee, uint256 amount) external;
 recipient. Can only be called by the current owner.
 WARNING: Forwarding all gas opens the door to reentrancy vulnerabilities.
 Make sure you trust the recipient, or are either following the
-checks-effects-interactions pattern or using {ReentrancyGuard}.*
+checks-effects-interactions pattern or using ReentrancyGuard.*
 
 
 ```solidity

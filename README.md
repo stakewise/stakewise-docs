@@ -1,41 +1,29 @@
-# Website
+- Broken link on source page path = /docs/for-operators/operator-services/introduction:
+     -> linking to broken-reference/ (resolved as: /docs/for-operators/operator-services/broken-reference/)
+     -> linking to ./#environment-variables (resolved as: /docs/for-operators/operator-services/#environment-variables)
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
-
-### Installation
-
-```
-$ yarn
-```
-
-### Local Development
-
-```
-$ yarn start
-```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-### Build
-
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+  - Broken link on source page path = /docs/for-operators/operator-services/running-as-api-service:
+     -> linking to ./intro.mdx (resolved as: /docs/for-operators/operator-services/intro.mdx)
+  - Broken link on source page path = /docs/for-operators/operator-services/running-with-hashicorp-vault:
+     -> linking to ./intro.mdx (resolved as: /docs/for-operators/operator-services/intro.mdx)
+  - Broken link on source page path = /docs/for-operators/operator-services/running-with-remote-signer:
+     -> linking to ./intro.mdx (resolved as: /docs/for-operators/operator-services/intro.mdx)
+  - Broken link on source page path = /docs/guides/defi/boost:
+     -> linking to ./intro.mdx (resolved as: /docs/guides/defi/intro.mdx)
+  - Broken link on source page path = /docs/guides/defi/swise-eth-liquidity:
+     -> linking to ./intro.mdx (resolved as: /docs/guides/defi/intro.mdx)
+  - Broken link on source page path = /docs/guides/ostoken:
+     -> linking to ./intro.mdx (resolved as: /docs/guides/intro.mdx)
+  - Broken link on source page path = /docs/guides/running-a-vault:
+     -> linking to ./intro.mdx (resolved as: /docs/guides/intro.mdx)
+  - Broken link on source page path = /docs/guides/staking:
+     -> linking to ./intro.mdx (resolved as: /docs/guides/intro.mdx)
+  - Broken link on source page path = /docs/protocol-overview-in-depth/os-token:
+     -> linking to ostoken.md#overcollateralization (resolved as: /docs/protocol-overview-in-depth/ostoken.md#overcollateralization)
+     -> linking to ostoken.md#redemption-mechanism (resolved as: /docs/protocol-overview-in-depth/ostoken.md#redemption-mechanism)
+     -> linking to ostoken.md#staking-fee (resolved as: /docs/protocol-overview-in-depth/ostoken.md#staking-fee)
+  - Broken link on source page path = /docs/protocol-overview-in-depth/vaults:
+     -> linking to ../guides/staking.md#staking-with-vaults (resolved as: /docs/guides/staking.md#staking-with-vaults)
+     -> linking to vaults.md#staking-and-unstaking (resolved as: /docs/protocol-overview-in-depth/vaults.md#staking-and-unstaking)
+     -> linking to vaults.md#for-operators-of-vaults (resolved as: /docs/protocol-overview-in-depth/vaults.md#for-operators-of-vaults)
+     -> linking to ../for-operators/operator-service/ (resolved as: /docs/for-operators/operator-service/)

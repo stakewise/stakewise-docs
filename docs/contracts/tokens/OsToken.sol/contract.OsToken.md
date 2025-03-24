@@ -93,8 +93,8 @@ function burn(address account, uint256 value) external override onlyController;
 ### nonces
 
 *Returns the current nonce for `owner`. This value must be
-included whenever a signature is generated for {permit}.
-Every successful call to {permit} increases ``owner``'s nonce by one. This
+included whenever a signature is generated for permit.
+Every successful call to permit increases ``owner``'s nonce by one. This
 prevents a signature from being used multiple times.*
 
 

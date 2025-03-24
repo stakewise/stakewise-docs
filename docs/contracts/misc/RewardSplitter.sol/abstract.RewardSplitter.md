@@ -2,7 +2,7 @@
 [Git Source](https://github.com/stakewise/v3-core/blob/c4059a64871829ca60ea58f054baf8eb13d3572a/contracts/misc/RewardSplitter.sol)
 
 **Inherits:**
-[IRewardSplitter](/contracts/interfaces/IRewardSplitter.sol/interface.IRewardSplitter.md), Initializable, [Multicall](/contracts/base/Multicall.sol/abstract.Multicall.md)
+[IRewardSplitter](/contracts/interfaces/IRewardSplitter.sol/interface.IRewardSplitter.md), Initializable, [Multicall](/contracts/base/multicall.md)
 
 **Author:**
 StakeWise

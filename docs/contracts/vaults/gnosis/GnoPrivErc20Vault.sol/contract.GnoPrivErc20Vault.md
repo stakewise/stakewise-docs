@@ -157,7 +157,7 @@ function version() public pure virtual override(IVaultVersion, GnoErc20Vault) re
 ### _transfer
 
 *Moves `amount` of tokens from `from` to `to`.
-Emits a {Transfer} event.*
+Emits a Transfer event.*
 
 
 ```solidity

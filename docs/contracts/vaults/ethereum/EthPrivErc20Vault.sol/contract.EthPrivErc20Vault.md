@@ -167,7 +167,7 @@ function mintOsToken(address receiver, uint256 osTokenShares, address referrer)
 ### _transfer
 
 *Moves `amount` of tokens from `from` to `to`.
-Emits a {Transfer} event.*
+Emits a Transfer event.*
 
 
 ```solidity

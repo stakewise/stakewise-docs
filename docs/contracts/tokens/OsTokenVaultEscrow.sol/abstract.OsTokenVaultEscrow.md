@@ -2,7 +2,7 @@
 [Git Source](https://github.com/stakewise/v3-core/blob/c4059a64871829ca60ea58f054baf8eb13d3572a/contracts/tokens/OsTokenVaultEscrow.sol)
 
 **Inherits:**
-Ownable2Step, [Multicall](/contracts/base/Multicall.sol/abstract.Multicall.md), [IOsTokenVaultEscrow](/contracts/interfaces/IOsTokenVaultEscrow.sol/interface.IOsTokenVaultEscrow.md)
+Ownable2Step, [Multicall](/contracts/base/multicall.md), [IOsTokenVaultEscrow](/contracts/interfaces/IOsTokenVaultEscrow.sol/interface.IOsTokenVaultEscrow.md)
 
 **Author:**
 StakeWise

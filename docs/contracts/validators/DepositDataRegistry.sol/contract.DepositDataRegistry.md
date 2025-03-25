@@ -2,7 +2,7 @@
 [Git Source](https://github.com/stakewise/v3-core/blob/c4059a64871829ca60ea58f054baf8eb13d3572a/contracts/validators/DepositDataRegistry.sol)
 
 **Inherits:**
-[Multicall](/contracts/base/Multicall.sol/abstract.Multicall.md), [IDepositDataRegistry](/contracts/interfaces/IDepositDataRegistry.sol/interface.IDepositDataRegistry.md)
+[Multicall](/contracts/base/multicall.md), [IDepositDataRegistry](/contracts/interfaces/IDepositDataRegistry.sol/interface.IDepositDataRegistry.md)
 
 **Author:**
 StakeWise

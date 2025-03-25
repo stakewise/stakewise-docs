@@ -49,8 +49,8 @@ function implementation() external view override returns (address);
 
 *Upgrade the implementation of the proxy to `newImplementation`, and subsequently execute the function call
 encoded in `data`.
-Calls {_authorizeUpgrade}.
-Emits an {Upgraded} event.*
+Calls _authorizeUpgrade.
+Emits an Upgraded event.*
 
 **Note:**
 oz-upgrades-unsafe-allow-reachable: delegatecall
@@ -63,8 +63,8 @@ function upgradeToAndCall(address newImplementation, bytes memory data) public p
 ### _authorizeUpgrade
 
 *Function that should revert when `msg.sender` is not authorized to upgrade the contract. Called by
-{upgradeToAndCall}.
-Normally, this function will use an xref:access.adoc[access control] modifier such as {Ownable-onlyOwner}.
+upgradeToAndCall.
+Normally, this function will use an xref:access.adoc[access control] modifier such as Ownable-onlyOwner.
 ```solidity
 function _authorizeUpgrade(address) internal onlyOwner {}
 ```*

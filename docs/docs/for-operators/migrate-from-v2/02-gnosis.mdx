@@ -4,84 +4,135 @@ sidebar_position: 2
 
 # Gnosis
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+### Step 0. Download Operator
+
+Download the latest operator binary from [here](https://github.com/stakewise/v3-operator/releases).
+
+### Step 1. Validator keys recovery
+
+Follow the steps to recover the keystores using your validator keys mnemonic [here](https://github.com/stakewise/v3-operator?tab=readme-ov-file#recover-validator-keystores).
+
+After recovery add fake `deposit_data.json` file to your operator's vault directory, with content:
+
+```
+[{"pubkey": "aa8c737dd0b96232094c5591fa5a02b0e72e4292b6bbfd476673c3dbc56da996888d9d95724375b4ab3734172afec382", "withdrawal_credentials": "0100000000000000000000004b4406ed8659d03423490d8b62a1639206da0a7a", "amount": 32000000000, "signature": "a336744ac33a0329dbfe070b6b91a482386b22a7576aefd14d770d5e525b9b98539afa472dd1cb6399b801363d79fefd0a75929e290e3a16f9f57e27a2a6e98b8c7080a9a89b0b8ae86928abe20bbc298af894df24a7c25baab49bc992b99737", "deposit_message_root": "bafe0525dc543e89dcc2e1b22e68e6673b1f4dee9f5e82d9d65c77a5d012afc9", "deposit_data_root": "c32fdb0f6faced1b51a04b3bbb006d030399275ccf6dfc23e19cf3f0d5881250", "fork_version": "00000064", "network_name": "gnosis", "deposit_cli_version": "2.4.0"}]
 ```
 
-#### Adding liquidity to the new SWISE-ETH pool
-
-This guide will walk you through the process of adding liquidity to the SWISE-ETH pool on Uniswap V3. Follow the simple steps below to proceed.
-
-:::info
-If you are a liquidity provider in the SWISE-sETH2 pool and are looking to migrate liquidity to the SWISE-ETH pool, we have included the instructions for removing liquidity and swapping sETH2 for ETH [here](../../intro.mdx).
-:::
-
-## Add Liquidity to the new ETH-SWISE pool
-
-<b>Step 1:</b> Head to the [UniSwap Pools](https://app.uniswap.org/pools) page and
-select New Position. Click the drop-down to select SWISE to pair vs ETH.
-
-![Step 1](./img/step1.gif)
-
-<b>Step 2:</b> Edit the Fee Tier, selecting 0.3% and select Full Range.
-
-![Step 2](./img/step2.gif)
+#### Step 1.1. Import Genesis Keys (If applicable)
 
 :::warning
-IMPORTANT — Double check that the correct pool is selected (0.3% fee tier) and that the price range shows 0 to infinity as per the below. Failure to do so will mean you might not receive incentives.
+**If you run keys from the Verihash operator before continuing, you must import them.**
 :::
 
-![Step 2-1](./img/step2-1.webp)
+This can be done with the following command:
 
-<b>Step 3:</b> Once you are happy with the pool settings, enter the amount of ETH
-and SWISE tokens you wish to deploy (must be 50/50 if Full Range). Once again, you
-may need to provide UniSwap with approval to access your SWISE tokens. Once the approval
-has been granted, you can finally Preview and accept the transaction to deploy your
-liquidity.
+```bash
+./operator \
+   import-genesis-keys \
+   --rsa-key /path/to/rsa_key \
+   --exported-keys-dir /path/to/keys \
+   --vault 0x4b4406ed8659d03423490d8b62a1639206da0a7a
+```
 
-![Step 3](./img/step3.gif)
+### Step 2. Setup operator database
 
-:::success
-Congratulations — you are now an LP in the new SWISE-ETH pool 🥳
-:::
+Create new database called `operator` and the user for the database. Next, initialize database and upload keysotres:
 
-## Migrating liquidity from the SWISE-sETH2 pool
+```
+./operator remote-db setup
+Enter your vault address: 0x4b4406ed8659d03423490d8b62a1639206da0a7a
+Enter the Postgres DB connection URL (e.g. postgresql://username:pass@hostname/dbname): postgresql://username:pass@hostname/dbname
+Successfully configured remote database.
+Encryption key: SAAHK4DYwAvWMcKpV........
+NB! You must store your encryption in a secure cold storage!
 
-### Remove SWISE-sETH2 liquidity
+./operator remote-db upload-keypairs
+```
 
-<b>Step 1:</b> Head to the [UniSwap Pools](https://app.uniswap.org/pools) page, select
-your SWISE-sETH2 position and click Remove Liquidity.
+### Step 3. Start web3signer
 
-![Pool 1](./img/pool-1.gif)
+To start web3signer, use our chart. With `values.yaml`&#x20;
 
-<b>Step 2:</b> Click Max and then Remove to initiate the transaction to remove your
-entire liquidity position, including previously unclaimed fees. Confirm the transaction
-in your wallet.
+```
+global:
+    network: gnosis
+    vault: 0x4b4406ed8659d03423490d8b62a1639206da0a7a
+dbUrl: jdbc:postgresql://postgres:postgres@localhost/web3signer
+dbUsername: web3signer
+dbPassword: <password goes here>
+dbKeystoreUrl: postgresql://postgres:postgres@localhost/operator
+decryptionKey: <decrypt key goes here>
+```
 
-![Pool 2](./img/pool-2.gif)
+The deployment command looks like this:
 
-:::success
-Congratulations - you successfully removed liquidity from the SWISE-sETH2 pool 🥳
-:::
+```sh
+helm repo add stakewise https://charts.stakewise.io
+helm upgrade --install web3signer stakewise/web3signer \
+  -n web3signer \
+  -f values.yaml
+```
 
-### Swap sETH2 to ETH
+### Step 4. Create wallet and Kubernetes secret
 
-<b>Step 1:</b> Head to the [UniSwap Swap](https://app.uniswap.org/swap?chain=mainnet)
-page and select sETH2 to ETH. Enter the amount of sETH2 you wish to exchange and
-confirm the swap. Note, you may need to enable spending of sETH2 on UniSwap prior
-to executing the swap. This will be an on-chain transaction.
+Сreate operator hot wallet by following the instructions [here](https://github.com/stakewise/v3-operator?tab=readme-ov-file#step-3-create-hot-wallet).
 
-![Swap 1](./img/swap-1.gif)
+Before deploying v3-operator service create kubernetes secret with operator wallet:
 
-<b>Step 2:</b> Once the transaction enabling sETH2 spending is completed, you then
-need to allow sETH2 for swapping (simply signing a message rather than an on-chain
-transaction).
+```
+kubectl create secret -n operator generic v3-operator-wallet-data \
+  --from-file=/home/username/.stakewise/0x4b4406ed8659d03423490d8b62a1639206da0a7a/wallet
+```
 
-![Swap 2](./img/swap-2.png)
+### Step 5. Start the Operator
 
-<b>Step 3:</b> Finally, confirm the swap transaction in your wallet.
+To start the operator, use our chart. With `values.yaml`:&#x20;
 
-:::success
-Congratulations - you successfully swapped sETH2 for ETH 🥳
-:::
+```
+settings:
+    network: gnosis
+    vault: 0x4b4406ed8659d03423490d8b62a1639206da0a7a
+    executionEndpoints: https://node.example.com/gnosis-nethermind
+    consensusEndpoints: https://node.example.com/gnosis-lighthouse
+    walletSecretName: wallet-secret
+    remoteDbConfig:
+        enabled: true
+        dbUrl: postgresql://postgres:postgres@localhost/operator
+        remoteSignerUrl: http://web3signer.web3signer:6174
+```
+
+The deployment command looks like this:
+
+```sh
+helm repo add stakewise https://charts.stakewise.io
+helm upgrade --install v3-operator stakewise/v3-operator \
+  -n operator \
+  -f values.yaml
+```
+
+### Step 6. Start the Validators
+
+To start the validators, use our chart. With `values.yaml`:
+
+```
+global:
+    network: gnosis
+    vault: 0x4b4406ed8659d03423490d8b62a1639206da0a7a
+dbKeystoreUrl: postgresql://postgres:postgres@localhost/operator
+enabled: true
+type: teku
+validatorsCount: 1
+suggestedFeeRecipient: 0x30db0d10d3774e78f8cB214b9e8B72D4B402488a
+web3signerEndpoint: http://web3signer.web3signer:6174
+beaconChainRpcEndpoints:
+    - https://teku.example.com/
+```
+
+The deployment command looks like this:
+
+```sh
+helm repo add stakewise https://charts.stakewise.io
+helm upgrade --install validators stakewise/web3signer-validators \
+  -n validators \
+  -f values.yaml
+```

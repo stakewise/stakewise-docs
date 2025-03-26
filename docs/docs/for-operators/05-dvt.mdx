@@ -9,118 +9,278 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-StakeWise is a DeFi protocol that offers a simple and safe way to stake ETH and GNO on favourable terms and to farm, restake, and borrow with your stake for more yield using osETH and osGNO, liquid staking tokens.&#x20;
+The Distributed Validator Technology (DVT) represents a crucial element poised to revolutionize consensus scalability. Much like roll-up technology in Layer 2 scaling, DVT is set to significantly enhance scalability while upholding decentralization. As DVT continues to evolve, it is expected to become a fundamental building block, safeguarding the security and decentralization of public blockchain networks.
 
-StakeWise pioneers the concept of a staking marketplace that allows stakers to choose their own node operators, earn more staking profits, minimize slashing risk, and stake solo, all while keeping their stake liquid.&#x20;
+StakeWise Vaults stand out for their compatibility with both [Obol](https://docs.obol.org/docs/int/Overview) and [SSV](https://docs.ssv.network/) DVT technologies, offering an additional layer of security and decentralization to the network. This interoperability greatly bolsters the long-term sustainability of public blockchain networks, empowering stakeholders with diverse options for securing and leveraging their assets.
 
-StakeWise also provides individuals, communities and businesses with the tools to launch their own staking pools from scratch and give their users osTokens - osETH and osGNO - with an extensive liquidity & utility ecosystem developed by the StakeWise DAO.&#x20;
+### DVT setup components
 
-StakeWise is a good fit for you if you are:
+#### DVT cluster of distributed validators
 
-- An everyday staker who wants a simple and secure solution for staking your capital, with the potential to use your staked capital in DeFi apps.
-- A solo staker who wants to mint a liquid staking token against your own node, and also has the potential to offer fully trustless, non-custodial staking as a service to others.
-- A whale/fund/DAO/institution looking for a bespoke staking solution to best suit your needs, whilst being able to access DeFi with staked capital.&#x20;
+Performs validator duties
 
-### osToken
+#### Stakewise Operator
+
+Registers validators in vault contract. Operator doesn’t have access to validator keystores.
+
+#### DVT Relayer
+
+Used to collect exit signatures of the validators for passing them to oracles.
+
+#### DVT sidecars
+
+Sidecars provide exit signature shares to DVT Relayer. Each distributed validator node should run DVT sidecar instance. Each sidecar should have access to validator key shares on related DVT node.
+
+### Validator registration procedure
+
+Operator reads validators from the deposit data file.
+
+On validator registration Operator sends request to the relayer:
+
+1. Operator sends a list of public keys from the deposit data to the relayer, then polls the relayers for the exit signature(s)
+2. Relayer creates VoluntaryExit(s) out of public keys and stores to DB. VoluntaryExits can be received through relayer API.
+3. DVT sidecars poll VoluntaryExits they can sign from the relayer, create exit signatures for them and post to the relayer.
+4. Relayer i) receives exit signature shares from the sidecars, ii) Restores exit signature from sidecar shares, verifies exit signature, creates shares for oracles, encrypts with oracle public keys and stores to DB. The encrypted shares for oracles are available through relayer API.
+5. Operator fetches encrypted signatures from relayer and registers the validator.
+
+## Running operator with DVT
+
+### Prerequisites
+
+Vault should be created in [Stakewise web UI](https://app.stakewise.io/).
+
+:::warning
+Please refrain from manually activating validators through the Staking Launchpad or Etherscan as instructed on Obol/SSV sites. These instructions do not pertain to the Operator setup. Validators will be activated by the Operator once there are sufficient assets in the vault balance.
+:::
+
+### Step 1. Generate validator key shares
+
+There are 2 ways to create validator keys:
+
+- create keys alone
+- create keys with a group using Distributed Key Generation (DKG) ceremony
+
+Creating keys alone may be an option if you don't collaborate with anybody. In this case DVT may be used for additional robustness. When using SSV you can fully delegate validator duties to other entities (SSV operators) and do not mind running validators on your own. See [Obol page](obol-setup.md) and [SSV page](ssv-setup.md) for further instructions if you are creating keys alone.
+
+DKG is more secure and decentralized way because nobody has full control over validator keys. The document below is dedicated to DKG way.
 
 ```mdx-code-block
   <Tabs
-    groupId="ostoken"
-    defaultValue="oseth"
+    groupId="dvt"
+    defaultValue="obol"
     values={[
-      {label: 'osETH', value: 'oseth'},
-      {label: 'osGNO', value: 'osgno'},
+      {label: 'Obol', value: 'obol'},
+      {label: 'SSV', value: 'ssv'},
     ]}>
-    <TabItem value="oseth">
-      osETH is the main liquid staking token for the StakeWise ecosystem. With in-built slashing protection\* and yield accrual from a highly diversified set of node operators, osETH is a simple and secure way to stake ETH while preserving access to DeFi.&#x20;
-
-      **In-built slashing protection**
-
-      * 90% LTV Vaults are overcollateralized.
-      * 99.99% Vault operators are required to place a 5M SWISE bond before such capability is provided by the StakeWise DAO.
+    <TabItem value="obol">
+      Generate validator keys with a group using DKG ceremony. See [Obol DKG guide](https://docs.obol.org/docs/start/quickstart_group).
     </TabItem>
-    <TabItem value="osgno">
-      osGNO is the main liquid staking token for the StakeWise ecosystem on Gnosis Chain. With in-built slashing protection\* and yield accrual from a diversified set of node operators, osGNO is a simple and secure way to stake GNO while preserving access to DeFi.&#x20;
-
-      **In-built slashing protection**
-
-      * 90% LTV Vaults are overcollateralized.
-      * 99.95% Vault operators are required to place a 1M SWISE bond before such capability is provided by the StakeWise DAO.
+    <TabItem value="ssv">
+      Generate validator keys with a group using DKG ceremony. See [SSV DKG guide](https://docs.ssv.network/validator-user-guides/validator-management/distributing-a-validator-1).
     </TabItem>
   </Tabs>
 ```
 
-### StakeWise components
+### Step 2. Set up DVT cluster
 
-<table>
-  <thead>
-    <tr>
-      <th width="137">Component</th>
-      <th>Description</th>
-      <th data-hidden></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <a href="vaults.md">
-          <strong>Vaults</strong>
-        </a>
-      </td>
-      <td>
-        Permissionless and non-custodial, Vaults are isolated staking pools
-        connected to Ethereum nodes that allow staking on specific terms
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="ostoken.md">
-          <strong>osETH</strong>
-        </a>
-      </td>
-      <td>
-        A token for liquid staking that can be minted against staked ETH in any
-        Vault
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="ostoken.md">
-          <strong>osGNO</strong>
-        </a>
-      </td>
-      <td>
-        A token for liquid staking that can be minted against staked GNO in any
-        Vault
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="oracles.md">
-          <strong>Oracles</strong>
-        </a>
-      </td>
-      <td>
-        A set of entities fetching information about staking performance and
-        events off-chain and pushing it on-chain to enable staking, unstaking
-        and rewards distribution
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="../governance/stakewise-dao.md">
-          <strong>DAO</strong>
-        </a>
-      </td>
-      <td>
-        A community of SWISE token holders that govern the key parameters of the
-        StakeWise protocol and manage its Treasury{" "}
-      </td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+During cluster setup keep in mind:
+
+- `withdrawal_address` should equal to vault address
+- validator fee recipient should equal to address specified in vault details section on the vault page.
+
+```mdx-code-block
+  <Tabs
+    groupId="dvt"
+    defaultValue="obol"
+    values={[
+      {label: 'Obol', value: 'obol'},
+      {label: 'SSV', value: 'ssv'},
+    ]}>
+    <TabItem value="obol">
+      Each DVT operator should run Charon instance. Charon is HTTP middleware built by Obol to enable any existing Ethereum validator clients to operate together as part of a distributed validator. Guide from step 1 includes setting up Charon.
+    </TabItem>
+    <TabItem value="ssv">
+      SSV node works as DVT replacement for validator client. Each SSV operator participating in a cluster should run his own node. See [the guide for SSV operators](https://docs.ssv.network/operator-user-guides/operator-node).
+    </TabItem>
+  </Tabs>
+```
+
+### Step 3. Set up DVT sidecars
+
+Run [DVT sidecar](https://github.com/stakewise/dvt-operator-sidecar) instance for each DVT node in a cluster. Each DVT operator should run his own sidecar instance.
+
+Instructions how to run single sidecar for a given DVT operator is below.
+
+```mdx-code-block
+  <Tabs
+    groupId="dvt"
+    defaultValue="obol"
+    values={[
+      {label: 'Obol', value: 'obol'},
+      {label: 'SSV', value: 'ssv'},
+    ]}>
+    <TabItem value="obol">
+      DVT sidecar should have access to Obol node directory generated on step 1. Node directory contains cluster lock file and validator keys. In example below `~/node0` is used as node directory.
+
+      For Obol there is an option to store validator keys in Remote signer. In this case you should upload validator keys into Remote signer. After that you can move validator keys away from Obol node directory.
+
+      Fill .env file with environment variables.
+    </TabItem>
+    <TabItem value="ssv">
+      Sidecar should have access to:
+
+      - SSV operator key file and password file generated on step 2
+      - keyshares json file generated on step 1
+
+      Put these files into `ssv-data` directory which will be mapped as docker volume.
+    </TabItem>
+  </Tabs>
+```
+
+<details>
+
+<summary>Env example for Obol</summary>
+
+```ini
+# Network choices: mainnet,holesky,gnosis,chiado
+NETWORK=mainnet
+
+# LOG_LEVEL=INFO
+# LOG_FORMAT=plain
+
+# SENTRY_DSN=
+# SENTRY_ENVIRONMENT=
+
+# Relayer API params
+# If you would like to use custom relayer, specify it here
+# By default RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
+# RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
+RELAYER_TIMEOUT=10
+
+# Interval for polling DVT Relayer
+POLL_INTERVAL=1
+
+# Cluster type. Choices: OBOL, SSV
+CLUSTER_TYPE=OBOL
+
+# Path to Obol keystores directory.
+# Not used if REMOTE_SIGNER_URL param is set.
+OBOL_KEYSTORES_DIR=/node/validator_keys
+
+# Obol cluster lock file path
+OBOL_CLUSTER_LOCK_FILE=/node/cluster-lock.json
+
+# Obol node index
+# The node index is the node position number in the cluster.
+# The order is defined during the cluster creation
+OBOL_NODE_INDEX=0
+
+# NB! If you are using the remote signer,
+# uncomment and provide values for the parameters below
+# REMOTE_SIGNER_URL=http://localhost:9000
+# REMOTE_SIGNER_TIMEOUT=10
+```
+
+</details>
+
+<details>
+
+<summary>Env example for SSV</summary>
+
+```ini
+# Network choices: mainnet,holesky,gnosis,chiado
+NETWORK=mainnet
+
+# LOG_LEVEL=INFO
+# LOG_FORMAT=plain
+
+# SENTRY_DSN=
+# SENTRY_ENVIRONMENT=
+
+# Relayer API params
+# RELAYER_ENDPOINT=https://mainnet-dvt-relayer.stakewise.io
+RELAYER_TIMEOUT=10
+
+# Interval for polling DVT Relayer
+POLL_INTERVAL=1
+
+# Cluster type. Choices: OBOL, SSV
+CLUSTER_TYPE=SSV
+
+# SSV operator key
+# Path to key file
+SSV_OPERATOR_KEY_FILE=/data/encrypted_private_key.json
+# Path to password file
+SSV_OPERATOR_PASSWORD_FILE=/data/password.txt
+
+# SSV operator id (node id)
+SSV_OPERATOR_ID=123
+
+# SSV keyshares file path
+SSV_KEYSHARES_FILE=/data/keyshares.json
+```
+
+</details>
+
+Run sidecar:
+
+````mdx-code-block
+  <Tabs
+    groupId="dvt"
+    defaultValue="obol"
+    values={[
+      {label: 'Obol', value: 'obol'},
+      {label: 'SSV', value: 'ssv'},
+    ]}>
+    <TabItem value="obol">
+      ```bash
+      docker run \
+      -u $(id -u):$(id -g) \
+      --env-file .env \
+      -v $(pwd)/.charon:/node \
+      europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.4
+      ```
+    </TabItem>
+    <TabItem value="ssv">
+      ```bash
+      docker run \
+      -u $(id -u):$(id -g) \
+      --env-file .env \
+      -v $(pwd)/ssv-data:/data \
+      europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v0.4.4
+      ```
+    </TabItem>
+  </Tabs>
+````
+
+### Step 4. Set up Stakewise Operator
+
+Single operator instance should be set up for DVT cluster.
+
+#### Step 4.0 Prerequisites
+
+Ensure [prerequisites](https://docs.stakewise.io/for-operators/operator-service#prerequisites) are satisfied. This includes setting up execution client and consensus client.
+
+#### Step 4.1 Generate mnemonic
+
+Run [init](https://docs.stakewise.io/for-operators/operator-service#step-1.-create-mnemonic) command. The command creates mnemonic and creates folders structure. Mnemonic will not be used to generate validator keys because validator keys are already created by DVT tools (step 1). Mnemonic may be used for creating wallet (see below).
+
+#### Step 4.2 **Create hot wallet**
+
+Run the [create-wallet](https://docs.stakewise.io/for-operators/operator-service#step-3.-create-hot-wallet) command to create your hot wallet using your mnemonic (note, this mnemonic can be the one generated on step 4.1, or a new mnemonic if you desire).
+
+Note, you must send some ETH (or xDAI for Gnosis) to the wallet for gas expenses
+
+#### Step 4.3 Upload deposit data file to Vault
+
+DKG ceremony produces deposit data file in addition to keystores. See [instructions](https://docs.stakewise.io/for-operators/operator-service#upload-deposit-data-file-to-vault) for uploading this file to Vault.
+
+#### Step 4.4 Run Stakewise Operator
+
+See [instructions](https://docs.stakewise.io/for-operators/operator-service#upload-deposit-data-file-to-vault).
+
+There are some changes for DVT case:
+
+- Run operator with `start-api` command, unlike `start` command in default scenario.
+- Pass `--relayer-type=DVT --relayer-endpoint=https://mainnet-dvt-relayer.stakewise.io/` in `start-api` options
+- Pass `--deposit-data-path` to provide deposit data file generated during DKG

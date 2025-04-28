@@ -1,0 +1,49 @@
+@layer utilities {
+
+  /* Borders */
+  .border {
+    border-style: solid;
+    border-width: 1px;
+  }
+
+  .border-top {
+    border-top-width: 1px;
+    border-top-style: solid;
+  }
+
+  .border-bottom {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  .border-left {
+    border-left-width: 1px;
+    border-left-style: solid;
+  }
+
+  .border-right {
+    border-right-width: 1px;
+    border-right-style: solid;
+  }
+
+  /* Radius */
+  .rounded-full {
+    border-radius: 100%;
+  }
+
+  .rounded-4 {
+    border-radius: var(--radius-4);
+  }
+
+  .rounded-6 {
+    border-radius: var(--radius-6);
+  }
+
+  .rounded-8 {
+    border-radius: var(--radius-8);
+  }
+
+  .rounded-12 {
+    border-radius: var(--radius-12);
+  }
+}

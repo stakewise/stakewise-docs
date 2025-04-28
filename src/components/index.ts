@@ -1,0 +1,5 @@
+export { default as DocsSections } from './DocsSections/DocsSections'
+export { default as BrandAssets } from './BrandAssets/BrandAssets'
+export { default as GitHub } from './GitHub/GitHub'
+export { default as Links } from './Links/Links'
+export { default as FAQ } from './FAQ/FAQ'

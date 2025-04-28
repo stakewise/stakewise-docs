@@ -1,156 +1,130 @@
-import { themes as prismThemes } from "prism-react-renderer";
-import type { Config } from "@docusaurus/types";
-import type * as Preset from "@docusaurus/preset-classic";
+import { themes as prismThemes } from 'prism-react-renderer'
+import type * as Preset from '@docusaurus/preset-classic'
+import type { Config } from '@docusaurus/types'
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "StakeWise Docs",
-  tagline: "Dinosaurs are cool",
-  favicon: "img/favicon.ico",
+  title: 'Welcome to StakeWise Docs',
+  tagline: 'Documentation and Guides',
+  url: 'https://docs.stakewise.io',
+  favicon: 'img/favicon.ico',
+  baseUrl: '/',
+  projectName: 'docs', // Usually your repo name.
+  organizationName: 'stakewise', // Usually your GitHub org/user name.
 
-  // Set the production url of your site here
-  url: "https://docs.stakewise.io",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
+  onDuplicateRoutes: 'throw',
+  onBrokenMarkdownLinks: 'throw',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: "stakewise", // Usually your GitHub org/user name.
-  projectName: "docs", // Usually your repo name.
-
-  onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
-
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: 'en',
+    locales: ['en'],
   },
 
   presets: [
     [
-      "classic",
+      '@docusaurus/preset-classic',
       {
         docs: {
-          sidebarPath: "./sidebars.ts",
-          routeBasePath: "/",
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-        },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ["rss", "atom"],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          // Useful options to enforce blogging best practices
-          onInlineTags: "warn",
-          onInlineAuthors: "warn",
-          onUntruncatedBlogPosts: "warn",
+          sidebarPath: './sidebars.ts',
+          showLastUpdateTime: true,
+          routeBasePath: '/',
+          breadcrumbs: true,
         },
         theme: {
-          customCss: "./src/css/custom.css",
+          customCss: require.resolve('./src/css/custom.css'),
         },
-      } satisfies Preset.Options,
+      }
     ],
   ],
 
+  plugins: [
+    './src/plugins/tailwind-config.js',
+  ],
+
   themeConfig: {
-    // Replace with your project's social card
-    image: "img/docusaurus-social-card.jpg",
-    tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 5 },
+    respectPrefersColorScheme: true,
+    image: 'img/og-image.png',
+  
+    docs: {
+      sidebar: {
+        autoCollapseCategories: true,
+      },
+    },
+
     navbar: {
-      title: "StakeWise Docs",
+      title: 'StakeWise Docs',
       logo: {
-        alt: "My Site Logo",
-        src: "img/logo.svg",
+        alt: 'StakeWise Logo',
+        src: 'img/logo512.png',
+        height: 32,
+        width: 32,
+        style: {
+          marginRight: '12px',
+        },
       },
       items: [
         {
+          label: 'Docs',
+          to: 'docs/intro',
           type: "docSidebar",
-          sidebarId: "docsSidebar",
-          position: "left",
-          label: "Docs",
+          activeBaseRegex: `/docs/`,
+          sidebarId: 'docsSidebar',
         },
         {
-          label: "SDK",
-          position: "left",
-          sidebarId: "sdkSidebar",
+          label: 'SDK',
+          to: '/sdk/intro',
           activeBaseRegex: `/sdk/`,
-          to: "/sdk/intro",
+          sidebarId: 'sdkSidebar',
         },
         {
-          label: "Contracs",
-          position: "left",
-          sidebarId: "contractsSidebar",
+          label: 'Contracs',
+          to: '/contracts/intro',
           activeBaseRegex: `/contracts/`,
-          to: "/contracts/intro",
+          sidebarId: 'contractsSidebar',
         },
-        { to: "/blog", label: "Blog", position: "left" },
         {
-          href: "https://github.com/stakewise/docs",
-          label: "GitHub",
-          position: "right",
+          label: 'Discord',
+          href: 'https://discord.com/invite/2BSdr2g',
+          position: 'right',
         },
+        {
+          label: 'X',
+          href: 'https://x.com/stakewise_io',
+          position: 'right',
+        },
+        {
+          label: 'Telegram',
+          href: 'https://t.me/stakewise_io',
+          position: 'right',
+        },
+        {
+          type: 'html',
+          position: 'right',
+          value: `
+            <button   
+              onclick="window.open('https://app.stakewise.io', '_blank')"  
+              style="padding: 10px 20px; background-color: #846ab2; color: white; border: none; border-radius: 5px; cursor: pointer;"  
+            >  
+              Go to StakeWise  
+            </button>
+          `,
+        }
       ],
+    },
+
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 5,
     },
     footer: {
-      style: "dark",
-      links: [
-        {
-          title: "Docs",
-          items: [
-            {
-              label: "Docs",
-              to: "/docs/intro",
-            },
-          ],
-        },
-        {
-          title: "Community",
-          items: [
-            {
-              label: "Stack Overflow",
-              href: "https://stackoverflow.com/questions/tagged/docusaurus",
-            },
-            {
-              label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus",
-            },
-            {
-              label: "X",
-              href: "https://x.com/docusaurus",
-            },
-          ],
-        },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Blog",
-              to: "/blog",
-            },
-            {
-              label: "GitHub",
-              href: "https://github.com/facebook/docusaurus",
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} StakeWise`,
+      copyright: `Copyright © ${new Date().getFullYear()} StakeWise Labs`,
     },
+  
     prism: {
       theme: prismThemes.github,
+      defaultLanguage: 'typescript',
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,

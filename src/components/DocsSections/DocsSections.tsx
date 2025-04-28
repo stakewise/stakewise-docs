@@ -1,0 +1,32 @@
+import React, { useEffect } from 'react'
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
+
+import Blocks from './Blocks/Blocks'
+
+
+const DocsSections: React.FC = () => {
+  const { siteConfig } = useDocusaurusContext()
+
+  useEffect(() => {
+    // Something prevents adding a class, apparently a little later
+    // calls for another modification of the element
+    setTimeout(() => {
+      document.body.classList.add('bg-gradient')
+    })
+
+    return () => {
+      document.body.classList.remove('bg-gradient')
+    }
+  }, [ location ])
+
+  return (
+    <div className="pt-40 flex flex-col items-center">
+      <h1 className="text-lilac!">{siteConfig.title}</h1>
+      <h3>{siteConfig.tagline}</h3>
+      <Blocks />
+    </div>
+  )
+}
+
+
+export default React.memo(DocsSections)

@@ -34,7 +34,7 @@ All deposits, rewards distribution, and withdrawals are handled by smart contrac
 
       Whenever users stake ETH into a particular Vault, that Vault contract accumulates all deposits and launches a new validator for every 32 ETH collected.&#x20;
 
-      [Read our guide about staking in Vaults ->](../guides/staking.md#staking-with-vaults)
+      [Read our guide about staking in Vaults ->](../guides/01-staking.mdx#staking-with-vaults)
 
       Registering new validators in the Beacon Chain can take several weeks during times when many new staking deposits are being made. ETH staked in a Vault and used to create a validator will not start producing staking rewards until the validator passes the deposit queue and becomes active. This may cause a dilution in Vault's APY.&#x20;
 
@@ -57,15 +57,13 @@ All deposits, rewards distribution, and withdrawals are handled by smart contrac
       If there isn't enough unbonded ETH in the Vault, a sufficient number of Vault validators will be automatically exited to provide enough ETH for unstaking. Since exiting validators from the Beacon Chain takes time, users who requested to unstake their ETH are placed in the exit queue. Once the exit queue is over, users can claim their unstaked ETH whenever they want.&#x20;
 
       Users who requested to unstake ETH from a Vault and were placed into the exit queue will continue earning staking rewards until their ETH has been exited from staking.&#x20;
-
-      [Read our guide about unstaking ETH from Vaults ->](vaults.md#staking-and-unstaking)
     </TabItem>
     <TabItem value="gno">
       **Staking and deposit queue**
 
       Whenever users stake GNO into a particular Vault, that Vault contract accumulates all deposits and launches a new validator for every 1 GNO collected.&#x20;
 
-      [Read our guide about staking in Vaults ->](../guides/staking.md#staking-with-vaults)
+      [Read our guide about staking in Vaults ->](../guides/01-staking.mdx#staking-with-vaults)
 
       Registering new validators in the Gnosis Beacon Chain can take several weeks during times when many new staking deposits are being made. GNO staked in a Vault and used to create a validator will not start producing staking rewards until the validator passes the deposit queue and becomes active. This may cause a dilution in Vault's APY.&#x20;
 
@@ -88,8 +86,6 @@ All deposits, rewards distribution, and withdrawals are handled by smart contrac
       If there isn't enough unbonded GNO in the Vault, a sufficient number of Vault validators will be automatically exited to provide enough GNO for unstaking. Since exiting validators from the Gnosis Beacon Chain takes time, users who requested to unstake their GNO are placed in the exit queue. Once the exit queue is over, users can claim their unstaked GNO whenever they want.&#x20;
 
       Note that users who requested to unstake GNO from a Vault and were placed into the exit queue stop earning staking rewards as soon as they are placed in the queue.&#x20;
-
-      [Read our guide about unstaking GNO from Vaults ->](vaults.md#staking-and-unstaking)
     </TabItem>
   </Tabs>
 ```
@@ -245,15 +241,11 @@ and a snapshot is taken every \~12 hours.
       Solo Vaults are Public or Private Vaults where the Vault Admin is both the node operator and the depositor of ETH in the Vault.&#x20;
 
       Solo Vaults can be configured to a solo staker's liking, including setting the fee to the desired level, choosing between the Smoothing Pool and Own Escrow for handling of MEV, opting for a tokenless Vault to avoid potentially taxable token swaps on deposits / withdrawals, etc.
-
-      [Read more about configuring a Vault ->](vaults.md#for-operators-of-vaults)
     </TabItem>
     <TabItem value="gno">
       Solo Vaults are Public or Private Vaults where the Vault Admin is both the node operator and the depositor of GNO in the Vault.&#x20;
 
       Solo Vaults can be configured to a solo staker's liking, including setting the fee to the desired level, choosing between the Smoothing Pool and Own Escrow for handling of MEV, opting for a tokenless Vault to avoid potentially taxable token swaps on deposits / withdrawals, etc.
-
-      [Read more about configuring a Vault ->](vaults.md#for-operators-of-vaults)
     </TabItem>
   </Tabs>
 ```

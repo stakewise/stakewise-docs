@@ -38,6 +38,19 @@ html[data-theme='dark'] {
   background-color: #181618;
 }
 
+html[data-theme='dark'] .alert--success {
+  --ifm-tabs-color-active-border: #7fbc7f;
+  --ifm-alert-background-color: #65cd6533;
+}
+
+html[data-theme='dark'] .alert--danger {
+  --ifm-alert-background-color: #94595b6b;
+}
+
+html[data-theme='dark'] .alert--warning {
+  --ifm-alert-background-color: #9490596b;
+}
+
 html[data-theme='light'] {
   --ifm-toc-border-color: #00060f0d;
   --ifm-footer-background-color: #00060f0d;

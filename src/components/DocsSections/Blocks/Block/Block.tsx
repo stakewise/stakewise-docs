@@ -17,7 +17,6 @@ const LinkIcon = require("@site/static/icon/link.svg").default
 const Block: React.FC<BlockProps> = (props) => {
   const { title, text, href, Svg } = props
 
-
   return (
     <Link
       className={cx(s.container, 'rounded-8 mx-16 px-12 py-16 bg-moon/5 relative max-[960px]:mt-16')}

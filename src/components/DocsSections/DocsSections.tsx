@@ -17,7 +17,7 @@ const DocsSections: React.FC = () => {
     return () => {
       document.body.classList.remove('bg-gradient')
     }
-  }, [ location ])
+  }, [])
 
   return (
     <div className="pt-40 flex flex-col items-center w-full">

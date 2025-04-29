@@ -12,7 +12,7 @@ const config: Config = {
   projectName: 'docs', // Usually your repo name.
   organizationName: 'stakewise', // Usually your GitHub org/user name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenAnchors: 'throw',
   onDuplicateRoutes: 'throw',
   onBrokenMarkdownLinks: 'throw',

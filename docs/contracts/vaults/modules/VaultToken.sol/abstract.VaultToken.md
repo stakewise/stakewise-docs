@@ -91,7 +91,7 @@ function _updateExitQueue() internal virtual override returns (uint256 burnedSha
 ### _transfer
 
 *Moves `amount` of tokens from `from` to `to`.
-Emits a {Transfer} event.*
+Emits a Transfer event.*
 
 
 ```solidity

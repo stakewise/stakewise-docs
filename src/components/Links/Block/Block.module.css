@@ -1,0 +1,17 @@
+.container {
+  min-width: 167px;
+  transition: .2s;
+  cursor: pointer;
+}
+
+.container:hover {
+  transform: scale(1.05);
+  text-decoration: none;
+  background-color: rgba(var(--moon-rgb), .1) !important;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: var(--moon);
+}

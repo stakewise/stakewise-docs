@@ -101,8 +101,6 @@ Liquid staking in StakeWise V3 is powered by osTokens - staked tokens that accru
       **Buying osETH on DEXs**
 
       Stakers who buy osETH on DEXs don't have exposure to any particular Vault and hence are fully insulated against any slashing losses and poor performance that may occur.&#x20;
-
-      [Read more about the excess backing of osETH ->](ostoken.md#overcollateralization)
     </TabItem>
     <TabItem value="osgno">
       osGNO can be minted against any Gnosis node, including those that perform poorly.&#x20;
@@ -142,8 +140,6 @@ Liquid staking in StakeWise V3 is powered by osTokens - staked tokens that accru
       Redemption of osETH for ETH always happens at the underlying exchange rate between the two tokens. The exchange rate is determined by StakeWise Oracles based on the performance of Vaults.
 
       Redemption of osETH for ETH is instant if there is enough unbonded ETH in the protocol. If the amount of unbonded ETH is not enough to meet the volume of redemption requests, the protocol will exit validators to withdraw a sufficient amount of ETH for full redemption.&#x20;
-
-      [Read more about the osETH redemption mechanism ->](ostoken.md#redemption-mechanism)
     </TabItem>
     <TabItem value="osgno">
       osGNO is backed by staked GNO in Vaults, and is redeemable for GNO in their validators.
@@ -151,8 +147,6 @@ Liquid staking in StakeWise V3 is powered by osTokens - staked tokens that accru
       Redemption of osGNO for GNO always happens at the underlying exchange rate between the two tokens. The exchange rate is determined by StakeWise Oracles based on the performance of Vaults.
 
       Redemption of osGNO for GNO is instant if there is enough unbonded GNO in the protocol. If the amount of unbonded GNO is not enough to meet the volume of redemption requests, the protocol will exit validators to withdraw a sufficient amount of GNO for full redemption.&#x20;
-
-      [Read more about the osGNO redemption mechanism ->](ostoken.md#redemption-mechanism)
     </TabItem>
   </Tabs>
 ```
@@ -493,8 +487,6 @@ Liquid staking in StakeWise V3 is powered by osTokens - staked tokens that accru
 
       The amount of osETH to be burned will equal the sum of the original amount minted plus the StakeWise DAO commission, which is set to 5% of the rewards osETH accumulated.
 
-      [Read more about the StakeWise DAO fee ->](ostoken.md#staking-fee)
-
       Note that burning the full outstanding amount of osETH is necessary to fully unstake from the Vault. If less osETH is burned, user's ETH stake will be withdrawable only partially in order to maintain appropriate position health.&#x20;
 
       The amount of ETH that can be unstaked immediately will be based on position health, where the osETH position must remain healthy (i.e. up to 90% of staked ETH in 90% LTV Vaults and up to 99.99% in 99.99% LTV Vaults) after some ETH has been unstaked. This is calculated by the following formula:
@@ -534,8 +526,6 @@ Liquid staking in StakeWise V3 is powered by osTokens - staked tokens that accru
       Users' staked GNO in Vaults is used as backing when they mint osGNO. oGNO relies on this backing to maintain value on the secondary market. To prevent users from minting unbacked osGNO, StakeWise locks users' staked GNO until the osGNO they minted is fully returned to the Vault. The latter is known as osGNO burning.
 
       The amount of osGNO to be burned will equal the sum of the original amount minted plus the StakeWise DAO commission, which is set to 5% of the rewards osGNO accumulated.
-
-      [Read more about the StakeWise DAO fee ->](ostoken.md#staking-fee)
 
       Note that burning the full outstanding amount of osGNO is necessary to fully unstake from the Vault. If less osGNO is burned, user's GNO stake will be withdrawable only partially in order to maintain appropriate position health.&#x20;
 

@@ -4,42 +4,138 @@ sidebar_position: 1
 
 # Ethereum
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+### Step 0. Download Operator
+
+Download the latest operator binary from [here](https://github.com/stakewise/v3-operator/releases).
+
+### Step 1. Validator keys recovery
+
+Follow the steps to recover the keystores using your validator keys mnemonic [here](https://github.com/stakewise/v3-operator#recover-vault-data-directory-and-keystores).
+
+After recovery add fake `deposit_data.json` file to your operator's vault directory, with content:
+
+```
+[{"pubkey": "8bfc0efc0209514a62cda2de8346a3a0849352eb830e0ff5b525642d93b9095d879a2789b284da14e348f85711b6b6d0", "withdrawal_credentials": "010000000000000000000000ac0f906e433d58fa868f936e8a43230473652885", "amount": 32000000000, "signature": "b55612acebde460bb273d100bc1574a21aea12f168ad7921cca855b6bf587646b0da329d4b17944773a876a90d87939a001a3857ca224b300ebe57703dce6be37d074e892fd65aa64e92284092efa14c38c1ed17f9fb4e3cd7a585ea66d46b03", "deposit_message_root": "f39eaed6c4c7e3e4563a3b5f3f1ca195c761f10517a5b303031d453dd3be28be", "deposit_data_root": "2d85d54c2b3d1a593f0f974d41fded6d68910e59adfc2d4e90ec74bb2e91e3c4", "fork_version": "00000000", "network_name": "mainnet", "deposit_cli_version": "2.4.0"}]
 ```
 
-```mdx-code-block
-  <Tabs
-    groupId="ostoken"
-    defaultValue="oseth"
-    values={[
-      {label: 'osETH', value: 'oseth'},
-    ]}>
-    <TabItem value="oseth">
-        ### Boost feature and liquidation risks
+#### Step 1.1. Import Genesis Keys (If applicable)
 
-        When using the <b>Boost feature</b> (looped staking with osETH as collateral), the max LTV for borrowing ETH on Aave is 93%, with a liquidation threshold of 95%, leaving a 2% safety buffer. If the LTV reaches 94.5%, anyone can trigger an unboosting transaction to prevent liquidation.
+:::warning
+**If you run keys from the Verihash operator before continuing, you must import them.**
+:::
 
-        ### osETH price and borrowing stability
+This can be done with the following command:
 
-        <ul>
-          <li>The osETH APY follows the APY of the lowest-yielding 99.99% LTV Vault.</li>
-          <li>osETH depegging on secondary markets does not impact these Vaults' borrow positions since Aave relies on StakeWise’s native price feed for osETH.</li>
-        </ul>
+```bash
+./operator \
+   import-genesis-keys \
+   --rsa-key /path/to/rsa_key \
+   --exported-keys-dir /path/to/keys \
+   --vault vault_address
+```
 
-        However, prolonged negative yield spread (where ETH borrow APY exceeds osETH staking APY) can erode collateral over time. osETH and ETH borrow APY historic time-series analysis indicates that ETH borrow APY exceeded osETH APY only 10.7% (39 days per year) of the time leading to a temporary rise in LTV. This means that on the rest of the days, your LTV is decreasing because the value of your collateral grows faster than your loan value.
+### Step 2. Setup operator database
 
-        Given historical data, osETH growth rate matching the APY of the lowest-yielding 99.99% LTV Vault, and Aave using the StakeWise native price feed for osETH, the probability of a Boost position reaching 94.5% LTV is low.
+Create new database called `operator` and the user for the database. Next, initialize database and upload keysotres:
 
-        To prevent liquidation, the StakeWise core team actively monitors boosted positions and triggers exits when LTV reaches 94.5%.
+```
+./operator remote-db setup
+Enter your vault address: vault_address
+Enter the Postgres DB connection URL (e.g. postgresql://username:pass@hostname/dbname): postgresql://username:pass@hostname/dbname
+Successfully configured remote database.
+Encryption key: SAAHK4DYwAvWMcKpV........
+NB! You must store your encryption in a secure cold storage!
 
-        <b>Further reading</b>
+./operator remote-db upload-keypairs
+```
 
-        <ul>
-          <li>[Maximize Your Rewards With StakeWise Boost](../../intro.mdx)</li>
-          <li>[How StakeWise Boost Keeps Your Rewards Juicy & Your Stake Safe](../../intro.mdx)</li>
-        </ul>
-    </TabItem>
-  </Tabs>
+### Step 3. Start web3signer
+
+To start web3signer, use our chart. With `values.yaml`&#x20;
+
+```
+global:
+    network: mainnet
+    vault: 0xac0f906e433d58fa868f936e8a43230473652885
+dbUrl: jdbc:postgresql://postgres:postgres@localhost/web3signer
+dbUsername: web3signer
+dbPassword: <password goes here>
+dbKeystoreUrl: postgresql://postgres:postgres@localhost/operator
+decryptionKey: <decrypt key goes here>
+```
+
+The deployment command looks like this:
+
+```sh
+helm repo add stakewise https://charts.stakewise.io
+helm upgrade --install web3signer stakewise/web3signer \
+  -n web3signer \
+  -f values.yaml
+```
+
+### Step 4. Create wallet and Kubernetes secret
+
+Сreate operator hot wallet by following the instructions [here](https://github.com/stakewise/v3-operator#3-create-wallet).
+
+Before deploying v3-operator service create kubernetes secret with operator wallet:
+
+```
+kubectl create secret -n operator generic v3-operator-wallet-data \
+  --from-file=/home/username/.stakewise/0xac0f906e433d58fa868f936e8a43230473652885/wallet
+```
+
+### Step 5. Start the Operator
+
+To start the operator, use our chart. With `values.yaml`:&#x20;
+
+```
+settings:
+    network: mainnet
+    vault: 0xac0f906e433d58fa868f936e8a43230473652885
+    executionEndpoints: https://node.example.com/mainnet-nethermind
+    consensusEndpoints: https://node.example.com/mainnet-lighthouse
+    walletSecretName: wallet-secret
+    remoteDbConfig:
+        enabled: true
+        dbUrl: postgresql://postgres:postgres@localhost/operator
+        remoteSignerUrl: http://web3signer.web3signer:6174
+```
+
+The deployment command looks like this:
+
+```sh
+helm repo add stakewise https://charts.stakewise.io
+helm upgrade --install v3-operator stakewise/v3-operator \
+  -n operator \
+  -f values.yaml
+```
+
+### Step 6. Start the Validators
+
+To start the validators, use our chart. With `values.yaml`:
+
+```
+global:
+    network: mainnet
+    vault: 0xac0f906e433d58fa868f936e8a43230473652885
+dbKeystoreUrl: postgresql://postgres:postgres@localhost/operator
+enabled: true
+type: lighthouse
+validatorsCount: 1
+suggestedFeeRecipient: 0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86
+web3signerEndpoint: http://web3signer.web3signer:6174
+beaconChainRpcEndpoints:
+    - https://node.example.com/mainnet-lighthouse
+extraFlags:
+    lighthouse:
+        - --builder-proposals
+```
+
+The deployment command looks like this:
+
+```sh
+helm repo add stakewise https://charts.stakewise.io
+helm upgrade --install validators stakewise/web3signer-validators \
+  -n validators \
+  -f values.yaml
 ```

@@ -2,125 +2,75 @@
 sidebar_position: 6
 ---
 
-# Vault Performance
+# Vault performance
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+### Vault performance
+
+Vault performance is the average performance of its validators. The goal is to derive a simple and effective formula for calculating vault efficiency by evaluating the ratio of rewards to penalties, minimizing the influence of luck. Efficiency consists of proposer and attester parts.
+
+### Proposer performance
+
+Block proposals depend on luck, but we should penalize validators who miss MEV opportunities. Since MEV rewards can vary greatly between blocks, we focus only on the number of blocks processed and ignore the reward sizes to avoid relying on chance.
+
+We calculate the proposal_score by dividing the number of produced blocks by the total number of blocks. Validators are not negatively penalized for missed blocks; they get a score of 0 if they miss all their opportunities.
+
+**Formula:**
+
+```
+proposal_score = proposed_block_count / (proposed_block_count + missed_block_count)
 ```
 
-StakeWise is a DeFi protocol that offers a simple and safe way to stake ETH and GNO on favourable terms and to farm, restake, and borrow with your stake for more yield using osETH and osGNO, liquid staking tokens.&#x20;
+Where:
 
-StakeWise pioneers the concept of a staking marketplace that allows stakers to choose their own node operators, earn more staking profits, minimize slashing risk, and stake solo, all while keeping their stake liquid.&#x20;
+- `proposed_block_count` - Number of successfully mined MEV blocks.
+- `missed_block_count` - Number of missed MEV blocks.
 
-StakeWise also provides individuals, communities and businesses with the tools to launch their own staking pools from scratch and give their users osTokens - osETH and osGNO - with an extensive liquidity & utility ecosystem developed by the StakeWise DAO.&#x20;
+### Attester performance
 
-StakeWise is a good fit for you if you are:
+#### **Attestation Rewards**
 
-- An everyday staker who wants a simple and secure solution for staking your capital, with the potential to use your staked capital in DeFi apps.
-- A solo staker who wants to mint a liquid staking token against your own node, and also has the potential to offer fully trustless, non-custodial staking as a service to others.
-- A whale/fund/DAO/institution looking for a bespoke staking solution to best suit your needs, whilst being able to access DeFi with staked capital.&#x20;
+85% of rewards come from attestations containing valuable information about consensus layer correctness and inclusion delay.
 
-### osToken
+An attestation consists:
 
-```mdx-code-block
-  <Tabs
-    groupId="ostoken"
-    defaultValue="oseth"
-    values={[
-      {label: 'osETH', value: 'oseth'},
-      {label: 'osGNO', value: 'osgno'},
-    ]}>
-    <TabItem value="oseth">
-      osETH is the main liquid staking token for the StakeWise ecosystem. With in-built slashing protection\* and yield accrual from a highly diversified set of node operators, osETH is a simple and secure way to stake ETH while preserving access to DeFi.&#x20;
+- Head vote
+- Source vote
+- Target vote
 
-      **In-built slashing protection**
+If a validator votes correctly on all three with optimal inclusion delay, they receive 100% of potential reward.
 
-      * 90% LTV Vaults are overcollateralized.
-      * 99.99% Vault operators are required to place a 5M SWISE bond before such capability is provided by the StakeWise DAO.
-    </TabItem>
-    <TabItem value="osgno">
-      osGNO is the main liquid staking token for the StakeWise ecosystem on Gnosis Chain. With in-built slashing protection\* and yield accrual from a diversified set of node operators, osGNO is a simple and secure way to stake GNO while preserving access to DeFi.&#x20;
+The beacon node API provides `idealReward` for an epoch representing maximum potential rewards based on optimal performance, allowing us to calculate attester efficiency:
 
-      **In-built slashing protection**
+**Formula:**&#x20;
 
-      * 90% LTV Vaults are overcollateralized.
-      * 99.95% Vault operators are required to place a 1M SWISE bond before such capability is provided by the StakeWise DAO.
-    </TabItem>
-  </Tabs>
+```
+attester_score = total_rewards / ideal_rewards
 ```
 
-### StakeWise components
+Where:
 
-<table>
-  <thead>
-    <tr>
-      <th width="137">Component</th>
-      <th>Description</th>
-      <th data-hidden></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <a href="vaults.md">
-          <strong>Vaults</strong>
-        </a>
-      </td>
-      <td>
-        Permissionless and non-custodial, Vaults are isolated staking pools
-        connected to Ethereum nodes that allow staking on specific terms
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="ostoken.md">
-          <strong>osETH</strong>
-        </a>
-      </td>
-      <td>
-        A token for liquid staking that can be minted against staked ETH in any
-        Vault
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="ostoken.md">
-          <strong>osGNO</strong>
-        </a>
-      </td>
-      <td>
-        A token for liquid staking that can be minted against staked GNO in any
-        Vault
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="oracles.md">
-          <strong>Oracles</strong>
-        </a>
-      </td>
-      <td>
-        A set of entities fetching information about staking performance and
-        events off-chain and pushing it on-chain to enable staking, unstaking
-        and rewards distribution
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <a href="../governance/stakewise-dao.md">
-          <strong>DAO</strong>
-        </a>
-      </td>
-      <td>
-        A community of SWISE token holders that govern the key parameters of the
-        StakeWise protocol and manage its Treasury{" "}
-      </td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+- `total_rewards` - Sum of validators rewards fetched via [beacon API](https://ethereum.github.io/beacon-APIs/#/Rewards/getAttestationsRewards)
+- `ideal_rewards` - Sum of ideal rewards fetched via [beacon API](https://ethereum.github.io/beacon-APIs/#/Rewards/getAttestationsRewards)
+
+#### **Sync Committee**
+
+Sync committee rewards are ignored in calculations as they constitute 3% CL rewards and depend on luck.
+
+### Scoring formula
+
+<pre>
+  <code>
+    <strong>
+      score = (8/10 * attestations_score + 2/10 * proposal_score) * 100
+    </strong>
+  </code>
+</pre>
+
+### Scoring grades
+
+**We show vault grades based on the average vault performance over the last 7 days.**
+
+- **Excellent**: Values approximately between 99.6-100. No missed blocks or a very small percentage of them. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
+- **Good**: Values approximately between 99.2-99.6. No missed blocks or a very small percentage of them. Validators perform well in attestations, with less than 1% missed attestation rewards.
+- **Moderate**: Values approximately between 97.1-99.2%. The vault has issues, with up to 3% missed attestations and/or blocks.
+- **Bad**: Values between 0-97.1%. Validators are not performing correctly, missing blocks or poorly handling attestations.

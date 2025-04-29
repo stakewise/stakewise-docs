@@ -20,7 +20,7 @@ const Block: React.FC<BlockProps> = (props) => {
 
   return (
     <Link
-      className={cx(s.container, 'rounded-8 mx-16 px-12 py-16 bg-moon/5 relative')}
+      className={cx(s.container, 'rounded-8 mx-16 px-12 py-16 bg-moon/5 relative max-[960px]:mt-16')}
       to={href}
     >
       <div className="flex items-center justify-start">

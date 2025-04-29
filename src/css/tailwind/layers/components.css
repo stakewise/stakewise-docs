@@ -126,14 +126,4 @@
     font-size: 12px;
     line-height: 18px;
   }
-
-  .width-container {
-    width: 100%;
-    max-width: 1320px;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 60px;
-    padding-bottom: 40px;
-    padding-left: 60px;
-  }
 }

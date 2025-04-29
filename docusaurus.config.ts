@@ -85,13 +85,13 @@ const config: Config = {
           sidebarId: 'contractsSidebar',
         },
         {
-          label: 'Discord',
-          href: 'https://discord.com/invite/2BSdr2g',
+          label: 'X',
+          href: 'https://x.com/stakewise_io',
           position: 'right',
         },
         {
-          label: 'X',
-          href: 'https://x.com/stakewise_io',
+          label: 'Discord',
+          href: 'https://discord.com/invite/2BSdr2g',
           position: 'right',
         },
         {

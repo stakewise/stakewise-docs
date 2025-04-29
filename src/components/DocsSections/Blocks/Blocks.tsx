@@ -25,7 +25,7 @@ const blocks: BlockProps[] = [
 ]
 
 const Blocks: React.FC = () => (
-  <div className="mt-40 flex justify-between items-center">
+  <div className="mt-40 flex justify-between items-center max-[960px]:flex-col">
     {
       blocks.map((item) => (
         <Block key={item.title} {...item} />

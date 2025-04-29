@@ -20,9 +20,9 @@ const DocsSections: React.FC = () => {
   }, [ location ])
 
   return (
-    <div className="pt-40 flex flex-col items-center">
-      <h1 className="text-lilac!">{siteConfig.title}</h1>
-      <h3>{siteConfig.tagline}</h3>
+    <div className="pt-40 flex flex-col items-center w-full">
+      <h1 className="text-lilac! text-center">{siteConfig.title}</h1>
+      <h3 className="text-center">{siteConfig.tagline}</h3>
       <Blocks />
     </div>
   )

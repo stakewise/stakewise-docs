@@ -32,7 +32,7 @@ const links: BlockProps[] = [
 ]
 
 const Links: React.FC = () => (
-  <div className="mt-40 flex justify-center items-center">
+  <div className="mt-40 flex justify-center items-center max-[960px]:flex-col">
     {
       links.map((item) => (
         <Block key={item.title} {...item} />

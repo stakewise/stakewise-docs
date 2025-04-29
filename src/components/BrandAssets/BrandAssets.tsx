@@ -4,7 +4,7 @@ import React from 'react'
 const BrandAssets: React.FC = () => (
   <div className="mt-40 text-center">
     <a
-      href="./stakewise-brand-assets.zip"
+      href="/stakewise-brand-assets.zip"
       download
     >
       <div className="text-t16m text-lilac underline">

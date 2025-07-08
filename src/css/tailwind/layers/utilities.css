@@ -48,11 +48,11 @@
   }
 
   /* Colors */
-  .bg-fancy-ocean {
-    background: #fff;
+  .bg-white {
+    background: white;
   }
 
-  .bg-fancy-ocean:hover {
+  .bg-white:hover {
     opacity: .8;
   }
 }

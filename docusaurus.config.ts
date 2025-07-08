@@ -104,9 +104,9 @@ const config: Config = {
           position: 'right',
           value: `
             <button   
-              class="bg-fancy-ocean" 
+              class="bg-white" 
               onclick="window.open('https://app.stakewise.io', '_blank')"
-              style="padding: 10px 20px; color: white; border: none; border-radius: 5px; cursor: pointer;"  
+              style="padding: 10px 20px; color: #00060f; border: none; border-radius: 5px; cursor: pointer;"  
             >  
               Open App 
             </button>

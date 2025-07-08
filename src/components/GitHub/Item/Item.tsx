@@ -16,7 +16,7 @@ const Item: React.FC<ItemProps> = (props) => {
 
   return (
     <a
-      className={cx(s.container, 'flex items-center justify-between bg-moon/5 rounded-8 m-12 px-12 py-16')}
+      className={cx(s.container, 'flex items-center justify-between crystal-button-block rounded-8 m-12 px-12 py-16')}
       target="_blank"
       href={href}
     >

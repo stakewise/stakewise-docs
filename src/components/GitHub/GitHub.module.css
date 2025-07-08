@@ -1,0 +1,7 @@
+:global(html[data-theme='dark']) .box {
+  background-color: rgba(39, 40, 42, .2);
+}
+
+:global(html[data-theme='light']) .box {
+  background-color: rgba(255, 255, 255, .3);
+}

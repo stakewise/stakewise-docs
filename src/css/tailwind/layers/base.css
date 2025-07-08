@@ -11,15 +11,41 @@
   :root[data-theme='light'] {
     --moon: #00060f;
     --moon-rgb: 0, 6, 15;
-    --lilac: #846ab2;
-    --lilac-rgb: 132, 106, 178;
+    --coral-rgb: 1, 137, 112;
+    --coral: rgb(1, 137, 112);
+
+    --ifm-navbar-link-hover-color: rgb(1, 137, 112) !important;
+    --ifm-breadcrumb-color-active: rgb(1, 137, 112) !important;
+    --ifm-tabs-color-active-border: rgb(1, 137, 112) !important;
+    --ifm-menu-color-active: rgb(1, 137, 112) !important;
+    --ifm-tabs-color-active: rgb(1, 137, 112) !important;
+    --ifm-color-primary: rgb(1, 137, 112) !important;
+
+    --ifm-color-emphasis-200: transparent !important;
+
+    --ifm-card-background-color: rgba(26, 29, 28, .05) !important;
+    --ifm-menu-color-background-hover: rgba(26, 29, 28, .05) !important;
+    --ifm-menu-color-background-active: rgba(26, 29, 28, .05) !important;
   }
 
   :root[data-theme='dark'] {
     --moon: #ffffff;
     --moon-rgb: 255, 255, 255;
-    --lilac: #b68dff;
-    --lilac-rgb: 182, 141, 255;
+    --coral-rgb: 64, 233, 222;
+    --coral: rgb(64, 233, 222);
+
+    --ifm-navbar-link-hover-color: rgb(64, 233, 222) !important;
+    --ifm-breadcrumb-color-active: rgb(64, 233, 222) !important;
+    --ifm-tabs-color-active-border: rgb(64, 233, 222) !important;
+    --ifm-menu-color-active: rgb(64, 233, 222) !important;
+    --ifm-tabs-color-active: rgb(64, 233, 222) !important;
+    --ifm-color-primary: rgb(64, 233, 222) !important;
+
+    --ifm-color-emphasis-200: transparent !important;
+
+    --ifm-card-background-color: rgba(26, 29, 28, .2) !important;
+    --ifm-menu-color-background-hover:rgba(26, 29, 28, .2) !important;
+    --ifm-menu-color-background-active: rgba(26, 29, 28, .2) !important;
   }
 
   ::-moz-selection {
@@ -43,7 +69,6 @@
 
   body {
     position: relative;
-    background-color: var(--mirror);
     -webkit-overflow-scrolling: touch;
   }
 

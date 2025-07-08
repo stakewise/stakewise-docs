@@ -17,13 +17,13 @@ const Block: React.FC<BlockProps> = (props) => {
 
   return (
     <a
-      className={cx(s.container, 'rounded-8 mx-16 px-12 py-16 bg-moon/5 relative max-[960px]:mt-16')}
+      className={cx(s.container, 'rounded-8 mx-16 px-12 py-16 crystal-button-block relative max-[960px]:mt-16')}
       target="_blank"
       href={href}
     >
       <div className="flex items-center justify-start">
-        <Svg className={cx(s.icon, 'opacity-50')} />
-        <div className="ml-8 text-t18m opacity-50">
+        <Svg className={cx(s.icon, 'opacity-80')} />
+        <div className="ml-8 text-t16">
           {title}
         </div>
       </div>

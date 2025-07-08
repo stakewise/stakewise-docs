@@ -54,7 +54,7 @@ const Question: React.FC<QuestionProps> = (props) => {
         </div>
       </DisclosureButton>
       <div
-        className="flex p-8 mx-auto bg-moon/5 rounded-8"
+        className="flex p-8 mx-auto crystal-bg rounded-8"
         style={{
           overflow: 'hidden',
           maxWidth: '600px',
@@ -67,7 +67,7 @@ const Question: React.FC<QuestionProps> = (props) => {
           static
           ref={panelRef}
         >
-          <div className="text-center w-full text-moon text-t14 opacity-80 whitespace-pre-wrap">
+          <div className="text-center w-full text-moon text-t14 whitespace-pre-wrap">
             {text}
           </div>
         </DisclosurePanel>

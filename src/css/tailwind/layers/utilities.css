@@ -49,10 +49,10 @@
 
   /* Colors */
   .bg-fancy-ocean {
-    background: linear-gradient(90deg, #394cf6 0%, #74aafc 100%);
+    background: #fff;
   }
 
   .bg-fancy-ocean:hover {
-    background: linear-gradient(90deg, rgb(16.8757826087, 39.0694347826, 237.6442173913) 0%, rgb(65.5684507042, 139.1605633803, 250.9115492958) 90%);
+    opacity: .8;
   }
 }

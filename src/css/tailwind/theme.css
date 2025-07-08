@@ -2,21 +2,8 @@
   --*: initial;
 
   /* Colors */
-  /* --color-sun: var(--sun);
-  --color-coal: var(--coal);
-  --color-snow: var(--snow); */
   --color-moon: var(--moon);
-  --color-lilac: var(--lilac);
-  /* --color-stone: var(--stone);
-  --color-smoke: var(--smoke);
-  --color-ocean: var(--ocean);
-  --color-autumn: var(--autumn);
-  --color-forest: var(--forest);
-  --color-jungle: var(--jungle);
-  --color-sunset: var(--sunset);
-  --color-mirror: var(--mirror);
-  --color-volcano: var(--volcano);
-  --color-titanium: var(--titanium); */
+  --color-coral: var(--coral);
 
   /* Border radius */
   --radius-4: 4px;

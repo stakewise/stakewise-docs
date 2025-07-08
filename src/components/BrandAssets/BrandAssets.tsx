@@ -7,7 +7,7 @@ const BrandAssets: React.FC = () => (
       href="/stakewise-brand-assets.zip"
       download
     >
-      <div className="text-t16m text-lilac underline">
+      <div className="text-t16m text-coral underline">
         Download StakeWise brand assets
       </div>
     </a>

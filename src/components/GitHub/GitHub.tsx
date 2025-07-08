@@ -1,6 +1,9 @@
 import React from 'react'
+import cx from 'classnames'
 
 import Item from './Item/Item'
+
+import s from './GitHub.module.css'
 
 
 const items = [
@@ -27,7 +30,7 @@ const items = [
 ] as const
 
 const GitHub: React.FC = () => (
-  <div className="mt-40 mx-auto max-w-[966px] flex items-center justify-center bg-moon/5 rounded-12 max-[960px]:flex-wrap">
+  <div className={cx(s.box, 'mt-40 mx-auto max-w-[966px] flex items-center justify-center rounded-12 max-[960px]:flex-wrap')}>
     <div className="text-center text-t18b w-[220px] max-[960px]:flex-1 max-[960px]:pt-24">Developer Links</div>
     <div className="py-12 flex items-center justify-between flex-wrap min-[961px]:flex-1">
       {

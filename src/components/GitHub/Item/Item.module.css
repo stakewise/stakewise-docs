@@ -3,9 +3,3 @@
   transition: .2s;
   cursor: pointer;
 }
-
-.container:hover {
-  transform: scale(1.05);
-  text-decoration: none;
-  background-color: rgba(var(--moon-rgb), .1) !important;
-}

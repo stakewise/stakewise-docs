@@ -4,133 +4,45 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
-# Welcome to StakeWise V3
+# The StakeWise Protocol
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Details from '@theme/MDXComponents/Details';
-```
+<h3>Introduction</h3>
 
-Everything you want to know about StakeWise at your fingertips
+This documentation is designed to help you understand and build with StakeWise V3. It covers the protocol fundamentals, explains the technical architecture, and provides practical guides for staking, operating, and developing on the platform.
 
-Welcome to StakeWise - the premier liquid staking protocol on Ethereum and Gnosis Chain.
+Whether you are taking your first steps into liquid staking, running infrastructure, or navigating as a seasoned DeFi user, these pages guide you in unlocking the potential of capital.
 
-To find out more about StakeWise and the StakeWise DAO please refer to the sections below.
+<h3>What is StakeWise?</h3>
 
-# What can I do with StakeWise?
+StakeWise V3 is the premier liquid staking protocol on Ethereum and Gnosis Chain, enabling simple and secure staking for individuals and organizations. It also provides tools and software that allow anyone to launch their own staking pool (called a Vault) and earn fees by running validators for others.
 
-```mdx-code-block
-  <Tabs
-    groupId="token"
-    defaultValue="eth"
-    values={[
-      {label: 'ETH', value: 'eth'},
-      {label: 'GNO', value: 'gno'},
-    ]}>
-    <TabItem value="eth">
-      StakeWise is a liquid staking protocol that enables simple and secure ETH staking for individuals and organizations. It also provides the tools & software to allow anyone to launch their own staking Pool (called Vault) and earn fees by running validators for others.
+Our design philosophy is simple: advancing decentralization by giving anyone the chance to stake on their own terms. At the core of this vision are user empowerment and flexibility in creating solutions. Anyone can leverage StakeWise to achieve their unique staking goals. The system is maximally customizable and secure, offering diverse staking solutions for every user type.
 
-      All Ether staked using StakeWise can be made liquid with osETH, a liquid staking token.
+<h3>Core Architecture</h3>
 
-      <h3>Staking with StakeWise</h3>
-      <ul>
-          <li>[How to stake with StakeWise](./intro.mdx)</li>
-          <li>[How to solo stake with StakeWise](./intro.mdx)</li>
-          <li>[How to get osETH](./intro.mdx)</li>
-      </ul>
+StakeWise's architecture rests on three foundational pillars: Vaults, osETH tokens, and Oracles.
 
-      <h3>Running a Vault with StakeWise</h3>
-      <ul>
-          <li>[How to launch a Vault with StakeWise](./intro.mdx)</li>
-      </ul>
+<h4>Vaults</h4>
+StakeWise pioneers the Vault marketplace model. Anyone can launch a Vault, stake in Vaults, and mint osETH, with Vault operators earning a staking fee in exchange while maintaining the highest level of security.
+>📝 Learn how Vaults work, their isolation model, and how to create your own [Vaults →](./intro.mdx)
 
-      <h3>Use cases</h3>
+<h4>osETH</h4>
+osETH is a token for liquid staking that accrues ETH rewards to its holders. osETH is minted by stakers in Vaults who want to use their stake in DeFi. Anyone can swap their ETH for osETH in DeFi to start earning ETH rewards by holding the token.
+>📝 Explore osETH's inner mechanics, including its built-in slashing protection [osETH →](./intro.mdx)
 
-      For all guides on how to use StakeWise please refer to the [Guides](./intro.mdx) section.
-    </TabItem>
-    <TabItem value="gno">
-      StakeWise is a liquid staking protocol that enables simple and secure GNO staking for individuals and organizations. It also provides the tools & software to allow anyone to launch their own staking Pool (called Vault) and earn fees by running validators for others.
+<h4>Oracles</h4>
+Oracles ensure that Vaults register validators without assuming custody of funds, calculate Vault rewards, and push information about validator registrations and exits on-chain.
+>📝 Discover how Oracles maintain protocol security and decentralization [Oracles →](./intro.mdx)
 
-      All Ether staked using StakeWise can be made liquid with osGNO, a liquid staking token.
+<h3>The Art of Liquid Staking</h3>
+Liquid staking is the ability to turn your stake into its tokenized representation by receiving receipt tokens (LST). 'Staking' refers to providing capital to secure a blockchain consensus mechanism by locking up cryptocurrency (like ETH or GNO) and earning rewards in return, while 'liquid' refers to keeping your assets tradable and composable instead of locked.
+The art of liquid staking lies in maximizing yield while minimizing risk. StakeWise accomplishes this pursuit through its underlying architecture to unlock greater rewards securely. This security comes from osETH's overcollateralization mechanism, the decentralized Oracle network, customizable Vault configurations, and the choice to set your own staking conditions. StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes and adapting proactively for optimal performance.
 
-      <h3>Staking with StakeWise</h3>
-      <ul>
-          <li>[How to stake with StakeWise](./intro.mdx)</li>
-          <li>[How to solo stake with StakeWise](./intro.mdx)</li>
-          <li>[How to get osGNO](./intro.mdx)</li>
-      </ul>
 
-      <h3>Running a Vault with StakeWise</h3>
-      <ul>
-          <li>[How to launch a Vault with StakeWise](./intro.mdx)</li>
-      </ul>
 
-      <h3>Use cases (coming up)</h3>
-
-      For all guides on how to use StakeWise please refer to the [Guides](./intro.mdx) section.
-    </TabItem>
-  </Tabs>
-```
-
-# How does StakeWise work?
-
-```mdx-code-block
-  <Tabs
-    groupId="token"
-    defaultValue="eth"
-    values={[
-      {label: 'ETH', value: 'eth'},
-      {label: 'GNO', value: 'gno'},
-    ]}>
-    <TabItem value="eth">
-      The main components of the StakeWise protocol are Vaults, osETH token, and Oracles.
-
-      <h2>Vaults</h2>
-
-      Users stake ETH into different Vaults and earn ETH rewards, while Vault operators earn a staking fee in exchange. Anyone can launch their own Vault to allow others to stake in it.
-
-      [Read more about Vaults →](./intro.mdx)
-
-      <h2>osETH</h2>
-
-      osETH is a token for liquid staking that accrues ETH rewards to its holders. It can be used in DeFi to trade staked ETH and farm additional rewards.
-
-      osETH is minted by stakers in Vaults that want to use their stake in DeFi. Anyone can swap their ETH for osETH in DeFi to start earning ETH rewards by holding the token.
-
-      [Read more about osETH →](./intro.mdx)
-
-      <h2>Oracles</h2>
-⃗
-      Oracles ensure that Vaults register validators without assuming custody of funds, calculate Vault rewards, and push information about validator registrations and exits on-chain.
-
-      [Read more about Oracles →](./intro.mdx)
-    </TabItem>
-    <TabItem value="gno">
-      The main components of the StakeWise protocol are Vaults, osGNO token, and Oracles.
-
-      <h2>Vaults</h2>
-
-      Users stake GNO into different Vaults and earn GNO rewards, while Vault operators earn a staking fee in exchange. Anyone can launch their own Vault to allow others to stake in it.
-
-      [Read more about Vaults →](./intro.mdx)
-
-      <h2>osGNO</h2>
-
-      osGNO is a token for liquid staking that accrues ETH rewards to its holders. It can be used in DeFi to trade staked ETH and farm additional rewards.
-
-      osGNO is minted by stakers in Vaults that want to use their stake in DeFi. Anyone can swap their ETH for osGNO in DeFi to start earning ETH rewards by holding the token.
-
-      [Read more about osGNO →](./intro.mdx)
-
-      <h2>Oracles</h2>
-⃗
-      Oracles ensure that Vaults register validators without assuming custody of funds, calculate Vault rewards, and push information about validator registrations and exits on-chain.
-
-      [Read more about Oracles →](./intro.mdx)
-    </TabItem>
-  </Tabs>
-```
+:::info Work in Progress
+This documentation is currently under development. Check back soon for updates.
+:::
 
 <details>
   <summary>What is StakeWise DAO and how can I get involved?</summary>

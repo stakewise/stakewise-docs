@@ -8,60 +8,43 @@ toc_max_heading_level: 5
 
 <h3>Introduction</h3>
 
-This documentation is designed to help you understand and build with StakeWise V3. It covers the protocol fundamentals, explains the technical architecture, and provides practical guides for staking, operating, and developing on the platform.
+This documentation is designed to guide you in using StakeWise to stake and operate on your terms. It covers the protocol fundamentals, explains the protocol mechanics, and provides walkthroughs for a confident start.
 
-Whether you are taking your first steps into liquid staking, running infrastructure, or navigating as a seasoned DeFi user, these pages guide you in unlocking the potential of capital.
+Whether you are taking your first steps into liquid staking, running infrastructure, or navigating as a seasoned DeFi user, these pages help you unlock the potential of capital.
 
-❔ Get started with [FAQ →](./faq)
+<h3>The Art of Liquid Staking</h3>
 
-📚 Learn the fundamentals - Dive into [Protocol Overview (In-Depth) →](./protocol-overview-in-depth/01-introduction.mdx)
+<h4>The Traditional Staking Dilemma</h4>
+Traditional Proof-of-Stake staking operates on a simple premise: lock tokens, earn rewards, repeat. While this approach provides predictable returns, it has a severe limitation: stake is illiquid. You are excluded from new trading opportunities that DeFi offers to generate additional rewards. The art lies in transcending this either-or paradigm by having the best of both worlds.
 
-🖥 See guides for staking, running a Vault or osToken in [Guides →](./intro.mdx)
+<h4>Solution</h4>
+Liquid staking is the ability to turn your stake into its tokenized representation by receiving liquid staking tokens. These tokens open the doors to the DeFi ecosystem. You can earn rewards from both staking and using your liquid tokens in additional protocols, such as collateral for lending. You can stake any amount you wish with no need for in-depth programming knowledge or hardware setup.
 
-📖 Check definitions in [Glossary →](./glossary)
+Solo staking can be difficult for those who don't have the 32 ETH required by Ethereum. If you can't stake by yourself, you might opt for centralized exchanges, but they have one intrinsic flaw: centralization, which contradicts the original decentralization ethos. While APRs may appear attractive, 'not your keys, not your money,' as the crypto saying goes.
+
+Liquid staking protocols such as StakeWise, eliminate financial and technical barriers to maximize your stake in a non-custodial manner. However, most staking protocols use pre-configured validator sets, which can lead to centralization around the biggest node operators. You don’t know where your stake will end up. In StakeWise you can actively support decentralization by either running your own node or choosing to stake with specific operators of your choice.
 
 <h3>What is StakeWise?</h3>
 
-StakeWise V3 is the premier liquid staking protocol on Ethereum and Gnosis Chain, enabling simple and secure staking for individuals and organizations. It also provides tools and software that allow anyone to launch their own staking pool (called a Vault) and earn fees by running validators for others.
+StakeWise is the premier liquid staking protocol on Ethereum and Gnosis Chain, enabling simple and secure staking for individuals and organizations. It also provides tools and software that allow anyone to launch their own staking pool (called a Vault) and earn fees by running validators for others.
 
-Our design philosophy is simple: advancing decentralization by giving anyone the chance to stake on their own terms. At the core of this vision are user empowerment and flexibility in creating solutions. Anyone can leverage StakeWise to achieve their unique staking goals. The system is maximally customizable and secure, offering diverse staking solutions for every user type.
+Our design philosophy is simple: advancing decentralization by giving anyone the chance to stake on their own terms. Anyone can leverage StakeWise to achieve their unique staking goals. The system is maximally customizable and secure, offering diverse staking solutions for every user type. StakeWise's architecture delivers enhanced control across the entire staking stack — validator selection, fee structures, MEV strategies, and risk parameters — while preserving the non-custodial, permissionless nature that defines decentralized finance. Users can operate their own nodes, mint their own osTokens, and participate in DeFi protocols while maintaining complete asset custody. By holding osToken, you've effectively built a personal bank that earns staking rewards while participating in DeFi's endless opportunities.
 
 <h3>Core Architecture</h3>
 
-StakeWise's architecture rests on three foundational pillars: Vaults, osETH tokens, and Oracles.
+StakeWise's architecture rests on three foundational pillars: Vaults, osToken, and Oracles.
 
 <h4>Vaults</h4>
-StakeWise pioneers the Vault marketplace model. Anyone can launch a Vault, stake in Vaults, and mint osETH, with Vault operators earning a staking fee in exchange while maintaining the highest level of security.
+StakeWise pioneers the Vault marketplace model. Vaults are highly customizable smart contracts that can be used as a staking pool for any use case.
+Anyone can launch a Vault, stake in Vaults, and mint osToken, with Vault operators earning a staking fee in exchange.
 >📝 Learn how Vaults work, their isolation model, and how to create your own [Vaults →](./intro.mdx)
 
-<h4>osETH</h4>
-osETH is a token for liquid staking that accrues ETH rewards to its holders. osETH is minted by stakers in Vaults who want to use their stake in DeFi. Anyone can swap their ETH for osETH in DeFi to start earning ETH rewards by holding the token.
->📝 Explore osETH's inner mechanics, including its built-in slashing protection [osETH →](./intro.mdx)
+<h4>osToken</h4>
+osToken is the main liquid staking token for the StakeWise ecosystem, representing osETH on Ethereum and osGNO on Gnosis Chain. osTokens accrue native staking rewards when held and are minted by stakers in Vaults who want to use their stake in DeFi.
+>📝 Explore osToken's inner mechanics, including its built-in slashing protection [osToken →](./intro.mdx)
 
 <h4>Oracles</h4>
-Oracles ensure that Vaults register validators without assuming custody of funds, calculate Vault rewards, and push information about validator registrations and exits on-chain.
->📝 Discover how Oracles maintain protocol security and decentralization [Oracles →](./intro.mdx)
+Oracles calculate and submit periodic rewards for the Vaults. They also validate and sign validator registrations and consolidations.
+>📝 Discover how Oracles help enhance the protocol's security [Oracles →](./intro.mdx)
 
-<h3>The Art of Liquid Staking</h3>
-Liquid staking is the ability to turn your stake into its tokenized representation by receiving receipt tokens (LST). 'Staking' refers to providing capital to secure a blockchain consensus mechanism by locking up cryptocurrency (like ETH or GNO) and earning rewards in return, while 'liquid' refers to keeping your assets tradable and composable instead of locked.
-The art of liquid staking lies in maximizing yield while minimizing risk. StakeWise accomplishes this pursuit through its underlying architecture to unlock greater rewards securely. This security comes from osETH's overcollateralization mechanism, the decentralized Oracle network, customizable Vault configurations, and the choice to set your own staking conditions. StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes and adapting proactively for optimal performance.
-
-
-
-:::info Work in Progress
-This documentation is currently under development. Check back soon for updates.
-:::
-
-<details>
-  <summary>What is StakeWise DAO and how can I get involved?</summary>
-
-StakeWise DAO is a community of SWISE token holders that govern the parameters of the StakeWise protocol and control the assets of its Treasury.
-
-  <h2>Governance resources</h2>
-
-  <ul>
-    <li>[StakeWise Forum 🔗](https://forum.stakewise.io/)</li>
-    <li>[StakeWise Snapshot 🔗](https://vote.stakewise.io/)</li>
-    <li>[StakeWise Governance Principles 🔗](https://forum.stakewise.io/t/stakewise-dao-governance-process/49)</li>
-  </ul>
-</details>
+StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes and adapting proactively for optimal performance.

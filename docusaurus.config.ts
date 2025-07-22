@@ -67,7 +67,7 @@ const config: Config = {
       items: [
         {
           label: 'Docs',
-          to: 'docs/intro',
+          to: 'docs/overview',
           type: "docSidebar",
           activeBaseRegex: `/docs/`,
           sidebarId: 'docsSidebar',

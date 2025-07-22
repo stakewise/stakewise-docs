@@ -8,7 +8,7 @@ const blocks: BlockProps[] = [
     title: 'Docs',
     text: 'Everything you want to know about StakeWise at your fingertips',
     Svg: require("@site/static/icon/file.svg").default,
-    href: '/docs/intro',
+    href: '/docs/overview',
   },
   {
     title: 'SDK',

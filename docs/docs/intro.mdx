@@ -4,6 +4,10 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
+```mdx-code-block
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
+```
+
 # The StakeWise Protocol
 
 <h2>Introduction</h2>
@@ -109,7 +113,7 @@ StakeWise Oracles serve as the critical infrastructure layer that maintains the 
 **Key Features:**
 <ul>
   <li><strong>Validator Registration</strong>: Validate and sign new validator registrations and consolidations</li>
-  <li><strong>Reward and Penalty Calculation</strong>: Periodically vote for the rewards/penalties accumulated by the Vaults in the Beacon Chain and execution rewards (MEV and priority fees) for the Vaults connected to the smoothing pool</li>
+  <li><strong>Reward and Penalty Calculation</strong>: Periodically vote for the rewards/penalties accumulated by the Vaults in the <Tooltip definition="Ethereum's proof-of-stake consensus layer that coordinates validators, handles block validation, and manages staking rewards and penalties">Beacon Chain</Tooltip> and execution rewards (MEV and priority fees) for the Vaults connected to the smoothing pool</li>
   <li><strong>Exit Management</strong>: Process and validate validator exits and withdrawals</li>
   <li><strong>Rate Updates</strong>: Maintain accurate exchange rates for OsToken redemption values and participate in peg stability</li>
 </ul>

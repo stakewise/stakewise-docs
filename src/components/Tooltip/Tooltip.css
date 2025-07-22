@@ -60,6 +60,14 @@
   margin-top: 1px;
 }
 
+.tooltip-content a {
+  color: #5ba85b;
+}
+
+.tooltip-content a:hover {
+  color: #5ba85b;
+}
+
 @keyframes tooltip-fade-in {
   from {
     opacity: 0;

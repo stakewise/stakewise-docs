@@ -1,0 +1,18 @@
+.trigger {
+  display: inline-flex;
+  cursor: help;
+  text-decoration: underline dotted #018970;
+  text-decoration-thickness: 2px;
+}
+
+.trigger:hover {
+  color: #018970;
+}
+
+[data-theme='dark'] .trigger {
+  text-decoration-color: #40E9D9;
+}
+
+[data-theme='dark'] .trigger:hover {
+  color: #40E9D9;
+}

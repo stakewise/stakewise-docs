@@ -1,58 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './Tooltip.css';
+import React from 'react'
+import type { Placement } from '@floating-ui/react'
 
-interface TooltipProps {
-  children: React.ReactNode;
-  definition: string;
-  className?: string;
+import { useTooltip } from './util'
+import TooltipContent from './TooltipContent/TooltipContent'
+import TooltipTrigger from './TooltipTrigger/TooltipTrigger'
+
+
+export type TooltipData = ReturnType<typeof useTooltip>
+
+export type TooltipProps = {
+  children: React.ReactNode
+  content?: React.ReactNode | string
+  placement?: Placement
 }
 
-export default function Tooltip({ children, definition, className = '' }: TooltipProps) {
-  const [isVisible, setIsVisible] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const containerRef = useRef<HTMLSpanElement>(null);
+const Tooltip: React.FC<TooltipProps> = props => {
+  const {
+    children,
+    placement,
+    content,
+  } = props
 
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-    setIsVisible(true);
-  };
+  const tooltip = useTooltip({ placement })
 
-  const handleMouseLeave = (e: React.MouseEvent) => {
-    const relatedTarget = e.relatedTarget as Node;
-
-    if (containerRef.current && !containerRef.current.contains(relatedTarget)) {
-      timeoutRef.current = setTimeout(() => {
-        setIsVisible(false);
-      }, 150);
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  if (!content) {
+    return children
+  }
 
   return (
-    <span
-      ref={containerRef}
-      className={`tooltip-container ${className}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <span className="tooltip-trigger">
+    <>
+      <TooltipTrigger
+        data={tooltip}
+      >
         {children}
-      </span>
-      {isVisible && (
-        <div className="tooltip-content">
-          {definition}
+      </TooltipTrigger>
+      <TooltipContent
+        data={tooltip}
+      >
+        <div>
+          {content}
         </div>
-      )}
-    </span>
-  );
+      </TooltipContent>
+    </>
+  )
 }
+
+
+export default React.memo(Tooltip)

@@ -1,0 +1,29 @@
+.tooltip {
+  max-width: 330px;
+  overflow: visible;
+  border-radius: 8px;
+  background-color: #e9ecef;
+  padding: 8px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #212529;
+  text-align: left;
+  font-size: 15px;
+}
+
+[data-theme='dark'] .tooltip {
+  background-color: rgba(26, 29, 28, 1);
+  color: #f7fafc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.arrow {
+  position: absolute;
+  background: #e9ecef;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+}
+
+[data-theme='dark'] .arrow {
+  background: rgba(26, 29, 28, 1);
+}

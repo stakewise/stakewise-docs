@@ -13,19 +13,14 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 <h2>Introduction</h2>
 
-This documentation helps you stake and operate with StakeWise in a fully non-custodial, permissionless, and customizable way. It walks you through the protocol fundamentals, explains how everything works under the hood, and gives you the tools to get started confidently. Whether you're new to liquid staking, running your own infrastructure, or deep into DeFi, you'll find what you need to unlock the full potential of your capital.
+This documentation helps you use StakeWise for staking and offering staking. It explains the modular architecture of Vaults - the smart contracts that enable non-custodial, customizable, and permissionless staking - and the tokenomics behind OsToken's instant liquidity. It provides both theoretical understanding of protocol mechanics and practical acumen to unlock your capital's full potential. Whether you're new to liquid staking, running your own infrastructure, or deep into DeFi, it gives you everything needed for a confident start.
 
 <h2>Understanding Liquid Staking</h2>
 
 <h3>The Traditional Staking Dilemma</h3>
 <h4>What is Staking?</h4>
-Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior, thereby enhancing underlying security. In proof-of-stake based blockchains like Ethereum, network participants run <Tooltip definition={<>A <a href="./glossary#node" style={{textDecoration: 'underline'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator nodes</Tooltip> by putting tokens "at stake", which earn rewards for validating transactions but can also be "slashed" (taken as penalty) if the validator acts maliciously or unreliably.
+Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior, thereby enhancing underlying security. In proof-of-stake blockchains like Ethereum, participants run <Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator</Tooltip>nodes by putting tokens "at stake" - earning rewards for validating transactions but risking "slashing" (penalties) for malicious or unreliable behavior. Validators play an essential role in maintaining network consensus, enabling all participants to agree on the blockchain's new irreversible global state. For this critical work, validators receive two types of rewards:
 
-<h4>How Consensus Works</h4>
-Validators earn rewards for their essential role in maintaining network consensus. The consensus mechanism allows the participants to agree on the new irreversible global state of the blockchain. Different consensus mechanisms exist  — proof-of-authority, proof-of-work, or proof-of-history —  but they all serve as economic civil resistance. In the voting game of proposing blocks, participation requires staking economic resources. In Ethereum's case, this means ETH, where each validator's influence is proportional to their staked amount.
-
-<h4>Validator Rewards</h4>
-Validators receive two types of rewards:
 <ul>
   <li><strong>Consensus Layer rewards</strong>: Earned by performing validator duties like voting on block validity through attestations, participating in sync committees, and proposing blocks</li>
   <li><strong>Execution Layer rewards</strong>: Received as priority fees and Maximum Extractable Value (MEV)</li>
@@ -38,19 +33,15 @@ Traditional PoS staking operates on a simple premise: lock tokens, earn fixed re
 
 <h3>Solution</h3>
 <h4>How Liquid Staking Works</h4>
-Liquid staking transforms your stake into a tradeable asset through tokenization. When you stake cryptocurrency through a liquid staking protocol, you receive liquid staking tokens (LSTs) that represent your claim on the underlying staked assets plus accrued rewards. These tokens function as liquid representations of your stake, maintaining its value while making it tradeable.
+Liquid staking transforms your stake into a tradeable asset through tokenization. When you stake through a liquid staking protocol, you receive liquid staking tokens (LSTs) representing your claim on the underlying staked assets plus accrued rewards. Unlike native staking where tokens are locked, LSTs remain liquid and composable. This unlocks the entire DeFi ecosystem while your original stake continues earning validation rewards. You can now earn from multiple sources:
 
-<h4>Key Benefits</h4>
-Unlike native staking where tokens are locked, LSTs remain freely transferable and liquid. With liquid staking tokens, you unlock the entire DeFi ecosystem while your original stake continues earning validation rewards. You can now earn rewards from both:
 - Staking rewards from your underlying validators
-- DeFi yields by using your tokens as collateral for lending, in yield farming strategies, or trading on decentralized exchanges (DEXs)
+- DeFi yields in a multitude of opportunities: collateral for lending, yield farming strategies, or trading on decentralized exchanges (DEXs)
 
-Liquid staking represents an epistemic shift in how staking must work. By holding LSTs, you've effectively built a personal bank that earns staking rewards while participating in DeFi's endless opportunities.
+Liquid staking represents an epistemic shift in how staking works. With LSTs, you maintain exposure to staking rewards while having liquidity,  breaking the disjunctive premise of traditional staking.
 
 <h3>Staking Options</h3>
-In order to participate in the Ethereum consensus mechanism, a staker must deposit 32 ETH. **Solo staking** can be prohibitive for those who don't have 32 ETH minimum required by Ethereum and the requisite technical acumen.
-
-Traditional alternatives that require no in-depth programming knowledge or hardware setup include **staking-as-a-service (SaaS)** providers or **centralized exchanges**, but both come with trade-offs: SaaS providers still require the full 32 ETH minimum and provide no liquid staking benefits, while centralized exchanges have one intrinsic flaw: centralization, which contradicts crypto's original decentralization ethos. While APRs may appear attractive, "not your keys, not your crypto," as the saying goes.
+In order to participate in the Ethereum consensus mechanism, a staker must deposit 32 ETH. **Solo staking** can be prohibitive because of the minimum required 32 ETH and the requisite technical acumen. This accessibility barrier led to the emergence of staking service providers that require no programming knowledge or hardware setup: **staking-as-a-service (SaaS)** and **centralized exchanges (CEXs)**. However, both come with significant concessions: SaaS providers still require the full 32 ETH minimum and offer no liquidity benefits, while centralized exchanges have one fundamental flaw - centralization, which contradicts crypto's core decentralization principles. Despite attractive APRs, "not your keys, not your crypto," as the saying goes.
 
 <h3>Decentralized Staking</h3>
 <h4>Benefits of Decentralized Liquid Staking</h4>

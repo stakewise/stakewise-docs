@@ -5,6 +5,7 @@ import data from './questions'
 import Question from './Question/Question'
 
 import s from './FAQ.module.css'
+import Tooltip from '../Tooltip/Tooltip'
 
 
 type FAQProps = {

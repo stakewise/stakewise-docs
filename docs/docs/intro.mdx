@@ -13,98 +13,97 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 <h2>Introduction</h2>
 
-This documentation helps you use StakeWise for staking and offering staking. It explains the modular architecture of Vaults - the smart contracts that enable non-custodial, customizable, and permissionless staking - and the tokenomics behind OsToken's instant liquidity. It provides both theoretical understanding of protocol mechanics and practical acumen to unlock your capital's full potential. Whether you're new to liquid staking, running your own infrastructure, or deep into DeFi, it gives you everything needed for a confident start.
+This documentation helps you use StakeWise for staking and offering staking services. It explains the modular architecture of Vaults — the smart contracts that enable non-custodial, customizable, and permissionless staking — and the tokenomics behind OsToken's instant liquidity. It provides both theoretical understanding of protocol mechanics and practical acumen to unlock your capital's full potential. Whether you're new to liquid staking, running your own infrastructure, or deep into DeFi, it gives you everything needed for a confident start.
 
 <h2>Understanding Liquid Staking</h2>
 
 <h3>The Traditional Staking Dilemma</h3>
 <h4>What is Staking?</h4>
-Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior, thereby enhancing underlying security. In proof-of-stake blockchains like Ethereum, participants run <Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator</Tooltip>nodes by putting tokens "at stake" - earning rewards for validating transactions but risking "slashing" (penalties) for malicious or unreliable behavior. Validators play an essential role in maintaining network consensus, enabling all participants to agree on the blockchain's new irreversible global state. For this critical work, validators receive two types of rewards:
+Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior, thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains like Ethereum, participants run <Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator</Tooltip> nodes by putting tokens "at stake", meaning they earn rewards for validating transactions while risking "slashing" (penalties) for malicious or unreliable behavior. Validators play an essential role in maintaining network consensus, enabling all participants to agree on the blockchain's new irreversible global state. For this critical work, validators receive two types of rewards:
 
 <ul>
-  <li><strong>Consensus Layer rewards</strong>: Earned by performing validator duties like voting on block validity through attestations, participating in sync committees, and proposing blocks</li>
-  <li><strong>Execution Layer rewards</strong>: Received as priority fees and Maximum Extractable Value (MEV)</li>
+  <li><span style={{fontWeight: '600'}}>Consensus Layer rewards</span>: Earned by performing validator duties like voting on block validity through attestations, participating in sync committees, and proposing blocks</li>
+  <li><span style={{fontWeight: '600'}}>Execution Layer rewards</span>: Received as priority fees and Maximum Extractable Value (MEV)</li>
 </ul>
 
 Learn more about rewards and penalties - [ethereum.org](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)
 
 <h4>The Liquidity Problem</h4>
-Traditional PoS staking operates on a simple premise: lock tokens, earn fixed rewards, repeat. While this bond-like approach guarantees returns, it has a severe limitation: stake is illiquid. You are locked out of decentralized finance (DeFi) yield opportunities. Traditional staking created a fundamental dilemma: you had to choose between earning staking rewards or maintaining liquidity. Liquid staking transcends this either-or paradigm by having the best of both worlds.
+Traditional PoS staking operates on a simple premise: lock tokens, earn fixed rewards, repeat. While this bond-like approach guarantees returns, it has a severe limitation: stake is illiquid. You are locked out of decentralized finance (DeFi) <Tooltip content={<><strong>Yield</strong> <br /> Returns or profits generated from an investment, typically expressed as an annual percentage. In DeFi, yield can come from lending, providing liquidity to trading pools, staking rewards, or other financial activities.</>}>yield</Tooltip> opportunities. Traditional staking creates a fundamental dilemma: you have to choose between earning staking rewards or maintaining liquidity. Liquid staking transcends this either-or paradigm by having the best of both worlds.
 
 <h3>Solution</h3>
 <h4>How Liquid Staking Works</h4>
 Liquid staking transforms your stake into a tradeable asset through tokenization. When you stake through a liquid staking protocol, you receive liquid staking tokens (LSTs) representing your claim on the underlying staked assets plus accrued rewards. Unlike native staking where tokens are locked, LSTs remain liquid and composable. This unlocks the entire DeFi ecosystem while your original stake continues earning validation rewards. You can now earn from multiple sources:
 
 - Staking rewards from your underlying validators
-- DeFi yields in a multitude of opportunities: collateral for lending, yield farming strategies, or trading on decentralized exchanges (DEXs)
+- DeFi yields from a multitude of opportunities: collateral for lending, yield farming strategies, or trading on decentralized exchanges (DEXs)
 
-Liquid staking represents an epistemic shift in how staking works. With LSTs, you maintain exposure to staking rewards while having liquidity,  breaking the disjunctive premise of traditional staking.
+Liquid staking represents an epistemic shift in how staking works. With LSTs, you maintain exposure to staking rewards while having liquidity, breaking the disjunctive premise of traditional staking.
 
 <h3>Staking Options</h3>
-In order to participate in the Ethereum consensus mechanism, a staker must deposit 32 ETH. **Solo staking** can be prohibitive because of the minimum required 32 ETH and the requisite technical acumen. This accessibility barrier led to the emergence of staking service providers that require no programming knowledge or hardware setup: **staking-as-a-service (SaaS)** and **centralized exchanges (CEXs)**. However, both come with significant concessions: SaaS providers still require the full 32 ETH minimum and offer no liquidity benefits, while centralized exchanges have one fundamental flaw - centralization, which contradicts crypto's core decentralization principles. Despite attractive APRs, "not your keys, not your crypto," as the saying goes.
+In order to participate in the Ethereum consensus mechanism, a staker must deposit 32 ETH. **Solo staking** can be prohibitive because of the minimum required 32 ETH and the requisite technical expertise. This accessibility barrier leads to the emergence of staking service providers that require no programming knowledge or hardware setup: **staking-as-a-service (SaaS)** and **centralized exchanges (CEXs)**. However, both come with significant concessions: SaaS providers still require the full 32 ETH minimum and offer no liquidity benefits, while centralized exchanges have one fundamental flaw — centralization, which contradicts crypto's core decentralization principles. Despite attractive APRs, "not your keys, not your crypto," as the saying goes.
 
 <h3>Decentralized Staking</h3>
 <h4>Benefits of Decentralized Liquid Staking</h4>
-Decentralized liquid staking services eliminate financial and technical barriers to maximize your stake while letting you participate in DeFi. You can stake any amount you wish with full self-custody and no need for permission or intermediaries. **Smart contracts** ensure that your funds remain secure and under your control — no centralized entity can access or confiscate your staked assets, as all operations are governed by transparent, immutable code on the blockchain.
+Decentralized liquid staking protocols remove financial and technical barriers to staking and issue receipt tokens representing your stake. **Smart contracts** ensure that your funds remain secure and under your control. No centralized entity can access or confiscate your staked assets, as all operations are governed by transparent, immutable code on the blockchain. You can stake any desired amount with complete self-custody and no dependency on permission or intermediaries.
 
-<h4>The Validator Selection Challenge</h4>
-Beyond the classical risk considerations — slashing, exploits, secondary market volatility — liquid staking protocols face an equally important architectural choice: validator selection and control. Most liquid staking protocols use pre-configured validator sets, which can lead to centralization around the biggest node operators. As a staker, you don't know where your stake will end up or have any say in the matter. This design choice fundamentally shapes your staking experience and your ability to actively participate in network decentralization. Some protocols prioritize operational simplicity with managed validator sets, while others prioritize user agency and transparency in validator selection.
+<h4>Centralized Decentralization</h4>
+Liquid staking is not without risk considerations such as slashing, exploits, and secondary market volatility. But there is another element beneath surface-level observations: the validator set. The majority of liquid staking protocols employ fixed validator pools, potentially creating centralization around dominant node operators and leaving participants without transparency regarding stake allocation, ultimately undermining network decentralization. StakeWise resolves this centralization challenge by offering users complete control over their staking environment: either through creating their own Vault or selecting from a diverse set of available Vaults.
 
 <h2>What is StakeWise?</h2>
-StakeWise is a liquid staking protocol across Ethereum and Gnosis Chain that offers secure, non-custodial staking for individuals and organizations. Built to be fully permissionless and flexible, it allows you to stake any amount while maintaining control over your assets. You can also run your own staking pool — called a Vault — to earn fees from other stakers.
+StakeWise is a liquid staking protocol that gives you all the benefits you expect from permissionless and non-custodial staking and goes even further. Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive staking network that serves diverse participant needs through three distinct approaches:
 
-Our design philosophy is simple: push decentralization forward by letting anyone participate.
+**One-Click Staking**: For users who want to start earning immediately with one-click, StakeWise offers streamlined staking that automatically allocates your stake across proven Vaults and provides instant OsToken liquidity without requiring any decisions or complexity.
+
+**Vault Marketplace**: For advanced users seeking full control, choose from diverse Vault offerings with unique fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection.
+
+**Solo Vaults**: For operators running their own infrastructure, launch your own liquid staking pools within minutes without significant upfront investment, creating and managing your own Vault while earning fees from other stakers.
+
+StakeWise's tokenomics emerged from deep analysis of stakeholder motivations, engineering incentive structures that reinforce our decentralized vision while sustainably scaling the   protocol — far more strategic than simply launching a token and hoping for adoption. StakeWise also continuously develops innovative strategies to maximize your rewards, such as <Tooltip content={<><strong>Boost</strong> <br /> Using OsToken as collateral, Boost safely borrows additional ETH to create a looped staking position, allowing you to earn the surplus between staking rewards and borrowing costs while maintaining built-in safety mechanisms to prevent liquidation risks. In DeFi jargon, this process is called leveraged staking: you borrow osETH and stake it again, increasing your exposure to staking rewards. Boost can literally boost your staking rewards by up to 3x.</>}>**Boost**</Tooltip>, with more features coming soon.
+
+Our design philosophy centers on advancing decentralization through universal accessibility and meaningful choice.
 
 <h3>Architecture</h3>
 StakeWise's modular architecture is built on three foundational pillars: Vaults, OsToken, and Oracles.
 
 <h4>Vaults: Customizable Smart Contracts</h4>
-Vaults are isolated, highly customizable smart contracts that function as individual staking pools, each with their own characteristics, operators, and configurations. The marketplace model democratizes liquid staking by giving you unprecedented control over your staking experience. Vaults let you choose exactly where your stake goes and how it's managed.
+Vaults are isolated, highly customizable smart contracts that function as individual staking pools. Vault operators can accept deposits from other stakers, earning fees while providing staking services. The marketplace model democratizes liquid staking by giving you the freedom to choose where to stake and how.
 
 <h4>Key Features:</h4>
 <ul>
-  <li>Permissionless Creation: Launch your own Vault without approval or collateral requirements</li>
-  <li>Full Customization: Control fee structures, MEV strategies, client diversity, slashing insurance, and validator selection</li>
+  <li>Permissionless & Customizable: Launch your own Vault without approval, controlling fees, MEV strategies, and validator selection</li>
   <li>Open Marketplace: Choose from diverse Vaults based on your preferences for decentralization, yield, or specialized strategies</li>
   <li>Risk Isolation: Each Vault operates independently — issues in one Vault don't affect others</li>
 </ul>
 
-Whether you're a solo staker wanting to mint liquid tokens against your own node, an institution requiring regulatory compliance, or a DeFi protocol seeking specific staking strategies, Vaults provide the flexibility to stake on your exact terms.
 ><span style={{color: '#1f2937', fontWeight: '400'}}>📝 Learn how Vaults work, their isolation model, and how to create your own [Vaults →](./intro.mdx)</span>
 
-
 <h4>OsToken: Next-Generation Liquid Staking Tokens</h4>
-StakeWise makes staked assets liquid through OsToken: osETH on Ethereum and osGNO on Gnosis Chain. OsToken represents your staked assets as liquid, reward-bearing tokens designed with safety and composability at their core. OsToken's overcollateralized design with built-in protections creates a more resilient liquid staking experience.
+OsToken, standing for Overcollateralized Staking Token, is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain. Designed with safety and composability at its core, OsToken accrues staking rewards while maintaining full liquidity for DeFi participation. OsToken can be minted by anyone staking in Vaults or acquired directly from a DEX to instantly start earning staking rewards.
 
 <h4>Key Features:</h4>
 <ul>
-  <li>Auto-Compounding Rewards: Automatically accrues staking rewards, reflected in increasing redemption value</li>
-  <li>Built-in Slashing Protection: Overcollateralized design with excess reserve buffers protects holders from validator slashing events</li>
-  <li>DeFi Composability: Fully compatible with DeFi protocols for lending, borrowing, yield farming, and trading</li>
-  <li>Liquidation Risk Minimized: Uses stable native rate feeds instead of volatile market prices, eliminating depeg-related liquidation risks</li>
-  <li>Universal Backing: Backed by a diverse, decentralized network of Vaults across the entire StakeWise ecosystem</li>
+  <li>Protected & Rewarding: Overcollateralized design with auto-compounding rewards and slashing protection</li>
+  <li>DeFi Ready: Fully compatible with lending, trading, and yield farming protocols</li>
 </ul>
-
-OsToken can be minted by anyone staking in Vaults (up to 90-100% of their stake value) or acquired directly from Decentralized Exchanges (DEXs) to instantly start earning staking rewards.
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Explore OsToken's inner mechanics, including its built-in slashing protection [OsToken →](./intro.mdx)</span>
 
 <h4>Oracles: Decentralized Infrastructure Layer</h4>
-StakeWise Oracles serve as the critical infrastructure layer that maintains the protocol's security, accuracy, and non-custodial nature. Centralized oracle dependencies create single points of failure. StakeWise's decentralized oracle network ensures transparent, trustless operations while maintaining security.
+The decentralized oracle network bridges StakeWise smart contracts with Ethereum's <Tooltip content={<><strong>Beacon Chain</strong> <br /> Ethereum's consensus layer, a peer-to-peer network of consensus clients that handles block gossip and consensus logic. It is responsible for things like block and attestation handling, running the fork choice algorithm, and managing rewards and penalties for validators.</>}>Beacon Chain</Tooltip>, ensuring transparent, trustless operations while maintaining the protocol's security and non-custodial nature. Since Beacon Chain state is not directly accessible in the EVM (though [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) aims to address this), oracles fetch essential validator data.
 
-<h4>Key Features:</h4>
+<h4>Key Functions:</h4>
 <ul>
-  <li>Validator Registration: Validate and sign new validator registrations and consolidations</li>
-  <li>Reward and Penalty Calculation: Periodically vote for the rewards/penalties accumulated by the Vaults in the <Tooltip definition="Ethereum's proof-of-stake consensus layer that coordinates validators, handles block validation, and manages staking rewards and penalties">Beacon Chain</Tooltip> and execution rewards (MEV and priority fees) for the Vaults connected to the smoothing pool</li>
-  <li>Exit Management: Process and validate validator exits and withdrawals</li>
-  <li>Rate Updates: Maintain accurate exchange rates for OsToken redemption values and participate in peg stability</li>
+  <li>Validator Lifecycle: Handle registration, consolidations, rewards, penalties, and exits</li>
+  <li>Token Stability: Maintain accurate OsToken rates and ensure peg stability</li>
 </ul>
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Discover how Oracles help enhance the protocol's security [Oracles →](./intro.mdx)</span>
 
+<h4>Governance & SWISE Token</h4>
+StakeWise is governed by the community through the SWISE governance token, with holders voting on protocol parameters like fees, oracle selection, and upgrades via StakeWise Improvement Proposals (SWIPs).
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Get involved in shaping the protocol's future by participating in [Stakewise Governance →](https://vote.stakewise.io/#/)</span>
 
-<h4>Yield Enhancement</h4>
-StakeWise builds different yield amplification strategies to maximize your staking returns. **Boost** is our recent offering and more innovative strategies are in development. Using OsToken as collateral, Boost safely borrows additional ETH to create a looped staking position, allowing you to earn the surplus between staking rewards and borrowing costs while maintaining built-in safety mechanisms to prevent liquidation risks. In DeFi jargon, this process is called leveraged staking: you borrow osETH and stake it again, increasing your exposure to staking rewards. Boost can literally boost your staking rewards by up to 3x.
 
 <h4>Future Vision</h4>
 StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes and adapting proactively for optimal performance while fostering the decentralization that is essential for Ethereum's long-term health.

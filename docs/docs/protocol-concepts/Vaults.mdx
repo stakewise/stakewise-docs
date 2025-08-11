@@ -1,0 +1,204 @@
+---
+title: Vaults
+sidebar_position: 1
+description: ""
+---
+
+```mdx-code-block
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
+```
+
+# Vaults
+
+## Introduction
+
+Vaults are isolated staking pools that manage ETH and GNO staking, reward distribution, and withdrawals. Everything is handled via smart contracts, making staking non-custodial and trustless while abstracting away all technical complexity.
+
+Vaults serve as both staking pools and liquid staking infrastructure. The modular vault architecture accommodates different types of users with varying needs. Solo stakers can use vaults to access liquid staking, while node operators and organizations can create their own staking pool and offer liquid staking services on specific terms to others.
+
+Each vault runs dedicated validators that are completely isolated from other vaults, ensuring that validator slashing, performance issues, or operational failures in one vault never impact your stake in another. This creates unique staking environments with fully customizable parameters – from management and branding to vault economics (fees, capacity, tokenization). Most notably, vaults give you access to a liquid staking token – OsToken – which you can use throughout the DeFi ecosystem.
+
+## How Vaults Work
+
+### Validator registration
+
+Vaults collect user deposits and manage the entire validator lifecycle through smart contracts. When a vault reaches the staking threshold – 32 ETH on Ethereum or 1 GNO on Gnosis – the StakeWise [v3-operator](https://github.com/stakewise/v3-operator) begins the validator registration process.
+
+The v3-operator is a specialized off-chain service run by the <Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a vault. It monitors vault state changes, assigns validator keys based on deposit data files, coordinates with the oracle network for registration approvals, and performs BLS signature operations for validator exits.</>}>vault operator</Tooltip> alongside their Ethereum consensus and execution clients. At startup, the operator specifies which type of validator to register (`0x01` or `0x02`) using the `--validator-type` flag. This choice determines how the service will handle future deposits:
+
+**If the vault already has `0x02` validators**, the operator service sweeps all accumulated ETH in the vault into those validators once per day until they are filled to capacity.
+
+**If there are no `0x02` validators** (or they are already full), the service waits until the vault accumulates the full 32 ETH required for a new validator and then creates either a `0x01` or `0x02` validator, according to the `--validator-type` flag set at startup.
+
+When enough ETH is ready for registration, the v3-operator submits a request to the oracle network. The request must be approved by a 8-of-11 quorum before the validator becomes active on the Beacon chain. Activation is not immediate – [network](https://www.validatorqueue.com/) conditions determine how quickly a validator starts earning staking rewards.
+
+When depositing into a vault, users can choose between:
+
+**Regular staking** – receive vault shares that accrue rewards over time.
+
+**Liquid staking** – receive both vault shares and an osToken in a single transaction for immediate liquidity.
+
+Vaults may also run validators across multiple operators at once using <Tooltip content={<><strong>Distributed Validator Technology (DVT)</strong> <br /> A solution designed to overcome a single-operator trust problem by splitting a validator's private key among multiple independent operators. <br /> More on DVT - <a href="https://ethereum.org/en/staking/dvt/" style={{textDecoration: 'underline', color: '#018970'}}>ethereum.org</a></>}>Distributed Validator Technology (DVT)</Tooltip> for additional decentralization and resilience. StakeWise provides built-in DVT support that operates [automatically](../for-operators/05-dvt.mdx).
+
+### Reward Distribution
+
+Once validators are registered and active, they begin earning consensus-layer rewards. These rewards are automatically added to the vault's assets, increasing the value of each user's vault shares. The vault initially holds rewards as liquid ETH until there is enough to register additional validators.
+
+With Ethereum's validator consolidation feature, vaults can optimize by merging multiple 32 ETH validators into fewer validators with higher effective balances. This can improve efficiency and reduce infrastructure overhead.
+
+Each vault decides whether to:
+
+- Reinvest accumulated rewards into additional staking via consolidation, or
+
+
+- Keep rewards as <Tooltip content={<><strong>Unbounded ETH</strong> <br /> ETH that is not locked in validators (32 ETH increments). This includes excess deposits, staking rewards, and MEV that haven't been allocated to new validators yet.</>}>unbounded ETH</Tooltip> within the vault for greater liquidity.
+
+
+Because direct Beacon chain state queries are not feasible in the EVM<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>, rewards are calculated off-chain by the StakeWise oracle network. Oracles aggregate consensus and execution rewards (minus any penalties) into a Merkle root (`rewardsRoot`), publish it to <Tooltip content={<><strong>InterPlanetary File System (IPFS)</strong> <br /> A decentralized, immutable, distributed file storage network that stores and retrieves data using content-addressing across multiple nodes. Each piece of content receives a unique, unchangeable hash. In StakeWise, IPFS stores complete reward data for transparency and verification.</>}>IPFS</Tooltip>, and submit signatures to the [Keeper](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) contract. The Keeper validates these signatures and updates the global state. Vaults then harvest their share of rewards by providing a Merkle proof against this `rewardsRoot`.
+Rewards automatically increase the value of your vault shares over time. After the vault's fixed fee is applied, you can realize these rewards by withdrawing your stake or by using your shares as collateral to mint OsToken for instant liquidity.
+
+### Withdrawals
+
+When a user chooses to unstake, they enter the vault's **exit queue** and receive a **position ticket** that tracks their place in line. As ETH becomes available to the vault, users can claim what's available; if only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
+
+During validator registration, the v3-operator creates the validator's **voluntary-exit BLS signature**, splits it into secret shares, encrypts each share for the corresponding oracle, and distributes the shares to the oracle set. After that, exist proceed as follows:
+
+<ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
+<li style={{listStyleType: 'decimal'}}>**Daily operator check**. On a daily cycle, the v3-operator checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the vault – i.e., unbonded ETH (deposits + unallocated rewards), harvested MEV, and any partial withdrawals that have accrued.</li>
+
+<li style={{listStyleType: 'decimal'}}>**Initiate exits if needed**. If available ETH is insufficient, the operator initiates validator exits to free up the remaining amount.</li>
+
+<li style={{listStyleType: 'decimal'}}>**Oracle enforcement of exits**. If the operator has not freed enough ETH within the daily cycle, the oracles can step in and submit the pre-distributed exit signatures to trigger validator exits and cover the shortfall.</li>
+</ol>
+Ethereum processes validator exits through its **rate-limited global exit queue**. Once a validator fully exits, its balance is [swept](https://ethereum.org/en/staking/withdrawals/#validator-sweeping)  to the vault and becomes claimable by users according to their tickets.
+
+The exit queue advances whenever the vault **syncs state** – both on **user actions** (entering the queue, claiming; sometimes deposits/withdrawals) and on **keeper-driven syncs** (e.g., harvest). Throughout the process, user assets remain secured in the vault's smart contracts and are never directly controlled by any third party.
+
+### Token System
+
+Stakewise vaults can optionally integrate with the OsToken system to provide liquidity against staked position. When enabled, users may lock their vault shares as collateral and mint an OsToken (e.g., `osETH`, `osGNO`) without unstaking. Minting and redemption are enforced by the protocol's OsToken contracts – primarily [OsTokenVaultController](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) and [OsTokenConfig](https://etherscan.io/address/0x287d1e2a8de183a8bf8f2b09fa1340fbd766eb59#code) – which apply risk control such as collateralization (LTV) limits, fee rates and other parameters. Users unlock collateral by burning the OsToken. While OsTokens provide liquidity, the underlying stake and rewards remain in the originating Vault, continuing to accrue consensus and execution-layer returns.
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 See the dedicated [OsToken](OsToken.mdx) section for exchange rate stability, collateralization ratios, and peg maintenance mechanisms.</span>
+
+
+## Vault Configuration
+
+Each Vault is highly customizable. Core parameters set at deployment – like vault type, capacity, MEV strategy, ERC-20 support, and management roles are immutable, while branding and fees remain adjustable.
+
+### Vault Type
+
+**Standard Vaults** - Most common
+
+You receive vault shares that represent your portion of the staking pool. Your shares earn rewards based on how well the validators perform, but the shares themselves cannot be traded or transferred to others. Perfect for straightforward staking.
+
+**ERC-20 Vaults** - For DeFi Integration
+
+Instead of locked shares, you get transferable tokens that work like any other crypto token. You can trade them, use them in DeFi protocols, or transfer them to others while still earning staking rewards. Great if you want flexibility or plan to use your stake elsewhere.
+
+**Private Vaults** - Restricted Access
+
+Only approved addresses can join these vaults, controlled by an on-chain whitelist. Organizations, DAOs, or institutions use these to create compliant staking environments with custom rules and governance. You need permission to participate.
+
+**Blocklist Vaults** - Open with Exceptions
+
+Anyone can join except specifically blocked addresses. These vaults maintain an exclusion list for regulatory, compliance, or operational reasons while staying open to the general public.
+
+**Meta Vaults** - Diversified Strategy
+
+These don't run validators themselves. Instead, they automatically spread your deposit across up to 50 different underlying vaults using smart algorithms. You get exposure to multiple staking strategies and operators with a single deposit.
+
+All vault types are deployed through factory contracts, making creation simple and cost-effective with just a small security deposit required.
+
+### Capacity
+
+Vault capacity is an immutable deposit limit that vault operators set once during initialization to control the maximum amount of ETH their vault can accept. When left unset, vaults have unlimited capacity by default. The capacity is enforced on every
+deposit transaction, reverting with a `CapacityExceeded` error if exceeded. Capacity helps control validator set size based on operator infrastructure capabilities.
+
+### MEV Strategy
+
+MEV (Maximum Extractable Value) represents additional profits validators can earn when proposing blocks. Vaults handle these extra rewards via specialized escrow contracts in two ways:
+
+**Shared MEV** - Steady Rewards
+
+Vaults participate in MEV redistribution through SharedMevEscrow contracts, providing consistent returns across participating pools regardless of individual block proposal frequency.
+
+**MEV Escrow** - Keep What You Earn
+
+Vaults collect MEV rewards through individual OwnMevEscrow contracts, preserving full value capture but creating more volatile returns based on actual validator block proposals.
+
+This choice is permanent – vault operators must decide during creation and cannot change MEV strategies later.
+
+For most users: Shared MEV provides more stable, predictable returns, while MEV Escrow offers higher potential rewards with more risk.
+
+### ERC-20 Support
+
+ERC-20 enabled vaults allow operators to create branded tokens with custom names and symbols during deployment. These branded tokens represent transferable vault shares and implement standard ERC-20 functionality, enabling users to transfer their stake and operators to build utility ecosystems around their vault, while tokenless vaults avoid potential tax events from token transfers.
+
+### Management Roles
+
+Every Vault has several key roles for the internal management of the staking process:
+
+**Admin** - The Vault Owner
+
+The person who creates the vault and makes all major decisions. They set the vault's core settings (like fees and capacity), control the vault's name and branding, and can assign helpers for specific tasks. For security, the admin role cannot be transferred to someone else after the vault is created.
+
+**Access Manager** - The Gatekeeper
+
+Controls who can join Private Vaults by managing the approved user list. Think of them as the bouncer who decides who gets in. The admin usually handles this themselves, but they can delegate it to someone they trust and take it back anytime.
+
+**Keys Manager** - The Technical Coordinator
+
+Handles the technical setup when new validators need to be created. They submit the validator data that gets checked by StakeWise to make sure everything is secure and correct. This is typically handled by the admin or their technical team.
+
+### Branding
+
+Admin can customize their vault's metadata including name, description, and visual branding through IPFS-hosted metadata files. This branding information can be updated later by the vault Admin using the `setMetadata` function. Vault verification, managed by the StakeWise team, provides stakers with certainty that branded vaults are authentically controlled by their claimed operators.
+
+### Fee
+
+A maximum possible fee is 100% of rewards. Vault Admin can update fees through the `setFeePercent` function. The fee can be updated once every 3 days and may only be increased by up to 20% at a time. If the initial fee is 0%, the first increase is limited to 1%.
+
+## Technical Architecture
+
+### Vault Deployment
+
+Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state – including user balances –  and stores vault-specific configuration set during initialization, which defines its core operational characteristics. Vaults are created through factory contracts such as [EthVaultFactory](https://etherscan.io/address/0xDF82E5D27E175618e5bC4581ee336F59AdabfBB2#code) by:
+
+<ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
+<li style={{listStyleType: 'decimal'}}>Deploying a proxy that reserves storage for all vault data and sets its initial configuration during the initializer call.</li>
+<li style={{listStyleType: 'decimal'}}>Pointing the proxy to a shared implementation contract that contains the vault's logic and module integration.</li>
+<li style={{listStyleType: 'decimal'}}>Registering the vault in the VaultsRegistry – the canonical on-chain list of all valid vaults and factories.</li>
+</ol>
+
+To mitigate economic attacks during the vulnerable initial phase of a vault's lifetime, the factory requires a security deposit of 1 gwei at creation.
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 You can find the addresses of all vault factories [here](https://github.com/stakewise/v3-core/blob/main/deployments/mainnet.json).</span>
+
+
+### Modular Design
+
+The constructor parameters supplied during deployment link the vault to essential StakeWise infrastructure and the Ethereum Beacon Chain. Internally, each vault is built from specialized modules that split responsibilities into distinct functional areas, including:
+
+**Validator lifecycle** – adding, approving, and exiting validators.
+
+**Deposit and withdrawal** – staking to and withdrawing from the Beacon Chain.
+
+**Fee enforcement** –  calculating and applying protocol and operator fees.
+
+**MEV capture** – routing execution-layer rewards either to a vault-specific escrow or to a shared smoothing pool.
+
+This modular architecture ensures that all vault types (ETH, GNO, private, ERC-20) share consistent behavior while allowing new features to be added without breaking existing vaults.
+
+### State Tracking
+
+Vaults maintain an internal accounting ledger that tracks the value of all user stakes. This ledger is updated whenever user activity or protocol events affect stake values, such as deposits, withdrawals, reward distributions, or MEV payouts. Updates occur automatically when users interact with the vault, and operators can trigger updates manually when necessary, for example, to refresh valuations before osETH minting.
+
+### Upgrade Flexibility
+
+Because the proxy pattern separates storage from logic, upgrades can be applied without affecting user balances or redeploying the contract. Only the implementation contract changes, while the proxy – holding all state – remains untouched. All upgrades are subject to community governance approval, providing strong guarantees for user protection and protocol integrity.
+
+The vault architecture is deployed in parallel on both the Ethereum and Gnosis networks through equivalent contract implementations, such as `EthVault` and `GnoVault`, ensuring consistent functionality and user experience across chains.
+
+<div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) is currently in the project phase and proposes a method to expose Ethereum's beacon chain block roots inside the EVM by committing each beacon block's hash tree root into execution payload headers and storing them in a smart contract. <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>

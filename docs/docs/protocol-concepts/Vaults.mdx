@@ -55,11 +55,12 @@ Each vault decides whether to:
 
 
 Because direct Beacon chain state queries are not feasible in the EVM<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>, rewards are calculated off-chain by the StakeWise oracle network. Oracles aggregate consensus and execution rewards (minus any penalties) into a Merkle root (`rewardsRoot`), publish it to <Tooltip content={<><strong>InterPlanetary File System (IPFS)</strong> <br /> A decentralized, immutable, distributed file storage network that stores and retrieves data using content-addressing across multiple nodes. Each piece of content receives a unique, unchangeable hash. In StakeWise, IPFS stores complete reward data for transparency and verification.</>}>IPFS</Tooltip>, and submit signatures to the [Keeper](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) contract. The Keeper validates these signatures and updates the global state. Vaults then harvest their share of rewards by providing a Merkle proof against this `rewardsRoot`.
-Rewards automatically increase the value of your vault shares over time. After the vault's fixed fee is applied, you can realize these rewards by withdrawing your stake or by using your shares as collateral to mint OsToken for instant liquidity.
+
+Rewards automatically increase the value of your vault shares over time. After the vault's fixed fee is applied, you can realize these rewards by withdrawing your stake or by using your shares as collateral to mint [OsToken for instant liquidity](#token-system).
 
 ### Withdrawals
 
-When a user chooses to unstake, they enter the vault's **exit queue** and receive a **position ticket** that tracks their place in line. As ETH becomes available to the vault, users can claim what's available; if only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
+When a user chooses to unstake, they enter the vault's **exit queue** and receive a **position ticket** that tracks their place in line. While in the queue, their stake continues to earn staking rewards until the corresponding validator begins its exit from the Beacon Chain. As ETH becomes available to the vault, users can claim what's available; if only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
 During validator registration, the v3-operator creates the validator's **voluntary-exit BLS signature**, splits it into secret shares, encrypts each share for the corresponding oracle, and distributes the shares to the oracle set. After that, exist proceed as follows:
 
@@ -74,16 +75,26 @@ Ethereum processes validator exits through its **rate-limited global exit queue*
 
 The exit queue advances whenever the vault **syncs state** – both on **user actions** (entering the queue, claiming; sometimes deposits/withdrawals) and on **keeper-driven syncs** (e.g., harvest). Throughout the process, user assets remain secured in the vault's smart contracts and are never directly controlled by any third party.
 
+><span style={{color: '#1f2937', fontWeight: '500'}}> Note: Exit signatures can become invalid if the oracle network changes (e.g., DAO rotates oracles after a key compromise). The operator service periodically checks for outdated signatures and updates them on-chain when needed.</span>
+
 ### Token System
 
-Stakewise vaults can optionally integrate with the OsToken system to provide liquidity against staked position. When enabled, users may lock their vault shares as collateral and mint an OsToken (e.g., `osETH`, `osGNO`) without unstaking. Minting and redemption are enforced by the protocol's OsToken contracts – primarily [OsTokenVaultController](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) and [OsTokenConfig](https://etherscan.io/address/0x287d1e2a8de183a8bf8f2b09fa1340fbd766eb59#code) – which apply risk control such as collateralization (LTV) limits, fee rates and other parameters. Users unlock collateral by burning the OsToken. While OsTokens provide liquidity, the underlying stake and rewards remain in the originating Vault, continuing to accrue consensus and execution-layer returns.
+An OsToken (e.g., `osETH`, `osGNO`) is an over-collateralized ERC-20 token that represents a claim on staked assets in one or more vaults. StakeWise vaults can optionally integrate with the OsToken system to provide liquidity against a staked position.
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 See the dedicated [OsToken](OsToken.mdx) section for exchange rate stability, collateralization ratios, and peg maintenance mechanisms.</span>
+When enabled, users may lock their vault shares as collateral and mint an OsToken without unstaking. The amount of OsToken that can be minted is determined by parameters set in the [OsTokenVaultController](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) and [OsTokenConfig](https://etherscan.io/address/0x287d1e2a8de183a8bf8f2b09fa1340fbd766eb59#code) conatrcts. These parameters include:
+
+**Collateralization ratio (LTV)** – how much underlying stake must back each OsToken. Standard pools offer 90% LTV, while DAO-approved vaults can provide up to 99.99% (osETH) or 99.95% (osGNO), subject to strict requirements such as minimum stake size, low fees, above-median performance, and a SWISE bond.
+
+**Fee rates and other risk controls** – such as liquidation thresholds and redemption mechanisms that protect peg stability.
+
+Users unlock collateral by burning the OsToken. While OsTokens provide liquidity, the underlying stake and rewards remain in the originating Vault, continuing to accrue consensus and execution-layer returns.
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For details on exchange rate stability, collateralization ratios, and peg maintenance mechanisms, see [OsToken →](OsToken.mdx)</span>
 
 
 ## Vault Configuration
 
-Each Vault is highly customizable. Core parameters set at deployment – like vault type, capacity, MEV strategy, ERC-20 support, and management roles are immutable, while branding and fees remain adjustable.
+Each vault is highly customizable. Core parameters set at deployment – like vault type, capacity, MEV strategy, ERC-20 support, and management roles are immutable, while branding and fees remain adjustable.
 
 ### Vault Type
 
@@ -120,11 +131,11 @@ MEV (Maximum Extractable Value) represents additional profits validators can ear
 
 **Shared MEV** - Steady Rewards
 
-Vaults participate in MEV redistribution through SharedMevEscrow contracts, providing consistent returns across participating pools regardless of individual block proposal frequency.
+Vaults participate in MEV redistribution through [SharedMevEscrow](https://etherscan.io/address/0x48319f97e5da1233c21c48b80097c0fb7a20ff86#code) contract, providing consistent returns across participating pools regardless of individual block proposal frequency.
 
 **MEV Escrow** - Keep What You Earn
 
-Vaults collect MEV rewards through individual OwnMevEscrow contracts, preserving full value capture but creating more volatile returns based on actual validator block proposals.
+Vaults collect MEV rewards through individual OwnMevEscrow contract, preserving full value capture but creating more volatile returns based on actual validator block proposals.
 
 This choice is permanent – vault operators must decide during creation and cannot change MEV strategies later.
 
@@ -140,15 +151,17 @@ Every Vault has several key roles for the internal management of the staking pro
 
 **Admin** - The Vault Owner
 
-The person who creates the vault and makes all major decisions. They set the vault's core settings (like fees and capacity), control the vault's name and branding, and can assign helpers for specific tasks. For security, the admin role cannot be transferred to someone else after the vault is created.
+The person who creates the vault and makes all major decisions. They set the vault's core parameters (like fees and capacity), manage the vault’s name and branding, and can delegate specific responsibilities to other management roles such as **Access Manager** or **Keys Manager**. These delegated roles act as “helpers” to handle access control or validator key operations without giving away full administrative control. For security, the Admin role itself cannot be transferred to another address after the vault is created.
 
-**Access Manager** - The Gatekeeper
+**Access Manager** - Whitelist Controller
 
-Controls who can join Private Vaults by managing the approved user list. Think of them as the bouncer who decides who gets in. The admin usually handles this themselves, but they can delegate it to someone they trust and take it back anytime.
+Wallet with the authority to add and remove addresses from the whitelist of a Private Vault. The admin usually handles this themselves, but they can delegate the role to another wallet and reclaim it at any time in the future.
 
-**Keys Manager** - The Technical Coordinator
+**Keys Manager** - Deposit Data Controller
 
-Handles the technical setup when new validators need to be created. They submit the validator data that gets checked by StakeWise to make sure everything is secure and correct. This is typically handled by the admin or their technical team.
+Wallet with the authority to add and remove addresses from the whitelist of a Private Vault. The admin usually handles this themselves, but they can delegate the role to another wallet and reclaim it at any time in the future.
+
+><span style={{color: '#1f2937', fontWeight: '500'}}> Note: StakeWise always verifies the validity of deposit data submitted to the vault, ensuring it contains the correct withdrawal address and has not been used before.</span>
 
 ### Branding
 
@@ -156,7 +169,7 @@ Admin can customize their vault's metadata including name, description, and visu
 
 ### Fee
 
-A maximum possible fee is 100% of rewards. Vault Admin can update fees through the `setFeePercent` function. The fee can be updated once every 3 days and may only be increased by up to 20% at a time. If the initial fee is 0%, the first increase is limited to 1%.
+A maximum possible fee is 100% of rewards. This fee is automatically deducted from rewards before they are reflected in the Vault’s APY, so the displayed APY is always net of fees. Vault Admin can update fees through the `setFeePercent` function. The fee can be updated once every 3 days and may only be increased by up to 20% at a time. If the initial fee is 0%, the first increase is limited to 1%.
 
 ## Technical Architecture
 
@@ -195,7 +208,9 @@ Vaults maintain an internal accounting ledger that tracks the value of all user 
 
 ### Upgrade Flexibility
 
-Because the proxy pattern separates storage from logic, upgrades can be applied without affecting user balances or redeploying the contract. Only the implementation contract changes, while the proxy – holding all state – remains untouched. All upgrades are subject to community governance approval, providing strong guarantees for user protection and protocol integrity.
+Every vault is an independent staking pool, and its smart contracts cannot be unilaterally changed or upgraded by the StakeWise DAO. Because the proxy pattern separates storage from logic, upgrades can be applied without affecting user balances or redeploying the contract. Only the implementation contract changes, while the proxy – holding all state – remains untouched. All upgrades are subject to community governance approval, providing strong guarantees for user protection and protocol integrity.
+
+The DAO may release new vault contract versions to improve efficiency or safety, but upgrading is always optional – vaults can choose to remain on their current version. All upgrades are subject to community governance approval, providing strong guarantees for user protection and protocol integrity.
 
 The vault architecture is deployed in parallel on both the Ethereum and Gnosis networks through equivalent contract implementations, such as `EthVault` and `GnoVault`, ensuring consistent functionality and user experience across chains.
 

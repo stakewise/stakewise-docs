@@ -79,11 +79,12 @@ The exit queue advances whenever the vault **syncs state** – both on **user ac
 
 ### Token System
 
-An OsToken (e.g., `osETH`, `osGNO`) is an over-collateralized ERC-20 token representing a claim on staked assets in one or more vaults. When a vault supports OsToken minting, users can lock their vault shares as collateral and mint the corresponding OsToken without unstaking.
+The OsToken system allows users to gain liquidity on their staked assets without exiting the Beacon Chain validator set. Stakers can trade or use OsTokens in DeFi, while the underlying stake continues to earn consensus-layer rewards and MEV, which accumulate in the originating vault.
 
-The amount that can be minted is limited by the vault's collateralization ratio (LTV)—typically 90% for standard pools, and up to 99.99% (osETH) or 99.95% (osGNO) for DAO-approved vaults meeting strict requirements<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>.
+An OsToken (e.g., `osETH`, `osGNO`) is an over-collateralized ERC-20 token that represents a claim on staked assets in one or more vaults.
+When a vault supports OsToken minting, stakers can lock their vault shares as collateral and mint the corresponding OsToken against their position. The amount that can be minted is limited by the vault's collateralization ratio (LTV) - typically 90% for standard pools, and up to 99.99% (`osETH`) or 99.95% (`osGNO`) for DAO-approved vaults meeting strict requirements<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>.
 
-Collateral is released by burning the OsToken. While osTokens provide liquidity, the underlying stake and rewards remain in the vault, continuing to accrue returns.
+When a user wants to redeem their collateral, they must burn the OsTokens and unlock their vault shares. Because the system enforces over-collateralization, there is always more staked ETH (or GNO) backing the OsTokens in circulation than required to redeem them, protecting against shortfalls.
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For details on exchange rate stability, collateralization ratios, and peg maintenance mechanisms, see [OsToken →](OsToken.mdx)</span>
 

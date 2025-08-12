@@ -16,7 +16,7 @@ Vaults are isolated staking pools that manage ETH and GNO staking, reward distri
 
 Vaults serve as both staking pools and liquid staking infrastructure. The modular vault architecture accommodates different types of users with varying needs. Solo stakers can use vaults to access liquid staking, while node operators and organizations can create their own staking pool and offer liquid staking services on specific terms to others.
 
-Each vault runs dedicated validators that are completely isolated from other vaults, ensuring that validator slashing, performance issues, or operational failures in one vault never impact your stake in another. This creates unique staking environments with fully customizable parameters – from management and branding to vault economics (fees, capacity, tokenization). Most notably, vaults give you access to a liquid staking token – OsToken – which you can use throughout the DeFi ecosystem.
+Each vault runs dedicated validators that are completely isolated from other vaults, ensuring that validator slashing, performance issues, or operational failures in one vault never impact your stake in another. This creates unique staking environments with fully customizable parameters – from management and branding to vault economics (fees, capacity, tokenization). Most notably, vaults issue a liquid staking token (OsToken) usable across the DeFi ecosystem.
 
 ## How Vaults Work
 
@@ -24,7 +24,7 @@ Each vault runs dedicated validators that are completely isolated from other vau
 
 Vaults collect user deposits and manage the entire validator lifecycle through smart contracts. When a vault reaches the staking threshold – 32 ETH on Ethereum or 1 GNO on Gnosis – the StakeWise [v3-operator ↗](https://github.com/stakewise/v3-operator) begins the validator registration process.
 
-The v3-operator is a specialized off-chain service run by the <Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a vault. It monitors vault state changes, assigns validator keys based on deposit data files, coordinates with the oracle network for registration approvals, and performs BLS signature operations for validator exits.</>}>vault operator</Tooltip> alongside their Ethereum consensus and execution clients. At startup, the operator specifies which type of validator to register (`0x01` or `0x02`) using the `--validator-type` flag. This choice determines how the service will handle future deposits:
+The v3-operator is a specialized off-chain service run by the <Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a vault. It monitors vault state changes, assigns validator keys based on deposit data files, coordinates with the oracle network for registration approvals, and performs BLS signature operations for validator exits.</>}>vault operator</Tooltip> alongside their Ethereum consensus and execution clients. At startup, the operator specifies which validator type to register (`0x01` or `0x02`)<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup> using the `--validator-type` flag. This choice determines how the service will handle future deposits:
 
 **If the vault already has `0x02` validators**, the operator service sweeps all accumulated ETH in the vault into those validators once per day until they are filled to capacity.
 
@@ -90,31 +90,29 @@ Collateral is released by burning the OsToken. While osTokens provide liquidity,
 
 ## Vault Configuration
 
-Each vault is highly customizable. Core parameters set at deployment – like vault type, capacity, MEV strategy, ERC-20 support, and management roles are immutable, while branding and fees remain adjustable.
+Each vault is highly customizable. Core parameters such as vault type, capacity, MEV strategy, ERC-20 support, and management roles are immutable after deployment, while branding and fees can be adjusted.
 
 ### Vault Type
 
 **Standard Vaults** - Most common
 
-You receive vault shares that represent your portion of the staking pool. Your shares earn rewards based on how well the validators perform, but the shares themselves cannot be traded or transferred to others. Perfect for straightforward staking.
+Issue non-transferable vault shares representing a participant’s proportion of the staking pool. Rewards accrue to the shares over time.
 
 **ERC-20 Vaults** - For DeFi Integration
 
-Instead of locked shares, you get transferable tokens that work like any other crypto token. You can trade them, use them in DeFi protocols, or transfer them to others while still earning staking rewards. Great if you want flexibility or plan to use your stake elsewhere.
+Issue transferable ERC-20 tokens that represent vault shares. These tokens can be traded, transferred, or used in DeFi protocols while continuing to accrue staking rewards.
 
 **Private Vaults** - Restricted Access
 
-Only approved addresses can join these vaults, controlled by an on-chain whitelist. Organizations, DAOs, or institutions use these to create compliant staking environments with custom rules and governance. You need permission to participate.
+Restrict participation to approved addresses, enforced via an on-chain whitelist.
 
 **Blocklist Vaults** - Open with Exceptions
 
-Anyone can join except specifically blocked addresses. These vaults maintain an exclusion list for regulatory, compliance, or operational reasons while staying open to the general public.
+Open to all participants except those on an exclusion list.
 
 **Meta Vaults** - Diversified Strategy
 
-These don't run validators themselves. Instead, they automatically spread your deposit across up to 50 different underlying vaults using smart algorithms. You get exposure to multiple staking strategies and operators with a single deposit.
-
-All vault types are deployed through factory contracts, making creation simple and cost-effective with just a small security deposit required.
+Meta Vaults do not operate validators directly; instead, deposits are distributed across underlying sub-vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-vaults.
 
 ### Capacity
 
@@ -213,4 +211,8 @@ The vault architecture is deployed in parallel on both the Ethereum and Gnosis n
 
 <div id="user-content-fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '1rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>2.</span> To qualify for the higher LTV, vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#user-content-fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-3" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '1rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>3.</span> `0x01` and `0x02` refer to validator types that determine data format and capabilities: `0x01` validators use fixed 32 ETH deposits and cannot be topped up, while `0x02` validators support variable deposit amounts and validator consolidation features. The choice affects withdrawal credentials format and operational flexibility. <a href="#user-content-fnref-3" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>

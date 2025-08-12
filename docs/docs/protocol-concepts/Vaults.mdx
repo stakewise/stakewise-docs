@@ -79,15 +79,11 @@ The exit queue advances whenever the vault **syncs state** – both on **user ac
 
 ### Token System
 
-An OsToken (e.g., `osETH`, `osGNO`) is an over-collateralized ERC-20 token that represents a claim on staked assets in one or more vaults. StakeWise vaults can optionally integrate with the OsToken system to provide liquidity against a staked position.
+An OsToken (e.g., `osETH`, `osGNO`) is an over-collateralized ERC-20 token representing a claim on staked assets in one or more vaults. When a vault supports OsToken minting, users can lock their vault shares as collateral and mint the corresponding OsToken without unstaking.
 
-When enabled, users may lock their vault shares as collateral and mint an OsToken without unstaking. The amount of OsToken that can be minted is determined by parameters set in the [OsTokenVaultController](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) and [OsTokenConfig](https://etherscan.io/address/0x287d1e2a8de183a8bf8f2b09fa1340fbd766eb59#code) conatrcts. These parameters include:
+The amount that can be minted is limited by the vault's collateralization ratio (LTV)—typically 90% for standard pools, and up to 99.99% (osETH) or 99.95% (osGNO) for DAO-approved vaults meeting strict requirements<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>.
 
-**Collateralization ratio (LTV)** – how much underlying stake must back each OsToken. Standard pools offer 90% LTV, while DAO-approved vaults can provide up to 99.99% (osETH) or 99.95% (osGNO), subject to strict requirements such as minimum stake size, low fees, above-median performance, and a SWISE bond.
-
-**Fee rates and other risk controls** – such as liquidation thresholds and redemption mechanisms that protect peg stability.
-
-Users unlock collateral by burning the OsToken. While OsTokens provide liquidity, the underlying stake and rewards remain in the originating Vault, continuing to accrue consensus and execution-layer returns.
+Collateral is released by burning the OsToken. While osTokens provide liquidity, the underlying stake and rewards remain in the vault, continuing to accrue returns.
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For details on exchange rate stability, collateralization ratios, and peg maintenance mechanisms, see [OsToken →](OsToken.mdx)</span>
 
@@ -216,4 +212,8 @@ The vault architecture is deployed in parallel on both the Ethereum and Gnosis n
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) is currently in the project phase and proposes a method to expose Ethereum's beacon chain block roots inside the EVM by committing each beacon block's hash tree root into execution payload headers and storing them in a smart contract. <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '1rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>2.</span> To qualify for the higher LTV, vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#user-content-fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>

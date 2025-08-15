@@ -147,6 +147,9 @@ Each sub-vault must have at least one registered validator.
 Deposits are distributed across underlying sub-vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-vaults.
 `Curator` contract can be changed by the Admin.
 
+MetaVaults can be deployed using the `EthMetaVaultFactory` contract, and currently,
+only the factory owner is permitted to deploy new MetaVaults.
+
 ### Capacity
 
 Vault capacity is an immutable deposit limit that vault operators set once during initialization to control the maximum amount of ETH their vault can accept. When left unset, vaults have unlimited capacity by default. The capacity is enforced on every

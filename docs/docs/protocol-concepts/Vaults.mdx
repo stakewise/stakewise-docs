@@ -111,7 +111,9 @@ The system keeps more staked assets backing each OsToken than the token is worth
 
 ## Customization
 
-Each vault is highly customizable. Core parameters such as vault type, capacity, MEV strategy, ERC-20 support, and management roles are immutable after deployment, while branding and fees can be changed.
+Each Vault is highly customizable.
+Core parameters such as Vault type, capacity, and MEV strategy are immutable and set once on deployement,
+while management roles, branding, and fees can be changed later.
 
 ### Vault Type
 
@@ -131,7 +133,7 @@ Tokenless vaults avoid potential tax events when exchanging ETH for Vault token.
 
 **Private Vaults** - Restricted Access
 
-Receive staking deposits from wallets that have been whitelisted by the Admin.
+Receive staking deposits from wallets that have been whitelisted by the Vault Admin.
 
 **Blocklist Vaults** - Open with Exceptions
 
@@ -139,7 +141,11 @@ Receive staking deposits from any wallets except those on a blocklist.
 
 **Meta Vaults** - Diversified Strategy
 
-Meta Vaults do not operate validators directly; instead, deposits are distributed across underlying sub-vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-vaults.
+Meta Vaults do not register validators directly -
+instead, they delegate accumulated assets to sub-vaults, which are managed by the Vault Admin.
+Each sub-vault must have at least one registered validator.
+Deposits are distributed across underlying sub-vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-vaults.
+`Curator` contract can be changed by the Admin.
 
 ### Capacity
 
@@ -173,28 +179,29 @@ Own Escrow targets maximum value capture but with increased variability.
 
 Every Vault has several key roles for the internal management of the staking process:
 
-**Admin** - The Vault Owner
+**Vault Admin** - The Vault Owner
 
-Deploys the Vaults and sets the core parameters like the type of Vault and fee. Vault Admins also control the Vault's branding.
+Deploys the Vaults and sets the core parameters like the type of Vault, fee, and branding.
 
-Vault Admin can be a single wallet, a multisig, or a DAO. Out of security considerations, Vault Admin cannot be changed once the Vault has been deployed.
+Vault Admin can be a single wallet, a multisig, or a DAO and can be changed through `setAdmin` function.
+The function can only be called by the current Vault Admin.
 
-Vault Admin cannot change the core parameters of the Vault once it has been deployed.
-However, an Admin can assign the Access Manager and Keys Manager roles to other wallets, and change the recipient of the staking fee.
+While Vault Admin cannot change the core parameters of the Vault set once at deployment,
+they can assign the Access Manager and Keys Manager roles to other wallets, and change the recipient of the staking fee.
 
 **Access Manager** - Whitelist Controller
 
 Wallet with the power to add and remove wallets from the whitelist of a Private Vault.
 
-By default, Admin  is also the Access Manager.
-However, an Admin can assign the Access Manager role to another wallet, and reclaim this role at any moment in the future.
+By default, Vault Admin  is also the Access Manager.
+However, they can assign the Access Manager role to another wallet, and reclaim this role at any moment in the future.
 
 **Keys Manager** - Deposit Data Controller
 
 Wallet with the power to add and remove wallets from the whitelist of a Private Vault.
 
 By default, Vault Admin is also the Keys Manager.
-However, an Admin can assign the Keys Manager role to another wallet, and reclaim this role at any moment in the future.
+However, they can assign the Keys Manager role to another wallet, and reclaim this role at any moment in the future.
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 StakeWise always checks the validity of deposit data submitted to the Vault to ensure it contains the correct withdrawal address and has not been used before.</span>
 
@@ -207,7 +214,13 @@ Verification is a manual process managed by the core StakeWise team.
 
 ### Fee
 
-A maximum possible fee is 100% of rewards. This fee is automatically deducted from rewards before they are reflected in the Vault’s APY, so the displayed APY is always net of fees. Vault Admin can update fees through the `setFeePercent` function. The fee can be updated once every 3 days and may only be increased by up to 20% at a time. If the initial fee is 0%, the first increase is limited to 1%. The StakeWise DAO does not charge vault creators or stakers for using vaults.
+A maximum possible fee is 100% of rewards.
+This fee is deducted from rewards. The Vault’s displayed APY is always net of fees.
+Vault Admin can update current fees through the `setFeePercent` function.
+The fee can be updated once every 3 days and may only be increased by up to 20% at a time.
+If the initial fee is 0%, the first increase is limited to 1%.
+
+The StakeWise DAO does not charge vault creators or stakers for using Vaults.
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 The fee level for a given vault can be found in the Details at the bottom of the Vault page.</span>
 

@@ -13,28 +13,50 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 <h2>Introduction</h2>
 
-StakeWise is a decentralized protocol for liquid staking on Ethereum. Rather than consist of one large staking pool, StakeWise has a network of permissionless, customizable, and non-custodial staking pools deployed by various service providers, allowing individuals and organizations to pick which nodes will stake their ETH, helping them find the most suitable staking arrangement. All pools offer on-demand liquidity and DeFi integrations for users’ stake via osToken, providing the flexibility to get the token only when needed. The protocol is implemented as a mix of both upgradable (via dual governance) smart contracts that must keep up with the changes in Ethereum’s Proof-of-Stake specification, and persistent, non-upgradable smart contracts designed to prioritize security and self-custody, and to function without centralized intermediaries who may selectively restrict access to the service.
+StakeWise is a liquid staking protocol for Ethereum, designed to make staking more flexible, secure, and accessible.
 
-This documentation explains the modular architecture of Infinity Pools — the smart contracts that enable non-custodial, customizable, and permissionless staking — and the tokenization of stake via osToken. It offers in-depth coverage of protocol mechanics and possible software configurations, and provides step-by-step guides for full potential. Whether you're new to liquid staking or are an experienced user, this documentation gives you everything needed for a confident start.
+Rather than consist of one large staking pool, StakeWise has a network of permissionless, customizable, and non-custodial staking pools deployed by various service providers,
+allowing individuals and organizations to pick which nodes will stake their ETH, helping them find the most suitable staking arrangement.
+All pools offer on-demand liquidity and DeFi integrations for users’ stake via OsToken, providing the flexibility to get the token only when needed.
+
+The protocol is implemented as a mix of both upgradable (via dual governance) smart contracts that must keep up with the changes in Ethereum’s Proof-of-Stake specification,
+and persistent, non-upgradable smart contracts designed to prioritize security and self-custody, and to function without centralized intermediaries who may selectively restrict access to the service.
+
+StakeWise was formally introduced with the release of its [Litepaper in 2022 ↗](https://www.stakewise.io/stakewise-v3.pdf),
+which set out the vision for a modular staking protocol designed to counter centralization risks and expand user choice.
+Since then, the protocol has continued to evolve to embody the core ethos of Ethereum and DeFi,
+specifically the non-custodial, trustless nature that allows self-sovereignty to truly thrive.
+
+StakeWise provides this essential base layer for ETH staking by lowering the technical and capital barriers,
+since the vast majority lack either the technical knowledge to run a node or the 32 ETH required to stake.
+
 
 <h2>Understanding Liquid Staking</h2>
 
+<h3>What is Staking?</h3>
+
+Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior,
+thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains like Ethereum, participants run
+<Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator</Tooltip>
+nodes by putting tokens *at stake*.
+Validators are essential to maintaining network consensus — the process by which all participants agree on the blockchain’s new global state.
+For their work, validators receive two types of rewards:
+- Consensus Layer rewards for duties such as attestations and block proposals;
+- Execution Layer rewards from priority fees and MEV.
+
+At the same time, they risk *slashing* (penalties) if they act maliciously or fail to perform duties reliably.
+
+Learn more about rewards and penalties — [ethereum.org ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)
+
 <h3>The Traditional Staking Dilemma</h3>
-<h4>What is Staking?</h4>
-Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior, thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains like Ethereum, participants run <Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator</Tooltip> nodes by putting tokens "at stake", meaning they earn rewards for validating transactions while risking "slashing" (penalties) for malicious or unreliable behavior. Validators play an essential role in maintaining network consensus, enabling all participants to agree on the blockchain's new irreversible global state. For this critical work, validators receive two types of rewards:
+Traditional PoS staking follows a simple premise: lock tokens and earn rewards.
+While this model secures the network, it has a major drawback — staked ETH is illiquid.
+Once staked, it cannot be used elsewhere in decentralized finance (DeFi).
+This creates a fundamental dilemma: stakers must choose between earning rewards and keeping their ETH liquid, but never both.
 
-<ul>
-  <li><span style={{fontWeight: '600'}}>Consensus Layer rewards</span>: Earned by performing validator duties like voting on block validity through attestations, participating in sync committees, and proposing blocks</li>
-  <li><span style={{fontWeight: '600'}}>Execution Layer rewards</span>: Received as priority fees and Maximum Extractable Value (MEV)</li>
-</ul>
-
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Learn more about rewards and penalties [ethereum.org →](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)</span>
-
-<h3>The Liquidity Problem</h3>
-Traditional PoS staking operates on a simple premise: lock tokens, earn fixed rewards, repeat. While this bond-like approach guarantees returns, it has a significant limitation: stake is illiquid. You are locked out of decentralized finance (DeFi) yield opportunities. Traditional staking creates a fundamental dilemma: you must choose between earning staking rewards and maintaining liquidity for ETH, but never both.
 
 <h3>Solution</h3>
-<h4>How Liquid Staking Works</h4>
+
 Liquid staking transforms your stake into a tradeable asset through tokenization. When you stake through a liquid staking protocol, you receive liquid staking tokens (LSTs) representing your claim on the underlying staked assets plus accrued rewards. Unlike native staking where tokens are locked, LSTs remain liquid and composable. This unlocks the entire DeFi ecosystem while your original stake continues earning validation rewards. You can now earn from multiple sources:
 
 - Staking rewards from your underlying validators;
@@ -60,31 +82,31 @@ StakeWise is a liquid staking protocol that gives you the benefits of permission
 
 Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive staking network that serves diverse participants through three distinct approaches:
 
-**Infinity Pools**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive OsToken when staking.
+**Vaults**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive OsToken when staking.
 
-**One-Click Staking**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Infinity Pools that minimize fees and maximize your yield. OsToken is issued automatically, granting access to instant liquidity and DeFi by default.
+**One-Click Staking**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. OsToken is issued automatically, granting access to instant liquidity and DeFi by default.
 
-**Run Own Infinity Pool**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Infinity Pools allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via OsToken. Infinity Pools already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
+**Run Own Infinity Pool**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via OsToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
 
 StakeWise's product offering emerged from deep analysis of stakeholder motivations, creating a structure that reinforces our decentralized vision while sustainably scaling Ethereum staking. StakeWise also continuously develops innovative strategies to maximize your rewards, such as Boost, with more features coming soon.
 
 <h3>Architecture</h3>
-StakeWise's modular architecture is built on three foundational pillars: Infinity Pools, OsToken, and Oracles.
+StakeWise's modular architecture is built on three foundational pillars: Vaults, OsToken, and Oracles.
 
-<h4>Infinity Pools: Customizable Smart Contracts</h4>
-Infinity Pools are isolated, highly customizable smart contracts that function as individual staking pools. Pool operators can accept deposits from other stakers, earning fees while providing staking services. The marketplace model democratizes liquid staking by giving you the freedom to choose where to stake and how.
+<h4>Vaults: Customizable Smart Contracts</h4>
+Vaults are isolated, highly customizable smart contracts that function as individual staking pools. Pool operators can accept deposits from other stakers, earning fees while providing staking services. The marketplace model democratizes liquid staking by giving you the freedom to choose where to stake and how.
 
 <h4>Key Features:</h4>
 <ul>
   <li>Permissionless & Customizable: Launch your own Infinity Pool without approval, controlling fees, MEV strategies, and validator selection. Manage access by making your Pool private or <Tooltip content={<><strong>OFAC-compliant</strong> <br /> Compliance with the Office of Foreign Assets Control regulations, which may restrict access to certain jurisdictions or sanctioned entities.</>}>OFAC-compliant</Tooltip>;</li>
-  <li>Open Marketplace: Choose from diverse Infinity Pools based on your preferences for decentralization, yield, or specialized strategies;</li>
+  <li>Open Marketplace: Choose from diverse Vaults based on your preferences for decentralization, yield, or specialized strategies;</li>
   <li>Risk Isolation: Each Infinity Pool operates independently — issues in one Pool don't affect others;</li>
 </ul>
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Learn how Infinity Pools work, their isolation model, and how to create your own [Infinity Pools →](./intro.mdx)</span>
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Learn how Vaults work, their isolation model, and how to create your own [Vaults →](./intro.mdx)</span>
 
 <h4>OsToken: Next-Generation Liquid Staking Tokens</h4>
-OsToken, standing for Overcollateralized Staking Token, is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain. Designed with safety and composability at its core, OsToken accrues staking rewards while maintaining full liquidity for DeFi participation. OsToken can be minted by anyone staking in Infinity Pools or acquired directly from a DEX to instantly start earning staking rewards.
+OsToken, standing for Overcollateralized Staking Token, is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain. Designed with safety and composability at its core, OsToken accrues staking rewards while maintaining full liquidity for DeFi participation. OsToken can be minted by anyone staking in Vaults or acquired directly from a DEX to instantly start earning staking rewards.
 
 <h4>Key Features:</h4>
 <ul>

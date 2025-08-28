@@ -49,7 +49,8 @@ Once validators are registered and active, they earn:
 
 The Vault initially holds rewards as liquid ETH until there is enough to register additional validators.
 
-After the [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade, [EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251) allows Vaults to merge multiple 32 ETH validators into fewer `0x02` validators with higher effective balances.
+After the [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade,
+[EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251) allows Vaults to merge multiple 32 ETH validators into fewer `0x02` validators with higher effective balances.
 This can improve efficiency and reduce infrastructure overhead, and allows partial withdrawals of rewards above 32 ETH.
 Each Vault decides whether to:
 
@@ -58,18 +59,14 @@ Each Vault decides whether to:
 - Keep rewards as <Tooltip content={<><strong>Unbounded ETH</strong> <br /> ETH that is not locked in validators (32 ETH increments). This includes excess deposits, staking rewards, and MEV that have not been allocated to new validators yet.</>}>unbounded ETH</Tooltip>
 within the Vault for greater liquidity.
 
-
 Because direct Beacon chain state queries are not feasible in the EVM<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
-rewards are calculated off-chain by the StakeWise oracle network.
-Oracles aggregate consensus and execution rewards (minus any penalties) into a Merkle root (`rewardsRoot`),
-publish it to <Tooltip content={<><strong>InterPlanetary File System (IPFS)</strong> <br /> A decentralized, immutable, distributed file storage network that stores and retrieves data using content-addressing across multiple nodes.
-Each piece of content receives a unique, unchangeable hash. In StakeWise, IPFS stores complete reward data for transparency and verification.</>}>IPFS</Tooltip>, and submit signatures to the [Keeper ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) contract. The Keeper validates these signatures and updates the global state. Vaults then harvest their share of rewards by providing a Merkle proof against this `rewardsRoot`.
+rewards are calculated off-chain by the StakeWise Oracle Network.
 
-Users can mint OsTokens for instant liquidity or withdraw.
+><span style={{color: '#1f2937', fontWeight: '500'}}> 📝 For detailed information about the reward distribution process, see the [Oracles →](./Oracles) chapter.</span>
 
 ### Withdrawals
 
-When a user chooses to unstake, they enter the vault's **exit queue** and receive a **position ticket** that tracks their place in line.
+Users can mint OsTokens for instant liquidity or withdraw. When a user chooses to unstake, they enter the vault's **exit queue** and receive a **position ticket** that tracks their place in line.
 As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 

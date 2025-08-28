@@ -79,8 +79,6 @@ The operator prioritizes validators with higher balances first.
 If partial withdrawal capacity is insufficient or no validators have balances above 32 ETH or 1 GNO,
 the operator triggers a full validator exit from the Beacon Chain.
 
-
-
 The process is as follows:
 
 <ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
@@ -221,7 +219,6 @@ subject to protocol-enforced restrictions to protect users from sudden changes.
 ><span style={{color: '#1f2937', fontWeight: '500'}}> 📝 For complete details about Vault fee structures, limits, update restrictions, and how they interact with protocol fees, see the dedicated [Fees →](./Fees) chapter.</span>
 
 
-
 ## Staking into a Vault
 
   When staking into a Vault, users deposit ETH or GNO and receive Vault shares
@@ -235,6 +232,18 @@ subject to protocol-enforced restrictions to protect users from sudden changes.
   - No token swaps or conversions occur during staking
 
 For immediate liquidity, users can mint OsTokens (`osETH` or `osGNO`) using their Vault shares as collateral.
+
+### Evaluating Vault Performance
+
+StakeWise provides performance grades to help users evaluate vault quality based on validator operational excellence. These grades reflect the average vault performance over the last 7 days:
+
+**Scoring Grades:**
+* **Excellent (99.6-100%)**: No missed blocks or very few. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
+* **Good (99.2-99.6%)**: No missed blocks or very few. Validators perform well in attestations, with less than 1% missed attestation rewards.
+* **Moderate (97.1-99.2%)**: The vault has issues, with up to 3% missed attestations and/or blocks.
+* **Bad (0-97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
+
+Performance grades help users identify well-operated vaults but should be considered alongside other factors like fees, capacity, and operator reputation.
 
 ## Technical Architecture
 

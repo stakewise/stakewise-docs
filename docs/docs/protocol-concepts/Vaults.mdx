@@ -47,6 +47,10 @@ Once validators are registered and active, they earn:
 - **Consensus layer rewards**: Block proposals, attestations, and sync committee participation
 - **Execution layer rewards**: MEV, transaction fees, and block tips
 
+Validators may receive rewards only between their activation and exit epochs.
+Note that, after submitting a voluntary exit, there may be a delay while the validator moves through the exit queue until its exit epoch is passed.
+The validator is expected to participate as usual during this period.
+
 The Vault initially holds rewards as liquid ETH until there is enough to register additional validators.
 
 After the [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade,

@@ -37,14 +37,38 @@ since the vast majority lack either the technical knowledge to run a node or the
 
 Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior,
 thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains like Ethereum, participants run
-<Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain. To activate validator software, you need to be able to stake 32 ETH.</>}>validator</Tooltip>
-nodes by putting tokens *at stake*.
+<Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain.
+The primary identifier of a validator is its public BLS key (example of usage of the pubkey as an identifier is <a href="https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/account_manager/src/validator/exit.rs#L277-L280" style={{textDecoration: 'underline', color: '#018970'}}>here</a>).
+To activate validator software, you need to be able to stake 32 ETH. </>}>validator</Tooltip> nodes by putting tokens *at stake*.
 Validators are essential to maintaining network consensus — the process by which all participants agree on the blockchain’s new global state.
-For their work, validators receive two types of rewards:
-- Consensus Layer rewards for duties such as attestations and block proposals;
-- Execution Layer rewards from priority fees and MEV.
 
-At the same time, they risk *slashing* (penalties) if they act maliciously or fail to perform duties reliably.
+One of the important fields of the validator object (an example struct illustrating the validator lifecycle can be seen [here ↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36))
+is <code style={{backgroundColor: '#f4f4f4', color: '#018970', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>,
+which represents the validator's "active" balance and determines its influence in the protocol.
+This balance serves as the validator's "weight" in consensus duties:
+
+- Attesting to its view of the chain<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>
+- Proposing beacon chain blocks
+- Signing off on blocks in the <Tooltip content={<><strong>Sync Committee</strong> <br /> A sync committee is a special subset of 512 validators chosen pseudorandomly during each "sync committee period" (~1 day). These validators continually sign new Beacon block headers, enabling light clients "outside" the Beacon Chain to verify the consensus state with significantly reduced complexity.</>}>sync committees</Tooltip>
+that support <Tooltip content={<><strong>Light Client</strong> <br /> A light client is a streamlined way to verify Ethereum's consensus state without running a full node. Instead of performing complex verification checks, light clients rely on sync committees to provide cryptographically verifiable summaries of the Beacon Chain head using just a few public keys and a single aggregated signature.</>}>light clients</Tooltip>
+
+Validators in Ethereum are selected at random to propose blocks or participate in sync committees,
+while every active validator is assigned exactly one attestation per epoch.
+
+The Beacon Chain uses both rewards and penalties to incentivize proper validator behavior.
+Validators earn rewards for contributing to chain security and face penalties for failing to contribute.
+Receiving a penalty is not the same as being slashed.
+Being slashed is a severe punishment for very specific misbehaviours<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>
+(that could potentially be part of an attack on the chain),
+and results in the validator being ejected from the protocol in addition to some or all of its stake being removed.
+Penalties are subtracted from validators' balances on the Beacon Chain and effectively burned,
+so they reduce the net issuance of the Beacon Chain.
+
+Reward amounts are calculated based on mathematical formulas considering multiple variables, participation rates, timing, and network conditions<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
+
+Validator also earn rewards from priority fees and MEV (Maximum Extractable Value).
+
+As of the "Shapella" hard fork, validator balances are periodically "swept" (sent to the validator's designated withdrawal address on the Execution Layer).
 
 Learn more about rewards and penalties — [ethereum.org ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)
 
@@ -134,3 +158,30 @@ StakeWise is governed by the community through the SWISE governance token, with 
 
 <h4>Future Vision</h4>
 StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes and adapting proactively for optimal performance while fostering the decentralization that is essential for Ethereum's long-term health.
+
+
+<div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span>
+  Unlike the actual balance (which changes with every block), effective balance updates only once per epoch. It also "snaps" to the nearest 1 ETH increment due to a mechanism called hysteresis — this prevents constant fluctuations from affecting consensus calculations.
+  <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>2.</span>
+  Each attestation contains three votes: a source checkpoint vote, a target checkpoint vote (both for Casper FFG finality), and a head block vote (for LMD-GHOST fork choice).
+  More on Gasper consensus in the [whitepaper](https://arxiv.org/pdf/2003.03052)
+  <a href="#user-content-fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-3" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>3.</span>
+  Slashing occurs for: (1) Casper FFG violations - making conflicting attestations for the same target or creating "surrounding" votes, and (2) LMD-GHOST violations - proposing multiple blocks at the same height or attesting to different heads with the same checkpoints.
+  <a href="#user-content-fnref-3" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-4" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>4.</span>
+  For detailed reward calculations and formulas, see:
+  <a href="https://eth2book.info/capella/part2/incentives/rewards/" style={{textDecoration: 'none', color: '#018970'}}>eth2book</a>
+  <a href="#user-content-fnref-4" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>

@@ -1,4 +1,91 @@
 ---
-title: OsToken
+title: osToken
 sidebar_position: 2
 ---
+
+import Admonition from '@theme/Admonition';
+
+# osToken
+
+## Introduction
+
+osToken is a liquid staking token that accrues staking rewards when held. It is a generic name for StakeWise's network-specific ERC-20 tokens:
+
+- **osETH** on Ethereum
+- **osGNO** on Gnosis Chain
+
+osToken is issued against assets staked in a Vault to allow using staked capital in decentralized applications to trade, borrow, lend, and restake. Hence, osTokens represent the underlying staked assets and the rewards earned.
+
+Short for **Overcollateralized Staked Token**, osToken requires that the value of staked assets exceed the value of osToken issued. This overcollateralization acts as a safety buffer, protecting holders and the protocol from validator penalties or underperformance of permissionless Vaults.
+
+A defining feature is that osToken can be minted against validators run by anyone – from solo stakers to professional operators – making access to liquid staking fully permissionless and non-custodial.
+
+## How osToken Works
+
+osToken turns staked ETH or GNO into liquid, yield-bearing assets. Its operation is governed by four core mechanisms:
+minting, burning, exchange rate appreciation, and peg maintenance.
+
+### Minting
+
+Minting involves staking assets into a Vault and issuing osTokens against staked assets acting as collateral. Minting limits are in place to ensure each issued token is fully backed. These limits are set by the **Loan-to-Value (LTV) ratio**.
+
+#### Loan-to-Value Limits
+
+The LTV ratio determines what portion of your stake can be tokenized with osToken:
+
+| Vault Type     | Ethereum (osETH) | Gnosis (osGNO) | Safety Mechanism                 |
+|----------------|------------------|----------------|----------------------------------|
+| Standard       | 90% LTV          | 90% LTV        | 10% overcollateralization buffer |
+| DAO-Approved   | 99.99% LTV       | 99.95% LTV     | 5M SWISE operator bond           |
+
+
+<Admonition type="tip" icon="🧩" title="Example">
+  With 100 ETH staked in a 90% LTV Vault at 1.05 exchange rate:
+
+  - Maximum mintable osETH: `100 × 0.9 ÷ 1.05 = 85.71 osETH`
+  - Overcollateralization: `10 ETH` remains as safety buffer
+</Admonition>
+
+#### Minting & Buying Options
+
+osToken can be acquired via four methods:
+
+1. **One-click staking** – Deposit ETH or GNO through the [StakeWise App ↗](https://app.stakewise.io/) to receive osETH or osGNO. No validator setup or Vault selection required.
+2. **Staking with Vaults** – Select a specific Vault (operator, fees, performance). Rewards and penalties are isolated per Vault. Minting capacity is constrained by LTV limits.
+3. **Solo staking** – Operate private validators and mint osTokens against self-staked collateral, retaining full infrastructure control. Minting capacity is constrained by LTV limits.
+4. **DEX purchase** – Acquire osTokens on decentralized exchanges. Tokens have the same exchange-rate appreciation as minted tokens and do not create a Vault position (no LTV or liquidation exposure).
+
+All methods yield the same asset that appreciates through the same exchange rate mechanism.
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 More on each staking option’s step-by-step instructions in the [osToken Staking Guide →](../guides/01-staking.mdx)</span>
+
+#### Position Health
+
+Position health is continuously tracked through LTV thresholds:
+
+| Status     | LTV Range     | Description                          |
+|------------|--------------|--------------------------------------|
+| Healthy    | ≤ 90%        | Within Vault's safe operating limit  |
+| Moderate   | (90%, 91%]   | Exceeds limit, partial redemption available |
+| Risky      | (91%, 92%]   | Approaching liquidation threshold    |
+| Unhealthy  | > 92%        | Eligible for liquidation             |
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>💡`[ ]` includes value, `( )` excludes value.</span>
+
+Users can maintain healthy positions by keeping LTV well below limits, adding more collateral, or burning osToken.
+In 99.99% (osETH) / 99.95% (osGNO) Vaults, redemptions and liquidations do not apply, positions remain healthy by design.
+
+### Burning
+
+Burning is the process of returning minted osTokens to the Vault in exchange for unlocking the staked collateral that backs them.
+To fully unstake, a user must burn the entire amount of osTokens they minted, plus any protocol fees accrued.
+
+Partial burns are also possible, allowing users to reduce debt, improve position health, or free up a portion of their stake.
+The burn amount is calculated using the current fair exchange rate to ensure that the redeemed assets always match the true underlying value of the returned tokens.
+
+The amount of ETH that can be unstaked at any moment is determined by maintaining the osToken position within its healthy Loan-to-Value (LTV) range.
+After unstaking, the value of minted osETH must remain at or below:
+- **90%** of staked ETH in a **90% LTV Vault**
+- **99.99%** of staked ETH in a **99.99% LTV Vault**
+
+The protocol calculates the **maximum unstakable ETH** as:

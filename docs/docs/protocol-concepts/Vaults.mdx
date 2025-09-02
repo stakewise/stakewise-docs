@@ -25,14 +25,14 @@ All deposits, rewards distribution, and withdrawals are handled by smart contrac
 ### Validator registration
 
 Vaults collect user deposits and automatically manage the validator lifecycle through smart contracts.
-When a vault accumulates enough assets – 32 ETH on Ethereum or 1 GNO on Gnosis – the system initiates validator registration.
+When a Vault accumulates enough assets – 32 ETH on Ethereum or 1 GNO on Gnosis – the system initiates validator registration.
 
-<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a vault. It monitors vault state changes, assigns validator keys based on deposit data files, coordinates with the oracle network for registration approvals, and performs BLS signature operations for validator exits.</>}>The vault operator</Tooltip>
+<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. It monitors Vault state changes, assigns validator keys based on deposit data files, coordinates with the oracle network for registration approvals, and performs BLS signature operations for validator exits.</>}>The Vault operator</Tooltip>
 runs specialized software (the [operator ↗](https://github.com/stakewise/v3-operator) service) alongside their Ethereum consensus and execution clients
 that monitors deposit levels and handles the technical validator creation process.
 
 When sufficient funds are available, this service submits validator registration requests to the StakeWise [oracle network →](./Oracles.mdx).
-Each registration request must be approved by an 8-of-11 oracle quorum before the validator becomes active on the Beacon Chain. This approval process ensures the correctness of deposit data, validator keys are properly formatted, and withdrawal credentials point to the correct vault. Once approved, validators enter the Beacon Chain's activation queue - [network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
+Each registration request must be approved by an 8-of-11 oracle quorum before the validator becomes active on the Beacon Chain. This approval process ensures the correctness of deposit data, validator keys are properly formatted, and withdrawal credentials point to the correct Vault. Once approved, validators enter the Beacon Chain's activation queue - [network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
 
 Vaults support two types of validators (`0x01` or `0x02`)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup> allowing for different deposit strategies – traditional 32 ETH validators and [compounding validators ↗](https://ethereum.org/en/roadmap/pectra/maxeb/) that can hold more than 32 ETH.
 The default type is `0x02`.
@@ -70,7 +70,7 @@ rewards are calculated off-chain by the StakeWise Oracle Network.
 
 ### Withdrawals
 
-Users can mint OsTokens for instant liquidity or withdraw. When a user chooses to unstake, they enter the vault's **exit queue** and receive a **position ticket** that tracks their place in line.
+Users can mint osTokens for instant liquidity or withdraw. When a user chooses to unstake, they enter the Vault's **exit queue** and receive a **position ticket** that tracks their place in line.
 As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
@@ -86,7 +86,7 @@ the operator triggers a full validator exit from the Beacon Chain.
 The process is as follows:
 
 <ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
-<li style={{listStyleType: 'decimal'}}>**Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the vault – i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV</li>
+<li style={{listStyleType: 'decimal'}}>**Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault – i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV</li>
 
 <li style={{listStyleType: 'decimal'}}>**Initiate exits if needed**. If available ETH is insufficient, the operator initiates validator exits to free up the remaining amount.</li>
 
@@ -100,13 +100,13 @@ Exit processing time depends on the Ethereum network congestion.
 Staked assets continue earning rewards until validators complete the exit.
 Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en/staking/withdrawals/#validator-sweeping) to the Vault and becomes claimable by users according to their ticket number.
 
-### OsToken
+### osToken
 
-OsTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vault using their shares as backing (aka collateral), giving liquidity without unstaking. OsToken can be traded or used in DeFi while the underlying stake continues earning rewards.
+osTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vault using their shares as backing (aka collateral), giving liquidity without unstaking. osToken can be traded or used in DeFi while the underlying stake continues earning rewards.
 
-The system keeps more staked assets backing each OsToken than the token is worth. This safety buffer protects users and keeps the system stable. The vault's Loan-to-Value ratio determines how much users can mint - this ranges from standard ratios around 90% up to 99.99% for DAO-approved vaults<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
+The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint - this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For more details on how OsToken works, see [OsToken →](OsToken.mdx)</span>
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For more details on how osToken works, see [osToken →](osToken.mdx)</span>
 
 ## Customization
 
@@ -116,7 +116,7 @@ while management roles, branding, and fees can be changed later.
 
 ### Vault Type
 
-All vault types support OsToken minting. The Vault types differ in their specific characteristics and restrictions.
+All Vault types support osToken minting. The Vault types differ in their specific characteristics and restrictions.
 
 **Standard Vaults** - Most Common
 
@@ -126,9 +126,9 @@ Receive staking deposits from any wallet and issue non-transferable Vault shares
 
 Allow operator to build their own DeFi ecosystem using the Vault's Token.
 Operator sets its name and symbol (e.g. mntETH), which will be visible in most portfolio tracking applications.
-Users still can mint OsToken and transfer their stake in the Vault as long as they don't have OsToken minted.
+Users still can mint osToken and transfer their stake in the Vault as long as they don't have osToken minted.
 
-Tokenless vaults avoid potential tax events when exchanging ETH for Vault token.
+Tokenless Vaults avoid potential tax events when exchanging ETH for Vault token.
 
 **Private Vaults** - Restricted Access
 
@@ -141,9 +141,9 @@ Receive staking deposits from any wallets except those on a blocklist.
 **Meta Vaults** - Diversified Strategy
 
 Meta Vaults do not register validators directly -
-instead, they delegate accumulated assets to sub-vaults, which are managed by the Vault Admin.
-Each sub-vault must have at least one registered validator.
-Deposits are distributed across underlying sub-vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-vaults.
+instead, they delegate accumulated assets to sub-Vaults, which are managed by the Vault Admin.
+Each sub-Vault must have at least one registered validator.
+Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-Vaults.
 `Curator` contract can be changed by the Admin.
 
 MetaVaults can be deployed using the `EthMetaVaultFactory` contract, and currently,
@@ -151,7 +151,7 @@ only the factory owner is permitted to deploy new MetaVaults.
 
 ### Capacity
 
-Vault capacity is an immutable deposit limit that vault operators set once during initialization to control the maximum amount of ETH their vault can accept. When left unset, vaults have unlimited capacity by default. The capacity is enforced on every
+Vault capacity is an immutable deposit limit that Vault operators set once during initialization to control the maximum amount of ETH their Vault can accept. When left unset, Vaults have unlimited capacity by default. The capacity is enforced on every
 deposit transaction, reverting with a `CapacityExceeded` error if exceeded. Capacity helps control validator set size based on operator infrastructure capabilities.
 
 ### MEV Strategy
@@ -161,7 +161,7 @@ Vaults can use either a Smoothing Pool or Own Escrow for collecting the block re
 
 **Smoothing Pool** – Pooled Rewards
 
-Rewards are pooled across multiple vaults and distributed evenly, providing more stable and predictable returns regardless of block proposal frequency.
+Rewards are pooled across multiple Vaults and distributed evenly, providing more stable and predictable returns regardless of block proposal frequency.
 
 For example, a Vault with only a few validators can receive periodic small payouts from the Smoothing Pool, which come from the block proposal rewards contributed by other participating Vaults.
 In return, when the Vault does get the chance to earn a block proposal reward, it will flow to the Smoothing Pool as well, to be shared amongst all participating Vaults.
@@ -235,25 +235,25 @@ subject to protocol-enforced restrictions to protect users from sudden changes.
   - Share value increases automatically as staking rewards accumulate
   - No token swaps or conversions occur during staking
 
-For immediate liquidity, users can mint OsTokens (`osETH` or `osGNO`) using their Vault shares as collateral.
+For immediate liquidity, users can mint osTokens (`osETH` or `osGNO`) using their Vault shares as collateral.
 
 ### Evaluating Vault Performance
 
-StakeWise provides performance grades to help users evaluate vault quality based on validator operational excellence. These grades reflect the average vault performance over the last 7 days:
+StakeWise provides performance grades to help users evaluate Vault quality based on validator operational excellence. These grades reflect the average Vault performance over the last 7 days:
 
 **Scoring Grades:**
 * **Excellent (99.6-100%)**: No missed blocks or very few. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
 * **Good (99.2-99.6%)**: No missed blocks or very few. Validators perform well in attestations, with less than 1% missed attestation rewards.
-* **Moderate (97.1-99.2%)**: The vault has issues, with up to 3% missed attestations and/or blocks.
+* **Moderate (97.1-99.2%)**: The Vault has issues, with up to 3% missed attestations and/or blocks.
 * **Bad (0-97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
 
-Performance grades help users identify well-operated vaults but should be considered alongside other factors like fees, capacity, and operator reputation.
+Performance grades help users identify well-operated Vaults but should be considered alongside other factors like fees, capacity, and operator reputation.
 
 ## Technical Architecture
 
 ### Vault Deployment
 
-Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state – including user balances –  and stores vault-specific configuration set during initialization, which defines its core operational characteristics. Vaults are created through factory contracts such as [EthVaultFactory ↗](https://etherscan.io/address/0xDF82E5D27E175618e5bC4581ee336F59AdabfBB2#code) by:
+Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state – including user balances –  and stores Vault-specific configuration set during initialization, which defines its core operational characteristics. Vaults are created through factory contracts such as [EthVaultFactory ↗](https://etherscan.io/address/0xDF82E5D27E175618e5bC4581ee336F59AdabfBB2#code) by:
 
 <ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
 <li style={{listStyleType: 'decimal'}}>Deploying a proxy that reserves storage for all Vault data and sets its initial configuration during the initializer call.</li>
@@ -294,7 +294,7 @@ Every Vault is an independent staking pool, and its smart contracts cannot be un
 Because the proxy pattern separates storage from logic, upgrades can be applied without affecting user balances or redeploying the contract.
 Only the implementation contract changes, while the proxy – holding all state – remains untouched.
 
-The DAO may release new vault contract versions to improve efficiency or safety, but upgrading is always optional –
+The DAO may release new Vault contract versions to improve efficiency or safety, but upgrading is always optional –
 Vaults can opt for their current version.
 All upgrades are subject to community governance approval, providing strong guarantees for user protection and protocol integrity.
 
@@ -319,5 +319,5 @@ such as `EthVault` and `GnoVault`.
 </div>
 
 <div id="user-content-fn-4" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '1rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> To qualify for the higher LTV, vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#user-content-fnref-4" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+  <span>4.</span> To qualify for the higher LTV, Vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest Vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#user-content-fnref-4" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>

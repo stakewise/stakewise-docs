@@ -241,3 +241,37 @@ html[data-theme='dark'] blockquote {
     padding-left: 60px;
   }
 }
+
+/* Remove left border from all admonitions and match document background */
+.theme-admonition {
+  border-left: none !important;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+html[data-theme='light'] .theme-admonition {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
+}
+
+html[data-theme='dark'] .theme-admonition {
+  background: rgba(39, 40, 42, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.theme-admonition h4 {
+  margin-top: 1rem;  /* pushes headings down a bit */
+}
+
+/* Formula variant (light) */
+html[data-theme='light'] .theme-admonition.admonition--formula {
+  background-color: #f5f1eb !important;              /* warm amber light */
+  backdrop-filter: blur(6px);
+}
+
+/* Formula variant (dark) */
+html[data-theme='dark'] .theme-admonition.admonition--formula {
+  background-color: rgba(212, 165, 116, 0.3) !important;
+  border: 1px solid rgba(245, 241, 235, 0.4) !important;
+  color: #f5f1eb;
+}

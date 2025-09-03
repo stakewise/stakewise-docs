@@ -260,7 +260,7 @@ html[data-theme='dark'] .theme-admonition {
 }
 
 .theme-admonition h4 {
-  margin-top: 1rem;  /* pushes headings down a bit */
+  margin-top: 1rem;
 }
 
 /* Formula variant (light) */
@@ -274,4 +274,18 @@ html[data-theme='dark'] .theme-admonition.admonition--formula {
   background-color: rgba(212, 165, 116, 0.3) !important;
   border: 1px solid rgba(245, 241, 235, 0.4) !important;
   color: #f5f1eb;
+}
+
+/* Info variant with purple nuance */
+html[data-theme='light'] .theme-admonition.admonition--note {
+  background-color: rgba(168, 150, 221, 0.08) !important;  /* more purple tint */
+  border: 1px solid rgba(168, 150, 221, 0.15) !important;
+  backdrop-filter: blur(6px);
+}
+
+/* Info variant with purple nuance */
+html[data-theme='dark'] .theme-admonition.admonition--note {
+  background-color: rgba(168, 150, 221, 0.15) !important;  /* more purple tint */
+  border: 1px solid rgba(168, 150, 221, 0.25) !important;
+  backdrop-filter: blur(6px);
 }

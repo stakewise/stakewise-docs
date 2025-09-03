@@ -88,6 +88,18 @@ const config: Config = {
           sidebarId: 'docsSidebar',
         },
         {
+          label: 'Operator',
+          to: '/operator/intro',
+          activeBaseRegex: `/operator/`,
+          sidebarId: 'operatorSidebar',
+        },
+        {
+          label: 'Guides',
+          to: '/guides/intro',
+          activeBaseRegex: `/guides/`,
+          sidebarId: 'guidesSidebar',
+        },
+        {
           label: 'SDK',
           to: '/sdk/intro',
           activeBaseRegex: `/sdk/`,

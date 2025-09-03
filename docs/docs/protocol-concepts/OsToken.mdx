@@ -129,43 +129,6 @@ After unstaking **47.495 ETH**, Alice’s position health = **99.99%**
 
 </Admonition>
 
-### Exchange Rate Appreciation
-
-osToken is a **repricing token**, meaning its redemption value increases over time as staking rewards accrue.
-Each osToken represents a growing share of the underlying staked ETH or GNO.
-
-The **fair exchange rate** is the amount of assets a user can receive when redeeming osToken within the protocol.
-As rewards accrue, the redemption value increases, creating the “repricing” effect where e.g. each osETH becomes worth more ETH.
-
-
-The fair exchange rate is reflected through `convertToAssets` and `convertToShares` functions in the [osTokenVaultController ↗](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) contract,
-which manages osToken supply, collateral, and reward accrual.
-
-### Reward Accrual & Fee Mechanism
-A decentralized Oracle network uses the [VaultUserLtvTracker ↗](https://etherscan.io/address/0xe0ae8b04922d6e3fa06c2496a94ef2875efcc7bb#code) contract to identify the user with the highest osToken LTV position across all Vaults.
-Oracles then set the `avgRewardPerSecond` parameter to match  that user's Vault APY performance.
-This rate drives the continuous calculation of osToken value appreciation:
-
-<Admonition type="formula" icon="📐" title="Formula" className="admonition--formula">
-$$
-{\small profitAccrued = avgRewardPerSecond \times totalAssets \times timeElapsed}
-$$
-</Admonition>
-
-This mechanism ensures that osETH appreciation keeps pace with the least collateralized position in the entire protocol.
-When necessary, Oracles adjust `avgRewardPerSecond` downward to prevent any LTV from exceeding 100% due to insufficient Vault performance.
-
-From these rewards, the protocol deducts a 5% fee that increases users' osETH debt - the amount they must burn to fully exit their positions.
-This fee creates new tokens for the StakeWise DAO Treasury and increases the osETH balance that users owe back to their Vaults.
-The remaining 95% of rewards increase the backing assets, raising the fair exchange rate for all osToken holders.
-
-<Admonition type="tip" icon="🧩" title="Example">
-  If you minted **1 osToken** and after fee collection it increases to **1.000001**,
-  your debt grows by **0.000001** — your proportional share of the protocol's accumulated fees.
-</Admonition>
-
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For comprehensive information about all protocol fees, see the [Fees →](./Fees.mdx) chapter.</span>
-
 ### Peg Maintenance
 
 osToken maintains a soft peg to its underlying asset (ETH or GNO) through minting, redemptions, and liquidations.
@@ -263,3 +226,40 @@ The **loss of 1% collateral** is the direct penalty for breaching safe LTV limit
 </Admonition>
 
 Positions in **99.99% LTV Vaults** are exempt from liquidation, as their APY parity ensures position health remains stable.
+
+### Exchange Rate Appreciation
+
+osToken is a **repricing token**, meaning its redemption value increases over time as staking rewards accrue.
+Each osToken represents a growing share of the underlying staked ETH or GNO.
+
+The **fair exchange rate** is the amount of assets a user can receive when redeeming osToken within the protocol.
+As rewards accrue, the redemption value increases, creating the “repricing” effect where e.g. each osETH becomes worth more ETH.
+
+
+The fair exchange rate is reflected through `convertToAssets` and `convertToShares` functions in the [osTokenVaultController ↗](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) contract,
+which manages osToken supply, collateral, and reward accrual.
+
+### Reward Accrual & Fee Mechanism
+A decentralized Oracle network uses the [VaultUserLtvTracker ↗](https://etherscan.io/address/0xe0ae8b04922d6e3fa06c2496a94ef2875efcc7bb#code) contract to identify the user with the highest osToken LTV position across all Vaults.
+Oracles then set the `avgRewardPerSecond` parameter to match  that user's Vault APY performance.
+This rate drives the continuous calculation of osToken value appreciation:
+
+<Admonition type="formula" icon="📐" title="Formula" className="admonition--formula">
+$$
+{\small profitAccrued = avgRewardPerSecond \times totalAssets \times timeElapsed}
+$$
+</Admonition>
+
+This mechanism ensures that osETH appreciation keeps pace with the least collateralized position in the entire protocol.
+When necessary, Oracles adjust `avgRewardPerSecond` downward to prevent any LTV from exceeding 100% due to insufficient Vault performance.
+
+From these rewards, the protocol deducts a 5% fee that increases users' osETH debt - the amount they must burn to fully exit their positions.
+This fee creates new tokens for the StakeWise DAO Treasury and increases the osETH balance that users owe back to their Vaults.
+The remaining 95% of rewards increase the backing assets, raising the fair exchange rate for all osToken holders.
+
+<Admonition type="tip" icon="🧩" title="Example">
+  If you minted **1 osToken** and after fee collection it increases to **1.000001**,
+  your debt grows by **0.000001** — your proportional share of the protocol's accumulated fees.
+</Admonition>
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For comprehensive information about all protocol fees, see the [Fees →](./Fees.mdx) chapter.</span>

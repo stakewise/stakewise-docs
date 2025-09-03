@@ -17,7 +17,7 @@ StakeWise is a liquid staking protocol for Ethereum, designed to make staking mo
 
 Rather than consist of one large staking pool, StakeWise has a network of permissionless, customizable, and non-custodial staking pools deployed by various service providers,
 allowing individuals and organizations to pick which nodes will stake their ETH, helping them find the most suitable staking arrangement.
-All pools offer on-demand liquidity and DeFi integrations for users’ stake via OsToken, providing the flexibility to get the token only when needed.
+All pools offer on-demand liquidity and DeFi integrations for users’ stake via osToken, providing the flexibility to get the token only when needed.
 
 The protocol is implemented as a mix of both upgradable (via dual governance) smart contracts that must keep up with the changes in Ethereum’s Proof-of-Stake specification,
 and persistent, non-upgradable smart contracts designed to prioritize security and self-custody, and to function without centralized intermediaries who may selectively restrict access to the service.
@@ -40,35 +40,21 @@ thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains l
 <Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain.
 The primary identifier of a validator is its public BLS key (example of usage of the pubkey as an identifier is <a href="https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/account_manager/src/validator/exit.rs#L277-L280" style={{textDecoration: 'underline', color: '#018970'}}>here</a>).
 To activate validator software, you need to be able to stake 32 ETH. </>}>validator</Tooltip> nodes by putting tokens *at stake*.
-Validators are essential to maintaining network consensus — the process by which all participants agree on the blockchain’s new global state.
+Validators are essential to maintaining network consensus — the process by which all participants agree on the blockchain's new global state<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>.
 
-One of the important fields of the validator object (an example struct illustrating the validator lifecycle can be seen [here ↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36))
-is <code style={{backgroundColor: '#f4f4f4', color: '#018970', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>,
+One of the important fields of the [validator object↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36)
+is <code style={{backgroundColor: '#f4f4f4', color: '#018970', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
 which represents the validator's "active" balance and determines its influence in the protocol.
 This balance serves as the validator's "weight" in consensus duties:
 
-- Attesting to its view of the chain<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>
+- Attesting to its view of the chain<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>
 - Proposing beacon chain blocks
 - Signing off on blocks in the <Tooltip content={<><strong>Sync Committee</strong> <br /> A sync committee is a special subset of 512 validators chosen pseudorandomly during each "sync committee period" (~1 day). These validators continually sign new Beacon block headers, enabling light clients "outside" the Beacon Chain to verify the consensus state with significantly reduced complexity.</>}>sync committees</Tooltip>
 that support <Tooltip content={<><strong>Light Client</strong> <br /> A light client is a streamlined way to verify Ethereum's consensus state without running a full node. Instead of performing complex verification checks, light clients rely on sync committees to provide cryptographically verifiable summaries of the Beacon Chain head using just a few public keys and a single aggregated signature.</>}>light clients</Tooltip>
 
-Validators in Ethereum are selected at random to propose blocks or participate in sync committees,
-while every active validator is assigned exactly one attestation per epoch.
-
-The Beacon Chain uses both rewards and penalties to incentivize proper validator behavior.
-Validators earn rewards for contributing to chain security and face penalties for failing to contribute.
-Receiving a penalty is not the same as being slashed.
-Being slashed is a severe punishment for very specific misbehaviours<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>
-(that could potentially be part of an attack on the chain),
-and results in the validator being ejected from the protocol in addition to some or all of its stake being removed.
-Penalties are subtracted from validators' balances on the Beacon Chain and effectively burned,
-so they reduce the net issuance of the Beacon Chain.
-
-Reward amounts are calculated based on mathematical formulas considering multiple variables, participation rates, timing, and network conditions<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
-
+The Beacon Chain uses both rewards and penalties to incentivize proper validator behavior<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
+Reward amounts are calculated based on mathematical formulas considering multiple variables, participation rates, timing, and network conditions<sup><a href="#user-content-fn-5" id="user-content-fnref-5">5</a></sup>.
 Validator also earn rewards from priority fees and MEV (Maximum Extractable Value).
-
-As of the "Shapella" hard fork, validator balances are periodically "swept" (sent to the validator's designated withdrawal address on the Execution Layer).
 
 Learn more about rewards and penalties — [ethereum.org ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)
 
@@ -106,16 +92,16 @@ StakeWise is a liquid staking protocol that gives you the benefits of permission
 
 Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive staking network that serves diverse participants through three distinct approaches:
 
-**Vaults**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive OsToken when staking.
+**Vaults**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive osToken when staking.
 
-**One-Click Staking**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. OsToken is issued automatically, granting access to instant liquidity and DeFi by default.
+**One-Click Staking**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. osToken is issued automatically, granting access to instant liquidity and DeFi by default.
 
-**Run Own Infinity Pool**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via OsToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
+**Run Own Infinity Pool**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via osToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
 
 StakeWise's product offering emerged from deep analysis of stakeholder motivations, creating a structure that reinforces our decentralized vision while sustainably scaling Ethereum staking. StakeWise also continuously develops innovative strategies to maximize your rewards, such as Boost, with more features coming soon.
 
 <h3>Architecture</h3>
-StakeWise's modular architecture is built on three foundational pillars: Vaults, OsToken, and Oracles.
+StakeWise's modular architecture is built on three foundational pillars: Vaults, osToken, and Oracles.
 
 <h4>Vaults: Customizable Smart Contracts</h4>
 Vaults are isolated, highly customizable smart contracts that function as individual staking pools. Pool operators can accept deposits from other stakers, earning fees while providing staking services. The marketplace model democratizes liquid staking by giving you the freedom to choose where to stake and how.
@@ -129,8 +115,8 @@ Vaults are isolated, highly customizable smart contracts that function as indivi
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Learn how Vaults work, their isolation model, and how to create your own [Vaults →](./intro.mdx)</span>
 
-<h4>OsToken: Next-Generation Liquid Staking Tokens</h4>
-OsToken, standing for Overcollateralized Staking Token, is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain. Designed with safety and composability at its core, OsToken accrues staking rewards while maintaining full liquidity for DeFi participation. OsToken can be minted by anyone staking in Vaults or acquired directly from a DEX to instantly start earning staking rewards.
+<h4>osToken: Next-Generation Liquid Staking Tokens</h4>
+osToken, standing for Overcollateralized Staking Token, is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain. Designed with safety and composability at its core, osToken accrues staking rewards while maintaining full liquidity for DeFi participation. osToken can be minted by anyone staking in Vaults or acquired directly from a DEX to instantly start earning staking rewards.
 
 <h4>Key Features:</h4>
 <ul>
@@ -138,7 +124,7 @@ OsToken, standing for Overcollateralized Staking Token, is StakeWise's liquid st
   <li>DeFi Ready: Fully compatible with lending, trading, and yield farming protocols;</li>
 </ul>
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Explore OsToken's inner mechanics, including its built-in slashing protection [OsToken →](./intro.mdx)</span>
+><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Explore osToken's inner mechanics, including its built-in slashing protection [osToken →](./intro.mdx)</span>
 
 <h4>Oracles: Decentralized Infrastructure Layer</h4>
 The decentralized oracle network bridges StakeWise smart contracts with Ethereum's <Tooltip content={<><strong>Beacon Chain</strong> <br /> Ethereum's consensus layer, a peer-to-peer network of consensus clients that handles block gossip and consensus logic. It is responsible for things like block and attestation handling, running the fork choice algorithm, and managing rewards and penalties for validators.</>}>Beacon Chain</Tooltip>, ensuring transparent, trustless operations while maintaining the protocol's security and non-custodial nature. Since Beacon Chain state is not directly accessible in the EVM (though [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) aims to address this), oracles fetch essential validator data.
@@ -146,7 +132,7 @@ The decentralized oracle network bridges StakeWise smart contracts with Ethereum
 <h4>Key Functions:</h4>
 <ul>
   <li>Validator Lifecycle: Handle registration, consolidations, rewards, penalties, and exits;</li>
-  <li>Token Stability: Maintain accurate OsToken rates and ensure peg stability;</li>
+  <li>Token Stability: Maintain accurate osToken rates and ensure peg stability;</li>
 </ul>
 
 ><span style={{color: '#1f2937', fontWeight: '500'}}>📝 Discover how Oracles help enhance the protocol's security [Oracles →](./intro.mdx)</span>
@@ -162,26 +148,32 @@ StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes an
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span>
-  Unlike the actual balance (which changes with every block), effective balance updates only once per epoch. It also "snaps" to the nearest 1 ETH increment due to a mechanism called hysteresis — this prevents constant fluctuations from affecting consensus calculations.
+  Users submit transactions to this network of nodes, and the goal of the consensus protocol is that all correct nodes eventually agree on a single, consistent view of the history of transactions. That is, the order in which transactions were processed and the outcome of that processing.
   <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>
 
 <div id="user-content-fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>2.</span>
-  Each attestation contains three votes: a source checkpoint vote, a target checkpoint vote (both for Casper FFG finality), and a head block vote (for LMD-GHOST fork choice).
-  More on Gasper consensus in the [whitepaper](https://arxiv.org/pdf/2003.03052)
+  Unlike the actual balance (which changes with every block), effective balance updates only once per epoch. It also "snaps" to the nearest 1 ETH increment due to a mechanism called hysteresis — this prevents constant fluctuations from affecting consensus calculations.
   <a href="#user-content-fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>
 
 <div id="user-content-fn-3" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>3.</span>
-  Slashing occurs for: (1) Casper FFG violations - making conflicting attestations for the same target or creating "surrounding" votes, and (2) LMD-GHOST violations - proposing multiple blocks at the same height or attesting to different heads with the same checkpoints.
+  Each attestation contains three votes: a source checkpoint vote, a target checkpoint vote (both for Casper FFG finality), and a head block vote (for LMD-GHOST fork choice).
+  More on Gasper consensus in the [whitepaper](https://arxiv.org/pdf/2003.03052)
   <a href="#user-content-fnref-3" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>
 
 <div id="user-content-fn-4" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>4.</span>
+  Validators earn rewards for contributing to chain security and face penalties for failing to contribute. Receiving a penalty is not the same as being slashed. Being slashed is a severe punishment for very specific misbehaviours (that could potentially be part of an attack on the chain), and results in the validator being ejected from the protocol in addition to some or all of its stake being removed. Penalties are subtracted from validators' balances on the Beacon Chain and effectively burned, so they reduce the net issuance of the Beacon Chain.
+  <a href="#user-content-fnref-4" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-5" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>5.</span>
   For detailed reward calculations and formulas, see:
   <a href="https://eth2book.info/capella/part2/incentives/rewards/" style={{textDecoration: 'none', color: '#018970'}}>eth2book</a>
-  <a href="#user-content-fnref-4" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+  <a href="#user-content-fnref-5" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
 </div>

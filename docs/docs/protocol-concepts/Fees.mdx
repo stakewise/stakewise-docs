@@ -2,3 +2,72 @@
 title: Fees
 sidebar_position: 4
 ---
+
+import Admonition from '@theme/Admonition';
+
+# Fees
+
+## Introduction
+
+StakeWise acts as a middleware between stakers and node operators.
+
+The fee structure ensures sustainable protocol development while maintaining competitive returns for users and fair compensation for Vault operators.
+
+<Admonition type="formula" icon="📈" title="User Net Returns" className="admonition--formula">
+$$
+{\small UserNetReturns = ValidatorRewards - VaultFees - osTokenFees}
+$$
+</Admonition>
+
+## Vault Fees
+
+A Vault fee is a percentage fee charged by Vault operators on staking rewards.
+This fee varies by Vault operator and can range **from 0% to 100%**.
+
+The fee is automatically deducted from staking rewards when the Vault state is updated and is transferred to the Vault’s designated fee recipient (typically the Vault operator).
+
+The fee is a **dynamic parameter** set during the Vault creation process.
+Importantly, fees can only be increased by **20% at a time** (e.g., from 5% to 6%) with a **3-day delay** between updates.
+If the current fee is 0%, it cannot exceed 1% initially.
+The Vault must be "harvested" (state updated) before fee changes take effect.
+
+The StakeWise DAO does not charge Vault creators or stakers for using Vaults.
+
+><span style={{color: '#1f2937', fontWeight: '500'}}>💡 The fee level for a given Vault can be found in the *Details* at the bottom of the Vault page. Different Vaults have different fees (e.g., 5%, 4.2%, 100%, 3.5%, etc).</span>
+
+## osToken Fees
+
+StakeWise DAO charges a **5% fee** on the rewards accumulated by osETH, and continuously applies the fee to the balance of osETH a user must return to the Vault.
+The fee is charged in osETH, meaning that the amount of osETH a user must return to the Vault constantly increases proportionately to the fee.
+
+<Admonition type="info" icon="🔍" title="How Fees Accumulate" className="admonition--note">
+
+For example, if a user’s stake has accumulated **1 ETH in rewards**, StakeWise will apply a **0.05 ETH fee** to their osETH balance using the current exchange rate.
+
+At an exchange rate of **1.05 ETH/osETH**, the fee corresponds to:
+
+$$
+{\small \frac{0.05}{1.05} = 0.047619\ \text{osETH}}
+$$
+
+Thus, the user’s total minted osETH balance increases by **0.0476 osETH**.
+
+</Admonition>
+
+<Admonition type="example" icon="🧩" title="Basic Fee Calculation Example" className="admonition--example">
+Alice stakes **10 ETH** in a Vault with a **5% Vault fee**.
+
+- Her validator earns **0.4 ETH** in rewards over a year.
+- After the Vault fee (0.4 × 5% = 0.02 ETH), she receives **0.38 ETH** in direct rewards.
+
+If Alice had opted to mint osETH throughout this period, a **5% fee** would have been applied to her osETH rewards, with the fee going to the DAO Treasury.
+
+Alice would have earned **0.361 ETH in rewards** after both fees.
+
+</Admonition>
+
+
+## Network Fees
+
+Vault operators should also be aware of network-related fees required for Beacon Chain operations such as validator registration.
+These fees are paid directly to the Ethereum network and are separate from StakeWise protocol fees.

@@ -176,6 +176,18 @@ html[data-theme='dark'] .crystal-bg {
   text-decoration-color: var(--color-coral) !important;
 }
 
+/* Force admonition links to have same styling as regular links */
+.theme-admonition a {
+  color: #018970;
+  text-decoration: none;
+}
+
+.theme-admonition a:hover {
+  color: black;
+  text-decoration: underline;
+  text-decoration-color: black !important;
+}
+
 @media (max-width: 960px) {
   .navbar__toggle {
     margin-left: 16px;

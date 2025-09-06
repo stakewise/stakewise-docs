@@ -1,4 +1,146 @@
 ---
 title: Prerequisites
-sidebar_position: 2
+sidebar_position: 3
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Prerequisites
+
+Before installing and configuring the Operator Service, your node infrastructure must meet specific technical requirements to ensure reliable operation.
+
+## Execution Client
+
+Your execution node must be fully synced and running.
+Any execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/) can be used:
+
+<Tabs groupId="execution-clients">
+  <TabItem value="nethermind" label="Nethermind" default>
+    **[Nethermind ↗](https://launchpad.ethereum.org/en/nethermind)** - Supports both Ethereum and Gnosis networks
+
+    Standard installation and configuration. No special requirements.
+  </TabItem>
+  <TabItem value="besu" label="Besu">
+    **Besu** - Ethereum network support
+
+    Standard installation and configuration. No special requirements.
+  </TabItem>
+  <TabItem value="erigon" label="Erigon">
+    **Erigon** - Supports both Ethereum and Gnosis networks
+
+    :::warning Special Configuration Required
+    Event logs must be preserved for the Operator Service to function properly:
+
+    ```bash
+    # Ethereum Mainnet
+    erigon --prune=receipts --prune.to=21471500
+
+    # For other networks, adjust block number to Keeper contract creation block
+    ```
+
+    The required flags prevent event log pruning that the Operator reads from certain contracts.
+    :::
+  </TabItem>
+  <TabItem value="geth" label="Geth">
+    **Geth** - Ethereum network support
+
+    Standard installation and configuration. No special requirements.
+  </TabItem>
+  <TabItem value="reth" label="Reth">
+    **Reth** - Ethereum network support
+
+    Standard installation and configuration. Ensure proper event log retention (consult Reth documentation for specific configurations).
+  </TabItem>
+</Tabs>
+
+## Consensus Client
+
+Your consensus node must be fully synced and running.
+Any consensus client that supports [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
+
+<Tabs groupId="consensus-clients">
+  <TabItem value="lighthouse" label="Lighthouse" default>
+    **Lighthouse** - Supports both Ethereum and Gnosis networks
+  </TabItem>
+  <TabItem value="nimbus" label="Nimbus">
+    **Nimbus** - Supports both Ethereum and Gnosis networks
+  </TabItem>
+  <TabItem value="prysm" label="Prysm">
+    **Prysm** - Ethereum network support
+  </TabItem>
+  <TabItem value="teku" label="Teku">
+    **Teku** - Supports both Ethereum and Gnosis networks
+  </TabItem>
+  <TabItem value="lodestar" label="Lodestar">
+    **Lodestar** - Supports both Ethereum and Gnosis networks
+  </TabItem>
+</Tabs>
+
+:::tip Validator Configuration
+Configure your validator clients with the correct **fee recipient address**, which can be found in your Vault's Details section on the StakeWise interface.
+:::
+
+## Deployed Vault
+
+You must have an active StakeWise Vault deployed and ready for operation.
+
+### Creating a New Vault
+
+  If you don't have a Vault yet, follow these steps:
+
+  1. **Visit the StakeWise Interface**
+     - Go to the [StakeWise Operate page](https://stakewise.io/operate)
+     - Connect your wallet using the button in the upper right corner
+
+  2. **Create Your Vault**
+     - Click "Create Vault"
+     - Configure Vault parameters (these cannot be changed later):
+       - **Capacity**: Set maximum staking limits
+       - **Fee Structure**: Define your operator fees
+       - **Vault Token**: Choose whether to issue a Vault-specific token
+       - **Access Type**: Set as Public or Private
+
+  3. **Choose MEV Settings**
+     - Decide on Smoothing Pool participation
+     - This choice cannot be changed after deployment
+
+  4. **Add Vault Branding**
+     - Specify Vault name, logo, and description
+     - This helps users identify your Vault
+
+  5. **Deploy**
+     - Review all settings in the summary
+     - Click "Create Vault" and confirm the transaction
+
+  ### Finding Your Vault Address
+
+  Once your Vault is deployed, you'll need its contract address for Operator Service configuration:
+
+  <Tabs groupId="vault-address-methods">
+    <TabItem value="url" label="From URL" default>
+      **Method 1: URL Bar**
+
+      Navigate to your Vault page - the address is visible in the URL:
+      ```
+      https://stakewise.io/vault/mainnet/0x1234567890abcdef...
+                                        ^^^^^^^^^^^^^^^^^^^
+                                          Your Vault Address
+      ```
+    </TabItem>
+    <TabItem value="details" label="From Details Section">
+      **Method 2: Vault Details**
+
+      1. Go to your Vault page
+      2. Scroll to the bottom to find the "Details" section
+      3. Look for "Contract address" field
+      4. Copy the displayed address
+    </TabItem>
+  </Tabs>
+
+  :::important Save Your Vault Address
+  Keep your Vault address safe - you'll need it for all Operator Service configurations throughout the setup process.
+  :::
+
+
+Your infrastructure is now ready for Operator Service [Installation ↗](installation) ! 🎉

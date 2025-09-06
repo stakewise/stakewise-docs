@@ -1,0 +1,43 @@
+---
+title: Operator Service
+sidebar_position: 2
+---
+
+# Operator Service
+
+## What is the Operator Service?
+
+The Operator Service is a software developed by the Stakewise team, designed to run seamlessly alongside any node setup, giving operators the freedom to run their preferred execution and consensus clients, MEV relay, and distributed validator technology.
+
+It is responsible for performing the following tasks:
+
+### Validator Registration
+
+The service continuously monitors your Vault's balance and automatically registers new validators when sufficient assets are available (32 ETH for Ethereum, 1 GNO for Gnosis).
+It manages the complete registration flow from retrieving validator keys to submitting registration transactions while coordinating with StakeWise Oracles through encrypted exit signatures.
+
+### Exit Signatures Rotation
+
+The Operator Service maintains validator exit capabilities by monitoring oracle set changes and updating signatures when needed, ensuring validators can always be exited even if oracle keys are compromised.
+
+### Vault State Update (Optional)
+
+Through the --harvest-vault flag, the service automatically distributes fees, updates staker positions, and reprices Vault tokens every 12 hours to simplify user interactions.
+
+### Partial Withdrawals
+
+Automatically processes excess ETH from compound validators every 24 hours, providing faster and more efficient fund management compared to full validator exits.
+
+### Multi-Vault Support
+
+Allows single operator instances to manage multiple Vaults simultaneously, reducing operational complexity for professional operators.
+
+### Validator Consolidation
+
+Converts legacy 0x01 validators to more efficient 0x02 compound validators, optimizing validator performance and management.
+
+### Automated Reward Splitting
+
+Enables periodic withdrawal of rewards for vault fee shareholders, streamlining revenue distribution.
+
+To run the Operator Service effectively, you must first ensure your infrastructure meets the necessary [Prerequisites ↗](./prerequisites) outlined in the next section.

@@ -5,6 +5,7 @@ sidebar_position: 3
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
 
 # Prerequisites
 
@@ -22,12 +23,12 @@ Any execution client that supports the [ETH Execution API specification ↗](htt
     Standard installation and configuration. No special requirements.
   </TabItem>
   <TabItem value="besu" label="Besu">
-    **Besu** - Ethereum network support
+    **[Besu ↗](https://launchpad.ethereum.org/en/besu)** - Ethereum network support
 
     Standard installation and configuration. No special requirements.
   </TabItem>
   <TabItem value="erigon" label="Erigon">
-    **Erigon** - Supports both Ethereum and Gnosis networks
+    **[Erigon ↗](https://launchpad.ethereum.org/en/erigon)** - Supports both Ethereum and Gnosis networks
 
     :::warning Special Configuration Required
     Event logs must be preserved for the Operator Service to function properly:
@@ -43,14 +44,25 @@ Any execution client that supports the [ETH Execution API specification ↗](htt
     :::
   </TabItem>
   <TabItem value="geth" label="Geth">
-    **Geth** - Ethereum network support
+    **[Geth ↗](https://launchpad.ethereum.org/en/geth)** - Ethereum network support
 
     Standard installation and configuration. No special requirements.
   </TabItem>
   <TabItem value="reth" label="Reth">
-    **Reth** - Ethereum network support
+    **[Reth ↗](https://github.com/paradigmxyz/reth)** - Ethereum network support
 
-    Standard installation and configuration. Ensure proper event log retention (consult Reth documentation for specific configurations).
+    :::warning Special Configuration Required
+    The problem with Reth could be event logs pruning. Operator reads event logs from certain contracts. In order to preserve those logs execution client needs to be tweaked.
+
+    The required setting in the `reth.toml` is:
+
+    ```toml
+    [prune.segments.receipts_log_filter.0x6b5815467da09daa7dc83db21c9239d98bb487b5]
+    before = 21471500
+    ```
+
+    Here `0x6b5815467da09daa7dc83db21c9239d98bb487b5` is [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) address on Ethereum Mainnet. Note that the address must be lowercased.
+    :::
   </TabItem>
 </Tabs>
 
@@ -61,25 +73,25 @@ Any consensus client that supports [ETH Beacon Node API specification ↗](https
 
 <Tabs groupId="consensus-clients">
   <TabItem value="lighthouse" label="Lighthouse" default>
-    **Lighthouse** - Supports both Ethereum and Gnosis networks
+    **[Lighthouse ↗](https://launchpad.ethereum.org/en/lighthouse)** - Supports both Ethereum and Gnosis networks
   </TabItem>
   <TabItem value="nimbus" label="Nimbus">
-    **Nimbus** - Supports both Ethereum and Gnosis networks
+    **[Nimbus ↗](https://launchpad.ethereum.org/en/nimbus)** - Supports both Ethereum and Gnosis networks
   </TabItem>
   <TabItem value="prysm" label="Prysm">
-    **Prysm** - Ethereum network support
+    **[Prysm ↗](https://launchpad.ethereum.org/en/prysm)** - Ethereum network support
   </TabItem>
   <TabItem value="teku" label="Teku">
-    **Teku** - Supports both Ethereum and Gnosis networks
+    **[Teku ↗](https://launchpad.ethereum.org/en/teku)** - Supports both Ethereum and Gnosis networks
   </TabItem>
   <TabItem value="lodestar" label="Lodestar">
-    **Lodestar** - Supports both Ethereum and Gnosis networks
+    **[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** - Supports both Ethereum and Gnosis networks
   </TabItem>
 </Tabs>
 
-:::tip Validator Configuration
-Configure your validator clients with the correct **fee recipient address**, which can be found in your Vault's Details section on the StakeWise interface.
-:::
+<Admonition type="tip" icon="💡" title="Validator Configuration">
+  Configure your validator clients with the correct **fee recipient address**, which can be found in your Vault's "Details" section on the StakeWise interface.
+</Admonition>
 
 ## Deployed Vault
 
@@ -87,60 +99,43 @@ You must have an active StakeWise Vault deployed and ready for operation.
 
 ### Creating a New Vault
 
-  If you don't have a Vault yet, follow these steps:
+If you don't have a Vault yet, follow these steps:
 
-  1. **Visit the StakeWise Interface**
-     - Go to the [StakeWise Operate page](https://stakewise.io/operate)
-     - Connect your wallet using the button in the upper right corner
+<Admonition type="info" icon="🏗️" title="Vault Deployment Process">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Visit the [StakeWise Operate page ↗](https://frontwise-git-ui-stakewise.vercel.app/operate) and connect your wallet.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Click "Create Vault" to begin configuration.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Process vault setup step by step.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Once vault is deployed go to its page.</li>
+  </ol>
+</Admonition>
 
-  2. **Create Your Vault**
-     - Click "Create Vault"
-     - Configure Vault parameters (these cannot be changed later):
-       - **Capacity**: Set maximum staking limits
-       - **Fee Structure**: Define your operator fees
-       - **Vault Token**: Choose whether to issue a Vault-specific token
-       - **Access Type**: Set as Public or Private
+### Finding Your Vault Address
 
-  3. **Choose MEV Settings**
-     - Decide on Smoothing Pool participation
-     - This choice cannot be changed after deployment
+Once your Vault is deployed, you'll need its contract address for Operator Service configuration:
 
-  4. **Add Vault Branding**
-     - Specify Vault name, logo, and description
-     - This helps users identify your Vault
-
-  5. **Deploy**
-     - Review all settings in the summary
-     - Click "Create Vault" and confirm the transaction
-
-  ### Finding Your Vault Address
-
-  Once your Vault is deployed, you'll need its contract address for Operator Service configuration:
-
-  <Tabs groupId="vault-address-methods">
-    <TabItem value="url" label="From URL" default>
-      **Method 1: URL Bar**
-
-      Navigate to your Vault page - the address is visible in the URL:
+<Tabs groupId="vault-address-methods">
+  <TabItem value="url" label="From URL" default>
+   <Admonition type="info" icon="📄🔍" title="Method 1: URL Bar">
+     Navigate to your Vault page - the address is visible in the URL:
       ```
       https://stakewise.io/vault/mainnet/0x1234567890abcdef...
-                                        ^^^^^^^^^^^^^^^^^^^
+                                         ^^^^^^^^^^^^^^^^^^^
                                           Your Vault Address
       ```
-    </TabItem>
-    <TabItem value="details" label="From Details Section">
-      **Method 2: Vault Details**
-
-      1. Go to your Vault page
-      2. Scroll to the bottom to find the "Details" section
-      3. Look for "Contract address" field
-      4. Copy the displayed address
-    </TabItem>
-  </Tabs>
-
-  :::important Save Your Vault Address
-  Keep your Vault address safe - you'll need it for all Operator Service configurations throughout the setup process.
-  :::
+    </Admonition>
+  </TabItem>
+  <TabItem value="details" label="From Details Section">
+    <Admonition type="info" icon="📄🔍" title="Method 2: Vault Details">
+      <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Go to your Vault page.</li>
+        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Scroll to the bottom to find the "Details" section.</li>
+        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Look for "Contract address" field.</li>
+        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Copy the displayed address.</li>
+      </ol>
+    </Admonition>
+  </TabItem>
+</Tabs>
 
 
 Your infrastructure is now ready for Operator Service [Installation ↗](installation) ! 🎉

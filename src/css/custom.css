@@ -301,3 +301,49 @@ html[data-theme='dark'] .theme-admonition.admonition--note {
   border: 1px solid rgba(168, 150, 221, 0.25) !important;
   backdrop-filter: blur(6px);
 }
+
+/* Custom details styling (light theme) */
+html[data-theme='light'] .custom-details {
+  background-color: #f5f1eb !important;
+  backdrop-filter: blur(6px);
+  border: none !important;
+}
+
+html[data-theme='light'] .custom-details summary {
+  cursor: pointer;
+  color: rgba(139, 105, 20, 0.7);
+  transition: color 0.2s ease;
+}
+
+html[data-theme='light'] .custom-details summary:hover {
+  color: rgba(139, 105, 20, 1); /* Added hover state - opaque */
+}
+
+/* Custom details styling (dark theme) */
+html[data-theme='dark'] .custom-details {
+  background-color: rgba(212, 165, 116, 0.3) !important;
+  border: 1px solid rgba(245, 241, 235, 0.4) !important;
+  backdrop-filter: blur(6px);
+}
+
+html[data-theme='dark'] .custom-details summary:hover {
+  color: rgba(245, 241, 235, 1); /* Added hover state */
+}
+
+html[data-theme='dark'] .custom-details summary {
+  cursor: pointer;
+  color: rgba(245, 241, 235, 0.7);
+  transition: color 0.2s ease;
+}
+
+/* Force custom-details links to have same styling as regular links */
+.custom-details a {
+  color: #018970 !important;
+  text-decoration: none;
+}
+
+.custom-details a:hover {
+  color: black !important;
+  text-decoration: underline;
+  text-decoration-color: black !important;
+}

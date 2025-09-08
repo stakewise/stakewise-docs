@@ -3,4 +3,138 @@ title: Installation
 sidebar_position: 4
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 # Installation
+
+Operator Service can be run via a binary, docker image, deployed on a Kubernetes cluster using the Operator Helm Chart, or built from source.
+Decide on your preferred method and follow the respective instructions below.
+
+<Tabs groupId="installation-methods">
+  <TabItem value="binary" label="Binary" default>
+    ## Binary Installation
+
+    ### Download
+
+
+    <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Head to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) to find the latest version of Operator Service</li>
+      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Identify the binary file specific to your node hardware</li>
+      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Download and decompress the file</li>
+      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> You will execute Operator Service commands from within the `v3-operator` folder using the below format:</li>
+    </ol>
+
+    Note: The use of flags is optional
+      ```bash
+      ./operator COMMAND --flagA=123 --flagB=xyz
+      ```
+
+
+    ### Install Script (Linux and macOS)
+
+    To install a binary for the latest release, run:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s
+    ```
+
+    The binary will be installed inside the `~/bin` directory. Add the binary to your path:
+
+    ```bash
+    export PATH=$PATH:~/bin
+    ```
+
+    If you want to install a specific version to a custom location, run:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
+    ```
+
+    You will execute Operator Service commands using the below format:
+
+    Note: The use of flags is optional
+
+    ```bash
+    operator COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+
+  <TabItem value="docker" label="Docker Image">
+    ## Docker Installation
+
+    ### Pull Official Image
+
+    Pull the latest docker Operator docker image:
+
+    ```bash
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0
+    ```
+
+    ### Build From Source
+
+    You can also build the docker image from source by cloning this repo and executing the following command from within the `v3-operator` folder:
+
+    ```bash
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0 .
+    ```
+
+    ### Execute Commands
+
+    You will execute Operator Service commands using the format below:
+
+    Note: The use of flags is optional
+
+    ```bash
+    docker run --rm -ti \
+    -u $(id -u):$(id -g) \
+    -v ~/.stakewise/:/data \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0 \
+    src/main.py COMMAND \
+    --flagA=123 \
+    --flagB=xyz
+    ```
+  </TabItem>
+
+  <TabItem value="source" label="Source Files">
+    ## Source Installation
+
+    ### Build Requirements
+
+    - [Python 3.10+ ↗](https://www.python.org/downloads/)
+    - [Poetry ↗](https://python-poetry.org/docs/)
+
+    ### Setup
+
+    Clone this repo and install dependencies by executing the following command from within the `v3-operator` folder:
+
+    ```bash
+    poetry install --only main
+    ```
+
+    ### Execute Commands
+
+    You will execute Operator Service commands from within the `v3-operator` folder using the below format:
+
+    Note: The use of flags is optional
+
+    ```bash
+    PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+
+  <TabItem value="kubernetes" label="Kubernetes (Advanced)">
+    ## Kubernetes Installation
+
+    A separate guide runs through the set-up of Operator Service via Kubernetes, designed to run large numbers of validators (up to 10,000).
+
+    Visit the [Kubernetes setup ↗](kubernetes-setup) for more details.
+
+  </TabItem>
+</Tabs>
+
+## Next Steps
+
+Once you have installed the Operator Service using your preferred method, you're ready to proceed with [Key Creation ↗](key-creation).

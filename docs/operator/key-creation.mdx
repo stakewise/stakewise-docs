@@ -1,0 +1,220 @@
+---
+title: Key Creation
+sidebar_position: 5
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Key Creation
+
+After installing the Operator Service, you need to create validator keystores for your Vault and set up a wallet for handling validator registrations.
+
+The Operator Service includes built-in functionality to generate all of the above. Alternatively, you may use your preferred methods to generate keystores (e.g., [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen)) and create the wallet (e.g., [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline)).
+
+This section walks you through the complete setup process using the Operator Service built-in tools.
+
+## Step 1: Create Mnemonic
+
+<Admonition type="tip" icon="🔑" title="Initialize Configuration">
+  Run the `init` command to set up your mnemonic used to derive validator keys.
+</Admonition>
+
+For example, if running Operator Service from binary, you would use:
+
+```bash
+./operator init
+```
+
+The command will prompt you to:
+
+<Admonition type="info" icon="📝" title="Setup Process">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Choose your network (mainnet, hoodi, gnosis, chiado)</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Select your mnemonic language</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Write down your seed phrase safely</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Confirm you have written it down by typing it back</li>
+  </ol>
+</Admonition>
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]:
+Enter your vault address: 0x3320a...68
+Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]:
+This is your seed phrase. Write it down and store it safely, it is the ONLY way to recover your validator keys.
+
+pumpkin anxiety private salon inquiry ....
+
+
+Press any key when you have written down your mnemonic.
+
+Please type your mnemonic (separated by spaces) to confirm you have written it down
+
+: pumpkin anxiety private salon inquiry ....
+
+done.
+Successfully initialized configuration for vault 0x3320a...68
+```
+
+</details>
+
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Important Security Notice">
+  Your seed phrase is the **ONLY** way to recover your validator keys. Store it safely and never share it with anyone.
+</Admonition>
+
+## Step 2: Create Validator Keys
+
+Generate validator keystores from your mnemonic using the `create-keys` command.
+
+```bash
+./operator create-keys
+```
+
+You'll be prompted to:
+
+<Admonition type="info" icon="🔢" title="Key Generation Process">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Enter the number of validator keys to generate</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Provide your mnemonic phrase</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Wait for key generation and export to complete</li>
+  </ol>
+</Admonition>
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter the vault address: 0x3320a...68
+Enter the number of the validator keys to generate: 10
+Enter the mnemonic for generating the validator keys: pumpkin anxiety private salon inquiry ....
+Creating validator keys:    [####################################]  10/10
+Generating deposit data JSON    [####################################]  10/10
+Exporting validator keystores    [####################################]  10/10
+
+Done. Generated 10 keys for 0x3320a...68 vault.
+Keystores saved to /home/user/.stakewise/0x3320a...68/keystores file
+Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.json file
+```
+
+</details>
+
+**Note:** Keystores are saved to `~/.stakewise/keystores` and the password is stored in `password.txt` within the keystores folder.
+
+### Alternative Key Creation
+
+You may not want the operator service to have direct access to the validator keys.
+Validator keystores do not need to be present directly in the operator. You can check:
+
+- **[Remote Signer ↗](remote-signer)** - Use Web3Signer for key management
+- **[Hashi Vault ↗](hashi-vault)** - Store keys in HashiCorp Vault
+- **[API Mode ↗](api-mode)** - External key management via API
+
+## Step 3: Create Wallet
+
+Create a wallet for handling validator registrations and paying gas fees.
+
+```bash
+./operator create-wallet
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter the vault address: 0x3320a...68
+Enter the mnemonic for generating the wallet: pumpkin anxiety private salon inquiry ...
+Done. The wallet and password saved to /home/user/.stakewise/0x3320a...68/wallet directory. The wallet address is: 0x239B...e3Cc
+```
+
+</details>
+
+You'll need to provide your mnemonic phrase (can be the same as validator keys or different).
+
+<Admonition type="tip" icon="💰" title="Funding Your Wallet">
+  After creating the wallet, you **must** send ETH (or xDAI for Gnosis) to cover gas expenses:
+
+  - Each validator registration costs ~0.01 ETH with 30 Gwei gas price
+  - Keep monitoring your wallet balance, otherwise validators will stop registering if the balance falls too low
+</Admonition>
+
+## Step 4: Upload Validator Keys
+
+Upload your generated validator keys to your consensus client validators.
+
+<Admonition type="info" icon="📤" title="Key Upload Process">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Locate your keystores in `~/.stakewise/keystores`</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Follow your consensus client's guide for importing keys</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Use the password from `password.txt` file</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Set the fee recipient to your Vault's fee recipient address</li>
+  </ol>
+</Admonition>
+
+**Fee Recipient Address**: Found in your Vault's "Details" section on the StakeWise interface.
+
+## Performance Optimization
+
+<details className="custom-details">
+<summary>Optional: Reduce CPU Load</summary>
+
+If you want to limit CPU usage during key operations, use the `--pool-size` flag:
+
+```bash
+./operator create-keys --pool-size=2
+```
+
+Setting `--pool-size` to half your CPU cores is a safe way to prevent high CPU load.
+
+</details>
+
+## Security Considerations
+
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Security" style={{ width: 20, height: 20 }}/>} title="Key Security Best Practices">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Backup your mnemonic** - Store it securely offline</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Secure your keystores** - Protect the keystores directory</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Monitor wallet balance** - Keep sufficient ETH for gas fees</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Limit access** - Only authorized personnel should access these files</li>
+  </ol>
+</Admonition>
+
+## Recover Validator Keystores
+
+If you need to recover validator keystores that are active, you can use the `recover` command.
+
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Critical Safety Requirements">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Stop validators** - Ensure no validators are running with these keystores</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Wait 2 epochs** - Allow time to pass to avoid slashing</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Protect mnemonic** - Your seed phrase can generate all validator keys</li>
+  </ol>
+</Admonition>
+
+```bash
+./operator recover
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter the mnemonic for generating the validator keys: [Your Mnemonic Here]
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Enter the comma separated list of API endpoints for execution nodes: https://example.com
+Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter the network name: hoodi
+Found 24 validators, recovering...
+Generating keystores [####################################] 100%
+Keystores for vault 0x3320ad928c20187602a2b2c04eeaa813fa899468 successfully recovered to /home/user/.stakewise/keystores
+```
+
+</details>
+
+## Next Steps
+
+Once you've completed key creation and uploaded your validator keys, you're ready to proceed with [Getting Started ↗](getting-started) to configure your Vault permissions and start the Operator Service.

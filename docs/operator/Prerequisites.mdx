@@ -6,6 +6,7 @@ sidebar_position: 3
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Prerequisites
 
@@ -51,18 +52,18 @@ Any execution client that supports the [ETH Execution API specification ↗](htt
   <TabItem value="reth" label="Reth">
     **[Reth ↗](https://github.com/paradigmxyz/reth)** - Ethereum network support
 
-    :::warning Special Configuration Required
-    The problem with Reth could be event logs pruning. Operator reads event logs from certain contracts. In order to preserve those logs execution client needs to be tweaked.
+    <Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Special Configuration Required">
+      The problem with Reth could be event logs pruning. Operator reads event logs from certain contracts. In order to preserve those logs execution client needs to be tweaked.
 
-    The required setting in the `reth.toml` is:
+      The required setting in the `reth.toml` is:
 
-    ```toml
-    [prune.segments.receipts_log_filter.0x6b5815467da09daa7dc83db21c9239d98bb487b5]
-    before = 21471500
-    ```
+      ```toml
+      [prune.segments.receipts_log_filter.0x6b5815467da09daa7dc83db21c9239d98bb487b5]
+      before = 21471500
+      ```
 
-    Here `0x6b5815467da09daa7dc83db21c9239d98bb487b5` is [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) address on Ethereum Mainnet. Note that the address must be lowercased.
-    :::
+      Here `0x6b5815467da09daa7dc83db21c9239d98bb487b5` is [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) address on Ethereum Mainnet. Note that the address must be lowercased.
+    </Admonition>
   </TabItem>
 </Tabs>
 
@@ -89,7 +90,7 @@ Any consensus client that supports [ETH Beacon Node API specification ↗](https
   </TabItem>
 </Tabs>
 
-<Admonition type="tip" icon="💡" title="Validator Configuration">
+<Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Validator Configuration">
   Configure your validator clients with the correct **fee recipient address**, which can be found in your Vault's "Details" section on the StakeWise interface.
 </Admonition>
 
@@ -101,9 +102,9 @@ You must have an active StakeWise Vault deployed and ready for operation.
 
 If you don't have a Vault yet, follow these steps:
 
-<Admonition type="info" icon="🏗️" title="Vault Deployment Process">
+<Admonition type="info" icon={<img src={useBaseUrl('/img/cursor.png')} alt="Cursor" style={{ width: 20, height: 20 }}/>} title="Vault Deployment Process">
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Visit the [StakeWise Operate page ↗](https://frontwise-git-ui-stakewise.vercel.app/operate) and connect your wallet.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Visit the [StakeWise Operate page ↗](https://app.stakewise.io/operate) and connect your wallet.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Click "Create Vault" to begin configuration.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Process vault setup step by step.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Once vault is deployed go to its page.</li>
@@ -116,7 +117,7 @@ Once your Vault is deployed, you'll need its contract address for Operator Servi
 
 <Tabs groupId="vault-address-methods">
   <TabItem value="url" label="From URL" default>
-   <Admonition type="info" icon="📄🔍" title="Method 1: URL Bar">
+   <Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Method 1: URL Bar">
      Navigate to your Vault page - the address is visible in the URL:
       ```
       https://stakewise.io/vault/mainnet/0x1234567890abcdef...
@@ -126,7 +127,7 @@ Once your Vault is deployed, you'll need its contract address for Operator Servi
     </Admonition>
   </TabItem>
   <TabItem value="details" label="From Details Section">
-    <Admonition type="info" icon="📄🔍" title="Method 2: Vault Details">
+    <Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Method 2: Vault Details">
       <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
         <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Go to your Vault page.</li>
         <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Scroll to the bottom to find the "Details" section.</li>
@@ -137,5 +138,4 @@ Once your Vault is deployed, you'll need its contract address for Operator Servi
   </TabItem>
 </Tabs>
 
-
-Your infrastructure is now ready for Operator Service [Installation ↗](installation) ! 🎉
+Your infrastructure is now ready for Operator Service [Installation ↗](installation) 🎉

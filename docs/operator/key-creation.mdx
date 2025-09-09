@@ -110,9 +110,14 @@ Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.
 You may not want the operator service to have direct access to the validator keys.
 Validator keystores do not need to be present directly in the operator. You can check:
 
-- **[Remote Signer ↗](remote-signer)** - Use Web3Signer for key management
-- **[Hashi Vault ↗](hashi-vault)** - Store keys in HashiCorp Vault
-- **[API Mode ↗](api-mode)** - External key management via API
+- **[Remote Signer ↗](./alternative-key-creation/remote-signer)** - Query a remote signer to get signatures for validator deposit and exit messages
+- **[HashiCorp Vault ↗](./alternative-key-creation/hashicorp-vault)** - Load signing keys from remote HashiCorp Vault instance
+- **[API Mode ↗](./alternative-key-creation/api-mode)** - Run operator as API service with external key management via relayer
+
+### Add validator keys to Vault
+
+You can always add more validator keys to your Vault.
+For that, you need to generate new validator keys as described in [Step 2: Create Validator Keys →](#step-2-create-validator-keys).
 
 ## Step 3: Create Wallet
 
@@ -146,7 +151,7 @@ You'll need to provide your mnemonic phrase (can be the same as validator keys o
 
 Upload your generated validator keys to your consensus client validators.
 
-<Admonition type="info" icon="📤" title="Key Upload Process">
+<Admonition type="info" icon={<img src={useBaseUrl('/img/Email.png')} alt="Key Upload" style={{ width: 20, height: 20 }}/>}  title="Key Upload Process">
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Locate your keystores in `~/.stakewise/keystores`</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Follow your consensus client's guide for importing keys</li>
@@ -207,7 +212,7 @@ Enter the mnemonic for generating the validator keys: [Your Mnemonic Here]
 Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
 Enter the comma separated list of API endpoints for execution nodes: https://example.com
 Enter the comma separated list of API endpoints for consensus nodes: https://example.com
-Enter the network name: hoodi
+Enter the network name: holesky
 Found 24 validators, recovering...
 Generating keystores [####################################] 100%
 Keystores for vault 0x3320ad928c20187602a2b2c04eeaa813fa899468 successfully recovered to /home/user/.stakewise/keystores

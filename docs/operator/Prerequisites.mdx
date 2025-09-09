@@ -14,47 +14,35 @@ Before installing and configuring the Operator Service, your node infrastructure
 
 ## Execution Client
 
-Your execution node must be fully synced and running.
-Any execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/) can be used:
+Your execution node must be fully synced and running. Any execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/) can be used:
 
-<Tabs groupId="execution-clients">
-  <TabItem value="nethermind" label="Nethermind" default>
-    **[Nethermind ↗](https://launchpad.ethereum.org/en/nethermind)** - Supports both Ethereum and Gnosis networks
+**[Nethermind ↗](https://launchpad.ethereum.org/en/nethermind)** - (Ethereum, Gnosis)
 
-    Standard installation and configuration. No special requirements.
-  </TabItem>
-  <TabItem value="besu" label="Besu">
-    **[Besu ↗](https://launchpad.ethereum.org/en/besu)** - Ethereum network support
+**[Besu ↗](https://launchpad.ethereum.org/en/besu)** - (Ethereum)
 
-    Standard installation and configuration. No special requirements.
-  </TabItem>
-  <TabItem value="erigon" label="Erigon">
-    **[Erigon ↗](https://launchpad.ethereum.org/en/erigon)** - Supports both Ethereum and Gnosis networks
+**[Erigon ↗](https://launchpad.ethereum.org/en/erigon)** - (Ethereum, Gnosis)
 
-    :::warning Special Configuration Required
-    Event logs must be preserved for the Operator Service to function properly:
+**[Geth ↗](https://launchpad.ethereum.org/en/geth)** - (Ethereum)
 
-    ```bash
-    # Ethereum Mainnet
-    erigon --prune=receipts --prune.to=21471500
+**[Reth ↗](https://github.com/paradigmxyz/reth)** - (Ethereum)
 
-    # For other networks, adjust block number to Keeper contract creation block
-    ```
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Special Configuration for Erigon and Reth">
+  Event logs must be preserved for the Operator Service to function properly. Both clients require specific configuration to prevent event log pruning:
 
-    The required flags prevent event log pruning that the Operator reads from certain contracts.
-    :::
-  </TabItem>
-  <TabItem value="geth" label="Geth">
-    **[Geth ↗](https://launchpad.ethereum.org/en/geth)** - Ethereum network support
+  <Tabs groupId="special-config" defaultValue="erigon">
+    <TabItem value="erigon" label="Erigon">
+      ```bash
+      # Ethereum Mainnet
+      erigon --prune=receipts --prune.to=21471500
 
-    Standard installation and configuration. No special requirements.
-  </TabItem>
-  <TabItem value="reth" label="Reth">
-    **[Reth ↗](https://github.com/paradigmxyz/reth)** - Ethereum network support
+      # For other networks, adjust block number to Keeper contract creation block
+      ```
 
-    <Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Special Configuration Required">
-      The problem with Reth could be event logs pruning. Operator reads event logs from certain contracts. In order to preserve those logs execution client needs to be tweaked.
+      The required flags prevent event log pruning that the Operator reads from certain contracts.
 
+      Alternatively, if you want to save more disk space you can use the block when protocol config was updated. Actual values are defined in [network config ↗](https://github.com/stakewise/v3-operator/blob/master/src/config/networks.py) in Operator sources. See `CONFIG_UPDATE_EVENT_BLOCK` field for selected network.
+    </TabItem>
+    <TabItem value="reth" label="Reth">
       The required setting in the `reth.toml` is:
 
       ```toml
@@ -63,32 +51,25 @@ Any execution client that supports the [ETH Execution API specification ↗](htt
       ```
 
       Here `0x6b5815467da09daa7dc83db21c9239d98bb487b5` is [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) address on Ethereum Mainnet. Note that the address must be lowercased.
-    </Admonition>
-  </TabItem>
-</Tabs>
+
+      Alternatively, if you want to save more disk space you can use the block when protocol config was updated. Actual values are defined in [network config ↗](https://github.com/stakewise/v3-operator/blob/master/src/config/networks.py) in Operator sources. See `CONFIG_UPDATE_EVENT_BLOCK` field for selected network.
+    </TabItem>
+  </Tabs>
+</Admonition>
 
 ## Consensus Client
 
-Your consensus node must be fully synced and running.
-Any consensus client that supports [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
+Your consensus node must be fully synced and running. Any consensus client that supports [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
 
-<Tabs groupId="consensus-clients">
-  <TabItem value="lighthouse" label="Lighthouse" default>
-    **[Lighthouse ↗](https://launchpad.ethereum.org/en/lighthouse)** - Supports both Ethereum and Gnosis networks
-  </TabItem>
-  <TabItem value="nimbus" label="Nimbus">
-    **[Nimbus ↗](https://launchpad.ethereum.org/en/nimbus)** - Supports both Ethereum and Gnosis networks
-  </TabItem>
-  <TabItem value="prysm" label="Prysm">
-    **[Prysm ↗](https://launchpad.ethereum.org/en/prysm)** - Ethereum network support
-  </TabItem>
-  <TabItem value="teku" label="Teku">
-    **[Teku ↗](https://launchpad.ethereum.org/en/teku)** - Supports both Ethereum and Gnosis networks
-  </TabItem>
-  <TabItem value="lodestar" label="Lodestar">
-    **[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** - Supports both Ethereum and Gnosis networks
-  </TabItem>
-</Tabs>
+**[Lighthouse ↗](https://launchpad.ethereum.org/en/lighthouse)** - (Ethereum, Gnosis)
+
+**[Nimbus ↗](https://launchpad.ethereum.org/en/nimbus)** - (Ethereum, Gnosis)
+
+**[Prysm ↗](https://launchpad.ethereum.org/en/prysm)** - (Ethereum)
+
+**[Teku ↗](https://launchpad.ethereum.org/en/teku)** - (Ethereum, Gnosis)
+
+**[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** - (Ethereum, Gnosis)
 
 <Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Validator Configuration">
   Configure your validator clients with the correct **fee recipient address**, which can be found in your Vault's "Details" section on the StakeWise interface.
@@ -106,7 +87,7 @@ If you don't have a Vault yet, follow these steps:
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Visit the [StakeWise Operate page ↗](https://app.stakewise.io/operate) and connect your wallet.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Click "Create Vault" to begin configuration.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Process vault setup step by step.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Process Vault setup step by step.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Once vault is deployed go to its page.</li>
   </ol>
 </Admonition>

@@ -3,6 +3,11 @@ title: Operator Service
 sidebar_position: 2
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 # Operator Service
 
 ## What is the Operator Service?
@@ -13,8 +18,22 @@ It is responsible for performing the following tasks:
 
 ### Validator Registration
 
-The service continuously monitors your Vault's balance and automatically registers new validators when sufficient assets are available (32 ETH for Ethereum, 1 GNO for Gnosis).
-It manages the complete registration flow from retrieving validator keys to submitting registration transactions while coordinating with StakeWise Oracles through encrypted exit signatures.
+The Operator Service periodically checks whether Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
+
+<Admonition type="note" icon={<img src={useBaseUrl('/img/safe.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Validator Registration Process">
+  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Check whether Vault has accumulated enough assets to register a validator (e.g., 32 ETH for Ethereum)</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Get the next free validator key from the used keystore</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Obtain BLS signature for exit message using local keystores or remote signer</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Share the exit signature of the validator with StakeWise Oracles:</li>
+    <ul style={{ listStyleType: "disc", paddingLeft: "80px" }}>
+      <li>Using Shamir's secret sharing, splits validator's BLS signature. The number of shares equals the number of oracles</li>
+      <li>Encrypts exit signatures with the oracles' public keys</li>
+      <li>Sends encrypted exit signatures to all the oracles and receives registration signatures from them</li>
+    </ul>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Sends transaction to the Vault contract to register the validator.</li>
+  </ol>
+</Admonition>
 
 ### Exit Signatures Rotation
 
@@ -22,22 +41,116 @@ The Operator Service maintains validator exit capabilities by monitoring oracle 
 
 ### Vault State Update (Optional)
 
-Through the --harvest-vault flag, the service automatically distributes fees, updates staker positions, and reprices Vault tokens every 12 hours to simplify user interactions.
+Updating the Vault state distributes fees, updates staker positions, and reprices Vault-specific ERC-20 tokens based on rewards and penalties.
+
+#### How It Works
+
+By default, each Vault state updates when users interact with the Vault (deposit, withdraw, etc.) with a 12-hour cooldown.
+When enabled with the `--harvest-vault` flag, the Operator Service automatically distributes Vault fees to the fee address and updates each staker's position every 12 hours, with gas fees paid by the wallet linked to the Operator Service.
+
+<Admonition type="tip" icon={<img src={useBaseUrl('/img/asterisk.png')} alt="Warning" style={{ width: 20, height: 20 }}/>}title="Benefits of Vault Harvesting">
+  Harvesting the Vault rewards simplifies the contract calls to the Vault contract and reduces the gas fees for stakers. For example, the Vault does not need to sync rewards before calling deposit when a user stakes.
+</Admonition>
 
 ### Partial Withdrawals
 
-Automatically processes excess ETH from compound validators every 24 hours, providing faster and more efficient fund management compared to full validator exits.
+The Operator Service automatically processes partial ETH/GNO withdrawals from validators.
+
+<Admonition type="info" icon={<img src={useBaseUrl('/img/eth_coin.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Withdrawal Processing">
+  Every 24 hours, the operator checks the current exit queue. If the requested amount can be processed via partial withdrawals, it submits them through the execution layer
+</Admonition>
+
+#### Configuration Options
+
+- **Disable Partial Withdrawals**: Use `--disable-withdrawals` parameter to rely on oracle-managed full validator exits instead
+- **Withdrawal Interval**: Configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable (default: 24h)
+
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Performance Impact">
+  Disabling partial withdrawals forces the system to use oracle-managed validator exits, which may negatively impact the vault's APR due to longer processing times.
+</Admonition>
 
 ### Multi-Vault Support
 
-Allows single operator instances to manage multiple Vaults simultaneously, reducing operational complexity for professional operators.
+The Operator Service can manage multiple Vaults simultaneously using a single wallet and shared keystores.
+All validator keys are shared across connected Vaults using the `--vaults` flag with comma-separated addresses (e.g., `--vaults=0x1...23,0x4...56`).
 
-### Validator Consolidation
+### Validators Consolidation
 
-Converts legacy 0x01 validators to more efficient 0x02 compound validators, optimizing validator performance and management.
+Converts legacy 0x01 validators to 0x02 compound validators using the `consolidate` command.
+
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Validators Manager Required">
+  The wallet executing this command must be set as the Validators Manager in the Vault settings.
+</Admonition>
+
+
+Optionally specify `--source-public-keys` (0x01 validators) and `--target-public-key`(0x02 validators) parameters to consolidate selected validators.
+
+```bash
+./operator consolidate --vault=0x000...  --source-public-keys=0x001,0x002 --target-public-key=0x003
+```
+
+Follow the interactive prompts to specify your consolidation preferences:
+
+<details className="custom-details">
+<summary>Example Consolidation Process</summary>
+
+```
+Enter the comma separated list of API endpoints for execution nodes: https://example.com
+Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Enter the network name (mainnet, holesky, gnosis, chiado) [mainnet]: holesky
+Found 15 legacy validators eligible for consolidation
+Target consolidation: 7 compound validators (14 legacy validators + 1 remaining)
+Continue with consolidation? [y/N]: y
+```
+
+</details>
+
+Read more about [Validators consolidations ↗](https://github.com/stakewise/v3-operator/tree/v4?tab=readme-ov-file#validators-consolidation)
 
 ### Automated Reward Splitting
 
-Enables periodic withdrawal of rewards for vault fee shareholders, streamlining revenue distribution.
+Enables periodic withdrawal of rewards for Vault fee shareholders based on their configured percentages.
 
-To run the Operator Service effectively, you must first ensure your infrastructure meets the necessary [Prerequisites ↗](./prerequisites) outlined in the next section.
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Fee Claimer Required">
+  Set the wallet address connected to the operator as the `Fee Claimer` in the `Roles` tab under the Vault’s Settings.
+</Admonition>
+
+Enable automated reward splitting using the `--claim-fee-splitter` flag:
+
+```bash
+./operator start-local --claim-fee-splitter --vaults=0x3320a...68
+```
+
+#### Configuration Options
+
+<ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Distribution Interval**: Configurable via `REWARD_SPLITTER_INTERVAL` (default: 24h)</li>
+  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Minimum Threshold**: Set via `REWARD_SPLITTER_MIN_ASSETS` to avoid gas-inefficient small transactions</li>
+</ol>
+
+### Validators Voluntary Exit
+
+Validator exits are handled by [Oracles →](../../docs/protocol-concepts/Oracles), but you can force trigger exits for your validators using:
+
+```bash
+./operator exit-validators
+```
+
+Follow the prompts to confirm your consensus and execution node endpoints, Vault address, and validator indexes to exit. Use the optional `--indexes` parameter to exit only selected validators.
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter the comma separated list of API endpoints for execution nodes: : https://example.com
+Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Are you sure you want to exit 3 validators with indexes: 513571, 513572, 513861? [y/N]: y
+Validators 513571, 513572, 513861 exits successfully initiated
+```
+</details>
+
+## Next Steps
+
+To run the Operator Service effectively, you must first ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.

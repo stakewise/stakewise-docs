@@ -20,6 +20,11 @@ It is responsible for performing the following tasks:
 
 The Operator Service periodically checks whether Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
 
+The Operator Service supports registering both `0x01` and `0x02` validators within the same Vault using the `--validator-type` option to specify the validator type. By default, the operator registers new `0x02` validators, prioritizing funding of existing compound validators when possible; otherwise, it registers new validators up to the maximum balance via the `register_new_validators` function.
+Transactions are executed through the `fund_validators` and `register_validators` functions.
+
+The registration process follows a structured sequence of steps to ensure secure validator deployment:
+
 <Admonition type="note" icon={<img src={useBaseUrl('/img/safe.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Validator Registration Process">
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Check whether Vault has accumulated enough assets to register a validator (e.g., 32 ETH for Ethereum)</li>
@@ -56,10 +61,10 @@ When enabled with the `--harvest-vault` flag, the Operator Service automatically
 
 ### Partial Withdrawals
 
-The Operator Service automatically processes partial ETH/GNO withdrawals from validators.
+The Operator Service automatically processes partial ETH/GNO withdrawals from validators. The system prioritizes withdrawing all available ETH/GNO through partial withdrawals first, followed by full validator withdrawals when necessary.
 
 <Admonition type="info" icon={<img src={useBaseUrl('/img/eth_coin.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Withdrawal Processing">
-  Every 24 hours, the operator checks the current exit queue. If the requested amount can be processed via partial withdrawals, it submits them through the execution layer
+  Every 24 hours, the Operator Service checks the current exit queue. If the requested amount can be processed via partial withdrawals, it submits them through the execution layer
 </Admonition>
 
 #### Configuration Options
@@ -68,7 +73,7 @@ The Operator Service automatically processes partial ETH/GNO withdrawals from va
 - **Withdrawal Interval**: Configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable (default: 24h)
 
 <Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Performance Impact">
-  Disabling partial withdrawals forces the system to use oracle-managed validator exits, which may negatively impact the vault's APR due to longer processing times.
+  Disabling partial withdrawals forces the system to use oracle-managed validator exits, which may negatively impact the Vault's APR due to longer processing times.
 </Admonition>
 
 ### Multi-Vault Support
@@ -76,16 +81,21 @@ The Operator Service automatically processes partial ETH/GNO withdrawals from va
 The Operator Service can manage multiple Vaults simultaneously using a single wallet and shared keystores.
 All validator keys are shared across connected Vaults using the `--vaults` flag with comma-separated addresses (e.g., `--vaults=0x1...23,0x4...56`).
 
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Migration to Multi-Vault Setup">
+  When migrating from single-vault to multi-vault configuration, recreate your operator directory for a clean migration. This ensures proper configuration alignment with the new multi-vault setup.
+</Admonition>
+
 ### Validators Consolidation
 
-Converts legacy 0x01 validators to 0x02 compound validators using the `consolidate` command.
+Consolidates legacy `0x01` validators to `0x02` compound validators using the `consolidate` command, enabling variable validator balances up to 2048 ETH. This reduces the total validator count and lowers infrastructure overhead.
+The Operator Service includes a `check_vault_version` function to ensure compatibility with Pectra-enabled Vaults only. The consolidation process requires oracle signatures, which are automatically fetched during the operation.
 
 <Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Validators Manager Required">
   The wallet executing this command must be set as the Validators Manager in the Vault settings.
 </Admonition>
 
 
-Optionally specify `--source-public-keys` (0x01 validators) and `--target-public-key` (0x02 validators) parameters to consolidate selected validators.
+Optionally specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate selected validators.
 
 ```bash
 ./operator consolidate --vault=0x000...  --source-public-keys=0x001,0x002 --target-public-key=0x003
@@ -133,7 +143,7 @@ Enable automated reward splitting using the `--claim-fee-splitter` flag:
 
 ### Validators Voluntary Exit
 
-Validator exits are handled by [Oracles →](../../docs/protocol-concepts/Oracles), but you can force trigger exits for your validators using:
+Validator exits are handled by [Oracles →](../../docs/protocol-concepts/Oracles), but you can force trigger exits for your validators using the `exit-validators` command. The command now supports validator exits via the withdrawal queue, with exits triggered through `submit_withdraw_validators`.
 
 ```bash
 ./operator exit-validators

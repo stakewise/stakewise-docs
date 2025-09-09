@@ -67,10 +67,10 @@ For additional parameter information, use the `--help` flag:
 
 ### Operator-Relayer Flow
 
-The Operator Service continuously monitors vault balance changes. When 32 ETH becomes available, the following process occurs:
+The Operator Service continuously monitors Vault balance changes. When 32 ETH becomes available, the following process occurs:
 
 **Step 1: Balance Detection**
-- Operator detects sufficient balance (32 ETH) in the vault
+- Operator detects sufficient balance (32 ETH) in the Vault
 - Operator predicts the next validator index for registration
 
 **Step 2: Data Request**
@@ -92,12 +92,12 @@ The Relayer must provide comprehensive validator registration data:
 
 **Step 4: Signature Generation**
 - **Exit Signature**: Relayer uses the validator index from the request. For batch operations, increment the index for each validator (except the first)
-- **Manager Signature**: Must be an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature following the message structure defined in the [vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must match the validators manager configured in vault settings.
+- **Manager Signature**: Must be an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature following the message structure defined in the [Vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must match the validators manager configured in Vault settings.
 
 **Step 5: Registration Completion**
 - Operator receives registration data from Relayer
 - Operator requests approval from [Oracles ↗](../../protocol-concepts/Oracles) network
-- Upon approval, Operator submits the registration transaction to the vault contract
+- Upon approval, Operator submits the registration transaction to the Vault contract
 
 ### Request format:
 

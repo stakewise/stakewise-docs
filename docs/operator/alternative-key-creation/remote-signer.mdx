@@ -30,7 +30,7 @@ If you already have private keys uploaded to the remote signer, proceed to [Runn
 
 ```bash
 ./operator setup-remote-signer \
- --vault=0x3320a...68 \
+ --vaults=0x3320a...68 \
  --remote-signer-url=http://signer:9000
 ```
 
@@ -49,7 +49,7 @@ Done. Successfully configured operator to use remote signer for 20 public key(s)
 
 <Admonition type="info" icon="⚙️" title="Configuration Parameters">
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **`--vault`** - The vault address</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **`--vaults`** - The Vault address(es)</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **`--remote-signer-url`** - The base URL of the remote signer, e.g. `http://signer:9000`</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **`--data-dir`** - Path where the Vault data is stored. Default is ~/.stakewise</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **`--keystores-dir`** - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard</li>

@@ -79,6 +79,15 @@ Your consensus node must be fully synced and running. Any consensus client that 
 
 You must have an active StakeWise Vault deployed and ready for operation.
 
+<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Mandatory Vault Version Upgrade">
+  Before running the Operator Service, you must upgrade your Vault to the required version:
+  <ul style={{ listStyleType: "disc", paddingLeft: "20px" }}>
+    <li>**Ethereum**: Upgrade to Vault version 5</li>
+    <li>**Gnosis**: Upgrade to Vault version 3</li>
+  </ul>
+  Visit your Vault page on the StakeWise interface to check your current version and perform the upgrade if necessary.
+</Admonition>
+
 ### Creating a New Vault
 
 If you don't have a Vault yet, follow these steps:
@@ -88,7 +97,7 @@ If you don't have a Vault yet, follow these steps:
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Visit the [StakeWise Operate page ↗](https://app.stakewise.io/operate) and connect your wallet.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Click "Create Vault" to begin configuration.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Process Vault setup step by step.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Once vault is deployed go to its page.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Once Vault is deployed go to its page.</li>
   </ol>
 </Admonition>
 

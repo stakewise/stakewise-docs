@@ -31,7 +31,7 @@ The Operator Service periodically checks whether Vault has accumulated enough as
       <li>Encrypts exit signatures with the oracles' public keys</li>
       <li>Sends encrypted exit signatures to all the oracles and receives registration signatures from them</li>
     </ul>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Sends transaction to the Vault contract to register the validator.</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Sends transaction to the Vault contract to register the validator.</li>
   </ol>
 </Admonition>
 
@@ -48,7 +48,7 @@ Updating the Vault state distributes fees, updates staker positions, and reprice
 By default, each Vault state updates when users interact with the Vault (deposit, withdraw, etc.) with a 12-hour cooldown.
 When enabled with the `--harvest-vault` flag, the Operator Service automatically distributes Vault fees to the fee address and updates each staker's position every 12 hours, with gas fees paid by the wallet linked to the Operator Service.
 
-<Admonition type="tip" icon={<img src={useBaseUrl('/img/asterisk.png')} alt="Warning" style={{ width: 20, height: 20 }}/>}title="Benefits of Vault Harvesting">
+<Admonition type="tip" icon={<img src={useBaseUrl('/img/asterisk.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Benefits of Vault Harvesting">
   Harvesting the Vault rewards simplifies the contract calls to the Vault contract and reduces the gas fees for stakers. For example, the Vault does not need to sync rewards before calling deposit when a user stakes.
 </Admonition>
 
@@ -98,7 +98,7 @@ Follow the interactive prompts to specify your consolidation preferences:
 Enter the comma separated list of API endpoints for execution nodes: https://example.com
 Enter the comma separated list of API endpoints for consensus nodes: https://example.com
 Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
-Enter the network name (mainnet, holesky, gnosis, chiado) [mainnet]: holesky
+Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]: hoodi
 Found 15 legacy validators eligible for consolidation
 Target consolidation: 7 compound validators (14 legacy validators + 1 remaining)
 Continue with consolidation? [y/N]: y

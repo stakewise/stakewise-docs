@@ -36,18 +36,16 @@ Oracles are one of the protocol’s building blocks to deliver seamless staking 
 
 Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes and are responsible for validator registration, reward distribution, and validator exits.
 
-### Validator Registration
+### Validator Registration Approval
 
 Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-The [v3-operator ↗](https://github.com/stakewise/v3-operator) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
+The [Operator Service →](../../operator/operator-service) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
 Upon having enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
 This is done to maintain the protocol’s ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
 The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
 
-Oracles approve new validator registrations through a multi-step process:
-
-<Admonition type="tip" icon="⏳" title="Validator Registration Process">
+<Admonition type="tip" icon="⏳" title="Approval Process">
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Operator sends the validator registration requests and encrypted exit signatures to the Oracles.</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Oracles sign approval messages that include the current tree root hash from the Beacon Chain Deposit Contract.</li>
@@ -58,6 +56,8 @@ Oracles approve new validator registrations through a multi-step process:
 </Admonition>
 
 This process ensures Oracles approve validators based on current Beacon Chain state, bridging the consensus and execution layers while preventing stale approvals and replay attacks.
+
+For details on how the [Operator Service →](../../operator/operator-service) initiates and prepares validator registration, see the *Operator Service*: [*Validator Registration* →](../../operator/operator-service#validator-registration) section.
 
 ### Reward Distribution
 
@@ -83,22 +83,11 @@ The reward update process has protocol-wide impact.
 ### Validator Exits
 
 The validator exit process is automated and trustless.
-The exit signatures submitted to Oracles upon validator registration are encrypted and secured through distributed key management and can be reconstructed independently when needed.
+Validator exits require exit signatures that are generated during the [Validator Registration →](../../operator/operator-service#validator-registration) process.
 
-<Admonition type="tip" icon="🔑" title="Validator Exit Registration Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Operator generates the BLS exit signature<sup><a href="#user-content-fn-1" id="user-content-fnref-1" style={{textDecoration: 'none'}}>1</a></sup> of the validator using local keystores or a remote signer.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Operator shares the exit signature of the validator with StakeWise Oracles:</li>
-    <ul style={{ listStyleType: "disc", paddingLeft: "80px" }}>
-      <li>Using Shamir's secret sharing, splits validator's BLS signature<sup><a href="#user-content-fn-2" id="user-content-fnref-2" style={{textDecoration: 'none'}}>2</a></sup>. The number of shares equals the number of oracles.</li>
-      <li>Encrypts exit signatures with the oracles' public keys.</li>
-      <li>Sends encrypted exit signatures to all the oracles and receives registration signatures from them.</li>
-    </ul>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Sends transaction to the Vault contract to register the validator.</li>
-  </ol>
-</Admonition>
+As part of registration, the Operator Service encrypts exit signatures using Shamir's secret sharing and distributes them to all Oracles.
 
-Without Oracle approval of the exit signatures, the validator registration cannot proceed.
+This approach ensures validators can be exited on demand while maintaining protocol security through decentralized signature management.
 
 ## Oracle Network Participants
 
@@ -117,15 +106,3 @@ Without Oracle approval of the exit signatures, the validator registration canno
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>11.</span> [StakeWise Labs ↗](https://x.com/stakewise_io) (the development team)</li>
   </ol>
 </Admonition>
-
-<div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>1.</span>
-  Validators in Ethereum use two sets of BLS keys: <strong>validator keys (hot)</strong> and <strong>withdrawal keys (cold)</strong>. Validator keys sign attestations, blocks, and exits (`SignedVoluntaryExit`), while withdrawal keys secure the eventual withdrawal of stake and rewards.
-  <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
-</div>
-
-<div id="user-content-fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>2.</span>
-  BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" style={{textDecoration: 'underline', color: '#018970'}}>Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" style={{textDecoration: 'underline', color: '#018970'}}>here</a>.
-  <a href="#user-content-fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
-</div>

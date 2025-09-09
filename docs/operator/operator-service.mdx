@@ -24,16 +24,18 @@ The Operator Service periodically checks whether Vault has accumulated enough as
   <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Check whether Vault has accumulated enough assets to register a validator (e.g., 32 ETH for Ethereum)</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Get the next free validator key from the used keystore</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Obtain BLS signature for exit message using local keystores or remote signer</li>
+    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Obtain BLS signature for exit message<sup><a href="#user-content-fn-1" id="user-content-fnref-1" style={{textDecoration: 'none'}}>1</a></sup> using local keystores or remote signer</li>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Share the exit signature of the validator with StakeWise Oracles:</li>
     <ul style={{ listStyleType: "disc", paddingLeft: "80px" }}>
-      <li>Using Shamir's secret sharing, splits validator's BLS signature. The number of shares equals the number of oracles</li>
+      <li>Using Shamir's secret sharing, splits validator's BLS signature<sup><a href="#user-content-fn-2" id="user-content-fnref-2" style={{textDecoration: 'none'}}>2</a></sup>. The number of shares equals the number of oracles</li>
       <li>Encrypts exit signatures with the oracles' public keys</li>
       <li>Sends encrypted exit signatures to all the oracles and receives registration signatures from them</li>
     </ul>
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Sends transaction to the Vault contract to register the validator.</li>
   </ol>
 </Admonition>
+
+For details on how Oracles approve validator registration requests, see the *Oracles*: [*Validator Registration Approval* →](../docs/protocol-concepts/Oracles#validator-registration-approval) section.
 
 ### Exit Signatures Rotation
 
@@ -154,3 +156,15 @@ Validators 513571, 513572, 513861 exits successfully initiated
 ## Next Steps
 
 To run the Operator Service effectively, you must first ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.
+
+<div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span>
+  Validators in Ethereum use two sets of BLS keys: <strong>validator keys (hot)</strong> and <strong>withdrawal keys (cold)</strong>. Validator keys sign attestations, blocks, and exits (`SignedVoluntaryExit`), while withdrawal keys secure the eventual withdrawal of stake and rewards.
+  <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>2.</span>
+  BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" style={{textDecoration: 'underline', color: '#018970'}}>Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" style={{textDecoration: 'underline', color: '#018970'}}>here</a>.
+  <a href="#user-content-fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>

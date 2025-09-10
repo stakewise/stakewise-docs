@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap');
 
+:root {
+  --coral: #018970; /* default (light) */
+  --fog:#FFFFFF4D; /* fog effect */
+  --ifm-color-info-dark: #018970;
+}
+
+html[data-theme='dark'] {
+  --coral: #40E9DE;
+  --fog: #FFFFFF1A;
+  --ifm-color-info-dark: #40E9DE;
+}
+
 html {
   scroll-behavior: smooth;
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
@@ -178,7 +190,7 @@ html[data-theme='dark'] .crystal-bg {
 
 /* Force admonition links to have same styling as regular links */
 .theme-admonition a {
-  color: #018970;
+  color: var(--coral);
   text-decoration: none;
 }
 
@@ -295,53 +307,32 @@ html[data-theme='dark'] .theme-admonition.admonition--note {
   backdrop-filter: blur(6px);
 }
 
-/* Custom details styling (light theme) */
-html[data-theme='light'] .custom-details {
-  background-color: #f0f5eb !important;
-  backdrop-filter: blur(6px);
-  border: none !important;
+/* Customized <details> and <summary> elements */
+details.custom-details > summary::before {
+  border-color: transparent transparent transparent var(--coral);
 }
 
-html[data-theme='light'] .custom-details summary {
-  cursor: pointer;
-  color: rgba(76, 139, 20, 0.7);
-  transition: color 0.2s ease;
+details.custom-details > summary {
+  color: var(--coral);
+  opacity: 0.8;
 }
 
-html[data-theme='light'] .custom-details summary:hover {
-  color: rgba(76, 139, 20, 1); /* Added hover state - opaque */
+details.custom-details > summary:hover {
+  opacity: 1;
 }
 
-/* Custom details styling (dark theme) */
-html[data-theme='dark'] .custom-details {
-  background-color: rgba(116, 212, 165, 0.3) !important;
-  border: 1px solid rgba(180, 245, 200, 0.4) !important;
-  backdrop-filter: blur(6px);
+details.custom-details {
+  background-color: var(--fog);
+  border: none;
 }
 
-html[data-theme='dark'] .custom-details summary:hover {
-  color: rgba(180, 245, 200, 1); /* Added hover state */
-}
-
-html[data-theme='dark'] .custom-details summary {
-  cursor: pointer;
-  color: rgba(180, 245, 200, 0.7);
-  transition: color 0.2s ease;
-}
-
-/* Force custom-details links to have same styling as regular links */
 .custom-details a {
-  color: #018970 !important;
+  color: var(--coral);
   text-decoration: none;
 }
 
 .custom-details a:hover {
-  color: black !important;
+  color: black;
   text-decoration: underline;
   text-decoration-color: black !important;
-}
-
-.custom-details[class*="details_"] {
-  --docusaurus-details-decoration-color: var(--ifm-color-success-light);
-  --docusaurus-details-transition: transform 0.2s ease;
 }

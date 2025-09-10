@@ -266,45 +266,67 @@ html[data-theme='dark'] blockquote {
   }
 }
 
-/* Remove left border from all admonitions and match document background */
+/* Customized admonitions */
 .theme-admonition {
-  border-left: none !important;
+  background: var(--fog);
   border-radius: 0.5rem;
   padding: 1rem;
+  margin: 1.5rem 0;
 }
 
-html[data-theme='light'] .theme-admonition {
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(6px);
+/* Admonition heading styles */
+.admonition-heading {
+  margin-bottom: 0.75rem;
 }
 
-html[data-theme='dark'] .theme-admonition {
-  background: rgba(39, 40, 42, 0.4);
-  backdrop-filter: blur(6px);
+.admonition-heading h5 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--coral);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.theme-admonition h4 {
-  margin-top: 1rem;
+.admonition-icon {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
 }
 
-/* Formula variant (light) */
-html[data-theme='light'] .theme-admonition.admonition--formula {
-  background-color: #f5f1eb !important;              /* warm amber light */
-  backdrop-filter: blur(6px);
+/* Admonition content styles */
+.admonition-content {
+  line-height: 1.6;
 }
 
-/* Formula variant (dark) */
-html[data-theme='dark'] .theme-admonition.admonition--formula {
-  background-color: rgba(212, 165, 116, 0.3) !important;
-  border: 1px solid rgba(245, 241, 235, 0.4) !important;
-  color: #f5f1eb;
+.admonition-content > *:first-child {
+  margin-top: 0;
 }
 
-/* Info variant with purple nuance */
-html[data-theme='dark'] .theme-admonition.admonition--note {
-  background-color: rgba(168, 150, 221, 0.15) !important;  /* more purple tint */
-  border: 1px solid rgba(168, 150, 221, 0.25) !important;
-  backdrop-filter: blur(6px);
+.admonition-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.admonition-content p {
+  margin-bottom: 0.75rem;
+}
+
+.admonition-content ul,
+.admonition-content ol {
+  margin-bottom: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.admonition-content li {
+  margin-bottom: 0.25rem;
+}
+
+.admonition-content code {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
 }
 
 /* Customized <details> and <summary> elements */

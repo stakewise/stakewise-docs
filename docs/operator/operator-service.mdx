@@ -12,37 +12,34 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## What is the Operator Service?
 
-The Operator Service is a software developed by the Stakewise team, designed to run seamlessly alongside any node setup, giving operators the freedom to run their preferred execution and consensus clients, MEV relay, and distributed validator technology.
+The Operator Service is a software developed by StakeWise, designed to run seamlessly alongside any node setup, allowing operators to run their preferred execution and consensus clients, MEV relay, and distributed validator technology.
 
 It is responsible for performing the following tasks:
 
 ### Validator Registration
 
-The Operator Service periodically checks whether Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
+The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
 
-The Operator Service supports registering both `0x01` and `0x02` validators within the same Vault using the `--validators-type` flag to specify the validator type (e.g., `--validators-type=v1`). By default, the operator registers new `0x02` validators, prioritizing funding of existing compound validators when possible; otherwise, it registers new validators up to the maximum balance (2048 ETH or 64 GNO) via the `register_new_validators` function.
+The Operator Service supports registering both `0x01` and `0x02` validators within the same Vault using the `--validators-type` flag to specify the validator type (e.g., `--validators-type=v1`). By default, the Operator Service registers new `0x02` validators, prioritizing funding existing compound validators when possible; otherwise, it registers new validators up to the maximum balance (2048 ETH or 64 GNO) via the `register_new_validators` function.
 Transactions are executed through the `fund_validators` and `register_validators` functions.
 
-<Admonition type="tip" icon={<img src={useBaseUrl('/img/asterisk.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Top up only compound (0x02) validators">
-  Note that funding is disabled for `0x01` validator type
-</Admonition>
+:::custom-notes[Top Up Only `0x02` Compound Validators]
+  Funding is disabled for `0x01` validator type.
+:::
 
 The registration process follows a structured sequence of steps to ensure secure validator deployment:
 
-<Admonition type="note" icon={<img src={useBaseUrl('/img/safe.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Validator Registration Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Check whether Vault has accumulated enough assets to register a validator (e.g., 32 ETH for Ethereum)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Get the next free validator key from the used keystore</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Obtain BLS signature for exit message<sup><a href="#user-content-fn-1" id="user-content-fnref-1" style={{textDecoration: 'none'}}>1</a></sup> using local keystores or remote signer</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Share the exit signature of the validator with StakeWise Oracles:</li>
-    <ul style={{ listStyleType: "disc", paddingLeft: "80px" }}>
-      <li>Using Shamir's secret sharing, splits validator's BLS signature<sup><a href="#user-content-fn-2" id="user-content-fnref-2" style={{textDecoration: 'none'}}>2</a></sup>. The number of shares equals the number of oracles</li>
-      <li>Encrypts exit signatures with the oracles' public keys</li>
-      <li>Sends encrypted exit signatures to all the oracles and receives registration signatures from them</li>
-    </ul>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Sends transaction to the Vault contract to register the validator.</li>
-  </ol>
-</Admonition>
+:::custom-notes[Validator Registration Process]
+
+1. Check if the Vault has enough assets to register a validator (e.g., 32 ETH for Ethereum)
+2. Get the next free validator key from the used keystore
+3. Obtain the BLS signature for exit messages<sup><a href="#user-content-fn-1" id="user-content-fnref-1" style={{textDecoration: 'none'}}>1</a></sup> using local keystores or remote signer
+4. Share the exit signature of the validator with StakeWise Oracles:
+    - Using Shamir's secret sharing, splits validator's BLS signature<sup><a href="#user-content-fn-2" id="user-content-fnref-2" style={{textDecoration: 'none'}}>2</a></sup>. The number of shares equals the number of oracles
+    - Encrypts exit signatures with the oracles' public keys
+    - Sends encrypted exit signatures to all the oracles and receives registration signatures from them
+5. Sends transaction to the Vault contract to register the validator.
+:::
 
 The Operator Service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files.
 
@@ -51,8 +48,9 @@ For details on how Oracles approve validator registration requests, see the *Ora
 ### Exit Signatures Rotation
 
 The Operator Service maintains validator exit capabilities by monitoring oracle set changes and updating signatures when needed, ensuring validators can always be exited even if oracle keys are compromised.
+Without rotation, compromised or outdated oracle keys could prevent validator exits.
 
-### Vault State Update (Optional)
+### Vault State Update (Optional Feature)
 
 Updating the Vault state distributes fees, updates staker positions, and reprices Vault-specific ERC-20 tokens based on rewards and penalties.
 
@@ -61,42 +59,43 @@ Updating the Vault state distributes fees, updates staker positions, and reprice
 By default, each Vault state updates when users interact with the Vault (deposit, withdraw, etc.) with a 12-hour cooldown.
 When enabled with the `--harvest-vault` flag, the Operator Service automatically distributes Vault fees to the fee address and updates each staker's position every 12 hours, with gas fees paid by the wallet linked to the Operator Service.
 
-<Admonition type="tip" icon={<img src={useBaseUrl('/img/asterisk.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Benefits of Vault Harvesting">
-  Harvesting the Vault rewards simplifies the contract calls to the Vault contract and reduces the gas fees for stakers. For example, the Vault does not need to sync rewards before calling deposit when a user stakes.
-</Admonition>
+:::custom-tips[Benefits of Vault Harvesting]
+  Harvesting Vault rewards simplifies contract calls and reduces gas fees.
+:::
 
 ### Partial Withdrawals
 
-The Operator Service automatically processes partial ETH/GNO withdrawals from validators. Partial withdrawals run every 24 hours by default, processing available ETH from validators with balances exceeding 32 ETH or 1 GNO, prioritizing validators with higher balances first.
-If partial withdrawal capacity is insufficient or no validators have balances above the threshold, the Operator Service triggers full validator exits via execution request calls.
-If the operator does not initiate partial or full withdrawals, [Oracles →](../../docs/protocol-concepts/Oracles) automatically execute full withdrawal after 24 hours.
+The Operator Service automatically processes validator withdrawals.
+Partial withdrawals run every 24 hours by default, processing balances above 32 ETH or 1 GNO, prioritizing higher balances first.
+If capacity is insufficient or no validators exceed the threshold, the service triggers full exits via execution requests.
+If the Operator Service does not initiate withdrawals, [Oracles →](../../docs/protocol-concepts/Oracles) automatically execute full exits after 24 hours.
 
 #### Configuration Options
 
 - **Disable Partial Withdrawals**: Use `--disable-withdrawals` parameter to rely on oracle-managed full validator exits instead
 - **Withdrawal Interval**: Configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable (default: 24h)
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Performance Impact">
+:::custom-warning[Performance Impact]
   Disabling partial withdrawals forces the system to use oracle-managed validator exits, which may negatively impact the Vault's APR due to longer processing times.
-</Admonition>
+:::
 
 ### Multi-Vault Support
 
 The Operator Service can manage multiple Vaults simultaneously using a single wallet and shared keystores.
 All validator keys are shared across connected Vaults using the `--vaults` flag with comma-separated addresses (e.g., `--vaults=0x1...23,0x4...56`).
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Migration to Multi-Vault Setup">
-  When migrating from single-vault to multi-vault configuration, recreate your operator directory for a clean migration. This ensures proper configuration alignment with the new multi-vault setup.
-</Admonition>
+:::custom-tips[Migration to Multi-Vault Setup]
+  When migrating from a single-vault to a multi-vault setup, recreate your operator directory. This ensures your configuration aligns correctly with the new setup.
+:::
 
 ### Validators Consolidation
 
-Consolidates legacy `0x01` validators to `0x02` compound validators using the `consolidate` command, enabling variable validator balances up to 2048 ETH. This reduces the total validator count and lowers infrastructure overhead.
+Consolidates legacy `0x01` validators to `0x02` compound validators using the `consolidate` command, enabling variable validator balances up to 2048 ETH. This reduces validator count and infrastructure overhead.
 The Operator Service includes a `check_vault_version` function to ensure compatibility with Pectra-enabled Vaults only. The consolidation process requires oracle signatures, which are automatically fetched during the operation.
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Validators Manager Required">
+:::custom-warning[Validators Manager Required]
   The wallet executing this command must be set as the Validators Manager in the Vault settings.
-</Admonition>
+:::
 
 
 Optionally specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate selected validators.
@@ -105,7 +104,7 @@ Optionally specify `--source-public-keys` (`0x01` validators) and `--target-publ
 ./operator consolidate --vault=0x000...  --source-public-keys=0x001,0x002 --target-public-key=0x003
 ```
 
-Follow the interactive prompts to specify your consolidation preferences:
+Follow the prompts to complete consolidation:
 
 <details className="custom-details">
 <summary>Example Consolidation Process</summary>
@@ -129,15 +128,13 @@ Read more about [Validators consolidations ↗](https://github.com/stakewise/v3-
 Enables periodic withdrawal of rewards for Vault fee shareholders based on their configured percentages.
 The periodic withdrawal task relies on the `Reward Splitter` contract and combines multiple contract calls into a single multicall:
 
-<ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-  <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>1.</span> **Harvest Vault rewards** from [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code)</li>
-  <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>2.</span> **Withdraw Splitter rewards** on behalf of each shareholder (rewards go to exit queue)</li>
-  <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>3.</span> **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder address)</li>
-</ol>
+1. **Harvest Vault rewards** from [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code)
+2. **Withdraw Splitter rewards** on behalf of each shareholder (rewards go to exit queue)
+3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder address)
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Fee Claimer Required">
+:::custom-warning[Fee Claimer Required]
   Set the wallet address connected to the Operator Service as the `Fee Claimer` in the `Roles` tab under the Vault's Settings.
-</Admonition>
+:::
 
 You must pass the `--claim-fee-splitter` flag when starting the Operator Service:
 
@@ -147,10 +144,8 @@ You must pass the `--claim-fee-splitter` flag when starting the Operator Service
 
 #### Configuration Options
 
-<ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Distribution Interval**: Configurable via `REWARD_SPLITTER_INTERVAL` environment variable (default: 24h)</li>
-  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Minimum Threshold**: Set via `REWARD_SPLITTER_MIN_ASSETS` environment variable to avoid gas-inefficient small transactions (value specified in Wei)</li>
-</ol>
+- **Distribution Interval**: Configurable via `REWARD_SPLITTER_INTERVAL` environment variable (default: 24h)
+- **Minimum Threshold**: Set via `REWARD_SPLITTER_MIN_ASSETS` environment variable to avoid gas-inefficient small transactions (value specified in Wei)
 
 ### Validators Voluntary Exit
 
@@ -176,7 +171,7 @@ Validators 513571, 513572, 513861 exits successfully initiated
 
 ## Next Steps
 
-To run the Operator Service effectively, you must first ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.
+Before running the Operator Service, you must first ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span>

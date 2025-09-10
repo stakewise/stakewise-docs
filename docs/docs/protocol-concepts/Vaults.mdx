@@ -74,14 +74,9 @@ Users can mint osTokens for instant liquidity or withdraw. When a user chooses t
 As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
-Partial withdrawals for compound validators (`0x02`) are now supported.
-They are significantly faster and more efficient than full validator exits.
-Even full validator exits now can be processed via execution request call<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>.
-
-Partial withdrawals run every 24 hours by default, processing available ETH from validators with balances exceeding 32 ETH or 1 GNO.
-The operator prioritizes validators with higher balances first.
-If partial withdrawal capacity is insufficient or no validators have balances above 32 ETH or 1 GNO,
-the operator triggers a full validator exit from the Beacon Chain.
+Partial withdrawals for compound validators (`0x02`) are now supported. They are significantly faster and more efficient than full validator exits, which can now also be processed via execution request call<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>.
+The withdrawal fulfillment process is automated by the [Operator Service →](../../operator/operator-service), which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
+More details on partial withdrawals are available in the *Operator*: [*Partial Withdrawals* →](../../operator/operator-service#partial-withdrawals) section.
 
 The process is as follows:
 

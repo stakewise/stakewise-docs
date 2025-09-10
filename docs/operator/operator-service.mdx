@@ -67,11 +67,9 @@ When enabled with the `--harvest-vault` flag, the Operator Service automatically
 
 ### Partial Withdrawals
 
-The Operator Service automatically processes partial ETH/GNO withdrawals from validators. The system prioritizes withdrawing all available ETH/GNO through partial withdrawals first, followed by full validator withdrawals when necessary.
-
-<Admonition type="info" icon={<img src={useBaseUrl('/img/eth_coin.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Withdrawal Processing">
-  Every 24 hours, the Operator Service checks the current exit queue. If the requested amount can be processed via partial withdrawals, it submits them through the execution layer
-</Admonition>
+The Operator Service automatically processes partial ETH/GNO withdrawals from validators. Partial withdrawals run every 24 hours by default, processing available ETH from validators with balances exceeding 32 ETH or 1 GNO, prioritizing validators with higher balances first.
+If partial withdrawal capacity is insufficient or no validators have balances above the threshold, the Operator Service triggers full validator exits via execution request calls.
+If the operator does not initiate partial or full withdrawals, [Oracles →](../../docs/protocol-concepts/Oracles) automatically execute full withdrawal after 24 hours.
 
 #### Configuration Options
 

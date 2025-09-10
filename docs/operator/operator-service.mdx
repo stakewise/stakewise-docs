@@ -20,8 +20,12 @@ It is responsible for performing the following tasks:
 
 The Operator Service periodically checks whether Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
 
-The Operator Service supports registering both `0x01` and `0x02` validators within the same Vault using the `--validator-type` option to specify the validator type. By default, the operator registers new `0x02` validators, prioritizing funding of existing compound validators when possible; otherwise, it registers new validators up to the maximum balance via the `register_new_validators` function.
+The Operator Service supports registering both `0x01` and `0x02` validators within the same Vault using the `--validators-type` flag to specify the validator type (e.g., `--validators-type=v1`). By default, the operator registers new `0x02` validators, prioritizing funding of existing compound validators when possible; otherwise, it registers new validators up to the maximum balance (2048 ETH or 64 GNO) via the `register_new_validators` function.
 Transactions are executed through the `fund_validators` and `register_validators` functions.
+
+<Admonition type="tip" icon={<img src={useBaseUrl('/img/asterisk.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Top up only compound (0x02) validators">
+  Note that funding is disabled for `0x01` validator type
+</Admonition>
 
 The registration process follows a structured sequence of steps to ensure secure validator deployment:
 
@@ -39,6 +43,8 @@ The registration process follows a structured sequence of steps to ensure secure
     <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Sends transaction to the Vault contract to register the validator.</li>
   </ol>
 </Admonition>
+
+The Operator Service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files.
 
 For details on how Oracles approve validator registration requests, see the *Oracles*: [*Validator Registration Approval* →](../docs/protocol-concepts/Oracles#validator-registration-approval) section.
 

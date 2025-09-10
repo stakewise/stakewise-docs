@@ -10,122 +10,109 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Prerequisites
 
-Before installing and configuring the Operator Service, your node infrastructure must meet specific technical requirements to ensure reliable operation.
+Before installing the Operator Service, ensure your node infrastructure meets the technical requirements below for reliable operation.
 
 ## Execution Client
 
-Your execution node must be fully synced and running. Any execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/) can be used:
+Your execution node must be fully synced and running. Any client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/) can be used:
 
-**[Nethermind ↗](https://launchpad.ethereum.org/en/nethermind)** - (Ethereum, Gnosis)
+- **[Nethermind ↗](https://launchpad.ethereum.org/en/nethermind)** — (Ethereum, Gnosis)
+- **[Besu ↗](https://launchpad.ethereum.org/en/besu)** — (Ethereum)
+- **[Erigon ↗](https://launchpad.ethereum.org/en/erigon)** — (Ethereum, Gnosis)
+- **[Geth ↗](https://launchpad.ethereum.org/en/geth)** — (Ethereum)
+- **[Reth ↗](https://github.com/paradigmxyz/reth)** — (Ethereum)
 
-**[Besu ↗](https://launchpad.ethereum.org/en/besu)** - (Ethereum)
+:::custom-warning[Configure Erigon and Reth]
+Preserve event logs to ensure the Operator Service functions correctly. Both clients require specific configuration to prevent event log pruning:
 
-**[Erigon ↗](https://launchpad.ethereum.org/en/erigon)** - (Ethereum, Gnosis)
+<Tabs groupId="special-config" defaultValue="erigon">
+  <TabItem value="erigon" label="Erigon">
+    ```bash
+    # Ethereum Mainnet
+    erigon --prune=receipts --prune.to=21471500
 
-**[Geth ↗](https://launchpad.ethereum.org/en/geth)** - (Ethereum)
+    # For other networks, adjust the block number to the Keeper contract creation block
+    ```
 
-**[Reth ↗](https://github.com/paradigmxyz/reth)** - (Ethereum)
+  These flags prevent pruning of event logs required by the Operator Service.
+  </TabItem>
+  <TabItem value="reth" label="Reth">
+    Add the following setting to your `reth.toml`:
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Special Configuration for Erigon and Reth">
-  Event logs must be preserved for the Operator Service to function properly. Both clients require specific configuration to prevent event log pruning:
+    ```toml
+    [prune.segments.receipts_log_filter.0x6b5815467da09daa7dc83db21c9239d98bb487b5]
+    before = 21471500
+    ```
 
-  <Tabs groupId="special-config" defaultValue="erigon">
-    <TabItem value="erigon" label="Erigon">
-      ```bash
-      # Ethereum Mainnet
-      erigon --prune=receipts --prune.to=21471500
+    The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239D98Bb487b5#code) on Ethereum Mainnet is located at
+    `0x6b5815467da09daa7dc83db21c9239d98bb487b5` (must be provided in lowercase).
+  </TabItem>
+</Tabs>
 
-      # For other networks, adjust block number to Keeper contract creation block
-      ```
-
-      The required flags prevent event log pruning that the Operator reads from certain contracts.
-
-      Alternatively, if you want to save more disk space you can use the block when protocol config was updated. Actual values are defined in [network config ↗](https://github.com/stakewise/v3-operator/blob/master/src/config/networks.py) in Operator sources. See `CONFIG_UPDATE_EVENT_BLOCK` field for selected network.
-    </TabItem>
-    <TabItem value="reth" label="Reth">
-      The required setting in the `reth.toml` is:
-
-      ```toml
-      [prune.segments.receipts_log_filter.0x6b5815467da09daa7dc83db21c9239d98bb487b5]
-      before = 21471500
-      ```
-
-      Here `0x6b5815467da09daa7dc83db21c9239d98bb487b5` is [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) address on Ethereum Mainnet. Note that the address must be lowercased.
-
-      Alternatively, if you want to save more disk space you can use the block when protocol config was updated. Actual values are defined in [network config ↗](https://github.com/stakewise/v3-operator/blob/master/src/config/networks.py) in Operator sources. See `CONFIG_UPDATE_EVENT_BLOCK` field for selected network.
-    </TabItem>
-  </Tabs>
-</Admonition>
+Alternatively, to save disk space, you can use the block number at which the protocol configuration was updated. The actual values are defined in the [network config ↗](https://github.com/stakewise/v3-operator/blob/master/src/config/networks.py) within the Operator sources. See the `CONFIG_UPDATE_EVENT_BLOCK` field for the selected network.
+:::
 
 ## Consensus Client
 
-Your consensus node must be fully synced and running. Any consensus client that supports [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
+Your consensus node must also be fully synced and running. Any client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
 
-**[Lighthouse ↗](https://launchpad.ethereum.org/en/lighthouse)** - (Ethereum, Gnosis)
+- **[Lighthouse ↗](https://launchpad.ethereum.org/en/lighthouse)** — (Ethereum, Gnosis)
+- **[Nimbus ↗](https://launchpad.ethereum.org/en/nimbus)** — (Ethereum, Gnosis)
+- **[Prysm ↗](https://launchpad.ethereum.org/en/prysm)** — (Ethereum)
+- **[Teku ↗](https://launchpad.ethereum.org/en/teku)** — (Ethereum, Gnosis)
+- **[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** — (Ethereum, Gnosis)
 
-**[Nimbus ↗](https://launchpad.ethereum.org/en/nimbus)** - (Ethereum, Gnosis)
-
-**[Prysm ↗](https://launchpad.ethereum.org/en/prysm)** - (Ethereum)
-
-**[Teku ↗](https://launchpad.ethereum.org/en/teku)** - (Ethereum, Gnosis)
-
-**[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** - (Ethereum, Gnosis)
-
-<Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Validator Configuration">
-  Configure your validator clients with the correct **fee recipient address**, which can be found in your Vault's "Details" section on the StakeWise interface.
-</Admonition>
+:::custom-info[Validator Configuration]
+Configure your validator clients with the correct **fee recipient address**, which is available in the "Details" section of your Vault in the StakeWise interface.
+:::
 
 ## Deployed Vault
 
 You must have an active StakeWise Vault deployed and ready for operation.
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Mandatory Vault Version Upgrade">
-  Before running the Operator Service, you must upgrade your Vault to the required version:
-  <ul style={{ listStyleType: "disc", paddingLeft: "20px" }}>
-    <li>**Ethereum**: Upgrade to Vault version 5</li>
-    <li>**Gnosis**: Upgrade to Vault version 3</li>
-  </ul>
-  Visit your Vault page on the StakeWise interface to check your current version and perform the upgrade if necessary.
-</Admonition>
+:::custom-warning[Upgrade Vault Version]
+Upgrade your Vault to the required version before running the Operator Service:
+
+- **Ethereum**: Vault version 5
+- **Gnosis**: Vault version 3
+
+Visit your Vault page in the StakeWise interface to check your current version and perform the upgrade if necessary.
+:::
 
 ### Creating a New Vault
 
-If you don't have a Vault yet, follow these steps:
+If you don’t have a Vault yet, follow these steps:
 
-<Admonition type="info" icon={<img src={useBaseUrl('/img/cursor.png')} alt="Cursor" style={{ width: 20, height: 20 }}/>} title="Vault Deployment Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Visit the [StakeWise Operate page ↗](https://app.stakewise.io/operate) and connect your wallet.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Click "Create Vault" to begin configuration.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Process Vault setup step by step.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Once Vault is deployed go to its page.</li>
-  </ol>
-</Admonition>
+:::custom-notes[Vault Deployment Process]
+1. Visit the [StakeWise Operate page ↗](https://app.stakewise.io/operate) and connect your wallet.
+2. Click **Create Vault** to begin configuration.
+3. Follow the prompts to complete the setup.
+4. Once the Vault is deployed, navigate to its page.
+:::
 
 ### Finding Your Vault Address
 
-Once your Vault is deployed, you'll need its contract address for Operator Service configuration:
+You will need the Vault contract address for Operator Service configuration:
 
+:::custom-info[Where to Find Your Vault Address]
 <Tabs groupId="vault-address-methods">
   <TabItem value="url" label="From URL" default>
-   <Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Method 1: URL Bar">
-     Navigate to your Vault page - the address is visible in the URL:
-      ```
-      https://stakewise.io/vault/mainnet/0x1234567890abcdef...
-                                         ^^^^^^^^^^^^^^^^^^^
-                                          Your Vault Address
-      ```
-    </Admonition>
+    Navigate to your Vault page — the address is included in the URL:
+    ```
+    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
+                                       ^^^^^^^^^^^^^^^^^^^
+                                        Your Vault Address
+    ```
   </TabItem>
   <TabItem value="details" label="From Details Section">
-    <Admonition type="info" icon={<img src={useBaseUrl('/img/Search.png')} alt="Search" style={{ width: 20, height: 20 }}/>} title="Method 2: Vault Details">
-      <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Go to your Vault page.</li>
-        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Scroll to the bottom to find the "Details" section.</li>
-        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Look for "Contract address" field.</li>
-        <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Copy the displayed address.</li>
-      </ol>
-    </Admonition>
+    1. Go to your Vault page
+    2. Scroll to the bottom to find the **Details** section
+    3. Look for the **Contract address** field
+    4. Copy the displayed address
   </TabItem>
 </Tabs>
+:::
 
-Your infrastructure is now ready for Operator Service [Installation ↗](installation) 🎉
+---
+
+🎉 Congratulations! Your infrastructure is now ready for [Operator Service installation ↗](installation).

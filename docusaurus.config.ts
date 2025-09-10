@@ -36,6 +36,10 @@ const config: Config = {
           showLastUpdateTime: true,
           routeBasePath: '/',
           breadcrumbs: true,
+          admonitions: {
+            keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes'],
+            extendDefaults: true,
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

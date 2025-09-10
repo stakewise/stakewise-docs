@@ -129,12 +129,19 @@ Read more about [Validators consolidations ↗](https://github.com/stakewise/v3-
 ### Automated Reward Splitting
 
 Enables periodic withdrawal of rewards for Vault fee shareholders based on their configured percentages.
+The periodic withdrawal task relies on the `Reward Splitter` contract and combines multiple contract calls into a single multicall:
+
+<ol style={{ listStyleType: "none", paddingLeft: "0" }}>
+  <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>1.</span> **Harvest Vault rewards** from [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code)</li>
+  <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>2.</span> **Withdraw Splitter rewards** on behalf of each shareholder (rewards go to exit queue)</li>
+  <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>3.</span> **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder address)</li>
+</ol>
 
 <Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Fee Claimer Required">
-  Set the wallet address connected to the operator as the `Fee Claimer` in the `Roles` tab under the Vault’s Settings.
+  Set the wallet address connected to the Operator Service as the `Fee Claimer` in the `Roles` tab under the Vault's Settings.
 </Admonition>
 
-Enable automated reward splitting using the `--claim-fee-splitter` flag:
+You must pass the `--claim-fee-splitter` flag when starting the Operator Service:
 
 ```bash
 ./operator start-local --claim-fee-splitter --vaults=0x3320a...68
@@ -143,8 +150,8 @@ Enable automated reward splitting using the `--claim-fee-splitter` flag:
 #### Configuration Options
 
 <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Distribution Interval**: Configurable via `REWARD_SPLITTER_INTERVAL` (default: 24h)</li>
-  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Minimum Threshold**: Set via `REWARD_SPLITTER_MIN_ASSETS` to avoid gas-inefficient small transactions</li>
+  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Distribution Interval**: Configurable via `REWARD_SPLITTER_INTERVAL` environment variable (default: 24h)</li>
+  <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Minimum Threshold**: Set via `REWARD_SPLITTER_MIN_ASSETS` environment variable to avoid gas-inefficient small transactions (value specified in Wei)</li>
 </ol>
 
 ### Validators Voluntary Exit

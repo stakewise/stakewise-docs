@@ -4,6 +4,7 @@
   --coral: #018970; /* default (light) */
   --fog:#FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
+  --code: #f6f7f8; /* code background */
 }
 
 html[data-theme='dark'] {
@@ -71,9 +72,14 @@ hr {
   border-color: var(--ifm-color-emphasis-200);
 }
 
-ol, ul {
+ul {
   list-style-type: disc;
-  padding-left: 20px;
+  padding-left: 10px;
+}
+
+ol {
+  list-style-type: decimal;
+  padding-left: 10px;
 }
 
 h1,
@@ -266,6 +272,15 @@ html[data-theme='dark'] blockquote {
   }
 }
 
+ol {
+  list-style-type: decimal;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--coral);
+}
+
 /* Customized admonitions */
 .theme-admonition {
   background: var(--fog);
@@ -323,10 +338,14 @@ html[data-theme='dark'] blockquote {
 }
 
 .admonition-content code {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--code);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   font-size: 0.9em;
+}
+
+html[data-theme='dark'] .admonition-content code {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Customized <details> and <summary> elements */

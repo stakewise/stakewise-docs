@@ -1,0 +1,70 @@
+---
+title: Remote Signer
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Remote Signer
+
+You may not want the operator service to have direct access to the validator keys. Validator keystores do not need to be present directly in the operator. The operator can query a remote signer to get signatures for validator deposit and exit messages.
+## Prerequisites
+
+Complete the following steps before proceeding:
+
+:::custom-notes[Required Setup Steps]
+  1. [Installation ↗](../installation)
+  2. [Key Creation ↗](../key-creation)
+:::
+
+## Setup Remote Signer (Optional)
+
+If you already have private keys uploaded to the remote signer, proceed to [Running the Operator](#running-the-operator) below.
+
+### Example Usage
+
+```bash
+./operator setup-remote-signer \
+ --vaults=0x3320a...68 \
+ --remote-signer-url=http://signer:9000
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Successfully imported 20 keys into remote signer.
+Remove local keystores? [y/N]: y
+Removed keystores from local filesystem.
+Done. Successfully configured operator to use remote signer for 20 public key(s)!
+```
+</details>
+
+### `setup-remote-signer` Options
+
+  - **`--vaults`** - The Vault address(es)
+  - **`--remote-signer-url`** - The base URL of the remote signer, e.g. `http://signer:9000`
+  - **`--data-dir`** - Path where the Vault data is stored. Default is ~/.stakewise
+  - **`--keystores-dir`** - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard
+  - **`--verbose`** - Enable debug mode. Default is false
+
+## Running the Operator
+
+Provide the operator with the URL to your remote signer instance using the `--remote-signer-url` flag:
+
+```bash
+./operator start-remote-signer --remote-signer-url=http://remote-signer:9000 ...
+```
+
+You should see a message similar to this one after starting the operator:
+
+```
+Using remote signer at http://remote-signer:9000 for 20 public keys
+```
+
+:::custom-info[Successful Configuration]
+  When properly configured, the Operator Service will connect to your remote signer and manage validator operations without requiring local access to private keys.
+:::

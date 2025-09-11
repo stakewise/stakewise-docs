@@ -1,0 +1,140 @@
+---
+title: Relayer (API Mode)
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Relayer (API Mode)
+
+The Operator API facilitates the initiation of validator registrations via API calls, proving particularly useful in cases where the operator independently oversees the creation and storage of validator keys.
+
+Within this framework, keystores are generated and preserved externally from the operator. Similarly, exit signatures are produced outside the operator.
+
+In essence, the operator acts as an intermediary for communication with the Vault contract.
+
+## Prerequisites
+
+Complete the following steps before proceeding:
+
+:::custom-notes[Required Setup Steps]
+  1. [Installation ↗](../installation)
+  2. Generate a hot wallet or connect an existing one. Refer to the [Key Creation ↗](../key-creation) section for more details.
+:::
+
+## Running Operator API
+
+To run the Operator API, use the command below:
+
+```bash
+./operator start-relayer
+```
+
+This command allows for direct parameter input (e.g., `--data-dir`) or through environment variables. A basic example of setting environment variables is as follows:
+
+```bash title=".env"
+CONSENSUS_ENDPOINTS=https://lighthouse
+DATA_DIR=/data
+DATABASE_DIR=/database
+EXECUTION_ENDPOINTS=https://nethermind
+NETWORK=hoodi
+VAULT=0x3cc...
+RELAYER_ENDPOINT=https://relayer
+```
+
+For additional parameter information, use the `--help` flag:
+
+```bash
+./operator start-api --help
+```
+
+:::custom-notes[Docker Usage Notes]
+  When operating within Docker, it's necessary to specify the `--data-dir` variable, such as `--data-dir=/data`. Ensure the `data-dir` is mapped to a directory on the host.
+
+  The `database-dir` should also be mapped to a host directory or Docker volume, with write permissions enabled for the directory linked to `database-dir`. Setting up permissions is not required if using volumes.
+:::
+
+## Relayer API
+
+:::custom-info[Info]
+  Relayer API is supported since Operator release v2.0.0
+:::
+
+### Operator-Relayer Flow
+
+The Operator Service continuously monitors Vault balance changes. When 32 ETH becomes available, the following process occurs:
+
+**Step 1: Balance Detection**
+- Operator detects sufficient balance (32 ETH) in the Vault
+- Operator predicts the next validator index for registration
+
+**Step 2: Data Request**
+- Operator sends a request to the Relayer service
+- Request includes validator start index and batch size information
+
+**Step 3: Registration Data Provision**
+The Relayer must provide comprehensive validator registration data:
+
+:::custom-warning[Registration Data Requirements]
+  - **Validator public key** - The public key for the validator
+  - **Deposit signature** - Signature for the deposit transaction
+  - **Deposit amount** - Amount being deposited (typically 32 ETH)
+  - **Validator exit signature** - Pre-signed exit signature for the validator
+  - **Validators manager signature** - Authorization signature from validators manager
+:::
+
+**Step 4: Signature Generation**
+- **Exit Signature**: Relayer uses the validator index from the request. For batch operations, increment the index for each validator (except the first)
+- **Manager Signature**: Must be an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature following the message structure defined in the [Vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must match the validators manager configured in Vault settings.
+
+**Step 5: Registration Completion**
+- Operator receives registration data from Relayer
+- Operator requests approval from [Oracles ↗](../../protocol-concepts/Oracles) network
+- Upon approval, Operator submits the registration transaction to the Vault contract
+
+### Request format:
+
+```
+POST /validators
+
+{
+  "vault": "0x1234...",
+  "validators_start_index": int,
+  "validators_batch_size": int,
+  "validators_total": int
+}
+```
+
+:::custom-warning[Request Parameters]
+  - `validators_start_index` - validator index for the first validator in the batch
+  - `validators_batch_size` - number of validators in current batch. Maximum batch size is determined by protocol config, currently 10.
+  - `validators_total` - hint for Relayer. Does not affect Relayer response. Relayer may use this value to allocate larger portions of validators in background. `validators_total` should be more than or equal to `validators_batch_size`.
+:::
+
+### Response format:
+
+```json
+{
+  "validators": [
+    {
+      "public_key": "string",
+      "deposit_signature": "string",
+      "amount_gwei": int,
+      "exit_signature": "string"
+    }
+  ],
+  "validators_manager_signature": "string"
+}
+```
+
+Multiple relayers are possible for various use-cases. You can implement your own relayer using the API specification provided below to meet your specific requirements.
+
+:::custom-tips[Relayer Example]
+See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
+The relayer acts as an intermediary between validators and the StakeWise operator service, handling validator credential generation and management.
+
+You may use it as a starting point for your own Relayer.
+:::

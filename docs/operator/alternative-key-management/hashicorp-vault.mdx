@@ -1,0 +1,68 @@
+---
+title: HashiCorp Vault
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# HashiCorp Vault
+
+Operator supports loading signing keys from remote [HashiCorp Vault ↗](https://github.com/hashicorp/vault) instance, avoiding storage of keystores on the filesystem. This approach is best suited for node operators who already have most of StakeWise Operator functionality implemented in their systems, and only need integration for validator registration or pooling support.
+
+:::custom-warning[Advanced Users Only]
+  Regular users should only employ this functionality on their own risk, if they already manage a deployment of HashiCorp Vault.
+:::
+
+## Prerequisites
+
+Complete the following steps before proceeding:
+
+:::custom-notes[Required Setup Steps]
+  1. [Installation ↗](../installation)
+  2. [Key Creation ↗](../key-creation)
+:::
+
+## Key Storage Format
+
+Currently there are two commands that support loading signing keys: `start` and `validators-exit`. The user must provide HashiCorp Vault instance URL, authentication token, and secret path in K/V engine.
+
+Internal structure of the secret must resemble the following JSON format:
+  ```json
+{
+  "pubkey1": "privkey1",
+  "pubkey2": "privkey2",
+  ...
+}
+```
+
+Public and private signing keys must be stored in hex form, with or without `0x` prefix.
+
+After loading keys from HashiCorp Vault, operator behaves in the same way as if it had loaded them from keystores, no additional operations needed to support the integration.
+
+## `start` Options
+
+Passing following options to `start` command will enable loading validator signing keys from remote [HashiCorp Vault ↗](https://github.com/hashicorp/vault).
+
+```bash
+./operator start-hashi-vault ...
+````
+:::custom-warning[Keystores Directory]
+  Make sure keystores directory is empty before running this command, otherwise operator will prefer local keystores.
+:::
+
+### Configuration Options
+
+  - **`--hashi-vault-url`** - The base URL of the vault service, e.g. `http://vault:8200`.
+  - **`--hashi-vault-token`** - Authentication token for accessing Hashi vault.
+  - **`--hashi-vault-key-path`** - Key path(s) in the K/V secret engine where validator signing keys are stored
+  - **`--hashi-vault-key-prefix`** - Key prefix(es) in the K/V secret engine under which validator signing keys are stored
+  - **`--hashi-vault-parallelism`** - How much requests to K/V secrets engine to do in parallel
+
+:::custom-info[Additional Resources]
+  - [HashiCorp Vault Documentation ↗](https://www.vaultproject.io/docs)
+  - [Vault K/V Secrets Engine ↗](https://www.vaultproject.io/docs/secrets/kv)
+  - [Vault Authentication Methods ↗](https://www.vaultproject.io/docs/auth)
+:::

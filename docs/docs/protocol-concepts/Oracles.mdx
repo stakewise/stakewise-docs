@@ -1,6 +1,7 @@
 ---
 title: Oracles
 sidebar_position: 3
+description: "Learn how Oracles validate transactions and distribute rewards"
 ---
 
 import Admonition from '@theme/Admonition';
@@ -45,19 +46,19 @@ Upon having enough ETH, the operator sends a registration approval request to Or
 This is done to maintain the protocol’s ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
 The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
 
-<Admonition type="tip" icon="⏳" title="Approval Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Operator sends the validator registration requests and encrypted exit signatures to the Oracles.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Oracles sign approval messages that include the current tree root hash from the Beacon Chain Deposit Contract.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Operator submits registration to the Vault contract with Oracle signatures.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Vault contract calls the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) to validate Oracle signatures and confirm the tree root hash hasn't changed.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Vault transfers ETH to the Beacon Chain deposit contract to complete validator registration.</li>
-  </ol>
-</Admonition>
+:::custom-notes[Approval Process]
+1. Operator sends the validator registration requests and encrypted exit signatures to the Oracles.
+2. Oracles sign approval messages that include the current tree root hash from the Beacon Chain Deposit Contract.
+3. Operator submits registration to the Vault contract with Oracle signatures.
+4. Vault contract calls the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) to validate Oracle signatures and confirm the tree root hash hasn't changed.
+5. Vault transfers ETH to the Beacon Chain deposit contract to complete validator registration.
+:::
 
 This process ensures Oracles approve validators based on current Beacon Chain state, bridging the consensus and execution layers while preventing stale approvals and replay attacks.
 
+:::custom-notes[Deep Dive]
 For details on how the [Operator Service →](../../operator/operator-service) initiates and prepares validator registration, see the *Operator Service*: [*Validator Registration* →](../../operator/operator-service#validator-registration) section.
+:::
 
 ### Reward Distribution
 
@@ -65,18 +66,16 @@ Oracles periodically vote on the consensus rewards/penalties accumulated by the 
 
 The reward distribution process consists of the following steps:
 
-<Admonition type="tip" icon="💰" title="Reward Distribution Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Verify sufficient time has passed since the last reward distribution.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Calculate rewards/penalties for all Vaults based on validator balances in the Beacon Chain.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Calculate MEV and priority fee rewards for Vaults connected to the Smoothing Pool.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Create Merkle trees from reward calculations and upload them to IPFS. For example, <code>bafkreibqhdr6p5uh67ickt4dpppb525bwuofjocnpsx4dbl57llogfph2e</code>.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Save the cryptographically signed vote to the local database and expose via API.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>6.</span> The [Keeper service ↗](https://github.com/stakewise/v3-keeper/) fetches votes from Oracle APIs, concatenates them, and sends the resulting transaction to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code).</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>7.</span> Upon verification, the protocol updates global state.</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>8.</span> Individual Vaults can claim their rewards.</li>
-  </ol>
-</Admonition>
+:::custom-info[Reward Distribution Process]
+1. Verify sufficient time has passed since the last reward distribution.
+2. Calculate rewards/penalties for all Vaults based on validator balances in the Beacon Chain.
+3. Calculate MEV and priority fee rewards for Vaults connected to the Smoothing Pool.
+4. Create Merkle trees from reward calculations and upload them to IPFS. For example, <code>bafkreibqhdr6p5uh67ickt4dpppb525bwuofjocnpsx4dbl57llogfph2e</code>.
+5. Save the cryptographically signed vote to the local database and expose via API.
+6. The [Keeper service ↗](https://github.com/stakewise/v3-keeper/) fetches votes from Oracle APIs, concatenates them, and sends the resulting transaction to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code).
+7. Upon verification, the protocol updates global state.
+8. Individual Vaults can claim their rewards.
+:::
 
 The reward update process has protocol-wide impact.
 
@@ -87,22 +86,20 @@ Validator exits require exit signatures that are generated during the [Validator
 
 As part of registration, the Operator Service encrypts exit signatures using Shamir's secret sharing and distributes them to all Oracles.
 
+:::custom-notes[Key Benefit]
 This approach ensures validators can be exited on demand while maintaining protocol security through decentralized signature management.
+:::
 
 ## Oracle Network Participants
 
-<Admonition type="tip" icon="🔮" title="Oracle Network Participants">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> [Chorus One ↗](https://chorus.one/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> [Stake.fish ↗](https://stake.fish/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> [Telekom ↗](https://www.telekom-mms.com/) (formerly T-Systems MMS)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> [Finoa Consensus Services ↗](https://www.finoa.io/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> [Bitfly ↗](https://gobitfly.com/) (operators of the [Beaconchain ↗](https://beaconcha.in/) explorer)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>6.</span> [SenseiNode ↗](https://www.senseinode.com/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>7.</span> [Gateway.fm ↗](https://gateway.fm/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>8.</span> [Gnosis Chain ↗](https://www.gnosis.io/) team</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>9.</span> [P2P ↗](https://p2p.org/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>10.</span> [DSRV ↗](https://www.dsrvlabs.com/)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>11.</span> [StakeWise Labs ↗](https://x.com/stakewise_io) (the development team)</li>
-  </ol>
-</Admonition>
+1. [Chorus One ↗](https://chorus.one/)
+2. [Stake.fish ↗](https://stake.fish/)
+3. [Telekom ↗](https://www.telekom-mms.com/) (formerly T-Systems MMS)
+4. [Finoa Consensus Services ↗](https://www.finoa.io/)
+5. [Bitfly ↗](https://gobitfly.com/) (operators of the [Beaconchain ↗](https://beaconcha.in/) explorer)
+6. [SenseiNode ↗](https://www.senseinode.com/)
+7. [Gateway.fm ↗](https://gateway.fm/)
+8. [Gnosis Chain ↗](https://www.gnosis.io/) team
+9. [P2P ↗](https://p2p.org/)
+10. [DSRV ↗](https://www.dsrvlabs.com/)
+11. [StakeWise Labs ↗](https://x.com/stakewise_io) (the development team)

@@ -18,31 +18,27 @@ The Validators Manager is a designated role that has permission to register vali
 
 Assign the Validators Manager role to your wallet address created in the [Key Creation →](key-creation) process. This setup must be performed by the Vault Admin via the StakeWise UI.
 
-<Admonition type="info" icon="👤" title="Role Assignment Steps">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Connect wallet and go to [StakeWise Operate page ↗](https://app.stakewise.io/operate)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Select your Vault</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Click "Settings" → "Roles" tab</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Enter your wallet address in "Validators manager" field</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>5.</span> Click "Save" and sign the transaction</li>
-  </ol>
-</Admonition>
+:::custom-notes[Role Assignment Steps]
+1. Connect wallet and go to [StakeWise Operate page ↗](https://app.stakewise.io/operate)
+2. Select your Vault
+3. Click "Settings" → "Roles" tab
+4. Enter your wallet address in "Validators manager" field
+5. Click "Save" and sign the transaction
+:::
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Important" style={{ width: 20, height: 20 }}/>} title="Admin Required">
+:::custom-warning[Admin Required]
   The "Settings" button is only visible to the Vault Admin or current Validators Manager.
-</Admonition>
+:::
 
 ## Start Operator Service
 
 You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Security" style={{ width: 20, height: 20 }}/>} title="Required Flags">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> `--vaults` - Comma-separated list of Vault addresses</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> `--consensus-endpoints` - Consensus client API endpoints</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> `--execution-endpoints` - Execution client API endpoints</li>
-  </ol>
-</Admonition>
+:::custom-warning[Required Flags]
+- `--vaults` - Comma-separated list of Vault addresses
+- `--consensus-endpoints` - Consensus client API endpoints
+- `--execution-endpoints` - Execution client API endpoints
+:::
 
 There are several ways to run the Operator Service, depending on how you store private keys.
 
@@ -59,9 +55,10 @@ If you **did not** use Operator Service to generate validator keys, you will nee
 - `--keystores-dir` - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. The folder must contain either a single `password.txt` password file for all the keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt`. For example, `keystore1.json`, `keystore1.txt`, etc.
 - `--keystores-password-file` - Absolute path to the password file for decrypting keystores.
 
-### External Key Management
 
+:::custom-info[External Key Management]
 For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Creation →](./alternative-key-creation/) section.
+:::
 
 ### Running Options
 
@@ -108,44 +105,36 @@ Depending on your installation method, use the appropriate command format:
 
 ### Optional Flags
 
-<Admonition type="info" icon="⚙️" title="Common Configuration Options">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--harvest-vault` - Enable automatic vault reward harvesting. Default is false</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--disable-withdrawals` - Disable partial withdrawals (use oracle exits)</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--claim-fee-splitter` - Enable automated reward splitter withdrawals</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--max-fee-per-gas-wei` - Maximum gas fee for both validator registrations and Vault harvests when using the `--harvest-vault` flag</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--pool-size` - Number of CPU cores used to both load keystores and create keystores. The flag is passed with both `start` and `create-keys` commands. Default is 100% of CPU cores. The safest setting is `(number of CPU cores) / 2`</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--validators-type=v1` - Register 0x01 validators (default: 0x02)</li>
-  </ol>
-</Admonition>
+- `--harvest-vault` - Enable automatic vault reward harvesting. Default is false
+- `--disable-withdrawals` - Disable partial withdrawals (use oracle exits)
+- `--claim-fee-splitter` - Enable automated reward splitter withdrawals
+- `--max-fee-per-gas-wei` - Maximum gas fee for both validator registrations and Vault harvests
+- `--pool-size` - Number of CPU cores used to both load keystores and create keystores.
+- `--validators-type=v1` - Register 0x01 validators (default: 0x02)
+
+:::custom-tips[Performance Optimization]
+For optimal performance, set `--pool-size` to half your CPU cores (e.g., `--pool-size=4` for 8-core systems) to prevent overloading during keystore operations.
+:::
 
 ### Self-Report to Rated Network
 
-This command allows you to self-report your validator keys to the Rated Network, ensuring that your validator set is tracked and updated on the Rated Explorer.
+:::custom-info[What is Rated Network?]
+Rated Network provides validator performance tracking and analytics. Self-reporting ensures your validators appear correctly in the Rated Explorer dashboard.
+:::
 
 To use the `submit-rated-network` command, you will need to provide the following parameters:
 
-#### Required Parameters
-
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Required Configuration">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--vaults` - The comma separated list of your Vault addresses</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--network` - The network of your Vault (e.g., mainnet, hoodi)</li>
-    <li><span style={{ display: "inline-block", width: "2ch", textAlign: "left" }}>•</span> `--token` - OAuth token for authorization</li>
-  </ol>
-</Admonition>
-
-#### Optional Parameters
-
+- `--vaults` - The comma separated list of your Vault addresses
+- `--network` - The network of your Vault (e.g., mainnet, hoodi)
+- `--token` - OAuth token for authorization
 - `--data-dir` - Path where the Vault data will be placed (default: `~/.stakewise`)
 - `--pool-tag` - The pool name listed on the Explorer
 
-#### Usage Example
-
+**Usage Example**
 ```bash
 ./operator submit-rated-network --vaults=0x000...,0x111... --network=mainnet --pool-tag=my-pool --token=your-oauth-token --data-dir=/data
 ```
 
-<Admonition type="tip" icon="🎉" title="Setup Complete">
-  Congratulations, you should now have Operator Service up and running and ready to trigger validator registrations within your Vault!
-</Admonition>
+:::custom-notes[Setup Complete]
+Congratulations🎉! Your Operator Service is now running and ready to trigger validator registrations within your Vault. Monitor the logs to ensure validators are being registered successfully.
+:::

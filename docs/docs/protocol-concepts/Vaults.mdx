@@ -1,7 +1,7 @@
 ---
 title: Vaults
 sidebar_position: 1
-description: ""
+description: "Learn what are Vaults and what you can do with them"
 ---
 
 ```mdx-code-block
@@ -66,7 +66,9 @@ within the Vault for greater liquidity.
 Because direct Beacon chain state queries are not feasible in the EVM<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
 rewards are calculated off-chain by the StakeWise Oracle Network.
 
-><span style={{color: '#1f2937', fontWeight: '500'}}> 📝 For detailed information about the reward distribution process, see the [Oracles →](./Oracles) chapter.</span>
+:::custom-notes[Deep Dive]
+For detailed information about the reward distribution process, see the [Oracles →](./Oracles) chapter.
+:::
 
 ### Withdrawals
 
@@ -80,13 +82,10 @@ More details on partial withdrawals are available in the *Operator*: [*Partial W
 
 The process is as follows:
 
-<ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
-<li style={{listStyleType: 'decimal'}}>**Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault – i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV</li>
+1. **Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault – i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
+2. **Initiate exits if needed**. If available ETH is insufficient, the operator initiates validator exits to free up the remaining amount.
+3. **Oracle enforcement of exits**. If the operator does not initiate partial or full withdrawals, the oracle network will automatically execute full withdrawal after 24 hours.
 
-<li style={{listStyleType: 'decimal'}}>**Initiate exits if needed**. If available ETH is insufficient, the operator initiates validator exits to free up the remaining amount.</li>
-
-<li style={{listStyleType: 'decimal'}}>**Oracle enforcement of exits**. If the operator does not initiate partial or full withdrawals, the oracle network will automatically execute full withdrawal after 24 hours.</li>
-</ol>
 The exit queue advances whenever the Vault **syncs state** – both on **user actions**
 (entering the queue, deposits/withdrawals) and on **operator service-driven syncs** (e.g., harvest).
 Throughout the process, user assets are safe in the Vault's smart contracts and are never controlled by any third party.
@@ -101,7 +100,9 @@ osTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vau
 
 The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint - this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 For more details on how osToken works, see [osToken →](osToken.mdx)</span>
+:::custom-notes[Deep Dive]
+For more details on how osToken works, see [osToken →](osToken.mdx).
+:::
 
 ## Customization
 
@@ -200,14 +201,14 @@ Wallet with the power to add and remove wallets from the whitelist of a Private 
 By default, Vault Admin is also the Keys Manager.
 However, they can assign the Keys Manager role to another wallet, and reclaim this role at any moment in the future.
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 StakeWise always checks the validity of deposit data submitted to the Vault to ensure it contains the correct withdrawal address and has not been used before.</span>
-
 ### Branding
 
 Vault operators can set their Vault's name, description, and image simply through StakeWise interface and can be updated anytime by the Admin.
 
+:::custom-stakewise[Authenticity Guarantee]
 Stakers can be confident about the authenticity of these informations, i.e. a Vault branded by Operator A is indeed controlled and run by Operator A.
 Verification is a manual process managed by the core StakeWise team.
+:::
 
 ### Fee
 
@@ -215,8 +216,9 @@ Vault operators can charge fees on staking rewards to compensate for infrastruct
 These fees are set by the Vault Admin and can be updated over time,
 subject to protocol-enforced restrictions to protect users from sudden changes.
 
-><span style={{color: '#1f2937', fontWeight: '500'}}> 📝 For complete details about Vault fee structures, limits, update restrictions, and how they interact with protocol fees, see the dedicated [Fees →](./Fees) chapter.</span>
-
+:::custom-notes[Deep Dive]
+For complete details about Vault fee structures, limits, update restrictions, and how they interact with protocol fees, see the dedicated [Fees →](./Fees) chapter.
+:::
 
 ## Staking into a Vault
 
@@ -242,7 +244,9 @@ StakeWise provides performance grades to help users evaluate Vault quality based
 * **Moderate (97.1-99.2%)**: The Vault has issues, with up to 3% missed attestations and/or blocks.
 * **Bad (0-97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
 
+:::custom-warning[Important]
 Performance grades help users identify well-operated Vaults but should be considered alongside other factors like fees, capacity, and operator reputation.
+:::
 
 ## Technical Architecture
 
@@ -250,16 +254,17 @@ Performance grades help users identify well-operated Vaults but should be consid
 
 Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state – including user balances –  and stores Vault-specific configuration set during initialization, which defines its core operational characteristics. Vaults are created through factory contracts such as [EthVaultFactory ↗](https://etherscan.io/address/0xDF82E5D27E175618e5bC4581ee336F59AdabfBB2#code) by:
 
-<ol style={{listStyleType: 'decimal', paddingLeft: '20px'}}>
-<li style={{listStyleType: 'decimal'}}>Deploying a proxy that reserves storage for all Vault data and sets its initial configuration during the initializer call.</li>
-<li style={{listStyleType: 'decimal'}}>Pointing the proxy to a shared implementation contract that contains the Vault's logic and module integration.</li>
-<li style={{listStyleType: 'decimal'}}>Registering the Vault in the VaultsRegistry – the canonical on-chain list of all valid Vaults and factories.</li>
-</ol>
+1. Deploying a proxy that reserves storage for all Vault data and sets its initial configuration during the initializer call.
+2. Pointing the proxy to a shared implementation contract that contains the Vault's logic and module integration.
+3. Registering the Vault in the [VaultsRegistry ↗](https://etherscan.io/address/0x3a0008a588772446f6e656133C2D5029CC4FC20E#code) – the canonical on-chain list of all valid Vaults and factories.
 
+:::custom-warning[Important]
 To mitigate economic attacks during the vulnerable initial phase of a Vault's lifetime, the factory requires a security deposit of 1 gwei at creation.
+:::
 
-><span style={{color: '#1f2937', fontWeight: '500'}}>📝 All Vault factory addresses can be found [here ↗](https://github.com/stakewise/v3-core/blob/main/deployments/mainnet.json).</span>
-
+:::custom-notes[Deep Dive]
+All Vault factory addresses can be found [here ↗](https://github.com/stakewise/v3-core/blob/main/deployments/mainnet.json).
+:::
 
 ### Modular Design
 
@@ -274,8 +279,9 @@ and the Ethereum Beacon Chain. Each Vault is built from specialized modules that
 
 **MEV capture** – routing execution-layer rewards either to a Vault-specific escrow or to a Smoothing Pool.
 
-This modular architecture ensures that all Vault types (ETH, GNO, private, ERC-20)
-share consistent behavior and allowi new features to be added without breaking existing Vaults.
+:::custom-notes[Architecture Note]
+This modular architecture ensures that all Vault types (ETH, GNO, private, ERC-20) share consistent behavior and allow new features to be added without breaking existing Vaults.
+:::
 
 ### State Tracking
 

@@ -11,16 +11,10 @@ const blocks: BlockProps[] = [
     href: '/docs/overview',
   },
   {
-    title: 'SDK',
-    text: 'Our JS library for working with api and contracts',
+    title: 'Operator',
+    text: 'Documentation for running and managing StakeWise operators',
     Svg: require("@site/static/icon/code.svg").default,
-    href: '/sdk/intro',
-  },
-  {
-    title: 'Contracts',
-    text: 'Details of all contracts that use the StakeWise protocol',
-    Svg: require("@site/static/icon/gears.svg").default,
-    href: '/contracts/intro',
+    href: '/operator/intro',
   }
 ]
 

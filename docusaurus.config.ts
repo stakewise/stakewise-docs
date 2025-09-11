@@ -98,24 +98,6 @@ const config: Config = {
           sidebarId: 'operatorSidebar',
         },
         {
-          label: 'Guides',
-          to: '/guides/intro',
-          activeBaseRegex: `/guides/`,
-          sidebarId: 'guidesSidebar',
-        },
-        {
-          label: 'SDK',
-          to: '/sdk/intro',
-          activeBaseRegex: `/sdk/`,
-          sidebarId: 'sdkSidebar',
-        },
-        {
-          label: 'Contracs',
-          to: '/contracts/intro',
-          activeBaseRegex: `/contracts/`,
-          sidebarId: 'contractsSidebar',
-        },
-        {
           label: 'X',
           href: 'https://x.com/stakewise_io',
           position: 'right',

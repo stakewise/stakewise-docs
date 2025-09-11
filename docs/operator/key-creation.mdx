@@ -10,34 +10,47 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Key Creation
 
-After installing the Operator Service, you need to create validator keystores for your Vault and set up a wallet for handling validator registrations.
+After installing the Operator Service, you need to generate validator keystores for your Vault and set up a wallet for handling validator registrations.
 
-The Operator Service includes built-in functionality to generate all of the above. Alternatively, you may use your preferred methods to generate keystores (e.g., [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen)) and create the wallet (e.g., [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline)).
+The Operator Service provides built-in functionality to generate all of the above.
+Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores, and wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline).
 
 This section walks you through the complete setup process using the Operator Service built-in tools.
 
-## Step 1: Create Mnemonic
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <pre style={{
+    display: 'inline-block',
+    textAlign: 'left',
+    background: '#FFFFFF4D',
+    color: '#018970',
+    padding: '2rem',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Monaco, monospace',
+    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
+    lineHeight: '1.8'
+  }}>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🔑 Key Generation Flow</strong>
 
-<Admonition type="tip" icon="🔑" title="Initialize Configuration">
-  Run the `init` command to set up your mnemonic used to derive validator keys.
-</Admonition>
+     📝 Mnemonic
+       ├─ 🔐 Validator Keys &rarr; 📁 Keystores &rarr; ✅ Import to Client
+       └─ 💳 Wallet &rarr; 💰 Fund with ETH &rarr; 🚀 Register Validators
+  </pre>
+</div>
 
-For example, if running Operator Service from binary, you would use:
+## Step 1: Initialize Mnemonic
+
+:::custom-notes[Initialize Configuration]
+  Run the `init` command to set up your mnemonic used to derive your validator keys.
+:::
+
+For example, if running Operator Service from binary:
 
 ```bash
 ./operator init
 ```
 
-The command will prompt you to:
-
-<Admonition type="info" icon="📝" title="Setup Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Choose your network (mainnet, hoodi, gnosis, chiado)</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Select your mnemonic language</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Write down your seed phrase safely</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Confirm you have written it down by typing it back</li>
-  </ol>
-</Admonition>
+Follow the command prompts.
 
 <details className="custom-details">
 <summary>Example Output</summary>
@@ -63,31 +76,22 @@ Successfully initialized configuration for vault 0x3320a...68
 
 </details>
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Important Security Notice">
-  Your seed phrase is the **ONLY** way to recover your validator keys. Store it safely and never share it with anyone.
-</Admonition>
+:::custom-warning[Important Security Notice]
+  Keep your mnemonic safe. It is the only way to recover your validator keys.
+:::
 
-## Step 2: Create Validator Keys
+## Step 2: Generate Validator Keys
 
-Generate validator keystores from your mnemonic using the `create-keys` command.
+Generate validator keystores from your mnemonic using:
 
 ```bash
 ./operator create-keys
 ```
 
-You'll be prompted to:
-
-<Admonition type="info" icon="🔢" title="Key Generation Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Enter the number of validator keys to generate</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Provide your mnemonic phrase</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Wait for key generation and export to complete</li>
-  </ol>
-</Admonition>
+Follow the command prompts.
 
 <details className="custom-details">
 <summary>Example Output</summary>
-
 ```
 Enter the vault address: 0x3320a...68
 Enter the number of the validator keys to generate: 10
@@ -100,28 +104,22 @@ Done. Generated 10 keys for 0x3320a...68 vault.
 Keystores saved to /home/user/.stakewise/0x3320a...68/keystores file
 Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.json file
 ```
-
 </details>
 
-**Note:** Keystores are saved to `~/.stakewise/keystores` and the password is stored in `password.txt` within the keystores folder.
+:::custom-notes[Keystore Locations]
+  - Keystores are saved to `~/.stakewise/keystores`.
+  - The password is stored in `password.txt` within the keystores folder.
+:::
 
-### Alternative Key Creation
+:::custom-warning[Important]
+  Protect `password.txt` as carefully as your keystores — anyone with it can access your keys.
+:::
 
-You may not want the operator service to have direct access to the validator keys.
-Validator keystores do not need to be present directly in the operator. You can check:
+You can always add more validator keys to your Vault. For that, you need to generate new validator keys.
 
-- **[Remote Signer ↗](./alternative-key-creation/remote-signer)** - Query a remote signer to get signatures for validator deposit and exit messages
-- **[HashiCorp Vault ↗](./alternative-key-creation/hashicorp-vault)** - Load signing keys from remote HashiCorp Vault instance
-- **[API Mode ↗](./alternative-key-creation/api-mode)** - Run operator as API service with external key management via relayer
+## Step 3: Set Up Wallet
 
-### Add validator keys to Vault
-
-You can always add more validator keys to your Vault.
-For that, you need to generate new validator keys as described in [Step 2: Create Validator Keys →](#step-2-create-validator-keys).
-
-## Step 3: Create Wallet
-
-Create a wallet for handling validator registrations and paying gas fees.
+Create a wallet for validator registrations and gas payments:
 
 ```bash
 ./operator create-wallet
@@ -129,76 +127,54 @@ Create a wallet for handling validator registrations and paying gas fees.
 
 <details className="custom-details">
 <summary>Example Output</summary>
-
 ```
 Enter the vault address: 0x3320a...68
 Enter the mnemonic for generating the wallet: pumpkin anxiety private salon inquiry ...
 Done. The wallet and password saved to /home/user/.stakewise/0x3320a...68/wallet directory. The wallet address is: 0x239B...e3Cc
 ```
-
 </details>
 
-You'll need to provide your mnemonic phrase (can be the same as validator keys or different).
+You may reuse the same mnemonic as your validator keys or generate a separate one for added security.
 
-<Admonition type="tip" icon="💰" title="Funding Your Wallet">
-  After creating the wallet, you **must** send ETH (or xDAI for Gnosis) to cover gas expenses:
+:::custom-warning[Wallet Balance Warning]
+  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
 
-  - Each validator registration costs ~0.01 ETH with 30 Gwei gas price
-  - Keep monitoring your wallet balance, otherwise validators will stop registering if the balance falls too low
-</Admonition>
+    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
+    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
+    - Monitor balance regularly to prevent registration failures
+:::
 
-## Step 4: Upload Validator Keys
+## Step 4: Import Validator Keys
 
-Upload your generated validator keys to your consensus client validators.
+Upload your keystores into your consensus client:
 
-<Admonition type="info" icon={<img src={useBaseUrl('/img/Email.png')} alt="Key Upload" style={{ width: 20, height: 20 }}/>}  title="Key Upload Process">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Locate your keystores in `~/.stakewise/keystores`</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Follow your consensus client's guide for importing keys</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Use the password from `password.txt` file</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> Set the fee recipient to your Vault's fee recipient address</li>
-  </ol>
-</Admonition>
+1. Locate your keystores in `~/.stakewise/keystores`
+2. Follow your consensus client's guide for importing keys
+3. Use the password from `password.txt` file
+4. Set the fee recipient to your Vault's fee recipient address
 
-**Fee Recipient Address**: Found in your Vault's "Details" section on the StakeWise interface.
+:::custom-info[Fee Recipient Address]
+Found in your Vault's "Details" section on the StakeWise interface.
+:::
 
-## Performance Optimization
+## Alternative Key Management
 
-<details className="custom-details">
-<summary>Optional: Reduce CPU Load</summary>
+Validator keystores don't need to be stored directly in the Operator Service. You can instead use:
 
-If you want to limit CPU usage during key operations, use the `--pool-size` flag:
-
-```bash
-./operator create-keys --pool-size=2
-```
-
-Setting `--pool-size` to half your CPU cores is a safe way to prevent high CPU load.
-
-</details>
-
-## Security Considerations
-
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Security" style={{ width: 20, height: 20 }}/>} title="Key Security Best Practices">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Backup your mnemonic** - Store it securely offline</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Secure your keystores** - Protect the keystores directory</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Monitor wallet balance** - Keep sufficient ETH for gas fees</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Limit access** - Only authorized personnel should access these files</li>
-  </ol>
-</Admonition>
+- **[Remote Signer ↗](./alternative-key-creation/remote-signer)** - Sign deposit/exit messages via a remote signer
+- **[HashiCorp Vault ↗](./alternative-key-creation/hashicorp-vault)** - Load keys from a remote Vault instance
+- **[API Mode ↗](./alternative-key-creation/api-mode)** - Run Operator as API service with external key management
 
 ## Recover Validator Keystores
 
-If you need to recover validator keystores that are active, you can use the `recover` command.
+You can recover validator keystores that are active. The recovery process will detect validators associated with your Vault address.
 
-<Admonition type="warning" icon={<img src={useBaseUrl('/img/exclamation_mark.png')} alt="Warning" style={{ width: 20, height: 20 }}/>} title="Critical Safety Requirements">
-  <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Stop validators** - Ensure no validators are running with these keystores</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Wait 2 epochs** - Allow time to pass to avoid slashing</li>
-    <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>•</span> **Protect mnemonic** - Your seed phrase can generate all validator keys</li>
-  </ol>
-</Admonition>
+:::custom-warning[Safety Requirements]
+  Before recovering keystores:
+  - **Stop all validators** - Ensure no validators are running with these keystores
+  - **Wait at least 2 epochs** - Allow time to pass to avoid slashing
+  - **Protect mnemonic** - Your seed phrase can generate all validator keys
+:::
 
 ```bash
 ./operator recover
@@ -206,7 +182,6 @@ If you need to recover validator keystores that are active, you can use the `rec
 
 <details className="custom-details">
 <summary>Example Output</summary>
-
 ```
 Enter the mnemonic for generating the validator keys: [Your Mnemonic Here]
 Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
@@ -217,9 +192,47 @@ Found 24 validators, recovering...
 Generating keystores [####################################] 100%
 Keystores for vault 0x3320ad928c20187602a2b2c04eeaa813fa899468 successfully recovered to /home/user/.stakewise/keystores
 ```
-
 </details>
+
+## Advanced Configuration
+
+### Environment Variables
+
+Operator Service can be configured via environment variables instead of CLI flags.
+Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/master/.env.example) and save it as `.env`.
+
+```bash
+# Load environment variables
+export $(grep -v '^#' .env | xargs)
+
+# Verify they're loaded
+env
+```
+
+### Gas Fee Limits
+
+Protect against excessive gas costs by setting maximum fees:
+
+```bash
+./operator start --max-fee-per-gas-wei=100000000000  # 100 Gwei max
+```
+
+### CPU Optimization
+
+Reduce CPU load during key operations:
+
+```bash
+# Use half your CPU cores (recommended)
+./operator create-keys --pool-size=2
+```
+:::custom-tips[Performance Tip]
+  Setting `--pool-size` to half your CPU cores ensures smooth node operation during keystore operations.
+:::
 
 ## Next Steps
 
-Once you've completed key creation and uploaded your validator keys, you're ready to proceed with [Getting Started ↗](getting-started) to configure your Vault permissions and start the Operator Service.
+With your keys and wallet prepared, continue to [Getting Started ↗](getting-started) to configure your Vault permissions and launch the Operator Service.
+
+:::custom-info[For consensus client documentation, see:]
+[Lighthouse ↗](https://lighthouse-book.sigmaprime.io/intro.html) • [Prysm ↗](https://docs.prylabs.network/) • [Teku ↗](https://docs.teku.consensys.io/) • [Nimbus ↗](https://nimbus.guide/) • [Lodestar ↗](https://chainsafe.github.io/lodestar/)
+:::

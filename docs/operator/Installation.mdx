@@ -10,8 +10,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Installation
 
-Operator Service can be run via a binary, docker image, deployed on a Kubernetes cluster using the Operator Helm Chart, or built from source.
-Decide on your preferred method and follow the respective instructions below.
+Operator Service can be installed in several ways: as a binary, via Docker, deployed on Kubernetes with the Operator Helm Chart, or built from source.
+Choose your preferred method and follow the instructions below.
 
 <Tabs groupId="installation-methods">
   <TabItem value="binary" label="Binary" default>
@@ -19,55 +19,48 @@ Decide on your preferred method and follow the respective instructions below.
 
     ### Download
 
+    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version
+    2. Select the binary file for your node's hardware
+    3. Download and decompress the file
+    4. Run commands from inside the `v3-operator` folder:
 
-    <ol style={{ listStyleType: "none", paddingLeft: "0" }}>
-      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>1.</span> Head to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) to find the latest version of Operator Service</li>
-      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>2.</span> Identify the binary file specific to your node hardware</li>
-      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>3.</span> Download and decompress the file</li>
-      <li><span style={{ display: "inline-block", width: "3ch", textAlign: "left" }}>4.</span> You will execute Operator Service commands from within the `v3-operator` folder using the below format:</li>
-    </ol>
-
-    Note: The use of flags is optional
-      ```bash
-      ./operator COMMAND --flagA=123 --flagB=xyz
-      ```
-
+    ```bash
+    ./operator COMMAND --flagA=123 --flagB=xyz
+    ```
+    :::custom-notes[Optional]
+      The use of flags is optional.
+    :::
 
     ### Install Script (Linux and macOS)
 
-    To install a binary for the latest release, run:
+    To install the latest release, run:
 
     ```bash
     curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s
     ```
 
-    The binary will be installed inside the `~/bin` directory. Add the binary to your path:
+    The binary will be placed in `~/bin`. Add it to your PATH:
 
     ```bash
     export PATH=$PATH:~/bin
     ```
 
-    If you want to install a specific version to a custom location, run:
+    To install a specific version to a custom location:
 
     ```bash
     curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
     ```
 
-    You will execute Operator Service commands using the below format:
-
-    Note: The use of flags is optional
+    Run commands with:
 
     ```bash
     operator COMMAND --flagA=123 --flagB=xyz
     ```
   </TabItem>
-
   <TabItem value="docker" label="Docker Image">
     ## Docker Installation
 
     ### Pull Official Image
-
-    Pull the latest docker Operator docker image:
 
     ```bash
     docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0
@@ -75,17 +68,15 @@ Decide on your preferred method and follow the respective instructions below.
 
     ### Build From Source
 
-    You can also build the docker image from source by cloning this repo and executing the following command from within the `v3-operator` folder:
+    Alternatively, build the Docker image locally:
 
     ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
     docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0 .
     ```
 
-    ### Execute Commands
-
-    You will execute Operator Service commands using the format below:
-
-    Note: The use of flags is optional
+    ### Run Commands
 
     ```bash
     docker run --rm -ti \
@@ -96,43 +87,47 @@ Decide on your preferred method and follow the respective instructions below.
     --flagA=123 \
     --flagB=xyz
     ```
-  </TabItem>
 
+    :::custom-notes[Optional]
+      The use of flags is optional.
+    :::
+
+  </TabItem>
   <TabItem value="source" label="Source Files">
     ## Source Installation
 
-    ### Build Requirements
+    ### Requirements
 
     - [Python 3.10+ ↗](https://www.python.org/downloads/)
     - [Poetry ↗](https://python-poetry.org/docs/)
 
     ### Setup
 
-    Clone this repo and install dependencies by executing the following command from within the `v3-operator` folder:
-
     ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
     poetry install --only main
     ```
 
-    ### Execute Commands
+    ### Run Commands
 
-    You will execute Operator Service commands from within the `v3-operator` folder using the below format:
-
-    Note: The use of flags is optional
+    Run commands from within the `v3-operator` folder using the below format:
 
     ```bash
     PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
     ```
+    :::custom-notes[Optional]
+        The use of flags is optional.
+    :::
   </TabItem>
-
   <TabItem value="kubernetes" label="Kubernetes (Advanced)">
     ## Kubernetes Installation
 
-    A separate guide runs through the set-up of Operator Service via Kubernetes, designed to run large numbers of validators (up to 10,000).
+    A dedicated guide is available for running Operator Service on Kubernetes, designed for large-scale validator deployments (up to 10,000).
 
   </TabItem>
 </Tabs>
 
 ## Next Steps
 
-Once you have installed the Operator Service using your preferred method, you're ready to proceed with [Key Creation ↗](key-creation).
+Once installed, continue with [Key Creation ↗](key-creation).

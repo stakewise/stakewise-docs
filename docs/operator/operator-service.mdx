@@ -33,12 +33,12 @@ The registration process follows a structured sequence of steps to ensure secure
 
 1. Check if the Vault has enough assets to register a validator (e.g., 32 ETH for Ethereum)
 2. Get the next free validator key from the used keystore
-3. Obtain the BLS signature for exit messages<sup><a href="#user-content-fn-1" id="user-content-fnref-1" style={{textDecoration: 'none'}}>1</a></sup> using local keystores or remote signer
-4. Share the exit signature of the validator with StakeWise Oracles:
-    - Using Shamir's secret sharing, splits validator's BLS signature<sup><a href="#user-content-fn-2" id="user-content-fnref-2" style={{textDecoration: 'none'}}>2</a></sup>. The number of shares equals the number of oracles
-    - Encrypts exit signatures with the oracles' public keys
-    - Sends encrypted exit signatures to all the oracles and receives registration signatures from them
-5. Sends transaction to the Vault contract to register the validator.
+3. Obtain the BLS signature for exit messages<sup><a href="#user-content-fn-1" id="user-content-fnref-1" style={{textDecoration: 'none'}}>1</a></sup> using local keystores or a [remote signer →](./alternative-key-creation/remote-signer)
+4. Share the validator's exit signature with StakeWise Oracles:
+    - Split the BLS signature<sup><a href="#user-content-fn-2" id="user-content-fnref-2" style={{textDecoration: 'none'}}>2</a></sup> using [Shamir's Secret Sharing ↗](https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing) (number of shares = number of oracles)
+    - Encrypt each signature share with the corresponding oracle’s public key
+    - Send the encrypted shares to all oracles and receive registration signatures in return
+5. Submit a transaction to the Vault contract to register the validator.
 :::
 
 The Operator Service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files.

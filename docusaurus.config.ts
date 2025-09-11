@@ -37,7 +37,7 @@ const config: Config = {
           routeBasePath: '/',
           breadcrumbs: true,
           admonitions: {
-            keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes'],
+            keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes', 'custom-stakewise'],
             extendDefaults: true,
           },
         },

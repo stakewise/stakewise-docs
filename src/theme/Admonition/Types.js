@@ -29,6 +29,7 @@ const AdmonitionTypes = {
   'custom-notes': (props) => <CustomAdmonition iconSrc="/img/notes.png" {...props} />,
   'custom-tips': (props) => <CustomAdmonition iconSrc="/img/tips.png" {...props} />,
   'custom-warning': (props) => <CustomAdmonition iconSrc="/img/warning.png" {...props} />,
+  'custom-stakewise': (props) => <CustomAdmonition iconSrc="/img/stakewise_logo.png" {...props} />,
 };
 
 export default AdmonitionTypes;

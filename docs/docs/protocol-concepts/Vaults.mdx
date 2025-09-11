@@ -31,7 +31,7 @@ When a Vault accumulates enough assets – 32 ETH on Ethereum or 1 GNO on Gnosis
 runs specialized software (the [operator ↗](https://github.com/stakewise/v3-operator) service) alongside their Ethereum consensus and execution clients
 that monitors deposit levels and handles the technical validator creation process.
 
-When sufficient funds are available, this service submits validator registration requests to the StakeWise [oracle network →](./Oracles.mdx).
+When sufficient funds are available, this service submits validator registration requests to the StakeWise [oracle network →](./Oracles).
 Each registration request must be approved by an 8-of-11 oracle quorum before the validator becomes active on the Beacon Chain. This approval process ensures the correctness of deposit data, validator keys are properly formatted, and withdrawal credentials point to the correct Vault. Once approved, validators enter the Beacon Chain's activation queue - [network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
 
 Vaults support two types of validators (`0x01` or `0x02`)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup> allowing for different deposit strategies – traditional 32 ETH validators and [compounding validators ↗](https://ethereum.org/en/roadmap/pectra/maxeb/) that can hold more than 32 ETH.
@@ -101,7 +101,7 @@ osTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vau
 The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint - this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
 
 :::custom-notes[Deep Dive]
-For more details on how osToken works, see [osToken →](osToken.mdx).
+For more details on how osToken works, see [osToken →](osToken).
 :::
 
 ## Customization

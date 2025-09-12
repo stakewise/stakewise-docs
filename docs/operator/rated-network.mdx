@@ -1,0 +1,31 @@
+---
+title: 7. Rated Network Integration
+sidebar_position: 7
+---
+
+import Admonition from '@theme/Admonition';
+
+# Rated Network Integration
+
+## Self-Report to Rated Network
+
+:::custom-info[What is Rated Network?]
+Rated Network provides validator performance tracking and analytics. Self-reporting ensures your validators appear correctly in the Rated Explorer dashboard.
+:::
+
+To use the `submit-rated-network` command, you will need to provide the following parameters:
+
+- `--vaults` - The comma separated list of your Vault addresses
+- `--network` - The network of your Vault (e.g., mainnet, hoodi)
+- `--token` - OAuth token for authorization
+- `--data-dir` - Path where the Vault data will be placed (default: `~/.stakewise`)
+- `--pool-tag` - The pool name listed on the Explorer
+
+**Usage Example**
+```bash
+./operator submit-rated-network --vaults=0x000...,0x111... --network=mainnet --pool-tag=my-pool --token=your-oauth-token --data-dir=/data
+```
+
+:::custom-notes[Integration Complete]
+Your validator data is now being reported to Rated Network for performance tracking and analytics.
+:::

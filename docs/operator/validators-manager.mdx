@@ -27,7 +27,7 @@ The Validators Manager role provides permission to execute essential validator o
 
 Operations can be executed in two ways:
 1. **Direct execution**: By a wallet address that has been assigned the Validators Manager role
-2. **Signature-based**: By providing a valid Validators Manager signature (useful for advanced setups)
+2. **Signature-based**: By providing a valid Validators Manager signature when the wallet is stored outside the operator service, such as in [Relayer (API Mode) ↗](./alternative-key-management/api-mode)
 
 :::custom-info[Role Flexibility]
 The signature-based approach allows for more complex authorization workflows, such as multi-signature setups or automated systems that can execute operations with proper authorization.
@@ -36,6 +36,14 @@ The signature-based approach allows for more complex authorization workflows, su
 ## Step 1: Create Operator Wallet
 
 The first step is creating a dedicated wallet that will be assigned the Validators Manager role and handle validator operations.
+
+:::custom-info[Wallet Options]
+You have two options for the Validators Manager wallet:
+- **Create a new wallet** using the command below (recommended for dedicated operator setups)
+- **Use an existing wallet** by manually configuring the Validators Manager role in your Vault settings
+
+If using an existing wallet, skip to [Step 2](#step-2-assign-validators-manager-role) and use your existing wallet address.
+:::
 
 Create a wallet for validator registrations and gas payments:
 

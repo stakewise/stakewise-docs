@@ -107,8 +107,8 @@ Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.
 </details>
 
 :::custom-notes[Generated Files]
-  - **Keystores**: Saved to `~/.stakewise/0x[vault-address]/keystores`
-  - **Deposit Data**: Saved to `~/.stakewise/0x[vault-address]/keystores/deposit_data.json`
+  - **Keystores**: Saved to `~/.stakewise/[network]/keystores`
+  - **Deposit Data**: Saved to `~/.stakewise/[network]/keystores/deposit_data.json`
   - **Password**: Stored in `password.txt` within the keystores folder
 :::
 
@@ -195,20 +195,20 @@ If there is more than one node operator in a Vault, you first need to merge all 
 
 ## Step 5: Import Validator Keys
 
-Upload your keystores into your consensus client:
+Upload your keystores into your validator client:
 
-1. Locate your keystores in `~/.stakewise/0x[vault-address]/keystores`
+1. Locate your keystores in `~/.stakewise/[network]/keystores`
 2. Follow your consensus client's guide for importing keys
 3. Use the password from `password.txt` file
-4. Set the fee recipient to your Vault's fee recipient address
+4. Start the validator client with attached validator keys.
 
-:::custom-info[Fee Recipient Address]
-Found in your Vault's "Details" section on the StakeWise interface.
+:::custom-warning[Fee Recipient Configuration Required]
+You must use the **Block Reward Recipient** address from the **Details** section on the Vault page as the `suggested-fee-recipient` in your validator client. An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
 :::
 
 ## Alternative Key Management
 
-Validator keystores don't need to be stored directly in the Operator Service. You can instead use:
+Validator keystores don't need to be stored locally. You can instead use:
 
 - **[Remote Signer ↗](./alternative-key-creation/remote-signer)** - Sign deposit/exit messages via a remote signer
 - **[HashiCorp Vault ↗](./alternative-key-creation/hashicorp-vault)** - Load keys from a remote Vault instance

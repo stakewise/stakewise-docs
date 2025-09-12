@@ -14,7 +14,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 At the core of StakeWise are individual staking pools called [Vaults →](/docs/protocol-concepts/Vaults). Anyone – from solo stakers to professional operators – can create and operate their own Vault, offering flexible staking solutions that serve diverse needs: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking services to others.
 
-**Creating a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational and compliant with Ethereum staking requirements.
+**Creating a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
 
 ## Core Functions
 
@@ -36,35 +36,25 @@ By default, the Operator Service registers new `0x02` validators, prioritizing f
 ### Validator Consolidation
 Consolidates legacy `0x01` validators to `0x02` compound validators. This reduces validator count and infrastructure overhead.
 
-### Partial Withdrawals
-The Operator Service automatically processes validator withdrawals.
-Partial withdrawals run every 24 hours by default, processing balances above 32 ETH or 1 GNO, prioritizing higher balances first.
-If capacity is insufficient or no validators exceed the threshold, the service triggers full exits via execution requests.
+### Withdrawals
 
-:::custom-info[Withdrawal Automation]
-If the Operator Service doesn't initiate withdrawals within 24 hours, StakeWise [Oracles →](../../docs/protocol-concepts/Oracles) automatically execute validator exits as a failsafe.
+When a user requests to exit their stake, the Operator Service identifies the validators from which to withdraw the assets.
+It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
+If partial withdrawals are insufficient, it proceeds with full withdrawals.
+:::custom-notes[Exit Queue Monitoring]
+To minimize the number of withdrawals, the Operator Service checks the exit queue every 12 hours (this interval can be reconfigured).
 :::
 
-### Vault State Update (Optional Feature)
+:::custom-info[Oracle Failsafe]
+The withdrawal functionality can also be disabled for the operator.
+In that case, the [Oracles →](../../docs/protocol-concepts/Oracles) will use the exit signatures they received from the operator during validator registration (more details [here →](../../docs/protocol-concepts/Oracles#validator-registration-approval)).
+:::
+
+### Vault State Update (Optional)
 Keeps your Vault updated by distributing fees to the fee recipient and updating staker positions. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users.
 
-### Multi-Vault Support
-The Operator Service can manage multiple Vaults simultaneously using a single wallet and shared keystores.
-:::custom-tips[Migration to Multi-Vault Setup]
-  When migrating from a single-vault to a multi-vault setup, recreate your operator directory. This ensures your configuration aligns correctly with the new setup.
-:::
-
 ### Automated Fee Claims
-For Vaults with multiple fee recipients, automatically handles reward splitting and distribution according to configured percentages, streamlining the reward collection process.
-
-### Exit Signatures Rotation
-
-The Operator Service maintains validator exit capabilities by monitoring oracle set changes and updating signatures when needed, ensuring validators can always be exited even if oracle keys are compromised.
-Without rotation, compromised or outdated oracle keys could prevent validator exits.
-
-:::custom-tips[Operational Benefits]
-The Operator Service reduces manual intervention, improves security through automation, and optimizes gas costs while maintaining full operator control over critical decisions.
-:::
+By default, the fees earned by the Vault fee recipient remain locked in the validators. You can enable periodic fee claims through the operator service.
 
 ## Next Steps
 

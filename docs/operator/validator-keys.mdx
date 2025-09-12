@@ -109,7 +109,7 @@ Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.
 </details>
 
 :::custom-notes[Keystore Locations]
-  - Keystores are saved to `~/.stakewise/0x[vault-address]/keystores`
+  - Keystores are saved to `~/.stakewise/[network]/keystores`
   - **Default**: A single `password.txt` file contains the password for all generated keystores
   - **Per-keystore option**: Use the `--per-keystore` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
 :::
@@ -122,16 +122,20 @@ You can always add more validator keys to your Vault. For that, you need to gene
 
 ## Step 3: Import Validator Keys
 
-Upload your keystores into your consensus client:
+Upload your keystores into your validator client:
 
-1. Locate your keystores in `~/.stakewise/keystores`
+1. Locate your keystores in `~/.stakewise/[network]/keystores`
 2. Follow your consensus client's guide for importing keys
 3. Use the password from `password.txt` file
-4. Set the fee recipient to your Vault's fee recipient address
+4. Start the validator client with attached validator keys.
+
+:::custom-warning[Fee Recipient Configuration Required]
+You must use the Block Reward Recipient address from the Details section on the Vault page as the suggested-fee-recipient in your validator client. An incorrect value will result in penalties for your vault in the Smoothing Pool and will trigger a warning on the vault page, alerting users to an invalid validator setup.
+:::
 
 ## Alternative Key Management
 
-Validator keystores don't need to be stored directly in the Operator Service. You can instead use:
+Validator keystores don't need to be stored locally. You can instead use:
 
 - **[Remote Signer ↗](./alternative-key-creation/remote-signer)** - Sign deposit/exit messages via a remote signer
 - **[HashiCorp Vault ↗](./alternative-key-creation/hashicorp-vault)** - Load keys from a remote Vault instance

@@ -9,3 +9,106 @@ import Admonition from '@theme/Admonition';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Start Operator
+
+After completing [Validators Manager →](validators-manager) setup, you're ready to start the Operator Service to begin automated validator registrations.
+
+## Start Operator Service
+
+You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
+
+:::custom-warning[Required Flags]
+- `--vaults` - Comma-separated list of Vault addresses
+- `--consensus-endpoints` - Consensus client API endpoints
+- `--execution-endpoints` - Execution client API endpoints
+:::
+
+There are several ways to run the Operator Service, depending on how you store private keys.
+
+### Local Keystores
+
+By default, the Operator Service runs with locally stored keystores created during key creation.
+
+```bash
+./operator start-local --vaults=0x3320a...68 --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+```
+
+If you **did not** use Operator Service to generate validator keys, you will need to add the following flags:
+
+- `--keystores-dir` - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. The folder must contain either a single `password.txt` password file for all the keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt`. For example, `keystore1.json`, `keystore1.txt`, etc.
+- `--keystores-password-file` - Absolute path to the password file for decrypting keystores.
+
+:::custom-warning[Existing Wallet Configuration]
+If you **are using an existing wallet** (instead of the Operator Service generated wallet), you must add these flags:
+
+- `--wallet-file` - Path to the wallet keystore file
+- `--wallet-password-file` - Path to the password file for the wallet keystore
+:::
+
+
+:::custom-info[External Key Management]
+For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Creation →](./alternative-key-creation/) section.
+:::
+
+### Running Options
+
+Depending on your installation method, use the appropriate command format:
+
+<Tabs groupId="installation-types">
+  <TabItem value="binary" label="Binary" default>
+    #### Using Binary
+
+    ```bash
+    ./operator start-local --vaults=0x000...,0x111... --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+    ```
+  </TabItem>
+
+  <TabItem value="docker" label="Docker">
+    #### Using Docker
+
+    For Docker, you first need to mount the folder containing validator keystores and include the `--data-dir` flag alongside the `start` command:
+
+    ```bash
+    docker run --restart on-failure:10 \
+    -u $(id -u):$(id -g) \
+    -v ~/.stakewise/:/data \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0 \
+    src/main.py start-local \
+    --vaults=0x3320ad928c20187602a2b2c04eeaa813fa899468 \
+    --data-dir=/data \
+    --consensus-endpoints=http://localhost:5052 \
+    --execution-endpoints=http://localhost:8545
+    ```
+  </TabItem>
+
+  <TabItem value="source" label="Source Files">
+    #### Using Source Files
+
+    ```bash
+    PYTHONPATH=. poetry run python src/main.py start-local \
+    --vaults=0x000... \
+    --consensus-endpoints=http://localhost:5052 \
+    --execution-endpoints=http://localhost:8545
+    ```
+  </TabItem>
+</Tabs>
+
+### Optional Flags
+
+- `--harvest-vault` - Enable automatic vault reward harvesting. Default is false
+- `--disable-withdrawals` - Disable partial withdrawals (use oracle exits)
+- `--claim-fee-splitter` - Enable automated reward splitter withdrawals
+- `--max-fee-per-gas-wei` - Maximum gas fee for both validator registrations and Vault harvests
+- `--concurrency` - Number of CPU cores used to both load keystores and create keystores.
+- `--validators-type=v1` - Register 0x01 validators (default: 0x02)
+
+:::custom-tips[Performance Optimization]
+For optimal performance, set `--concurrency` to half your CPU cores (e.g., `--concurrency=4` for 8-core systems) to prevent overloading during keystore operations.
+:::
+
+:::custom-notes[Setup Complete]
+Congratulations🎉! Your Operator Service is now running and ready to trigger validator registrations within your Vault. Monitor the logs to ensure validators are being registered successfully.
+:::
+
+## Next Steps
+
+Continue to [Rated Network Integration →](rated-network) to set up validator performance tracking and analytics reporting.

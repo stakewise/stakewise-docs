@@ -55,6 +55,13 @@ If you **did not** use Operator Service to generate validator keys, you will nee
 - `--keystores-dir` - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. The folder must contain either a single `password.txt` password file for all the keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt`. For example, `keystore1.json`, `keystore1.txt`, etc.
 - `--keystores-password-file` - Absolute path to the password file for decrypting keystores.
 
+:::custom-warning[Existing Wallet Configuration]
+If you **are using an existing wallet** (instead of the Operator Service generated wallet), you must add these flags:
+
+- `--wallet-file` - Path to the wallet keystore file
+- `--wallet-password-file` - Path to the password file for the wallet keystore
+:::
+
 
 :::custom-info[External Key Management]
 For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Creation →](./alternative-key-creation/) section.

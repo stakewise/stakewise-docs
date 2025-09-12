@@ -1,6 +1,6 @@
 ---
 title: Operator Service
-sidebar_position: 2
+sidebar_position: 11
 ---
 
 import Tabs from '@theme/Tabs';
@@ -172,6 +172,77 @@ Validators 513571, 513572, 513861 exits successfully initiated
 ## Next Steps
 
 Before running the Operator Service, you must first ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.
+
+
+## Recover Validator Keystores
+
+You can recover validator keystores that are active. The recovery process will detect validators associated with your Vault address.
+
+:::custom-warning[Safety Requirements]
+  Before recovering keystores:
+  - **Stop all validators** - Ensure no validators are running with these keystores
+  - **Wait at least 2 epochs** - Allow time to pass to avoid slashing
+  - **Protect mnemonic** - Your seed phrase can generate all validator keys
+:::
+
+```bash
+./operator recover
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Enter the mnemonic for generating the validator keys: [Your Mnemonic Here]
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Enter the comma separated list of API endpoints for execution nodes: https://example.com
+Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter the network name: hoodi
+Found 24 validators, recovering...
+Generating keystores [####################################] 100%
+Keystores for vault 0x3320ad928c20187602a2b2c04eeaa813fa899468 successfully recovered to /home/user/.stakewise/keystores
+```
+</details>
+
+## Advanced Configuration
+
+### Environment Variables
+
+Operator Service can be configured via environment variables instead of CLI flags.
+Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/master/.env.example) and save it as `.env`.
+
+```bash
+# Load environment variables
+export $(grep -v '^#' .env | xargs)
+
+# Verify they're loaded
+env
+```
+
+### Gas Fee Limits
+
+Protect against excessive gas costs by setting maximum fees:
+
+```bash
+./operator start --max-fee-per-gas-wei=100000000000  # 100 Gwei max
+```
+
+### CPU Optimization
+
+Reduce CPU load during key operations:
+
+```bash
+# Use half your CPU cores (recommended)
+./operator create-keys --pool-size=2
+```
+:::custom-tips[Performance Tip]
+  Setting `--pool-size` to half your CPU cores ensures smooth node operation during keystore operations.
+:::
+
+
+
+
+
+
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span>

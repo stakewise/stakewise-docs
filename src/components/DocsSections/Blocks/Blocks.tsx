@@ -5,10 +5,16 @@ import Block, { BlockProps } from './Block/Block'
 
 const blocks: BlockProps[] = [
   {
-    title: 'Docs',
+    title: 'Concepts',
     text: 'Everything you want to know about StakeWise at your fingertips',
     Svg: require("@site/static/icon/file.svg").default,
     href: '/docs/overview',
+  },
+  {
+    title: 'Guides',
+    text: 'Step-by-step tutorials for staking, Vaults, osTokens, and DeFi strategies',
+    Svg: require("@site/static/icon/file.svg").default,
+    href: '/docs/guides/staking',
   },
   {
     title: 'Operator',

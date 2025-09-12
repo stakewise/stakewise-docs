@@ -1,6 +1,6 @@
 ---
-title: Key Creation
-sidebar_position: 5
+title: 4. Validator Keys
+sidebar_position: 4
 ---
 
 import Tabs from '@theme/Tabs';
@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 import Admonition from '@theme/Admonition';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# Key Creation
+# Validator Keys
 
 After installing the Operator Service, you need to generate validator keystores for your Vault and set up a wallet for handling validator registrations.
 
@@ -30,11 +30,13 @@ This section walks you through the complete setup process using the Operator Ser
     boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
     lineHeight: '1.8'
   }}>
-    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🔑 Key Generation Flow</strong>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🔑 Validator Keys Setup</strong>
 
-     📝 Mnemonic
-       ├─ 🔐 Validator Keys &rarr; 📁 Keystores &rarr; ✅ Import to Client
-       └─ 💳 Wallet &rarr; 💰 Fund with ETH &rarr; 🚀 Register Validators
+     📝 Initialize Mnemonic
+       ↓
+     🔐 Generate Validator Keys &rarr; 📁 Keystores + 🔑 Passwords
+       ↓
+     ✅ Import Keys to Consensus Client
   </pre>
 </div>
 
@@ -107,44 +109,18 @@ Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.
 </details>
 
 :::custom-notes[Keystore Locations]
-  - Keystores are saved to `~/.stakewise/keystores`.
-  - The password is stored in `password.txt` within the keystores folder.
+  - Keystores are saved to `~/.stakewise/0x[vault-address]/keystores`
+  - **Default**: A single `password.txt` file contains the password for all generated keystores
+  - **Per-keystore option**: Use the `--per-keystore` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
 :::
 
 :::custom-warning[Important]
-  Protect `password.txt` as carefully as your keystores — anyone with it can access your keys.
+  Protect your password files as carefully as your keystores — anyone with access to them can decrypt your keys. This applies to both the single `password.txt` file and individual per-keystore password files.
 :::
 
 You can always add more validator keys to your Vault. For that, you need to generate new validator keys.
 
-## Step 3: Set Up Wallet
-
-Create a wallet for validator registrations and gas payments:
-
-```bash
-./operator create-wallet
-```
-
-<details className="custom-details">
-<summary>Example Output</summary>
-```
-Enter the vault address: 0x3320a...68
-Enter the mnemonic for generating the wallet: pumpkin anxiety private salon inquiry ...
-Done. The wallet and password saved to /home/user/.stakewise/0x3320a...68/wallet directory. The wallet address is: 0x239B...e3Cc
-```
-</details>
-
-You may reuse the same mnemonic as your validator keys or generate a separate one for added security.
-
-:::custom-warning[Wallet Balance Warning]
-  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
-
-    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
-    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
-    - Monitor balance regularly to prevent registration failures
-:::
-
-## Step 4: Import Validator Keys
+## Step 3: Import Validator Keys
 
 Upload your keystores into your consensus client:
 
@@ -152,10 +128,6 @@ Upload your keystores into your consensus client:
 2. Follow your consensus client's guide for importing keys
 3. Use the password from `password.txt` file
 4. Set the fee recipient to your Vault's fee recipient address
-
-:::custom-info[Fee Recipient Address]
-Found in your Vault's "Details" section on the StakeWise interface.
-:::
 
 ## Alternative Key Management
 
@@ -165,73 +137,9 @@ Validator keystores don't need to be stored directly in the Operator Service. Yo
 - **[HashiCorp Vault ↗](./alternative-key-creation/hashicorp-vault)** - Load keys from a remote Vault instance
 - **[API Mode ↗](./alternative-key-creation/api-mode)** - Run Operator as API service with external key management
 
-## Recover Validator Keystores
-
-You can recover validator keystores that are active. The recovery process will detect validators associated with your Vault address.
-
-:::custom-warning[Safety Requirements]
-  Before recovering keystores:
-  - **Stop all validators** - Ensure no validators are running with these keystores
-  - **Wait at least 2 epochs** - Allow time to pass to avoid slashing
-  - **Protect mnemonic** - Your seed phrase can generate all validator keys
-:::
-
-```bash
-./operator recover
-```
-
-<details className="custom-details">
-<summary>Example Output</summary>
-```
-Enter the mnemonic for generating the validator keys: [Your Mnemonic Here]
-Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
-Enter the comma separated list of API endpoints for execution nodes: https://example.com
-Enter the comma separated list of API endpoints for consensus nodes: https://example.com
-Enter the network name: hoodi
-Found 24 validators, recovering...
-Generating keystores [####################################] 100%
-Keystores for vault 0x3320ad928c20187602a2b2c04eeaa813fa899468 successfully recovered to /home/user/.stakewise/keystores
-```
-</details>
-
-## Advanced Configuration
-
-### Environment Variables
-
-Operator Service can be configured via environment variables instead of CLI flags.
-Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/master/.env.example) and save it as `.env`.
-
-```bash
-# Load environment variables
-export $(grep -v '^#' .env | xargs)
-
-# Verify they're loaded
-env
-```
-
-### Gas Fee Limits
-
-Protect against excessive gas costs by setting maximum fees:
-
-```bash
-./operator start --max-fee-per-gas-wei=100000000000  # 100 Gwei max
-```
-
-### CPU Optimization
-
-Reduce CPU load during key operations:
-
-```bash
-# Use half your CPU cores (recommended)
-./operator create-keys --pool-size=2
-```
-:::custom-tips[Performance Tip]
-  Setting `--pool-size` to half your CPU cores ensures smooth node operation during keystore operations.
-:::
-
 ## Next Steps
 
-With your keys and wallet prepared, continue to [Getting Started ↗](getting-started) to configure your Vault permissions and launch the Operator Service.
+With your validator keys generated and imported, continue to [Validators Manager ↗](validators-manager) to create your operator wallet and configure the necessary Vault permissions for validator management.
 
 :::custom-info[For consensus client documentation, see:]
 [Lighthouse ↗](https://lighthouse-book.sigmaprime.io/intro.html) • [Prysm ↗](https://docs.prylabs.network/) • [Teku ↗](https://docs.teku.consensys.io/) • [Nimbus ↗](https://nimbus.guide/) • [Lodestar ↗](https://chainsafe.github.io/lodestar/)

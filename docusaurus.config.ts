@@ -85,11 +85,17 @@ const config: Config = {
       },
       items: [
         {
-          label: 'Docs',
+          label: 'Concepts',
           to: 'docs/overview',
           type: "docSidebar",
           activeBaseRegex: `/docs/`,
           sidebarId: 'docsSidebar',
+        },
+        {
+          label: 'Guides',
+          to: '/docs/guides/staking',
+          activeBaseRegex: `/docs/guides/`,
+          sidebarId: 'guidesSidebar',
         },
         {
           label: 'Operator',

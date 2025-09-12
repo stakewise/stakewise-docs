@@ -1,12 +1,71 @@
 ---
-title: Operator Overview
+title: 1. Overview
 sidebar_position: 1
 ---
 
-# Operator Overview
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-Within the StakeWise protocol, anyone – from solo stakers to professional operators – can launch their own staking environment, called [Vault →](/docs/protocol-concepts/Vaults), and keep the stake in the Vault liquid with [osToken →](/docs/protocol-concepts/osToken), a liquid staking token of StakeWise.
+# Overview
 
-Vault architecture serves diverse use cases: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking to others.
+**StakeWise** is a decentralized liquid staking protocol that allows anyone to participate in Ethereum staking without the traditional barriers of technical complexity or capital requirements. The protocol enables users to stake their ETH while maintaining liquidity through [osToken →](/docs/protocol-concepts/osToken), StakeWise's liquid staking token.
 
-Each Vault requires a node operator, or a set of node operators, to stake the ETH deposited into the Vault, with each operator required to run StakeWise [Operator Service →](./operator-service).
+At the core of StakeWise are individual staking pools called [Vaults →](/docs/protocol-concepts/Vaults). Anyone – from solo stakers to professional operators – can create and operate their own Vault, offering flexible staking solutions that serve diverse needs: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking services to others.
+
+**Creating a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational and compliant with Ethereum staking requirements.
+
+## Core Functions
+
+The Operator Service integrates seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology.
+
+The Operator Service automates essential Vault management tasks:
+
+### Validator Registration
+
+The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
+
+:::custom-notes[Validator Types]
+- **`0x01` Legacy validators**: Fixed stake (32 ETH/1 GNO), no top-up funding available
+- **`0x02` Compound validators**: Variable stake up to 2048 ETH or 64 GNO, supports automatic funding
+:::
+
+By default, the Operator Service registers new `0x02` validators, prioritizing funding existing compound validators when possible; otherwise, it registers new validators up to the maximum balance.
+
+### Validator Consolidation
+Consolidates legacy `0x01` validators to `0x02` compound validators. This reduces validator count and infrastructure overhead.
+
+### Partial Withdrawals
+The Operator Service automatically processes validator withdrawals.
+Partial withdrawals run every 24 hours by default, processing balances above 32 ETH or 1 GNO, prioritizing higher balances first.
+If capacity is insufficient or no validators exceed the threshold, the service triggers full exits via execution requests.
+
+:::custom-info[Withdrawal Automation]
+If the Operator Service doesn't initiate withdrawals within 24 hours, StakeWise [Oracles →](../../docs/protocol-concepts/Oracles) automatically execute validator exits as a failsafe.
+:::
+
+### Vault State Update (Optional Feature)
+Keeps your Vault updated by distributing fees to the fee recipient and updating staker positions. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users.
+
+### Multi-Vault Support
+The Operator Service can manage multiple Vaults simultaneously using a single wallet and shared keystores.
+:::custom-tips[Migration to Multi-Vault Setup]
+  When migrating from a single-vault to a multi-vault setup, recreate your operator directory. This ensures your configuration aligns correctly with the new setup.
+:::
+
+### Automated Fee Claims
+For Vaults with multiple fee recipients, automatically handles reward splitting and distribution according to configured percentages, streamlining the reward collection process.
+
+### Exit Signatures Rotation
+
+The Operator Service maintains validator exit capabilities by monitoring oracle set changes and updating signatures when needed, ensuring validators can always be exited even if oracle keys are compromised.
+Without rotation, compromised or outdated oracle keys could prevent validator exits.
+
+:::custom-tips[Operational Benefits]
+The Operator Service reduces manual intervention, improves security through automation, and optimizes gas costs while maintaining full operator control over critical decisions.
+:::
+
+## Next Steps
+
+Before running the Operator Service, you must first ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.

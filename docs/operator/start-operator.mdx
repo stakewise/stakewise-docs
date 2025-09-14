@@ -94,12 +94,14 @@ Depending on your installation method, use the appropriate command format:
 
 ### Optional Flags
 
-- `--harvest-vault` - Enable automatic vault reward harvesting. Default is false
-- `--disable-withdrawals` - Disable partial withdrawals (use oracle exits)
-- `--claim-fee-splitter` - Enable automated reward splitter withdrawals
-- `--max-fee-per-gas-wei` - Maximum gas fee for both validator registrations and Vault harvests
-- `--concurrency` - Number of CPU cores used to both load keystores and create keystores.
-- `--validators-type=v1` - Register 0x01 validators (default: 0x02)
+- `--min-deposit-amount-gwei` - The minimum amount (in Gwei) that must accumulate in the Vault to trigger validator registration or a top-up. The default is 10,000,000,000 Gwei (10 ETH/GNO)
+- `--min-deposit-delay` - The minimum delay that must pass between validator registration or top-up transactions. Adjust this to control the frequency of registration transactions. The default is 3600 seconds (1 hour)
+- `--max-fee-per-gas-gwei` - The maximum fee per gas for transactions. Default is 10 Gwei for Ethereum, 2 Gwei for Gnosis. Adjust it if you want to limit the maximum gas fee you're willing to pay
+- `--validator-type` - Set to v1 if you want to register 0x01 validators. By default v2 or 0x02 validators are registered
+- `--harvest-vault` - Keeps your Vault synced by calling the `updateState` function of the Vault contract every 12 hours. This simplifies contract interactions and reduces gas costs for your users. By default, the Vault state is also updated whenever users interact with the Vault (deposits, withdrawals, etc.)
+- `--claim-fee-splitter` - Claims fees periodically to the addresses of the shareholders. See the configuration guide for details
+- `--disable-withdrawals` - Disables submitting partial and full withdrawals. This reduces gas costs but increases withdrawal times for users. Oracles will instead submit the exit signatures received from the Operator Service during validator registration
+- `--concurrency` - Number of CPU cores used to both load and create keystores
 
 :::custom-tips[Performance Optimization]
 For optimal performance, set `--concurrency` to half your CPU cores (e.g., `--concurrency=4` for 8-core systems) to prevent overloading during keystore operations.
@@ -111,4 +113,4 @@ Congratulations🎉! Your Operator Service is now running and ready to trigger v
 
 ## Next Steps
 
-Continue to [Rated Network Integration →](rated-network) to set up validator performance tracking and analytics reporting.
+Continue to [Additional Actions →](./additional-actions/rated-network) to explore optional configurations and integrations to enhance your Operator Service setup, including validator performance tracking with Rated Network.

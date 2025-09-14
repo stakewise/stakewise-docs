@@ -1,0 +1,8 @@
+{
+  "label": "Additional Actions",
+  "position": 9,
+  "link": {
+    "type": "generated-index",
+    "description": "Optional configurations and integrations to enhance your Operator Service setup."
+  }
+}

@@ -10,12 +10,12 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Validator Keys
 
-After installing the Operator Service, you need to generate validator keystores for your Vault and set up a wallet for handling validator registrations.
+After installing the Operator Service, you need to generate validator keystores for your Vault. These keystores contain the cryptographic keys that your validators will use to sign attestations and propose blocks on the Ethereum network.
 
-The Operator Service provides built-in functionality to generate all of the above.
-Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores, and wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline).
+The Operator Service provides built-in functionality to generate validator keys and keystores.
+Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores.
 
-This section walks you through the complete setup process using the Operator Service built-in tools.
+This section walks you through the validator key generation process using the Operator Service built-in tools.
 
 <div style={{textAlign: 'center', margin: '2rem 0'}}>
   <pre style={{
@@ -59,21 +59,20 @@ Follow the command prompts.
 
 ```
 Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]:
-Enter your vault address: 0x3320a...68
 Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]:
+
 This is your seed phrase. Write it down and store it safely, it is the ONLY way to recover your validator keys.
 
-pumpkin anxiety private salon inquiry ....
-
+fish monster write banner tired laptop slender ...
 
 Press any key when you have written down your mnemonic.
 
 Please type your mnemonic (separated by spaces) to confirm you have written it down
 
-: pumpkin anxiety private salon inquiry ....
+: fish monster write banner tired laptop slender ...
 
 done.
-Successfully initialized configuration for vault 0x3320a...68
+Successfully initialized configuration for StakeWise operator
 ```
 
 </details>
@@ -95,16 +94,14 @@ Follow the command prompts.
 <details className="custom-details">
 <summary>Example Output</summary>
 ```
-Enter the vault address: 0x3320a...68
-Enter the number of the validator keys to generate: 10
-Enter the mnemonic for generating the validator keys: pumpkin anxiety private salon inquiry ....
-Creating validator keys:    [####################################]  10/10
-Generating deposit data JSON    [####################################]  10/10
-Exporting validator keystores    [####################################]  10/10
 
-Done. Generated 10 keys for 0x3320a...68 vault.
-Keystores saved to /home/user/.stakewise/0x3320a...68/keystores file
-Deposit data saved to /home/user/.stakewise/0x3320a...68/keystores/deposit_data.json file
+Enter the number of the validator keys to generate: 3
+Enter the mnemonic for generating the validator keys: fish monster write banner tired laptop slender ...
+Creating validator keys:		  [####################################]  3/3
+Exporting validator keystores		  [####################################]  3/3
+
+Done. Generated 3 keys for StakeWise operator.
+Keystores saved to ~/.stakewise/[network]/keystores file
 ```
 </details>
 
@@ -130,7 +127,7 @@ Upload your keystores into your validator client:
 4. Start the validator client with attached validator keys.
 
 :::custom-warning[Fee Recipient Configuration Required]
-You must use the **Block Reward Recipient** address from the **"Details"** section on the Vault page as the `suggested-fee-recipient` in your validator client. An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
+You must use the **"Block reward recipient"** address from the **"Details"** section on the Vault page as the `suggested-fee-recipient` in your validator client. An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
 :::
 
 ## Alternative Key Management

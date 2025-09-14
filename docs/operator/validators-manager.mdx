@@ -12,6 +12,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 The Validators Manager is a critical role within StakeWise Vaults that grants specific permissions to perform validator-related operations. This role acts as the authorization mechanism for managing validators throughout their lifecycle.
 
+After generating your validator keys, you need to set up a wallet for handling validator registrations and assign it the Validators Manager role. The Operator Service provides built-in functionality to generate this operator wallet, or you can use existing wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline).
+
 ## What is the Validators Manager?
 
 The Validators Manager role provides permission to execute essential validator operations within your Vault. This role can be assigned to a wallet address and grants the authority to:
@@ -54,9 +56,9 @@ Create a wallet for validator registrations and gas payments:
 <details className="custom-details">
 <summary>Example Output</summary>
 ```
-Enter the vault address: 0x3320a...68
-Enter the mnemonic for generating the wallet: pumpkin anxiety private salon inquiry ...
-Done. The wallet and password saved to /home/user/.stakewise/0x3320a...68/wallet directory. The wallet address is: 0x239B...e3Cc
+
+Enter the mnemonic for generating the wallet: fish monster write banner tired laptop slender ...
+Done. The wallet and password saved to ~/.stakewise/[network]/wallet directory. The wallet address is: 0x59d58...B48C4
 ```
 </details>
 
@@ -76,7 +78,7 @@ You must assign the Validators Manager role to the wallet address created in the
 
 ### Using StakeWise UI
 
-1. Connect with your wallet and head to the [Operate page ↗](https://app.stakewise.io/operate)
+1. Connect using a Vault Admin wallet and navigate to the [Operate page ↗](https://app.stakewise.io/operate)
 2. Select the Vault for which you want to change the validators manager role
 3. In the upper right corner, click on **"Settings"** and open the **"Roles"** tab
 4. Enter the wallet address in the **"Validators manager"** field

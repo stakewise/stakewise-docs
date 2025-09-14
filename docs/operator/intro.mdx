@@ -32,8 +32,6 @@ At the core of StakeWise are individual staking pools called [Vaults →](/docs/
     <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🏛️ Architecture Overview</strong>
 
      📦 Your Vault &rarr; 🎯 Operator Service &rarr; ⛓️ Beacon Chain
-     
-     Smart Contract     Bridge & Manager     Validator Registration
   </pre>
 </div>
 
@@ -72,12 +70,11 @@ The withdrawal functionality can also be disabled for the Operator Service.
 In that case, the [Oracles →](../../docs/protocol-concepts/Oracles) will use the exit signatures they received from the Operator Service during validator registration (more details [here →](../../docs/protocol-concepts/Vaults#validator-registration)).
 :::
 
-### Vault State Update (Optional)
-Keeps your Vault updated by distributing fees to the fee recipient and updating staker positions. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users.
+### Vault State Update
+Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.)
 
 ### Automated Fee Claims
-By default, the fees earned by the Vault fee recipient remain locked in the validators.
-You can enable periodic fee claims through the Operator Service.
+By default, the fees earned by the Vault's fee recipient remain locked in the validators. You can enable periodic fee claims through the Operator Service. In this case, the earned fees will be claimed from the Vault and sent directly to the fee recipients.
 
 ## Next Steps
 

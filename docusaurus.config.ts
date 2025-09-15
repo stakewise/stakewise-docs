@@ -93,7 +93,7 @@ const config: Config = {
         },
         {
           label: 'Guides',
-          to: '/docs/guides/running-a-vault',
+          to: 'docs/guides/running-a-vault',
           activeBaseRegex: `/docs/guides/`,
           sidebarId: 'guidesSidebar',
         },

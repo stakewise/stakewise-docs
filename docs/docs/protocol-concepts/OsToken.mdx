@@ -39,6 +39,32 @@ The LTV ratio determines what portion of your stake can be tokenized with osToke
 | Standard       | 90% LTV          | 90% LTV        | 10% overcollateralization buffer |
 | DAO-Approved   | 99.99% LTV       | 99.95% LTV     | 5M SWISE operator bond           |
 
+This ensures that even if some validators get slashed, there are enough assets to back all outstanding osTokens.
+
+#### LTV Threshold Settings
+
+The StakeWise DAO sets **Loan-to-Value (LTV) thresholds** that determine how much osETH can be minted against staked assets in each Vault.
+
+**Standard Vaults**
+- **Default LTV**: 90% of staked ETH/GNO value
+- All Vaults can mint osETH up to this threshold by default
+
+**DAO-approved Vaults**
+- **Enhanced LTV**: Up to 99.99% of staked value
+- Reserved for DAO-approved Vaults meeting strict performance criteria
+
+:::custom-notes[DAO-approved Vault Requirements]
+To qualify for the 99.99% LTV threshold, Vaults must meet all criteria:
+
+- **📊 Scale**: Minimum 10,000 ETH staked
+- **💰 Fee Cap**: Maximum 5% Vault fee
+- **🎯 Performance**: Consistently above median network performance
+- **🔄 Technology**: Latest Vault version deployed
+- **🔒 Collateral**: 5M SWISE tokens locked as slashing insurance
+:::
+
+StakeWise DAO has the capability to increase or decrease the osETH minting threshold based on any given Vault's risk parameters.
+
 :::custom-notes[Example]
   With 100 ETH staked in a 90% LTV Vault at 1.05 exchange rate:
 
@@ -58,7 +84,7 @@ osToken can be acquired via four methods:
 All methods yield the same asset that appreciates through the same exchange rate mechanism.
 
 :::custom-notes[Deep Dive]
-More on each staking option's step-by-step instructions in the [osToken Staking Guide →](/guides/01-staking).
+More on each staking option's step-by-step instructions in the [Staking Guide →](/docs/guides/staking).
 :::
 
 #### Position Health

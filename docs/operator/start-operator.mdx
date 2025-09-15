@@ -29,7 +29,7 @@ There are several ways to run the Operator Service, depending on how you store p
 By default, the Operator Service runs with locally stored keystores created during key creation.
 
 ```bash
-./operator start-local --vaults=0x3320a...68 --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+./operator start-local --vaults=0x83...87Cf --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
 ```
 
 If you **did not** use Operator Service to generate validator keys, you will need to add the following flags:
@@ -58,7 +58,7 @@ Depending on your installation method, use the appropriate command format:
     #### Using Binary
 
     ```bash
-    ./operator start-local --vaults=0x000...,0x111... --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+    ./operator start-local --vaults=0x83...87Cf --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
     ```
   </TabItem>
 
@@ -73,7 +73,7 @@ Depending on your installation method, use the appropriate command format:
     -v ~/.stakewise/:/data \
     europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0 \
     src/main.py start-local \
-    --vaults=0x3320ad928c20187602a2b2c04eeaa813fa899468 \
+    --vaults=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --data-dir=/data \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
@@ -85,7 +85,7 @@ Depending on your installation method, use the appropriate command format:
 
     ```bash
     PYTHONPATH=. poetry run python src/main.py start-local \
-    --vaults=0x000... \
+    --vaults=0x834F... \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
     ```
@@ -113,4 +113,4 @@ Congratulations🎉! Your Operator Service is now running and ready to trigger v
 
 ## Next Steps
 
-Continue to [Additional Actions →](./additional-actions/rated-network) to explore optional configurations and integrations to enhance your Operator Service setup, including validator performance tracking with Rated Network.
+Continue to [Additional Actions →](./additional-actions/) to explore optional configurations and integrations to enhance your Operator Service setup, including validator performance tracking with Rated Network.

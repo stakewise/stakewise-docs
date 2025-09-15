@@ -1,236 +1,136 @@
 ---
 title: Staking
-sidebar_position: 2
+sidebar_position: 1
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Staking
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-```
+## Start Your Staking Journey
 
-#### Get started with staking using our how-to guides
+This comprehensive guide walks you through staking your ETH and GNO with StakeWise step by step.
 
-StakeWise is a liquid staking platform that gives you control over how your ETH and GNO are staked.
+StakeWise is a liquid staking platform that gives you complete control over how your assets are staked. Whether you're a beginner seeking simplicity or an advanced user wanting custom terms, StakeWise offers flexible staking solutions that earn rewards while keeping your stake liquid.
 
-Whether you are a beginner, an advanced DeFi user, a solo staker, or an organization that requires a bespoke staking solution, StakeWise will help you stake ETH and GNO on the best terms and get osToken, a liquid staking token, to keep your stake liquid.
+Choose your staking method based on your needs:
 
-| Method              | Advantages                                                            |
-| ------------------- | --------------------------------------------------------------------- |
-| One-click staking   | Simplicity and protection from all slashing                           |
-| Staking with Vaults | Higher yield, lower fee, protection from slashing in other Vaults     |
-| Liquid solo staking | MEV smoothing, highest yield, lowest fee, full control over the stake |
+| Method | Best for | Key advantages |
+|--------|----------|----------------|
+| 🚀 **One-click staking** | Beginners, simple staking | • Instant staking in seconds • Protection from all slashing • No technical knowledge required |
+| 🎯 **Vault marketplace staking** | Custom control, higher yields | • Choose your node operators • Higher potential yields • Lower fees • Protection from other Vaults |
+| 🏠 **Solo staking** | Advanced users, maximum control | • Run your own validators • Highest yields possible • Complete control over setup |
 
-Explore our how-to guides to start staking with StakeWise.
+:::custom-notes[New to liquid staking?]
+Learn about [osToken →](/docs/protocol-concepts/osToken), [Vaults →](/docs/protocol-concepts/Vaults), and [how StakeWise works →](/docs/intro).
+:::
 
-## One-click staking
+💡 Not sure which method to choose? Start with one-click staking for simplicity, then explore Vault options as you become more familiar with the platform.
 
-```mdx-code-block
-  <Tabs
-    groupId="token"
-    defaultValue="eth"
-    values={[
-      {label: 'ETH', value: 'eth'},
-      {label: 'GNO', value: 'gno'},
-    ]}>
-    <TabItem value="eth">
-        One-click staking relies on converting ETH for osETH, a liquid staking token of StakeWise. You will accrue ETH staking rewards by holding osETH in a wallet or in a smart contract.
+Below you'll find step-by-step instructions for each staking method.
 
-        osETH can be converted back into ETH at any time to receive the deposit and accumulated rewards.
+## How to stake with one click?
 
-        [Read more about osETH →](../intro)
+:::custom-notes[Wallet Requirements]
+You'll need an Ethereum wallet such as [Rabby Wallet ↗](https://rabby.io/).
+The process will look very similar in other wallets.
+:::
 
-        <h2>How to stake ETH with one click</h2>
-        <ol>
-            <li>Head to the [Stake](https://app.stakewise.io/) page in the StakeWise dApp and connect your wallet.</li>
-            <li>Enter the amount of ETH you would like to stake. The interface will show the amount of osETH tokens you will receive in return.</li>
-            <li>Note that the conversion ratio between osETH and ETH is >1 because osETH continuously accumulates staking rewards.</li>
-            <li>Press Deposit and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will receive osETH in your wallet and begin staking.</li>
-        </ol>
-    </TabItem>
-    <TabItem value="gno">
-        One-click staking relies on converting GNO for osGNO, a liquid staking token of StakeWise on Gnosis Chain. You will accrue GNO staking rewards by holding osGNO in a wallet or in a smart contract.
+One-click staking converts your assets directly into osTokens, StakeWise's liquid staking tokens. You instantly start earning staking rewards while maintaining full liquidity through osTokens.
 
-        osGNO can be converted back into GNO at any time to receive the deposit and accumulated rewards.
+:::custom-info[What are osTokens?]
+osTokens (osETH on Ethereum, osGNO on Gnosis Chain) represent your staked assets plus accumulated rewards. You can trade, use in DeFi, or convert back to the underlying asset anytime. [Learn more about osTokens →](/docs/protocol-concepts/osToken)
+:::
 
-        [Read more about osGNO →](../intro)
+1. **Open [StakeWise App ↗](https://app.stakewise.io)** and connect your wallet
+2. **Click the "Stake"** button to begin one-click staking
+3. **Enter the amount** you want to stake in the input field
+4. **Review conversion details** - The interface shows osTokens you'll receive, current rate, and estimated rewards
+5. **Click "Stake"** and confirm the transaction in your wallet
+6. **Wait for confirmation** (12-30 seconds) - osTokens will appear in your wallet and you start earning rewards
 
-        <h2>How to stake GNO with one click</h2>
-        <ol>
-            <li>Head to the [Stake](https://app.stakewise.io/) page in the StakeWise dApp and connect your wallet.</li>
-            <li>Enter the amount of GNO you would like to stake. The interface will show the amount of osGNO tokens you will receive in return.</li>
-            <li>Note that the conversion ratio between osGNO and GNO is >1 because osGNO continuously accumulates staking rewards.</li>
-            <li>Press Deposit and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will receive osGNO in your wallet and begin staking.</li>
-        </ol>
-    </TabItem>
-  </Tabs>
-```
+:::custom-warning[Important Notes]
+Ensure you have enough balance for both staking and gas fees for the transaction.
+:::
 
-## Staking with Vaults
+:::custom-info[Next Steps After Staking]
+**Track your rewards** - osToken value increases over time as rewards accumulate
 
-```mdx-code-block
-  <Tabs
-    groupId="token"
-    defaultValue="eth"
-    values={[
-      {label: 'ETH', value: 'eth'},
-      {label: 'GNO', value: 'gno'},
-    ]}>
-    <TabItem value="eth">
-        Staking with Vaults allows you to pick the specific terms on which your ETH will be staked, including the node operators that will run validators, relays used for MEV, and the staking fee.
+**Use your osTokens** - Trade, provide liquidity, or use in DeFi protocols while earning staking rewards
 
-        By staking in a particular Vault, you will earn ETH staking rewards only from that Vault's validators. You can unstake from a Vault at any time to receive the deposit and accumulated rewards.
+**Convert back anytime** - Swap osTokens back to the underlying asset through the app or exchanges when needed
+:::
 
-        [Read more about Vaults →](../intro)
+## How to stake with Vaults?
 
-        Your stake in any Vault can be made liquid by minting osETH, a liquid staking token.
+### Understanding Vault Staking
 
-        [Read more about osETH →](../intro)
+Vault staking gives you control over exactly how your assets are staked. Unlike one-click staking, you can choose specific node operators, MEV strategies, and fee structures that match your preferences.
 
-        <h3>How to stake with Vaults</h3>
+:::custom-notes[Why Choose Vault Staking?]
+**Higher potential yields** - Access to specialized operators and strategies
 
-        <ol>
-            <li>Head to the [Vault Marketplace](https://app.stakewise.io/) page in the StakeWise dApp and connect your wallet.</li>
-            <li>Browse through the different Vaults using Performance, APY, and TVL as filters.</li>
-            <li>Once you choose a Vault, press on the Stake button in the Vault interface.</li>
-            <li>Enter the amount of ETH you would like to stake.</li>
-            <li>Press the Stake button and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will start staking.</li>
-        </ol>
+**Custom terms** - Choose fee rates, node operators, and MEV handling
 
-        <h3>How to make your stake in the Vault liquid</h3>
+**Isolated rewards** - Earn from your chosen Vault's performance only
 
-        <ol>
-            <li>Head to the Vault page and connect your wallet.</li>
-            <li>Press the Mint button.</li>
-            <li>Enter the amount of osETH you want to mint or use the slider to choose the proportion of your stake that will be made liquid.</li>
-            <li>Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault (99.99% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.</li>
-            <li>Press the Mint button and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will start liquid staking</li>
-        </ol>
-    </TabItem>
-    <TabItem value="gno">
-        OStaking with Vaults allows you to pick the specific terms on which your GNO will be staked, including the node operators that will run validators, relays used for MEV, and the staking fee.
+**Slashing protection** - Protected from penalties in other Vaults
+:::
 
-        By staking in a particular Vault, you will earn GNO staking rewards only from that Vault's validators. You can unstake from a Vault at any time to receive the deposit and accumulated rewards.
+1. **Navigate to Vaults** from the StakeWise homepage and connect your wallet
+2. **Browse available Vaults** using filters for performance, APY, and TVL
+3. **Select your Vault** and review its APY, operator info, fees, and capacity
+4. **Click "Stake"** and enter the amount you want to stake
+5. **Review terms** and confirm the transaction in your wallet
 
-        [Read more about Vaults →](../intro)
+:::custom-warning[Research Before Staking]
+Review each Vault's operator, fee, and performance history. Higher APY may come with different risk profiles.
+:::
 
-        Your stake in any Vault can be made liquid by minting osGNO, a liquid staking token.
+### Making Your Stake Liquid (Optional)
 
-        [Read more about osGNO →](../intro)
+After staking in a Vault, you can mint osTokens against your stake to maintain liquidity:
 
-        <h3>How to stake with Vaults</h3>
+1. **Access Mint Option**: On your Vault's page, find the **"Mint osToken"** section
+2. **Choose Amount**: Use the slider or enter the amount of osTokens to mint
+   - Maximum: 90% of your stake (99.99% for select Vaults)
+   - Your full staking rewards continue regardless of minting ratio
 
-        <ol>
-            <li>Head to the [Vault Marketplace](https://app.stakewise.io/) page in the StakeWise dApp and connect your wallet.</li>
-            <li>Browse through the different Vaults using Performance, APY, and TVL as filters.</li>
-            <li>Once you choose a Vault, press on the Stake button in the Vault interface.</li>
-            <li>Enter the amount of GNO you would like to stake.</li>
-            <li>Press the Stake button and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will start staking.</li>
-        </ol>
+3. **Complete Minting**: Confirm the transaction to receive osTokens
+4. **Monitor Health**: Keep track of your position health in the Vault interface
 
-        <h3>How to make your stake in the Vault liquid</h3>
+:::custom-info[Position Health]
+Your osToken position has health levels (Healthy, Moderate, Risky, Unhealthy) based on your Vault's performance relative to osTokens. Monitor this regularly to avoid liquidation. [Learn more →](/docs/protocol-concepts/osToken#position-health)
+:::
 
-        <ol>
-            <li>Head to the Vault page and connect your wallet.</li>
-            <li>Press the Mint button.</li>
-            <li>Enter the amount of osGNO you want to mint or use the slider to choose the proportion of your stake that will be made liquid.</li>
-            <li>Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault (99.99% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.</li>
-            <li>Press the Mint button and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will start liquid staking</li>
-        </ol>
-    </TabItem>
-  </Tabs>
-```
+### Vault Staking Management
 
-## Liquid solo staking
+Once staked in a Vault, you can:
 
-```mdx-code-block
-  <Tabs
-    groupId="token"
-    defaultValue="eth"
-    values={[
-      {label: 'ETH', value: 'eth'},
-      {label: 'GNO', value: 'gno'},
-    ]}>
-    <TabItem value="eth">
-        Liquid solo staking works by creating a Vault with desired parameters (e.g. MEV smoothing) and staking your ETH in it, triggering the launch of solo validators on your node.
+- **📈 Track Performance**: Monitor your Vault's APY and your earned rewards
+- **🔄 Mint/Burn osTokens**: Adjust your liquid staking position as needed ([Learn about minting →](/docs/protocol-concepts/osToken#minting) | [Learn about burning →](/docs/protocol-concepts/osToken#burning))
+- **⚡ Use Boost**: Increase your staking rewards with additional yield opportunities
+- **📤 Unstake**: Exit the Vault (requires burning all minted osTokens first)
+- **💱 Switch Vaults**: Unstake from one and stake in another for better terms
 
-        By staking in your Vault, you will earn ETH staking rewards only from your solo validators. You can unstake from your Vault at any time to receive the deposit and accumulated rewards.
+## Solo Staking with StakeWise
 
-        [Read more about Solo Vaults →](../intro)
+For advanced users who want to run their own validators while maintaining liquidity, StakeWise offers solo staking through personal Vaults. This gives you maximum control and the highest potential yields.
 
-        Your stake in the Vault can be made liquid by minting osETH, a liquid staking token.
+:::custom-info[Advanced Feature]
+Solo staking requires technical expertise to run Ethereum validators. It's recommended for experienced users comfortable with node operation and command-line tools.
+:::
 
-        [Read more about osETH →](../intro)
+**Benefits of solo staking with StakeWise:**
+- 🎯 **Full control** over your validators and staking setup
+- 💰 **Highest yields** with minimal fees
+- 🔄 **Maintain liquidity** by minting osTokens against your stake
+- ⚙️ **MEV smoothing** for stable execution layer rewards
 
-        <h3>How to liquid solo stake</h3>
-
-        <ol>
-            <li>Head to the [Operate](https://app.stakewise.io/operate) page in the StakeWise dApp and connect your wallet.</li>
-            <li>Press on Create Vault button and follow the Vault Creation Wizard until completion.</li>
-            <li>Confirm the deployment of a Vault in your wallet and wait for the transaction to be confirmed to land on your Vault's page.</li>
-            <li>Press the Configure button on your Vault's page to set up your validators.</li>
-            <li>Choose your preferred way of running validators.</li>
-            <li>Follow the instructions on the screen to generate validator keys and press Continue.</li>
-            <li>Upload the deposit data when prompted.</li>
-            <li>Once the deposit data has been verified, press Save.</li>
-            <li>Proceed with staking the desired amount of ETH into your Vault by pressing the Stake button in the Vault interface.</li>
-            <li>Once your transaction is confirmed, your Vault will launch validators on your node and you will start staking.</li>
-        </ol>
-
-        <h3>How to make your solo stake in the Vault liquid</h3>
-
-        <ol>
-            <li>Head to the Vault page and connect your wallet.</li>
-            <li>Press the Mint button.</li>
-            <li>Enter the amount of osETH you want to mint or use the slider to choose the proportion of your stake that will be made liquid.</li>
-            <li>Note that the maximum value of osETH you can mint is set to 90% of your stake in the Vault (99.99% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.</li>
-            <li>Press the Mint button and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will start liquid staking</li>
-        </ol>
-    </TabItem>
-    <TabItem value="gno">
-        Liquid solo staking works by creating a Vault with desired parameters (e.g. MEV smoothing) and staking your GNO in it, triggering the launch of solo validators on your node.
-
-        By staking in your Vault, you will earn GNO staking rewards only from your solo validators. You can unstake from your Vault at any time to receive the deposit and accumulated rewards.
-
-        [Read more about Solo Vaults →](../intro)
-
-        Your stake in the Vault can be made liquid by minting osGNO, a liquid staking token.
-
-        [Read more about osGNO →](../intro)
-
-        <h3>How to liquid solo stake</h3>
-
-        <ol>
-            <li>Head to the [Operate](https://app.stakewise.io/operate) page in the StakeWise dApp and connect your wallet.</li>
-            <li>Press on Create Vault button and follow the Vault Creation Wizard until completion.</li>
-            <li>Confirm the deployment of a Vault in your wallet and wait for the transaction to be confirmed to land on your Vault's page.</li>
-            <li>Press the Configure button on your Vault's page to set up your validators.</li>
-            <li>Choose your preferred way of running validators.</li>
-            <li>Follow the instructions on the screen to generate validator keys and press Continue.</li>
-            <li>Upload the deposit data when prompted.</li>
-            <li>Once the deposit data has been verified, press Save.</li>
-            <li>Proceed with staking the desired amount of GNO into your Vault by pressing the Stake button in the Vault interface.</li>
-            <li>Once your transaction is confirmed, your Vault will launch validators on your node and you will start staking.</li>
-        </ol>
-
-        <h3>How to make your solo stake in the Vault liquid</h3>
-
-        <ol>
-            <li>Head to the Vault page and connect your wallet.</li>
-            <li>Press the Mint button.</li>
-            <li>Enter the amount of osGNO you want to mint or use the slider to choose the proportion of your stake that will be made liquid.</li>
-            <li>Note that the maximum value of osGNO you can mint is set to 90% of your stake in the Vault (99.99% for select Vaults). The profitability of your stake in the Vault is not reduced to the proportion you choose and remains fully intact.</li>
-            <li>Press the Mint button and confirm the transaction in your wallet.</li>
-            <li>Once the transaction is confirmed on the blockchain, you will start liquid staking</li>
-        </ol>
-    </TabItem>
-  </Tabs>
-```
+**To get started with solo staking:**
+1. **Create your own Vault** using our [Vault creation guide →](/docs/guides/running-a-vault)
+2. **Set up validator infrastructure** following our [operator documentation →](/operator/intro)
+3. **Stake in your Vault** and optionally mint osTokens for liquidity

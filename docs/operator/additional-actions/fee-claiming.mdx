@@ -1,0 +1,46 @@
+---
+title: Enable Fee Claiming
+sidebar_position: 1
+---
+
+# Enable Fee Claiming
+
+It is possible to periodically withdraw rewards for the Vault’s fee shareholders through the Reward Splitter system.
+
+:::custom-info[Prerequisites]
+1. **Set Fee Claimer Role**: In your Vault settings, assign the operator's wallet address as the **Fee Claimer** in the Roles tab
+2. **Start with Flag**: Add the `--claim-fee-splitter` flag when starting the Operator Service
+:::
+
+## Configuration
+
+The automated fee claiming process can be configured using environment variables:
+
+:::custom-info[Environment Variables]
+**`REWARD_SPLITTER_INTERVAL`** - Controls how often fee claiming runs (default: 24 hours)
+
+**`REWARD_SPLITTER_MIN_ASSETS`** - Minimum threshold in Wei before processing withdrawals to avoid unnecessary gas fees
+:::
+
+## How It Works
+
+The fee claiming task combines multiple operations into a single multicall transaction:
+
+1. **Harvest vault rewards** from Keeper contract
+2. **Withdraw splitter rewards** on behalf of each shareholder (rewards go to exit queue)
+3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses)
+
+## Usage
+
+```bash
+# Start operator with fee claiming enabled
+./operator start-local \
+  --vaults=0x3320a...68 \
+  --consensus-endpoints=http://localhost:5052 \
+  --execution-endpoints=http://localhost:8545 \
+  --claim-fee-splitter
+```
+
+:::custom-notes[Gas Optimization]
+To avoid unnecessary gas fees from the operator's wallet, withdrawals are processed only if their total amount exceeds the minimum threshold set by `REWARD_SPLITTER_MIN_ASSETS`.
+:::

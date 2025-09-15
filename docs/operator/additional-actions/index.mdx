@@ -1,13 +1,32 @@
 ---
 title: Overview
-sidebar_position: 1
+sidebar_position: 0
 ---
 
 # Overview
 
-Optional configurations and integrations to enhance your Operator Service setup.
+Beyond core validator registration, the StakeWise Operator supports several additional actions to enhance Vault management and operational efficiency.
 
-After successfully starting your Operator Service, you can configure additional features to optimize your validator operations and monitoring.
+## Available Actions
 
-### Monitoring & Analytics
-- **[Submit to Rated Network →](./rated-network)** - Integrate with Rated Network for performance tracking and analytics
+### Enable Fee Claiming
+Automate reward withdrawals for Vault fee shareholders through the Reward Splitter system. Configure periodic claiming with customizable intervals and minimum thresholds.
+Essential for Vault operators with multiple fee shareholders who want automated reward distribution.
+[Learn more →](./fee-claiming)
+
+### Enable Monitoring
+Track Vault performance and incentive distributions. Monitor various token rewards (SWISE, osETH, SSV, Obol, WETH, USDC) and access comprehensive reporting through the StakeWise App interface.
+Recommended for all operators who want to track performance and reward distributions across their validator operations.
+[Learn more →](./monitoring)
+
+### Consolidate Validators
+Convert legacy `0x01` validators to efficient `0x02` compound validators for Pectra upgrade compatibility. Support for balances above 32 ETH/1 GNO, improved partial withdrawals, and reduced operational overhead. Required for operators upgrading to Pectra and wanting to maximize validator efficiency with modern validator types.
+[Learn more →](./consolidate-validators)
+
+### Exit Validators
+Manually trigger validator exits when needed, with support for both partial withdrawals and full exits.
+[Learn more →](./exit-validators)
+
+:::custom-info[Getting Started]
+Each action has specific setup requirements and configuration options. Review the individual guides for detailed implementation instructions and best practices.
+:::

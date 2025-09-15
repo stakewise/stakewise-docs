@@ -1,0 +1,77 @@
+---
+title: Consolidate Validators
+sidebar_position: 3
+---
+
+# Consolidate Validators
+
+Convert legacy `0x01` validators to compound `0x02` validators for improved efficiency and Pectra upgrade compatibility.
+
+:::custom-info[Prerequisites]
+  - Wallet must be set as Validators Manager in vault settings
+  - Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
+:::
+
+## Usage Options
+
+### Consolidate Specific Validators
+
+```bash
+./operator consolidate \
+  --vault=0x000... \
+  --source-public-keys=0x001,0x002 \
+  --target-public-key=0x003
+```
+
+### Consolidate Using File
+
+For managing multiple validators, use a file containing public keys:
+
+```bash
+./operator consolidate \
+  --vault=0x000... \
+  --source-public-keys-file=public_keys.txt \
+  --target-public-key=0x003
+```
+
+### Convert `0x01` to `0x02` (Same Key)
+
+To convert validators while keeping the same public key:
+
+```bash
+./operator consolidate \
+  --vault=0x000... \
+  --source-public-keys=0x001 \
+  --target-public-key=0x001
+```
+
+ :::custom-info[Process Flow]
+  1. **Enter endpoints**: Provide consensus and execution node endpoints
+  2. **Confirm vault**: Verify the vault address
+  3. **Review consolidation**: Confirm the list of validators to consolidate
+  4. **Oracle signatures**: System fetches required signatures for consolidation
+  5. **Transaction submission**: Consolidation transaction is submitted and confirmed
+:::
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```bash
+Enter the comma separated list of API endpoints for execution nodes: : https://example.com
+Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Consolidating 2 validators:
+    0x001 -> 0x003
+    0x002 -> 0x003
+Proceed consolidation? [Y/n]: y
+Fetched signatures for validator consolidation: Received 11 out of 11 approvals
+Submitting consolidate validators transaction
+Waiting for transaction 0x00000... confirmation
+Validators has been successfully consolidated
+```
+
+</details>
+
+:::custom-warning[Important Notes]
+The target public key must be a compounding validator. The consolidation process requires oracle signatures and network confirmation before completion.
+:::

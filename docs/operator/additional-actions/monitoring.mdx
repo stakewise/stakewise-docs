@@ -1,0 +1,62 @@
+---
+title: Enable Monitoring
+sidebar_position: 2
+---
+
+# Enable Monitoring
+
+The Operator Service supports monitoring using Prometheus by providing a `/metrics` endpoint that Prometheus can scrape to gather various metrics about your validator operations.
+
+:::custom-info[Prerequisites]
+- Operator application running and accessible
+- Prometheus server installed and running
+- Basic knowledge of how to configure Prometheus targets
+- [Grafana Dashboard ↗](https://grafana.com/grafana/dashboards/19060-v3-operator/) for [v3-operator ↗](https://github.com/stakewise/v3-operator) installed
+:::
+
+## Setup Operator for Monitoring
+
+The Operator provides flexibility to define the host and port for the metrics endpoint via environment variables:
+
+:::custom-notes[Environment Variables]
+**`ENABLE_METRICS`** - Defines whether the metrics endpoint should be enabled (default: `false`)
+
+**`METRICS_HOST`** - Defines the hostname or IP on which the metrics endpoint will be available
+
+**`METRICS_PORT`** - Defines the port on which the metrics endpoint will be available
+:::
+
+Ensure that these environment variables are set as per your requirements.
+
+:::custom-notes[Environment Variables Example]
+```bash
+export ENABLE_METRICS=true
+export METRICS_HOST=0.0.0.0
+export METRICS_PORT=9100
+```
+:::
+
+:::custom-info[Command-Line Flags]
+You can also specify them by providing `--enable-metrics`, `--metrics-port` and `--metrics-host` flags to the start command.
+:::
+
+The Operator Service's metrics will be available at `http://[METRICS_HOST]:[METRICS_PORT]/metrics`.
+
+## Configure Prometheus
+
+To monitor the Operator, configure Prometheus to scrape metrics from the exposed `/metrics` endpoint.
+
+Add the following job configuration to your Prometheus configuration file (`prometheus.yml`):
+
+```yaml
+scrape_configs:
+  - job_name: 'operator'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['<METRICS_HOST>:<METRICS_PORT>']
+```
+
+Replace `<METRICS_HOST>` and `<METRICS_PORT>` with the values you've configured in the Operator.
+
+This configuration tells Prometheus to scrape metrics from the Operator every 30 seconds.
+

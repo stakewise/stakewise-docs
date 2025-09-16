@@ -1,31 +1,25 @@
 ---
-title: Overview
+title: Additional Actions
 sidebar_position: 0
 ---
 
-# Overview
+# Additional Actions
 
-Beyond validator registration, the StakeWise Operator supports several additional actions to simplify and improve Vault management.
+Running validators doesn’t stop at registration — operators also need tools to add extra rewards and manage them efficiently, monitor performance, upgrade validators, and eventually exit them when required.
 
-## Available Actions
+The StakeWise Operator Service includes a set of additional actions designed to make Vault management easier, more efficient, and more transparent.
 
-### Fee Claiming
-Automate reward withdrawals for Vault fee shareholders through the Reward Splitter system. Configure periodic claiming with customizable intervals and minimum thresholds.
-Essential for Vault operators with multiple fee shareholders who want automated reward distribution.
-[Learn more →](./fee-claiming)
+With these tools, you can:
 
-### Monitoring
-Track Vault performance and incentive distributions. Monitor various token rewards (SWISE, osETH, SSV, Obol, WETH, USDC) and access comprehensive reporting through the StakeWise App interface.
-Recommended for all operators who want to track performance and reward distributions across their validator operations.
-[Learn more →](./monitoring)
+[Automate fee claiming →](./fee-claiming) – distribute rewards to shareholders based on the set percentages.
 
-### Consolidate Validators
-Convert legacy `0x01` validators to efficient `0x02` compound validators for Pectra upgrade compatibility. Support for balances above 32 ETH/1 GNO, improved partial withdrawals, and reduced operational overhead. Required for operators upgrading to Pectra and wanting to maximize validator efficiency with modern validator types.
-[Learn more →](./consolidate-validators)
+[Monitor performance →](./monitoring) – track metrics and rewards in real time with Prometheus, Grafana, and Rated Network integration.
 
-### Exit Validators
-Trigger validator exits when needed.
-[Learn more →](./exit-validators)
+[Consolidate validators →](./consolidate-validators) – upgrade legacy validators for Pectra compatibility and reduce infrastructure overhead.
+
+[Exit validators →](./exit-validators) – safely withdraw validators when needed.
+
+Dive into each action to see when it’s useful and how to set it up in your environment.
 
 :::custom-info[Getting Started]
 Each action has specific setup requirements and configuration options. Review the individual guides for detailed implementation instructions and best practices.

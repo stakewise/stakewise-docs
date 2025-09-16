@@ -2,6 +2,7 @@
   "label": "DeFi",
   "position": 4,
   "link": {
-    "type": "generated-index"
+    "type": "doc",
+    "id": "docs/guides/defi/index"
   }
 }

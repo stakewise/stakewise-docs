@@ -5,12 +5,19 @@ sidebar_position: 3
 
 # Consolidate Validators
 
-Convert legacy `0x01` validators to compound `0x02` validators for improved efficiency and Pectra upgrade compatibility.
+The Operator Service supports consolidation of legacy `0x01` validators to `0x02` compound validators using the `consolidate` command, enabling variable validator balances up to 2048 ETH.
+This reduces validator count and infrastructure overhead by merging multiple 32 ETH validators into fewer, higher-balance validators.
+The Operator Service uses a `check_vault_version` function to verify that Vaults support Pectra features before attempting consolidation.
 
-:::custom-info[Prerequisites]
-  - Wallet must be set as Validators Manager in vault settings
-  - Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
+:::custom-warning[Validators Manager Required]
+  The wallet executing this command must be set as the Validators Manager in the Vault settings.
 :::
+
+Optionally specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate selected validators.
+
+```bash
+./operator consolidate --vault=0x000...  --source-public-keys=0x001,0x002 --target-public-key=0x003
+```
 
 ## Usage Options
 
@@ -45,14 +52,6 @@ To convert validators while keeping the same public key:
   --target-public-key=0x001
 ```
 
- :::custom-info[Process Flow]
-  1. **Enter endpoints**: Provide consensus and execution node endpoints
-  2. **Confirm vault**: Verify the vault address
-  3. **Review consolidation**: Confirm the list of validators to consolidate
-  4. **Oracle signatures**: System fetches required signatures for consolidation
-  5. **Transaction submission**: Consolidation transaction is submitted and confirmed
-:::
-
 <details className="custom-details">
 <summary>Example Output</summary>
 
@@ -69,9 +68,9 @@ Submitting consolidate validators transaction
 Waiting for transaction 0x00000... confirmation
 Validators has been successfully consolidated
 ```
-
 </details>
 
 :::custom-warning[Important Notes]
-The target public key must be a compounding validator. The consolidation process requires oracle signatures and network confirmation before completion.
+The target public key must be a compounding validator.
+The consolidation process requires oracle signatures, which are automatically fetched during the operation.
 :::

@@ -53,16 +53,29 @@ The Operator Service periodically checks whether the Vault has accumulated enoug
 
 By default, the Operator Service registers new `0x02` validators, prioritizing funding existing compound validators when possible; otherwise, it registers new validators up to the maximum balance.
 
+:::custom-notes[Deep Dive]
+For detailed information about the validator registration process, see [Validator Registration →](/docs/protocol-concepts/Vaults#validator-registration)
+:::
+
 ### Validator Consolidation
-Consolidates legacy `0x01` validators to `0x02` compound validators. This reduces validator count and infrastructure overhead.
+Consolidates legacy `0x01` validators to `0x02` compound validators.
+
+:::custom-notes[Deep Dive]
+For detailed instructions on consolidating validators, see [Consolidate Validators →](./additional-actions/consolidate-validators)
+:::
 
 ### Withdrawals
 
 When a user requests to exit their stake, the Operator Service identifies the validators from which to withdraw the assets.
 It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
 If partial withdrawals are insufficient, it proceeds with full withdrawals.
+
 :::custom-notes[Exit Queue Monitoring]
 To minimize the number of withdrawals, the Operator Service checks the exit queue every 12 hours (this interval can be reconfigured).
+:::
+
+:::custom-notes[Deep Dive]
+For detailed instructions on exiting validators, see [Exit Validators →](./additional-actions/exit-validators)
 :::
 
 :::custom-info[Oracle Failsafe]
@@ -71,10 +84,14 @@ In that case, the [Oracles →](../../docs/protocol-concepts/Oracles) will use t
 :::
 
 ### Vault State Update
-Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.)
+Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.).
 
 ### Automated Fee Claims
 By default, the fees earned by the Vault's fee recipient remain locked in the validators. You can enable periodic fee claims through the Operator Service. In this case, the earned fees will be claimed from the Vault and sent directly to the fee recipients.
+
+:::custom-notes[Deep Dive]
+For detailed instructions on enabling fee claiming, see [Fee Claiming →](./additional-actions/fee-claiming)
+:::
 
 ## Next Steps
 

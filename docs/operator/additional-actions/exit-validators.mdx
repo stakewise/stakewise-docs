@@ -5,36 +5,18 @@ sidebar_position: 4
 
 # Exit Validators
 
-Manually trigger validator exits when needed, though exits are typically handled automatically by oracles.
+The Operator Service can trigger validator exits when needed, though exits are typically handled automatically by Oracles.
 
 :::custom-info[Prerequisites]
-- Wallet must be set as Validators Manager in vault settings
+- Wallet must be set as Validators Manager in Vault settings
 - Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
 :::
 
-## Usage Options
-
-### Basic Exit Command
+## Basic Exit Command
 
 ```bash
 ./operator exit-validators
 ```
-
-### Exit Specific Validators
-
-Exit specific validators using the `--indexes` parameter:
-
-```bash
-./operator exit-validators --indexes=513571,513572,513861
-```
-
-:::custom-info[Process Flow]
-1. **Endpoint Configuration**: System confirms consensus and execution endpoints
-2. **Vault Verification**: Confirm the vault address
-3. **Validator Selection**: Choose which validator indexes to exit
-4. **Final Confirmation**: Review and confirm the list of validators to be exited
-5. **Execution**: Validator exits are initiated on-chain
-:::
 
 <details className="custom-details">
 <summary>Example Output</summary>
@@ -49,20 +31,6 @@ Validators 513571, 513572, 513861 exits successfully initiated
 
 </details>
 
-## Exit Processing Methods
-
-### Partial Withdrawals (Preferred)
-
-- Faster and more efficient than full exits
-- Processes validators with balances above 32 ETH/1 GNO
-- Maintains validator active status while withdrawing excess
-
-### Full Validator Exits
-
-- Used when partial withdrawals are insufficient
-- Completely removes validators from the network
-- Processed through execution request calls or oracle management
-
 :::custom-info[Automatic Processing]
 Validator exits are processed through the withdrawal queue system. The operator prioritizes partial withdrawals over full exits for better efficiency and faster processing times.
 :::
@@ -75,7 +43,7 @@ If the operator does not initiate partial or full withdrawals within 24 hours, t
 
 ### Disable Withdrawals
 
-Use `--disable-withdrawals` flag when starting the operator to rely solely on oracle-managed full exits:
+Use `--disable-withdrawals` flag when starting the Operator Service to rely solely on oracle-managed full exits:
 
 ```bash
 ./operator start-local \

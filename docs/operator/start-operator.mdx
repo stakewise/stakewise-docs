@@ -99,7 +99,7 @@ Depending on your installation method, use the appropriate command format:
 - `--max-fee-per-gas-gwei` - The maximum fee per gas for transactions. Default is 10 Gwei for Ethereum, 2 Gwei for Gnosis. Adjust it if you want to limit the maximum gas fee you're willing to pay
 - `--validator-type` - Set to v1 if you want to register 0x01 validators. By default v2 or 0x02 validators are registered
 - `--harvest-vault` - Keeps your Vault synced by calling the `updateState` function of the Vault contract every 12 hours. This simplifies contract interactions and reduces gas costs for your users. By default, the Vault state is also updated whenever users interact with the Vault (deposits, withdrawals, etc.)
-- `--claim-fee-splitter` - Claims fees periodically to the addresses of the shareholders. See the configuration guide for details
+- `--claim-fee-splitter` - Claims fees periodically to the addresses of the shareholders. See [Fee Claiming →](./additional-actions/fee-claiming) for details
 - `--disable-withdrawals` - Disables submitting partial and full withdrawals. This reduces gas costs but increases withdrawal times for users. Oracles will instead submit the exit signatures received from the Operator Service during validator registration
 - `--concurrency` - Number of CPU cores used to both load and create keystores
 

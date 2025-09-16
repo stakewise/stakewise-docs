@@ -21,7 +21,7 @@ Choose your staking method based on your needs:
 | Method | Best for | Key advantages |
 |--------|----------|----------------|
 | 🚀 **One-click staking** | Beginners, simple staking | • Instant staking in seconds • Protection from all slashing • No technical knowledge required |
-| 🎯 **Vault marketplace staking** | Custom control, higher yields | • Choose your node operators • Higher potential yields • Lower fees • Protection from other Vaults |
+| 🎯 **Staking with Vaults** | Custom control, higher yields | • Choose your node operators • Higher potential yields • Lower fees • Protection from other Vaults |
 | 🏠 **Solo staking** | Advanced users, maximum control | • Run your own validators • Highest yields possible • Complete control over setup |
 
 :::custom-notes[New to liquid staking?]
@@ -47,8 +47,8 @@ Below you'll find step-by-step instructions for each staking method.
   }}>
     <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}><img src="/img/icons8-flow-50.png" alt="Flow" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Staking Flow</strong>
     <img src="/img/icons8-ethereum.svg" alt="ETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Your Assets &rarr; <img src="/img/icons8-safe-40.png" alt="Vault" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> StakeWise Vaults &rarr; <img src="/img/osETH.svg" alt="osETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> osTokens &rarr; 💰 Earn Rewards
-    <span style={{marginLeft: '575px'}}>↓</span>
-    👛 Receive Assets &larr; 🚪 Unstaking &larr; 🔥 Burn osTokens &larr; 📥 Claim Rewards
+    <span style={{marginLeft: '570px'}}>↓</span>
+    👛 Receive Assets &larr; 📥 Claim Rewards &larr; 🚪 Unstaking &larr; 🔥 Burn osTokens
   </pre>
 </div>
 
@@ -154,3 +154,25 @@ Solo staking requires technical expertise to run Ethereum validators. It's recom
 1. **Create your own Vault** using our [Vault creation guide →](/docs/guides/running-a-vault)
 2. **Set up validator infrastructure** following our [operator documentation →](/operator/intro)
 3. **Stake in your Vault** and optionally mint osTokens for liquidity
+
+## How to unstake?
+
+:::custom-warning[Required Step]
+To unstake and withdraw your assets, you must first **burn the osTokens you minted**. The interface shows exactly how much to burn.
+:::
+
+### Unstaking Process
+
+:::custom-notes[When unstaking:]
+Burn osETH → Enter unstake amount → Confirm transaction → Join unstake queue → Claim ETH.
+:::
+
+1. **Burn osTokens** - Click **minus (-)** button, enter amount or click **"Max"**, click **"Confirm"**
+2. **Unstake assets** - Click **minus (-)** button, enter withdrawal amount, click **"Unstake"**
+3. **Join queue** - Confirmation shows **"Added to unstake queue"**
+4. **Claim assets** - Once assets are exited, click **"Claim"** to receive your assets
+
+:::custom-notes[Processing Times]
+- **Burning**: Immediate once confirmed
+- **Unstaking**: 24-48 hours depending on queue
+:::

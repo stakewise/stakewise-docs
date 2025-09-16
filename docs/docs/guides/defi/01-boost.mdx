@@ -12,51 +12,79 @@ StakeWise Boost enhances staking rewards by using osTokens as collateral to borr
 - **14x looping** in Vaults with 100% LTV
 - **Up to 3x boost** in staking rewards compared to normal staking
 
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <pre style={{
+    display: 'inline-block',
+    textAlign: 'left',
+    background: '#FFFFFF4D',
+    color: '#018970',
+    padding: '2rem',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Monaco, monospace',
+    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
+    lineHeight: '1.8'
+  }}>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🚀 Boost Flow</strong>
+
+    <img src="/img/osETH.svg" alt="osETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> osTokens &rarr; <img src="/img/aave-aave-logo.svg" alt="Aave" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Aave Collateral &rarr; <img src="/img/ethereum.png" alt="ETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Borrow ETH &rarr; <img src="/img/icons8-flow-50.png" alt="Flow" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Stake Again &rarr; 💰 Enhanced APY
+  </pre>
+</div>
+
 :::custom-tips[Expected Returns]
 The strategy extracts the difference between additional staking rewards and Aave borrowing costs, historically delivering 4-6% APY with peaks around 7%.
 :::
 
-## Safety Mechanisms
+### Safety Mechanisms
 
 :::custom-info[Liquidation Protection]
 **Max LTV**: 93% - the maximum you can borrow against your osToken collateral
 
 **Liquidation Threshold**: 95% - when positions become subject to liquidation
 
-**Safety Buffer**: 2% - substantial protection before liquidation risk
+**Safety Buffer**: 2% - substantial protection before liquidation risk<sup><a href="#fn-1" id="fnref-1">1</a></sup>
 :::
 
-### Built-in De-risking
-
-The Boost strategy includes automatic safety features that make positions progressively safer over time. When osToken APY exceeds borrow rates, your LTV decreases automatically, creating a self-improving mechanism. Historical analysis of 420 days shows that LTV only increases approximately 10.7% of the time (about 39 days per year), meaning for every 1 day of LTV increase, you benefit from 8 days of LTV decline.
-
-### Price Stability Protection
+#### Price Stability Protection
 
 Boost eliminates depeg-related liquidation risks through Aave's use of StakeWise's native price feed for osTokens instead of volatile secondary market prices. This means osToken price fluctuations on DEXs cannot trigger liquidations, as your collateral value always equals the osToken redemption value rather than market price. This design ensures that temporary market volatility doesn't endanger your boosted position.
 
-## Emergency Safeguards
+#### Escape Hatch
 
 As an additional safety layer, Boost includes an "escape hatch" mechanism that activates when positions approach the liquidation threshold. When any boosted position reaches 94.5% LTV, anyone in the community can trigger an automatic unboosting transaction to protect the user. The StakeWise core team actively monitors all boosted positions and will trigger these protective exits when necessary, with all funds always remaining under the original owner's control.
 
-:::custom-info[Risk Scenarios Analysis]
-**Scenario 1: Negative yield spread** - Even in extreme cases where borrow rates consistently exceed osToken APY by 2%, liquidation would take over a year. Historical data shows this scenario occurs only 10.7% of days, with the longest consecutive period being just 7 days during Genesis Vault validator rotation.
+### How to Use Boost
 
-**Scenario 2: Mass slashing events** - Would require unprecedented slashing of 480-1,150 validators across the protocol. StakeWise has maintained a perfect record with zero slashing events in 4 years of operation. Liquidation would require a 2.1% decline in osToken value from slashing.
+:::custom-info[Prerequisites]
+To use Boost, you need osTokens in your wallet. If you don't have any, see the [staking guide →](/docs/guides/staking) for instructions on minting osTokens from your stake.
 :::
 
-## User Best Practices
+#### Boosting Process
 
-While Boost includes comprehensive safety mechanisms, users should actively monitor their positions for optimal performance. Exit Boost if APY remains negative for more than 7 consecutive days, and stay connected with the StakeWise Discord community for real-time updates on market conditions. Regular check-ins on your position health ensure you're maximizing rewards while maintaining safety.
+1. Go to your Vault page and find the **"Boost"** section
+2. Click plus **+** button to start the boost process
+3. Use the input field to specify the amount of osTokens to boost
+4. Confirm the boost transaction
+5. View your boosted osETH balance and enhanced APY in Position changes
 
-:::custom-tips[Additional Benefits]
-**Zero fees** - StakeWise doesn't charge performance fees for using Boost
+#### Unboosting Process
 
-**No slippage risk** - Strategy doesn't rely on secondary markets for debt repayment
+1. Go to your Vault page and find the **"Boost"** section
+2. Click minus **-** button to start the unboost process
+3. Use the input field to specify the amount of osTokens to unboost
+4. Confirm the unboost transaction (enters unboost queue)
+5. Monitor estimated processing time and claim assets when available
 
-**Gas optimized** - Streamlined transaction process for deposits and withdrawals
+:::custom-warning[User Best Practices]
+Monitor your position regularly and exit Boost if APY remains negative for more than 7 consecutive days. Stay connected with the StakeWise Discord community for real-time updates on market conditions.
 :::
 
 :::custom-notes[Further Reading]
 - [Maximize Your Rewards With StakeWise Boost ↗](https://stakewise.medium.com/maximize-your-rewards-with-stakewise-boost-8799ae1e5731)
 - [How StakeWise Boost Keeps Your Rewards Juicy & Your Stake Safe ↗](https://x.com/stakewise_io/status/1883194716843348259)
 :::
+
+<div id="fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> The 2% safety buffer provides substantial protection because, based on historical analysis of 420 days: LTV increases only ~10.7% of the time (39 days per year), with the longest negative streak being just 7 days during Genesis Vault validator rotation. Even in extreme scenarios where borrow rates consistently exceed osToken APY by 2%, liquidation would take over a year. For every 1 day of LTV increase, users benefit from 8 days of LTV decline, making positions progressively safer over time.
+  <a href="#fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>

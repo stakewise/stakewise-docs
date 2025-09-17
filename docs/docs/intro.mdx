@@ -11,7 +11,7 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 # The StakeWise Protocol
 
-<h2>Introduction</h2>
+## Introduction
 
 StakeWise is a liquid staking protocol for Ethereum, designed to make staking more flexible, secure, and accessible.
 
@@ -30,9 +30,9 @@ specifically the non-custodial, trustless nature that allows self-sovereignty to
 Most users lack either the technical expertise to run validator nodes or the 32 ETH required to stake.
 StakeWise addresses this by providing an essential base layer that lowers both technical and capital barriers to ETH staking.
 
-<h2>Understanding Liquid Staking</h2>
+## Understanding Liquid Staking
 
-<h3>What is Staking?</h3>
+### What is Staking?
 
 Staking is a <Tooltip content={<><strong>Cryptoeconomic mechanism</strong> <br /> A cryptoeconomic mechanism is a combination of cryptographic proof with economic incentives to govern the production, distribution, and consumption of goods and services in a decentralized digital economy.</>}>cryptoeconomic mechanism</Tooltip> that uses rewards and penalties to incentivize proper network behavior,
 thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains like Ethereum, participants run
@@ -41,10 +41,10 @@ The primary identifier of a validator is its public BLS key (example of usage of
 To activate validator software, you need to be able to stake 32 ETH. </>}>validator</Tooltip> nodes by putting tokens *at stake*.
 Validators are essential to maintaining network consensus — the process by which all participants agree on the blockchain's new global state<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>.
 
-One of the important fields of the [validator object↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36)
-is <code style={{backgroundColor: '#f4f4f4', color: '#018970', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
+One of the important fields of the [validator object ↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36)
+is the <code style={{backgroundColor: '#f4f4f4', color: '#018970', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
 which represents the validator's "active" balance and determines its influence in the protocol.
-This balance serves as the validator's "weight" in consensus duties:
+This balance serves as the validator's "weight" in consensus duties, which are:
 
 - Attesting to its view of the chain<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>
 - Proposing beacon chain blocks
@@ -53,20 +53,20 @@ that support <Tooltip content={<><strong>Light Client</strong> <br /> A light cl
 
 The Beacon Chain uses both rewards and penalties to incentivize proper validator behavior<sup><a href="#user-content-fn-4" id="user-content-fnref-4">4</a></sup>.
 Reward amounts are calculated based on mathematical formulas considering multiple variables, participation rates, timing, and network conditions<sup><a href="#user-content-fn-5" id="user-content-fnref-5">5</a></sup>.
-Validator also earn rewards from priority fees and MEV (Maximum Extractable Value).
+Validators also earn rewards from priority fees and MEV (Maximum Extractable Value).
 
 Learn more about rewards and penalties — [ethereum.org ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)
 
-<h3>The Traditional Staking Dilemma</h3>
+### The Traditional Staking Dilemma
 Traditional PoS staking follows a simple premise: lock tokens and earn rewards.
 While this model secures the network, it has a major drawback — staked ETH is illiquid.
 Once staked, it cannot be used elsewhere in decentralized finance (DeFi).
 This creates a fundamental dilemma: stakers must choose between earning rewards and keeping their ETH liquid, but never both.
 
 
-<h3>Solution</h3>
+### Solution
 
-Liquid staking transforms your stake into a tradeable asset through tokenization. When you stake through a liquid staking protocol, you receive liquid staking tokens (LSTs) representing your claim on the underlying staked assets plus accrued rewards. Unlike native staking where tokens are locked, LSTs remain liquid and composable. This unlocks the entire DeFi ecosystem while your original stake continues earning validation rewards. You can now earn from multiple sources:
+Liquid staking transforms your stake into a tradeable asset through tokenization. When you stake through a liquid staking protocol, you receive liquid staking tokens (LSTs) representing your claim on the underlying staked assets plus accrued rewards. Unlike native staking where tokens are locked, LSTs remain liquid and <Tooltip content={<><strong>Composable</strong> <br /> In DeFi, composability refers to the ability of different protocols and applications to work together seamlessly, like building blocks. Composable tokens can be integrated across multiple DeFi protocols simultaneously, allowing users to leverage their assets in various ways at once.</>}>composable</Tooltip>. This unlocks the entire DeFi ecosystem while your original stake continues earning validation rewards. You can now earn from multiple sources:
 
 - Staking rewards from your underlying validators;
 - DeFi yields from a multitude of opportunities: collateral for lending, yield farming strategies, or trading on decentralized exchanges (DEXs);
@@ -75,7 +75,7 @@ Liquid staking transforms your stake into a tradeable asset through tokenization
 
 Liquid staking represents an epistemic shift in how staking works. With LSTs, you maintain exposure to staking rewards while having liquidity, breaking the disjunctive premise of traditional staking.
 
-<h3>Staking Options</h3>
+### Staking Options
 In order to participate in the Ethereum consensus mechanism, a staker must deposit 32 ETH.
 
 The default way to stake — called solo staking — can be prohibitive because of the minimum required 32 ETH and the technical expertise required to run a node. This accessibility barrier led to the emergence of staking service providers that require no programming knowledge or hardware setup: staking-as-a-service (SaaS) and centralized exchanges (CEXs). However, both come with significant concessions: SaaS providers still require the full 32 ETH minimum and offer no liquidity benefits, while centralized exchanges have one fundamental flaw — centralization, which contradicts crypto's core decentralization principles.
@@ -86,7 +86,7 @@ By nature of their service, liquid staking protocols are non-custodial and permi
 
 This opens room for an innovative approach to liquid staking pioneered by StakeWise.
 
-<h2>What is StakeWise?</h2>
+## What is StakeWise?
 StakeWise is a liquid staking protocol that gives you the benefits of permissionless and non-custodial liquid staking without the trade-offs.
 
 Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive staking network that serves diverse participants through three distinct approaches:
@@ -95,68 +95,73 @@ Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive st
 
 **[One-click staking →](./guides/staking#how-to-stake-with-one-click)**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. osToken is issued automatically, granting access to instant liquidity and DeFi by default.
 
-**[Run own Vault →](./guides/running-a-vault)**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via osToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
+**[Run own Vault →](./guides/running-a-vault)**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via osToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from [MetaMask ↗](https://metamask.io/), [Chorus One ↗](https://chorus.one/), [Blockchain.com ↗](http://Blockchain.com), [Ledger Live ↗](https://www.ledger.com/ledger-live), and others.
 
-StakeWise's product offering emerged from deep analysis of stakeholder motivations, creating a structure that reinforces our decentralized vision while sustainably scaling Ethereum staking. StakeWise also continuously develops innovative strategies to maximize your rewards, such as Boost, with more features coming soon.
+StakeWise also continuously develops innovative strategies to maximize your rewards, such as [Boost →](./guides/defi/boost), with more features coming soon.
 
-<h3>Architecture</h3>
+### Architecture
 StakeWise's modular architecture is built on three foundational pillars: Vaults, osToken, and Oracles.
 
-<h4>Vaults: Customizable Smart Contracts</h4>
-Vaults are isolated, highly customizable smart contracts that function as individual staking pools. Pool operators can accept deposits from other stakers, earning fees while providing staking services. The marketplace model democratizes liquid staking by giving you the freedom to choose where to stake and how.
+#### Vaults — Customizable Smart Contracts
+Vaults are isolated, highly customizable smart contracts that function as individual staking pools.
+Pool operators can accept deposits from stakers, earn fees, and offer tailored staking services.
+This open marketplace model democratizes liquid staking, giving you the freedom to choose how and where to stake.
 
-<h4>Key Features:</h4>
-<ul>
-  <li>Permissionless & Customizable: Launch your own Infinity Pool without approval, controlling fees, MEV strategies, and validator selection. Manage access by making your Pool private or <Tooltip content={<><strong>OFAC-compliant</strong> <br /> Compliance with the Office of Foreign Assets Control regulations, which may restrict access to certain jurisdictions or sanctioned entities.</>}>OFAC-compliant</Tooltip>;</li>
-  <li>Open Marketplace: Choose from diverse Vaults based on your preferences for decentralization, yield, or specialized strategies;</li>
-  <li>Risk Isolation: Each Infinity Pool operates independently — issues in one Pool don't affect others;</li>
-</ul>
+**Key Features**
 
-:::custom-notes[Deep Dive]
-Learn how Vaults work, their isolation model, and how to create your own [Vaults →](./protocol-concepts/Vaults)
-:::
+- **Permissionless & Customizable**: Launch your own Vault without approval, control fees, MEV strategies, and validator selection. Make your Vault private or <Tooltip content={<><strong>OFAC-compliant</strong> <br /> Compliance with the Office of Foreign Assets Control regulations, which may restrict access to certain jurisdictions or sanctioned entities.</>}>OFAC-compliant</Tooltip>.
 
-<h4>osToken: Next-Generation Liquid Staking Tokens</h4>
-osToken, standing for Overcollateralized Staking Token, is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain. Designed with safety and composability at its core, osToken accrues staking rewards while maintaining full liquidity for DeFi participation. osToken can be minted by anyone staking in Vaults or acquired directly from a DEX to instantly start earning staking rewards.
+- **Open Marketplace**: Choose from diverse Vaults based on your preferences for decentralization, yield, or specialized strategies.
 
-<h4>Key Features:</h4>
-<ul>
-  <li>Protected & Rewarding: Overcollateralized design with auto-compounding rewards and slashing protection;</li>
-  <li>DeFi Ready: Fully compatible with lending, trading, and yield farming protocols;</li>
-</ul>
+- **Risk Isolation**: Each Vault operates independently — issues in one do not affect others.
 
 :::custom-notes[Deep Dive]
-Explore osToken's inner mechanics, including its built-in slashing protection [osToken →](./protocol-concepts/osToken)
+Learn more about [Vaults →](./protocol-concepts/Vaults)
 :::
 
-<h4>Oracles: Decentralized Infrastructure Layer</h4>
-The decentralized oracle network bridges StakeWise smart contracts with Ethereum's <Tooltip content={<><strong>Beacon Chain</strong> <br /> Ethereum's consensus layer, a peer-to-peer network of consensus clients that handles block gossip and consensus logic. It is responsible for things like block and attestation handling, running the fork choice algorithm, and managing rewards and penalties for validators.</>}>Beacon Chain</Tooltip>, ensuring transparent, trustless operations while maintaining the protocol's security and non-custodial nature. Since Beacon Chain state is not directly accessible in the EVM (though [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) aims to address this), oracles fetch essential validator data.
+#### osToken — Overcollateralized Staking Token
+osToken is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain.
+Designed with safety and composability at its core, osToken accrues staking rewards while maintaining full liquidity for DeFi participation.
+It can be minted by staking in Vaults or acquired directly on a DEX to start earning rewards instantly.
 
-<h4>Key Functions:</h4>
-<ul>
-  <li>Validator Lifecycle: Handle registration, consolidations, rewards, penalties, and exits;</li>
-  <li>Token Stability: Maintain accurate osToken rates and ensure peg stability;</li>
-</ul>
+**Key Features**
+
+- **Protected & Rewarding**: Overcollateralized by design, with auto-compounding rewards and integrated slashing protection.
+
+- **DeFi Ready**: Fully composable and compatible with lending, trading, and yield-farming protocols.
 
 :::custom-notes[Deep Dive]
-Discover how Oracles help enhance the protocol's security [Oracles →](./protocol-concepts/Oracles)
+Learn more about [osToken →](./protocol-concepts/osToken)
 :::
 
-<h4>Governance & SWISE Token</h4>
-StakeWise is governed by the community through the SWISE governance token, with holders voting on protocol parameters like fees, oracle selection, and upgrades via StakeWise Improvement Proposals (SWIPs).
+#### Oracles — Decentralized Infrastructure Layer
+The decentralized Oracle network connects StakeWise smart contracts to Ethereum's <Tooltip content={<><strong>Beacon Chain</strong> <br /> Ethereum's consensus layer, a peer-to-peer network of consensus clients that handles block gossip and consensus logic. It is responsible for things like block and attestation handling, running the fork choice algorithm, and managing rewards and penalties for validators.</>}>Beacon Chain</Tooltip>, enabling transparent and trustless operations while preserving the protocol's security and non-custodial design.
+Since Beacon Chain state is not directly accessible in the EVM (though [EIP-4788 ↗](https://eips.ethereum.org/EIPS/eip-4788) aims to address this), oracles fetch essential validator data.
+
+**Key Functions**
+
+- **Validator Lifecycle**: Manages validator registration, consolidations, rewards, penalties, and exits.
+
+- **Token Stability**: Maintains accurate osToken exchange rates and safeguards peg stability. [Learn more →](./protocol-concepts/osToken#reward-accrual--fee-mechanism)
+
+:::custom-notes[Deep Dive]
+Learn more about [Oracles →](./protocol-concepts/Oracles)
+:::
+
+### Governance & SWISE Token
+StakeWise is governed by its community through the **SWISE** token. Holders vote on key protocol parameters—such as fees, oracle selection, and upgrades—via StakeWise Improvement Proposals (SWIPs).
 
 :::custom-stakewise[Join Us]
 Get involved in shaping the protocol's future by participating in [StakeWise Forum →](https://forum.stakewise.io/)
 :::
 
 
-<h4>Future Vision</h4>
-StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes and adapting proactively for optimal performance while fostering the decentralization that is essential for Ethereum's long-term health.
-
+### Future Vision
+StakeWise aligns closely with Ethereum’s roadmap, proactively researching and adapting to upcoming changes to ensure optimal performance. The protocol remains committed to fostering decentralization, a cornerstone for Ethereum’s long-term health.
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span>
-  Users submit transactions to this network of nodes, and the goal of the consensus protocol is that all correct nodes eventually agree on a single, consistent view of the history of transactions. That is, the order in which transactions were processed and the outcome of that processing.
+  Users submit transactions to the network of nodes, and the goal of the consensus protocol is that all correct nodes eventually agree on a single, consistent view of the history of transactions. That is, the order in which transactions were processed and the outcome of that processing.
   <a href="#user-content-fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
@@ -168,8 +173,8 @@ StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes an
 
 <div id="user-content-fn-3" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>3.</span>
-  Each attestation contains three votes: a source checkpoint vote, a target checkpoint vote (both for Casper FFG finality), and a head block vote (for LMD-GHOST fork choice).
-  More on Gasper consensus in the [whitepaper](https://arxiv.org/pdf/2003.03052)
+  Each attestation contains three votes: a source checkpoint vote, a target checkpoint vote (both for Casper FFG finality), and a head block vote (for [LMD-GHOST ↗](https://eth2book.info/latest/part2/consensus/lmd_ghost/) fork choice).
+  More on Gasper consensus in the [whitepaper ↗](https://arxiv.org/pdf/2003.03052)
   <a href="#user-content-fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
@@ -182,6 +187,6 @@ StakeWise stays aligned with Ethereum's roadmap, researching upcoming changes an
 <div id="user-content-fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>5.</span>
   For detailed reward calculations and formulas, see:
-  <a href="https://eth2book.info/capella/part2/incentives/rewards/" style={{textDecoration: 'none', color: '#018970'}}>eth2book</a>
+  <a href="https://eth2book.info/capella/part2/incentives/rewards/" style={{textDecoration: 'none', color: '#018970'}}>eth2book ↗</a>
   <a href="#user-content-fnref-5" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

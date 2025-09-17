@@ -1,7 +1,9 @@
 .container {
-  max-width: 300px;
+  width: 280px;
+  min-height: 120px;
   transition: .2s;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .icon {

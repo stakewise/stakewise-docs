@@ -1,0 +1,117 @@
+---
+title: Add Extra Rewards
+sidebar_position: 1
+---
+
+# Add Extra Rewards
+
+## Vault Incentives
+
+If you would like to add any of the incentives, you can either reach out to the StakeWise development team (e.g., info@stakewise.io ✉️, [Telegram ↗](https://t.me/stakewise_io), or [Discord ↗](https://discord.com/invite/2BSdr2g)) and they will add you as a distributor to the contract or submit the allocation for you.
+Once you're added as a distributor, you will be able to allocate extra incentives to your Vault directly, without an intermediary.
+
+:::custom-info[Supported Tokens]
+The following tokens are currently supported for distribution: SWISE, osETH, SSV, Obol, WETH, and USDC. If you would like to distribute a different token, feel free to reach out.
+:::
+
+:::custom-warning[Ethereum Only]
+Please note that Vault incentives are currently supported only on Ethereum.
+:::
+
+## Periodic Distribution to the Vault
+
+You can distribute tokens for any period of time to all the Vault stakers.
+Use periodic distributions when you want to provide consistent and scheduled incentives to all Vault stakers over a defined period.
+
+:::custom-info[Example]
+You can distribute SSV/Obol tokens to your Vault stakers.
+:::
+
+Incentives will be allocated every hour to all Vault users based on their staked balance, with `merkle root` updates by Oracles DAO. Users can claim their incentives at any time through the [StakeWise App ↗](https://app.stakewise.io/):
+
+![Claiming](./img/vault-incentives.gif)
+
+### How It Works
+
+The extra incentives will be added to both the base APY and the boost APY of the Vault.
+They will also be included in the user's reward statistics.
+
+### Setup Instructions
+
+If your address is approved by the DAO as a distributor, you will be able to allocate periodic incentives to your Vault by following these steps:
+
+1. Call `approve` on the token you would like to distribute. Set the spender to the `Merkle Distributor` contract address.
+2. Go to the `Merkle Distributor` contract.
+3. Click **Contract** → **Write Contract**.
+4. Click **Connect to Web3** and connect with the address that the DAO has approved as a distributor.
+5. Click `distributePeriodically` and enter the following:
+   - `token` – token address. Currently, only SWISE, osETH, SSV, WETH, and USDC are supported.
+   - `amount` – amount in Wei. Note: You must approve the transfer of the specified amount to the `Merkle Distributor` contract address.
+   - `delayInSeconds` – the delay before starting the distribution.
+   - `durationInSeconds` – the duration of the distribution in seconds.
+   - `extraData` – the address of the Vault.
+
+## One Time Distribution to the Vault
+
+You can distribute tokens to the Vault stakers as a one-time allocation. The one-time distribution feature is ideal for scenarios where a specific, lump-sum allocation of tokens is needed, ensuring that all stakers receive their share instantly.
+
+:::custom-info[Use Case]
+This method is particularly advantageous for distributing rewards quickly without requiring ongoing management of allocations.
+:::
+
+Incentives will be allocated to all Vault users based on their staked balance at the time of the transaction. The StakeWise Oracles DAO will then submit an update to the `Merkle Distributor` contract, and users will be able to claim the extra tokens from the UI. The distributed tokens will be included in the user's reward statistics.
+
+### Setup Instructions
+
+If your address is approved by the DAO as a distributor, you will be able to allocate one-time incentives to your vault by following these steps:
+
+1. Call `approve` on the token you would like to distribute. Set the spender to the `Merkle Distributor` contract address.
+2. Go to the Merkle Distributor contract.
+3. Click **Contract** → **Write Contract**.
+4. Click **Connect to Web3** and connect with the address that the DAO has approved as a distributor.
+5. Click `distributeOneTime` and enter the following:
+   - `token` – token address. Currently, only SWISE, osETH, SSV, WETH, and USDC are supported.
+   - `amount` – amount in Wei. Note: You must approve the transfer of the specified amount to the `Merkle Distributor` contract address.
+   - `rewardsIpfsHash` – not used here, pass empty string `""`.
+   - `extraData` – the address of the Vault.
+
+## One Time Distribution from IPFS File
+
+With this option, you can distribute tokens to Vault stakers based on an allocation file uploaded to IPFS.
+
+:::custom-info[Use Case]
+This method is suitable when managing complex distributions involving large numbers of recipients or when the distribution details are pre-determined and stored externally.
+:::
+
+### Preparation
+
+To proceed with an IPFS-based distribution:
+
+1. **Prepare your distribution file** and upload it to IPFS. The file should be JSON formatted and include addresses and corresponding amounts as follows:
+
+```json
+[
+  {
+    "address": "0x6280431e7D155073B51197d0C487f4385ed1b5b7",
+    "amount": "1200000000000000000"
+  },
+  {
+    "address": "0x5471C1A73FcbA6357A617779cDdA8B1F2952Be54",
+    "amount": "1800000000000000000"
+  }
+]
+```
+
+2. **Upload file to IPFS** and obtain a hash for it. For example, `bafkreig3c7venh7xlbqap2r5idlva73gooflgadilxnmav24bnyvltvouq`
+
+### Setup Instructions
+
+1. Call `approve` on the token you would like to distribute. Set the spender to the `Merkle Distributor` contract address.
+2. Go to the `Merkle Distributor` contract.
+3. Click **Contract** → **Write Contract**.
+4. Connect to Web3 with your approved distributor address.
+5. Use the `distributeOneTime` function and input:
+   - `token` – token address. Currently, only SWISE, osETH, SSV, WETH, and USDC are supported.
+   - `amount` – amount in Wei. Note: You must approve the transfer of the specified amount to the `Merkle Distributor` contract address.
+   - `rewardsIpfsHash` – the hash of the file uploaded to IPFS
+   - `extraData` – empty bytes `0x`

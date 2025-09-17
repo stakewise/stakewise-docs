@@ -17,9 +17,9 @@ It is possible to periodically withdraw rewards for the Vault’s fee shareholde
 The automated fee claiming process can be configured using environment variables:
 
 :::custom-info[Environment Variables]
-**`REWARD_SPLITTER_INTERVAL`** - Controls how often fee claiming runs (default: 24 hours)
+**`FEE_SPLITTER_INTERVAL`** - Controls how often fee claiming runs in seconds (default: 86400 seconds = 24 hours)
 
-**`REWARD_SPLITTER_MIN_ASSETS`** - Minimum threshold in Wei before processing withdrawals to avoid unnecessary gas fees
+**`FEE_SPLITTER_MIN_ASSETS`** - Minimum amount accumulated in the fee splitter contract (in Wei) before processing withdrawals to avoid unnecessary gas fees (default: 1000000000000000 Wei = 0.001 ETH)
 :::
 
 ## How It Works
@@ -42,5 +42,5 @@ The fee claiming task combines multiple operations into a single multicall trans
 ```
 
 :::custom-notes[Gas Optimization]
-To avoid unnecessary gas fees from the operator's wallet, withdrawals are processed only if their total amount exceeds the minimum threshold set by `REWARD_SPLITTER_MIN_ASSETS`.
+To avoid unnecessary gas fees from the operator's wallet, withdrawals are processed only if their total amount exceeds the minimum threshold set by `FEE_SPLITTER_MIN_ASSETS`.
 :::

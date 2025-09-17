@@ -44,7 +44,7 @@ The Operator Service automates essential Vault management tasks:
 
 ### Validator Registration
 
-The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validator(s) and sends a registration transaction to the Vault.
+The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validators and sends a registration transaction to the Vault.
 
 :::custom-notes[Validator Types]
 - **`0x01` Legacy validators**: Fixed stake (32 ETH/1 GNO), no top-up funding available
@@ -58,7 +58,7 @@ For detailed information about the validator registration process, see [Validato
 :::
 
 ### Validator Consolidation
-Consolidates legacy `0x01` validators to `0x02` compound validators.
+The Operator Service consolidates legacy `0x01` validators to `0x02` compound validators.
 
 :::custom-notes[Deep Dive]
 For detailed instructions on consolidating validators, see [Consolidate Validators →](./additional-actions/consolidate-validators)

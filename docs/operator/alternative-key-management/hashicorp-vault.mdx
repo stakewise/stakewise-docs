@@ -10,7 +10,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # HashiCorp Vault
 
-Operator supports loading signing keys from remote [HashiCorp Vault ↗](https://github.com/hashicorp/vault) instance, avoiding storage of keystores on the filesystem. This approach is best suited for node operators who already have most of StakeWise Operator functionality implemented in their systems, and only need integration for validator registration or pooling support.
+The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](https://github.com/hashicorp/vault) instance, avoiding storage of keystores on the filesystem. This approach is best suited for node operators who already have most of StakeWise Operator functionality implemented in their systems, and only need integration for validator registration or pooling support.
 
 :::custom-warning[Advanced Users Only]
   Regular users should only employ this functionality on their own risk, if they already manage a deployment of HashiCorp Vault.
@@ -27,7 +27,7 @@ Complete the following steps before proceeding:
 
 ## Key Storage Format
 
-Currently there are two commands that support loading signing keys: `start` and `validators-exit`. The user must provide HashiCorp Vault instance URL, authentication token, and secret path in K/V engine.
+Currently, there are two commands that support loading signing keys: `start` and `validators-exit`. The user must provide HashiCorp Vault instance URL, authentication token, and secret path in K/V engine.
 
 Internal structure of the secret must resemble the following JSON format:
   ```json
@@ -40,7 +40,7 @@ Internal structure of the secret must resemble the following JSON format:
 
 Public and private signing keys must be stored in hex form, with or without `0x` prefix.
 
-After loading keys from HashiCorp Vault, operator behaves in the same way as if it had loaded them from keystores, no additional operations needed to support the integration.
+After loading keys from HashiCorp Vault, the operator behaves in the same way as if it had loaded them from keystores, no additional operations needed to support the integration.
 
 ## `start` Options
 

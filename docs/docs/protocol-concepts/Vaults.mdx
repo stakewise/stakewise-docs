@@ -321,35 +321,35 @@ All upgrades are subject to community governance approval, providing strong guar
 The Vault architecture is deployed in parallel on both the Ethereum and Gnosis networks through equivalent contract implementations,
 such as `EthVault` and `GnoVault`.
 
-<div id="fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities:
   `0x01` validators (Type 1) use the current 32 ETH limit with automatic sweeps of excess balance, while
   `0x02` validators (Type 2) support higher effective balances up to 2048 ETH with compounding rewards and partial withdrawals.
   Converting from `0x01` to `0x02` is irreversible.
   By default, the `0x02` validators are registered. To register `0x01` validators, add the flag `--validators-type=0x01`.
-  <a href="#fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
-<div id="fn-2" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+<div id="fn-2" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>2.</span>
   Validators in Ethereum use two sets of BLS keys: <strong>validator keys (hot)</strong> and <strong>withdrawal keys (cold)</strong>. Validator keys sign attestations, blocks, and exits (`SignedVoluntaryExit`), while withdrawal keys secure the eventual withdrawal of stake and rewards.
-  <a href="#fnref-2" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+  <a href="#fnref-2" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
-<div id="fn-3" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+<div id="fn-3" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>3.</span>
   BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" style={{textDecoration: 'underline', color: '#018970'}}>Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" style={{textDecoration: 'underline', color: '#018970'}}>here</a>.
-  <a href="#fnref-3" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+  <a href="#fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
-<div id="fn-4" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) is currently in the project phase and proposes a method to expose Ethereum's beacon chain block roots inside the EVM by committing each beacon block's hash tree root into execution payload headers and storing them in a smart contract. <a href="#fnref-4" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+<div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>4.</span> [EIP-4788](https://eips.ethereum.org/EIPS/eip-4788) is currently in the project phase and proposes a method to expose Ethereum's beacon chain block roots inside the EVM by committing each beacon block's hash tree root into execution payload headers and storing them in a smart contract. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
-<div id="fn-5" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>5.</span> To disable this, use the flag `--disable-withdrawals` — in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-5" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+<div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>5.</span> To disable this, use the flag `--disable-withdrawals` — in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-5" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
-<div id="fn-6" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>6.</span> To qualify for the higher LTV, Vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest Vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#fnref-6" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+<div id="fn-6" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>6.</span> To qualify for the higher LTV, Vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest Vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#fnref-6" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

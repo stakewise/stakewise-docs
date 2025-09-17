@@ -128,11 +128,11 @@ while management roles, branding, and fees can be changed later.
 
 All Vault types support osToken minting. The Vault types differ in their specific characteristics and restrictions.
 
-#### **Standard Vaults** - Most Common
+#### Standard Vaults - Most Common
 
 Receive staking deposits from any wallet and issue non-transferable Vault shares that earn rewards.
 
-#### **ERC-20 Vaults** - For Custom Utility & Liquidity Ecosystem
+#### ERC-20 Vaults - For Custom Utility & Liquidity Ecosystem
 
 Allow operator to build their own DeFi ecosystem using the Vault's Token.
 Operator sets its name and symbol (e.g. mntETH), which will be visible in most portfolio tracking applications.
@@ -140,15 +140,15 @@ Users still can mint osToken and transfer their stake in the Vault as long as th
 
 Tokenless Vaults avoid potential tax events when exchanging ETH for a Vault token.
 
-#### **Private Vaults** - Restricted Access
+#### Private Vaults - Restricted Access
 
 Receive staking deposits from wallets that have been whitelisted by the Vault Admin.
 
-#### **Blocklist Vaults** - Open with Exceptions
+#### Blocklist Vaults - Open with Exceptions
 
 Receive staking deposits from any wallets except those on a blocklist.
 
-#### **Meta Vaults** - Diversified Strategy
+#### Meta Vaults - Diversified Strategy
 
 Meta Vaults do not register validators directly -
 instead, they delegate accumulated assets to sub-Vaults, which are managed by the Vault Admin.
@@ -169,7 +169,7 @@ deposit transaction, reverting with a `CapacityExceeded` error if exceeded. Capa
 MEV (Maximum Extractable Value) represents additional profits that validators can earn when proposing blocks.
 Vaults can use either a Smoothing Pool or Own Escrow for collecting the block rewards.
 
-#### **Smoothing Pool** – Pooled Rewards
+#### Smoothing Pool – Pooled Rewards
 
 Rewards are pooled across multiple Vaults and distributed evenly, providing more stable and predictable returns regardless of block proposal frequency.
 
@@ -180,7 +180,7 @@ The main advantage of using the Smoothing Pool is achieving a consistent level o
 
 Any Vault that opts into using the Smoothing Pool is required to operate one of the StakeWise DAO-approved MEV relays. This is necessary to ensure a consistently high contribution to the Smoothing Pool from every participating Vault.
 
-#### **Own Escrow** – Own Rewards
+#### Own Escrow – Own Rewards
 
 Rewards are collected solely by individual Vaults.
 Own Escrow allows a Vault to choose an independent approach to earning block production rewards,
@@ -191,29 +191,33 @@ Own Escrow targets maximum value capture but with increased variability.
 
 Every Vault has several key roles for the internal management of the staking process:
 
-**Vault Admin** - The Vault Owner
+#### Admin
 
-Deploys the Vaults and sets the core parameters like the type of Vault, fee, and branding.
+Can manage roles, modify the fee and recipients, and update the Vault's branding.
 
-Vault Admin can be a single wallet, a multisig, or a DAO and can be changed through `setAdmin` function.
-The function can only be called by the current Vault Admin.
+Admin can be a single wallet, a multisig, or a DAO and can be changed through `setAdmin` function.
+The function can only be called by the current Admin.
 
-While Vault Admin cannot change the core parameters of the Vault set once at deployment,
-they can assign the Access Manager and Keys Manager roles to other wallets, and change the recipient of the staking fee.
+#### Vault fee claimer
 
-**Access Manager** - Whitelist Controller
+Can claim Vault fees on behalf of the shareholders.
 
-Wallet with the power to add and remove wallets from the whitelist of a Private Vault.
+There is no default assignment - this role is initially set to the zero address and must be explicitly assigned by the Admin.
 
-By default, Vault Admin  is also the Access Manager.
-However, they can assign the Access Manager role to another wallet, and reclaim this role at any moment in the future.
+#### Whitelist / Blocklist manager
 
-**Keys Manager** - Deposit Data Controller
+Can update accounts that can deposit into the Vault (whitelist) or accounts that cannot deposit into the Vault (blocklist).
 
-Wallet with the power to submit validator deposit data to the Vault for validator registration.
+This role only appears for Private Vaults or Vaults with blocklist functionality enabled.
+By default, Admin is also the Whitelist/Blocklist manager.
+However, they can assign this role to another wallet, and reclaim this role at any moment in the future.
 
-By default, Vault Admin is also the Keys Manager.
-However, they can assign the Keys Manager role to another wallet, and reclaim this role at any moment in the future.
+#### Validators manager
+
+Can manage Vault validators. Set this to the wallet address attached to the Operator Service.
+
+By default, Admin is also the Validators manager.
+However, they can assign the Validators manager role to another wallet, and reclaim this role at any moment in the future.
 
 ### Branding
 

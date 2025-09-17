@@ -104,6 +104,12 @@ const config: Config = {
           sidebarId: 'operatorSidebar',
         },
         {
+          label: 'Contracts',
+          to: '/contracts/networks',
+          activeBaseRegex: `/contracts/`,
+          sidebarId: 'contractsSidebar',
+        },
+        {
           label: 'X',
           href: 'https://x.com/stakewise_io',
           position: 'right',

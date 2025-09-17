@@ -17,9 +17,9 @@ StakeWise is a liquid staking protocol for Ethereum, designed to make staking mo
 
 Rather than consist of one large staking pool, StakeWise has a network of permissionless, customizable, and non-custodial staking pools deployed by various service providers,
 allowing individuals and organizations to pick which nodes will stake their ETH, helping them find the most suitable staking arrangement.
-All pools offer on-demand liquidity and DeFi integrations for users’ stake via osToken, providing the flexibility to get the token only when needed.
+All pools offer on-demand liquidity and DeFi integrations for users' stake via osToken, providing the flexibility to get the token only when needed.
 
-The protocol is implemented as a mix of both upgradable (via dual governance) smart contracts that must keep up with the changes in Ethereum’s Proof-of-Stake specification,
+The protocol is implemented as a mix of both upgradable (via dual governance) smart contracts that must keep up with the changes in Ethereum's Proof-of-Stake specification,
 and persistent, non-upgradable smart contracts designed to prioritize security and self-custody, and to function without centralized intermediaries who may selectively restrict access to the service.
 
 StakeWise was formally introduced with the release of its [Litepaper in 2022 ↗](https://www.stakewise.io/stakewise-v3.pdf),
@@ -27,15 +27,14 @@ which set out the vision for a modular staking protocol designed to counter cent
 Since then, the protocol has continued to evolve to embody the core ethos of Ethereum and DeFi,
 specifically the non-custodial, trustless nature that allows self-sovereignty to truly thrive.
 
-StakeWise provides this essential base layer for ETH staking by lowering the technical and capital barriers,
-since the vast majority lack either the technical knowledge to run a node or the 32 ETH required to stake.
-
+Most users lack either the technical expertise to run validator nodes or the 32 ETH required to stake.
+StakeWise addresses this by providing an essential base layer that lowers both technical and capital barriers to ETH staking.
 
 <h2>Understanding Liquid Staking</h2>
 
 <h3>What is Staking?</h3>
 
-Staking is a cryptoeconomic mechanism that uses rewards and penalties to incentivize proper network behavior,
+Staking is a <Tooltip content={<><strong>Cryptoeconomic mechanism</strong> <br /> A cryptoeconomic mechanism is a combination of cryptographic proof with economic incentives to govern the production, distribution, and consumption of goods and services in a decentralized digital economy.</>}>cryptoeconomic mechanism</Tooltip> that uses rewards and penalties to incentivize proper network behavior,
 thereby enhancing the underlying security. In proof-of-stake (PoS) blockchains like Ethereum, participants run
 <Tooltip content={<><strong>Validator</strong> <br /> A <a href="./glossary#node" style={{textDecoration: 'underline', color: '#018970'}}>node</a> in a proof-of-stake system responsible for storing data, processing transactions, and adding new blocks to the blockchain.
 The primary identifier of a validator is its public BLS key (example of usage of the pubkey as an identifier is <a href="https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/account_manager/src/validator/exit.rs#L277-L280" style={{textDecoration: 'underline', color: '#018970'}}>here</a>).
@@ -92,11 +91,11 @@ StakeWise is a liquid staking protocol that gives you the benefits of permission
 
 Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive staking network that serves diverse participants through three distinct approaches:
 
-**Vaults**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive osToken when staking.
+**[Vaults →](./protocol-concepts/Vaults)**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive osToken when staking.
 
-**One-click staking**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. osToken is issued automatically, granting access to instant liquidity and DeFi by default.
+**[One-click staking →](./guides/staking#how-to-stake-with-one-click)**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. osToken is issued automatically, granting access to instant liquidity and DeFi by default.
 
-**Run own Vault**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via osToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
+**[Run own Vault →](./guides/running-a-vault)**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via osToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from MetaMask, Chorus One, [Blockchain.com](http://Blockchain.com), Ledger Live, and others.
 
 StakeWise's product offering emerged from deep analysis of stakeholder motivations, creating a structure that reinforces our decentralized vision while sustainably scaling Ethereum staking. StakeWise also continuously develops innovative strategies to maximize your rewards, such as Boost, with more features coming soon.
 

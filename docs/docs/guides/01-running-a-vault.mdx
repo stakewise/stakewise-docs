@@ -133,8 +133,9 @@ Once your Vault is created, you can manage all settings through the **"Settings"
   </TabItem>
   <TabItem value="fees" label="💰 Fees">
     **Manage fees:**
-    - Set rates: 0-20% of staking rewards
-    - Update frequency: Once every 3 days
+    - Set rates: 0-100% of staking rewards
+    - Update frequency: Once every 3 days, limited to 20% increase per update
+    - Special case: If initial fee is 0%, first increase is limited to 1%
     - Configure multiple recipients with percentage splits
     - Enable automatic periodic claims
   </TabItem>
@@ -143,6 +144,7 @@ Once your Vault is created, you can manage all settings through the **"Settings"
     - **Admin**: Full Vault control
     - **Fee Claimer**: Claim fees for shareholders
     - **Validators Manager**: Authorize validator registrations, funding, and withdrawals ([Learn more →](/operator/validators-manager))
+    - **Whitelist/Blocklist Manager**: Update accounts that can deposit (whitelist) or cannot deposit (blocklist). Only appears for Private Vaults or Vaults with blocklist functionality enabled
   </TabItem>
 </Tabs>
 

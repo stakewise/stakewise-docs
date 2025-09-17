@@ -101,12 +101,12 @@ Creating validator keys:		  [####################################]  3/3
 Exporting validator keystores		  [####################################]  3/3
 
 Done. Generated 3 keys for StakeWise operator.
-Keystores saved to ~/.stakewise/[network]/keystores file
+Keystores saved to ~/.stakewise/mainnet/keystores file
 ```
 </details>
 
 :::custom-notes[Keystore Locations]
-  - Keystores are saved to `~/.stakewise/[network]/keystores`
+  - Keystores are saved to `~/.stakewise/mainnet/keystores`
   - **Default**: A single `password.txt` file contains the password for all generated keystores
   - **Per-keystore option**: Use the `--per-keystore` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
 :::
@@ -121,7 +121,7 @@ You can always add more validator keys to your Vault. For that, you need to gene
 
 Upload your keystores into your validator client:
 
-1. Locate your keystores in `~/.stakewise/[network]/keystores`
+1. Locate your keystores in `~/.stakewise/mainnet/keystores`
 2. Follow your consensus client's guide for importing keys
 3. Use the password from `password.txt` file
 4. Start the validator client with attached validator keys.

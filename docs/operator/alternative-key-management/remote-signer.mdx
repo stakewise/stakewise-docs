@@ -10,7 +10,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Remote Signer
 
-You may not want the Operator Service to have direct access to the validator keys. Validator keystores do not need to be present directly in the Operator. The Operator can query a remote signer to get signatures for validator deposit and exit messages.
+You may not want the Operator Service to have direct access to the validator keys. Validator keystores do not need to be present directly in the Operator.
+The Operator can query a remote signer like [Web3Signer ↗](https://docs.web3signer.consensys.io/) to get signatures for validator deposit and exit messages.
 ## Prerequisites
 
 Complete the following steps before proceeding:
@@ -18,6 +19,8 @@ Complete the following steps before proceeding:
 :::custom-notes[Required Setup Steps]
   1. [Installation ↗](../installation)
   2. [Validator Keys ↗](../validator-keys)
+  3. [Validators Manager ↗](../validators-manager)
+  4. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>
 :::
 
 ## Setup Remote Signer (Optional)
@@ -27,29 +30,29 @@ Upload the keystores to a remote signer. If you already have private keys upload
 ### Example Usage
 
 ```bash
-./operator setup-remote-signer \
- --vaults=0x3320a...68 \
- --remote-signer-url=http://signer:9000
+./operator setup-remote-signer
 ```
 
 <details className="custom-details">
 <summary>Example Output</summary>
 
 ```
-Successfully imported 20 keys into remote signer.
+Enter the URL of the remote signer (e.g. https://signer:9000): https://localhost:9000
+Successfully imported 10 keys into remote signer.
 Remove local keystores? [y/N]: y
 Removed keystores from local filesystem.
-Done. Successfully configured operator to use remote signer for 20 public key(s)!
+Done. Successfully configured operator to use remote signer for 10 public key(s)!
 ```
 </details>
 
 ### `setup-remote-signer` Options
 
-  - **`--vaults`** - The Vault address(es)
-  - **`--remote-signer-url`** - The base URL of the remote signer, e.g. `http://signer:9000`
-  - **`--data-dir`** - Path where the Vault data is stored. Default is ~/.stakewise
-  - **`--keystores-dir`** - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard
-  - **`--verbose`** - Enable debug mode. Default is false
+- `--remote-signer-url` – The URL of the remote signer.
+- `--dappnode` – Use this flag when running with Dappnode Staking Brain. Must be provided together with the `--vault` and `--execution-endpoints` flags.
+- `--vault` – The Vault address. Required only if the `--dappnode` flag is set.
+- `--execution-endpoints` – A comma-separated list of API endpoints for execution nodes. Used to retrieve the Vault validator fee recipient. Required only if the `--dappnode` flag is set.
+- `--data-dir` – The path where Vault data is stored. Default: `~/.stakewise`.
+- `--keystores-dir` – The directory containing validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard.
 
 ## Running the Operator
 
@@ -72,3 +75,8 @@ This setup supports various optional flags to provide more flexibility and custo
 :::custom-tips[Successful Configuration]
   When properly configured, the Operator Service will connect to your remote signer and manage validator operations without requiring local access to private keys.
 :::
+
+<div id="user-content-fn-1" style={{fontSize: '0.85em', color: '#6b7280', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span>
+  Web3Signer is an open-source remote signing service developed by Consensys, which can sign payloads using `secp256k1` and `BLS12-381` keys. It supports keys stored either in external vaults or encrypted on disk, and is designed for use with both the Ethereum execution layer and consensus layer.  <a href="#user-content-fnref-1" style={{color: '#6b7280', textDecoration: 'none'}}>↩</a>
+</div>

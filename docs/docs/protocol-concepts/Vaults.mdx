@@ -1,7 +1,7 @@
 ---
 title: Vaults
 sidebar_position: 1
-description: "Learn what are Vaults and what you can do with them"
+description: "Learn what Vaults are and what you can do with them"
 ---
 
 ```mdx-code-block
@@ -12,13 +12,13 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 ## Introduction
 
-Vaults are isolated staking pools that can process ETH and GNO deposits into staking, distribute rewards and handle withdrawals in a trustless and non-custodial manner.
+Vaults are isolated staking pools that process ETH and GNO deposits for staking, distribute rewards, and handle withdrawals in a trustless and non-custodial manner.
 
-ETH and GNO deposits into any Vault can only be used to launch validators for that specific Vault. Any rewards (or penalties) accumulated by these validators will belong to the Vault. This makes every Vault isolated from others, allowing depositors to customize staking experience to their needs.
+ETH and GNO deposits into any Vault can only be used to launch validators for that specific Vault. Any rewards (or penalties) accumulated by these validators will belong to the Vault. This makes every Vault isolated from others, allowing depositors to customize their staking experience to their needs.
 
 Individuals, professional node operators, DAOs, communities, and institutions can deploy a Vault to enable ETH and GNO staking on specific terms, like a bespoke staking fee, unique mix of operators, custom MEV strategy, capacity, branding, and optional ERC-20 Vault Token issuance.
 
-All deposits, rewards distribution, and withdrawals are handled by smart contracts, making staking in Vaults fully non-custodial.
+All deposits, reward distribution, and withdrawals are handled by smart contracts, making staking in Vaults fully non-custodial.
 
 ## How Vaults Work
 
@@ -77,7 +77,7 @@ Each Vault decides whether to:
 - Keep rewards as <Tooltip content={<><strong>Unbounded ETH</strong> <br /> ETH that is not locked in validators (32 ETH increments). This includes excess deposits, staking rewards, and MEV that have not been allocated to new validators yet.</>}>unbounded ETH</Tooltip>
 within the Vault for greater liquidity.
 
-Because direct Beacon chain state queries are not feasible in the EVM<sup><a href="#fn-4" id="fnref-4">4</a></sup>,
+Because direct Beacon Chain state queries are not feasible in the EVM<sup><a href="#fn-4" id="fnref-4">4</a></sup>,
 rewards are calculated off-chain by the StakeWise Oracle Network.
 
 :::custom-notes[Deep Dive]
@@ -98,7 +98,7 @@ The process is as follows:
 
 1. **Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault – i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
 2. **Initiate exits if needed**. If available ETH is insufficient, the operator initiates validator exits to free up the remaining amount.
-3. **Oracle enforcement of exits**. If the operator does not initiate partial or full withdrawals, the oracle network will automatically execute full withdrawal after 24 hours.
+3. **Oracle enforcement of exits**. If the operator does not initiate partial or full withdrawals, the Oracle network will automatically execute full withdrawal after 24 hours.
 
 The exit queue advances whenever the Vault **syncs state** – both on **user actions**
 (entering the queue, deposits/withdrawals) and on **operator service-driven syncs** (e.g., harvest).
@@ -121,7 +121,7 @@ For more details on how osToken works, see [osToken →](osToken).
 ## Customization
 
 Each Vault is highly customizable.
-Core parameters such as Vault type, capacity, and MEV strategy are immutable and set once on deployement,
+Core parameters such as Vault type, capacity, and MEV strategy are immutable and set once upon deployment,
 while management roles, branding, and fees can be changed later.
 
 ### Vault Type
@@ -138,7 +138,7 @@ Allow operator to build their own DeFi ecosystem using the Vault's Token.
 Operator sets its name and symbol (e.g. mntETH), which will be visible in most portfolio tracking applications.
 Users still can mint osToken and transfer their stake in the Vault as long as they don't have osToken minted.
 
-Tokenless Vaults avoid potential tax events when exchanging ETH for Vault token.
+Tokenless Vaults avoid potential tax events when exchanging ETH for a Vault token.
 
 #### **Private Vaults** - Restricted Access
 
@@ -210,7 +210,7 @@ However, they can assign the Access Manager role to another wallet, and reclaim 
 
 **Keys Manager** - Deposit Data Controller
 
-Wallet with the power to add and remove wallets from the whitelist of a Private Vault.
+Wallet with the power to submit validator deposit data to the Vault for validator registration.
 
 By default, Vault Admin is also the Keys Manager.
 However, they can assign the Keys Manager role to another wallet, and reclaim this role at any moment in the future.
@@ -220,7 +220,7 @@ However, they can assign the Keys Manager role to another wallet, and reclaim th
 Vault operators can set their Vault's name, description, and image simply through StakeWise interface and can be updated anytime by the Admin.
 
 :::custom-stakewise[Authenticity Guarantee]
-Stakers can be confident about the authenticity of these informations, i.e. a Vault branded by Operator A is indeed controlled and run by Operator A.
+Stakers can be confident about the authenticity of this information, i.e. a Vault branded by Operator A is indeed controlled and run by Operator A.
 Verification is a manual process managed by the core StakeWise team.
 :::
 
@@ -253,10 +253,10 @@ For immediate liquidity, users can mint osTokens (`osETH` or `osGNO`) using thei
 StakeWise provides performance grades to help users evaluate Vault quality based on validator operational excellence. These grades reflect the average Vault performance over the last 7 days:
 
 **Scoring Grades:**
-* **Excellent (99.6-100%)**: No missed blocks or very few. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
-* **Good (99.2-99.6%)**: No missed blocks or very few. Validators perform well in attestations, with less than 1% missed attestation rewards.
-* **Moderate (97.1-99.2%)**: The Vault has issues, with up to 3% missed attestations and/or blocks.
-* **Bad (0-97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
+* **Excellent (99.6–100%)**: No missed blocks or very few. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
+* **Good (99.2–99.6%)**: No missed blocks or very few. Validators perform well in attestations, with less than 1% missed attestation rewards.
+* **Moderate (97.1–99.2%)**: The Vault has issues, with up to 3% missed attestations and/or blocks.
+* **Bad (0–97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
 
 :::custom-warning[Important]
 Performance grades help users identify well-operated Vaults but should be considered alongside other factors like fees, capacity, and operator reputation.

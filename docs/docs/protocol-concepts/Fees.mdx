@@ -10,7 +10,7 @@ import Admonition from '@theme/Admonition';
 
 ## Introduction
 
-StakeWise acts as a middleware between stakers and node operators.
+StakeWise acts as middleware between stakers and node operators.
 
 The fee structure ensures sustainable protocol development while maintaining competitive returns for users and fair compensation for Vault operators.
 
@@ -28,7 +28,7 @@ This fee varies by Vault operator and can range **from 0% to 100%**.
 The fee is automatically deducted from staking rewards when the Vault state is updated and is transferred to the Vault’s designated fee recipient (typically the Vault operator).
 
 The fee is a **dynamic parameter** set during the Vault creation process.
-Importantly, fees can only be increased by **20% at a time** (e.g., from 5% to 6%) with a **3-day delay** between updates.
+Importantly, fees can only be increased by **20% at a time** (e.g., from 5% to 6%) with **a 3-day delay** between updates.
 If the current fee is 0%, it cannot exceed 1% initially.
 The Vault must be "harvested" (state updated) before fee changes take effect.
 
@@ -41,7 +41,7 @@ The fee level for a given Vault can be found in the *Details* at the bottom of t
 ## osToken Fees
 
 StakeWise DAO charges a **5% fee** on the rewards accumulated by osETH, and continuously applies the fee to the balance of osETH a user must return to the Vault.
-The fee is charged in osETH, meaning that the amount of osETH a user must return to the Vault constantly increases proportionately to the fee.
+The fee is charged in osETH, meaning that the amount of osETH a user must return to the Vault constantly increases in proportion to the fee.
 
 :::custom-notes[How It Works: Fee to osETH Conversion]
 For example, if a user's stake has accumulated **1 ETH in rewards**, StakeWise will apply a **0.05 ETH fee** to their osETH balance using the current exchange rate.

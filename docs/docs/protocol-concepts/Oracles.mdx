@@ -18,7 +18,7 @@ Oracles are specialized entities that connect blockchains to external data sourc
 
 In the StakeWise protocol, Oracles monitor validator performance data on the Beacon Chain and reach consensus on validator registration approvals, reward distribution, and exit processes within Vaults.
 
-Oracles are a crucial part of the protocol, and must remain sufficiently decentralized and maintain high uptime in order for StakeWise to work seamlessly.
+Oracles are a crucial part of the protocol, and they must remain sufficiently decentralized and maintain high uptime for StakeWise to work seamlessly.
 
 The protocol operates with [11 Oracles](#oracle-network-participants) selected and [approved ↗](https://vote.stakewise.io/#/proposal/0x54ceedefd1060fbad17ab6181be5a90da4c686dc071d1f6121d24c0398700be6)
 by the StakeWise DAO through governance processes.
@@ -42,7 +42,7 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
 The [Operator Service →](../../operator/operator-service) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
-Upon having enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
+When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
 This is done to maintain the protocol’s ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
 The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
 
@@ -70,7 +70,7 @@ The reward distribution process consists of the following steps:
 1. Verify sufficient time has passed since the last reward distribution.
 2. Calculate rewards/penalties for all Vaults based on validator balances in the Beacon Chain.
 3. Calculate MEV and priority fee rewards for Vaults connected to the Smoothing Pool.
-4. Create Merkle trees from reward calculations and upload them to IPFS. For example, <code>bafkreibqhdr6p5uh67ickt4dpppb525bwuofjocnpsx4dbl57llogfph2e</code>.
+4. Create Merkle trees from the reward calculations and upload them to IPFS. For example, <code>bafkreibqhdr6p5uh67ickt4dpppb525bwuofjocnpsx4dbl57llogfph2e</code>.
 5. Save the cryptographically signed vote to the local database and expose via API.
 6. The [Keeper service ↗](https://github.com/stakewise/v3-keeper/) fetches votes from Oracle APIs, concatenates them, and sends the resulting transaction to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code).
 7. Upon verification, the protocol updates global state.

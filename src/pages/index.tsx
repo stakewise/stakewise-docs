@@ -10,6 +10,8 @@ import '@site/src/css/tailwind/config.css'
 const Home: React.FC = () => {
   const { siteConfig } = useDocusaurusContext()
 
+  const year = new Date().getFullYear()
+
   return (
     <Layout title={siteConfig.title}>
       <div className="width-container">
@@ -18,6 +20,9 @@ const Home: React.FC = () => {
         <FAQ />
         <Links />
         <BrandAssets />
+        <div className="mt-40 p-4 text-t14m text-moon/50 text-center">
+          Copyright © {year} StakeWise Labs
+        </div>
       </div>
     </Layout>
   )

@@ -74,14 +74,12 @@ const config: Config = {
 
     navbar: {
       title: 'StakeWise Docs',
+      hideOnScroll: true,
       logo: {
         alt: 'StakeWise Logo',
         src: 'img/logo512.png',
         height: 32,
         width: 32,
-        style: {
-          marginRight: '12px',
-        },
       },
       items: [
         {

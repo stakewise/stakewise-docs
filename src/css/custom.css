@@ -5,6 +5,7 @@
   --fog:#FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
+  --ifm-navbar-height: 4.5rem;
 }
 
 html[data-theme='dark'] {
@@ -123,12 +124,17 @@ a:hover {
   margin-left: auto;
 }
 
+.footer {
+  display: none;
+  padding: 2px;
+}
+
 html[data-theme='light'] .navbar {
-  background: rgba(26, 29, 28, .05);
+  background: #c0d4c6;
 }
 
 html[data-theme='dark'] .navbar {
-  background: rgba(26, 29, 28, .2);
+  background: #2b3c3f;
 }
 
 html[data-theme='light'] .menu {
@@ -243,7 +249,6 @@ html[data-theme='dark'] .crystal-bg {
 
   .width-container {
     padding-right: 12px;
-    padding-bottom: 24px;
     padding-left: 12px;
   }
 }
@@ -259,15 +264,11 @@ html[data-theme='dark'] blockquote {
 }
 
 @media (min-width: 961px) {
-  .navbar {
-    padding: 0 24px;
-    backdrop-filter: blur(6px);
-  }
 
   .width-container {
     max-width: 1320px;
     padding-right: 60px;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
     padding-left: 60px;
   }
 }

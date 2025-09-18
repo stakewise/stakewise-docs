@@ -53,12 +53,17 @@ Done. Successfully configured operator to use remote signer for 10 public key(s)
 - `--data-dir` – The path where Vault data is stored. Default: `~/.stakewise`.
 - `--keystores-dir` – The directory containing validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard.
 
-## Running the Operator
+## Start Operator Service
 
 Provide the operator with the URL to your remote signer instance using the `--remote-signer-url` flag:
 
 ```bash
-./operator start-remote-signer --remote-signer-url=http://remote-signer:9000 ...
+./operator start-remote-signer \
+  --vaults=0x001,0x002 \
+  --consensus-endpoints=https://consensus-node \
+  --execution-endpoints=https://execution-node \
+  --network=mainnet \
+  --remote-signer-url=https://remote-signer:9000
 ```
 
 You should see a message similar to this one after starting the operator:

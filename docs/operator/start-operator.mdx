@@ -29,7 +29,11 @@ There are several ways to run the Operator Service, depending on how you store p
 By default, the Operator Service runs with locally stored keystores created during key creation.
 
 ```bash
-./operator start-local --vaults=0x83...87Cf --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+./operator start \
+  --vaults=0x001,0x002 \
+  --consensus-endpoints=https://consensus-node \
+  --execution-endpoints=https://execution-node \
+  --network=mainnet
 ```
 
 If you **did not** use Operator Service to generate validator keys, you will need to add the following flags:
@@ -58,7 +62,7 @@ Depending on your installation method, use the appropriate command format:
     #### Using Binary
 
     ```bash
-    ./operator start-local --vaults=0x83...87Cf --consensus-endpoints=http://localhost:5052 --execution-endpoints=http://localhost:8545
+    ./operator start --vaults=0x001,0x002 --consensus-endpoints=https://consensus-node --execution-endpoints=https://execution-node --network=mainnet
     ```
   </TabItem>
 

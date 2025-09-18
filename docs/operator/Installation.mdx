@@ -92,6 +92,12 @@ Choose your preferred method and follow the instructions below.
       The use of flags is optional.
     :::
 
+    ### Docker Setup
+
+    When operating within Docker, it's necessary to specify the `--data-dir` variable, such as `--data-dir=/data`. Ensure the `data-dir` is mapped to a directory on the host.
+
+    The `database-dir` should also be mapped to a host directory or Docker volume, with write permissions enabled for the directory linked to `database-dir`. Setting up permissions is not required if using volumes.
+
   </TabItem>
   <TabItem value="source" label="Source Files">
     ## Source Installation

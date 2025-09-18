@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;1,400&display=swap');
 :root {
   --coral: #018970; /* default (light) */
   --fog:#FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
   --ifm-navbar-height: 4.5rem;
+  --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 html[data-theme='dark'] {
@@ -377,4 +378,12 @@ details.custom-details {
   color: black;
   text-decoration: underline;
   text-decoration-color: black !important;
+}
+
+/* Custom font for bash code blocks - aggressive override */
+code[class*="language-bash"],
+pre[class*="language-bash"],
+.prism-code[class*="language-bash"],
+.language-bash * {
+  font-family: Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace !important;
 }

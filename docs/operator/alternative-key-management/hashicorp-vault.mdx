@@ -48,15 +48,23 @@ After loading keys from HashiCorp Vault, the operator behaves in the same way as
 Passing following options to `start-hashi-vault` command will enable loading validator signing keys from remote [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs).
 
 ```bash
-./operator start-hashi-vault ...
+./operator start-hashi-vault \
+  --vaults=0x001,0x002 \
+  --consensus-endpoints=https://consensus-node \
+  --execution-endpoints=https://execution-node \
+  --network=mainnet \
+  --hashi-vault-key-path=keystores1 \
+  --hashi-vault-key-path=keystores2 \
+  --hashi-vault-token=hvs.abcde \
+  --hashi-vault-url=https://hashi-vault:8200
 ```
 
 ### Configuration Options
 
   - **`--hashi-vault-url`** - The base URL of the vault service, e.g. `http://vault:8200`.
   - **`--hashi-vault-token`** - Authentication token for accessing Hashi vault.
-  - **`--hashi-vault-key-path`** - Key path(s) in the K/V secret engine where validator signing keys are stored
-  - **`--hashi-vault-key-prefix`** - Key prefix(es) in the K/V secret engine under which validator signing keys are stored
+  - **`--hashi-vault-key-path`** - Key path(s) in the K/V secret engine where validator signing keys are stored. This flag can be repeated multiple times to specify multiple paths
+  - **`--hashi-vault-key-prefix`** - Key prefix(es) in the K/V secret engine under which validator signing keys are stored. This flag can be repeated multiple times to specify multiple prefixes
   - **`--hashi-vault-parallelism`** - How much requests to K/V secrets engine to do in parallel
 
 :::custom-info[Additional Configuration]

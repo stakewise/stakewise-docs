@@ -10,14 +10,14 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Relayer (API Mode)
 
-The Relayer is a service that provides validator credentials and signatures via API calls. The Operator Service requests this complete validator data package via API calls, and the Relayer returns it signed by the validators manager.
+The Relayer is a service that implements the logic for managing validator keystores, as well as signing validator operations with the Validators Manager wallet.
 
-The Operator API facilitates validator operations via API calls, including validator registrations, funding compound validators, consolidations, and withdrawals.
-This proves particularly useful when validator keys are managed externally from the Operator Service.
+When the Operator Service is started in relayer mode, it will send requests to the relayer service via API calls for all operations that require interaction with the validator keystores or signing by the Validator Manager wallet:
+validator registrations, funding compound validators, consolidations, and withdrawals.
+The Relayer returns the necessary data signed by the Validators Manager.
 
-In this framework, validator credentials and signatures are provided by the Relayer service, which can generate keys internally or integrate with external key management systems.
-
-In essence, the Operator communicates with the Vault contract using credentials and signatures provided by the Relayer service.
+This proves particularly useful when the Validators Manager wallet and validator keystores are managed externally from the Operator Service.
+In essence, the Operator communicates with the Vault contract using data and signatures provided by the Relayer.
 
 ## Prerequisites
 
@@ -28,8 +28,7 @@ Complete the following steps before proceeding:
   2. [Validators Manager →](../validators-manager), which is set to the wallet address of the Relayer.
 :::
 
-## `start-relayer` Command
-
+## Start Operator Service
 To run the Operator API, use the command below:
 
 ```bash
@@ -54,27 +53,23 @@ For additional parameter information, use the `--help` flag:
 ./operator start-relayer --help
 ```
 
-:::custom-notes[Docker Usage Notes]
-  When operating within Docker, it's necessary to specify the `--data-dir` variable, such as `--data-dir=/data`. Ensure the `data-dir` is mapped to a directory on the host.
-
-  The `database-dir` should also be mapped to a host directory or Docker volume, with write permissions enabled for the directory linked to `database-dir`. Setting up permissions is not required if using volumes.
+:::custom-info[Docker Configuration]
+For Docker-specific setup instructions, see *Installation*: [Docker Setup →](../installation#docker-setup)
 :::
 
-## Relayer API
+## Operator-Relayer Flow
 
-### Operator-Relayer Flow
-
-The Operator requests validator credentials and signatures from the Relayer for three main operations: validator registration, funding compound validators, and withdrawals.
+The Operator requests signatures from the Relayer for three main operations: validator registration, funding compound validators, and withdrawals.
 
 <Tabs groupId="operator-flows">
   <TabItem value="registration" label="Registration" default>
-    When the Operator detects sufficient balance (32 ETH) for validator operations, it requests the necessary data from the Relayer service. The Relayer responds with:
+    When the Operator detects sufficient balance (32 ETH) for validator registration, it requests the necessary data from the Relayer service. The Relayer responds with:
 
     - Validator public key, deposit signature, deposit amount
     - Validator exit signature
     - Validators Manager signature
 
-    The Operator then uses this data to execute the validator operation on the Vault contract.
+    The Operator then uses this data to execute the validator registration on the Vault contract.
 
     To produce the exit signature, the Relayer should use the validator index passed in the request. The Operator passes the start validator index. You should increment this index for each validator except the first one.
 
@@ -100,13 +95,13 @@ The Operator requests validator credentials and signatures from the Relayer for 
   </TabItem>
 </Tabs>
 
-The Validators Manager signature is an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature. See EIP-712 message structure in [vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must be the Validators Manager configured in Vault settings.
+The Validators Manager signature is an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature. See example implementation of the signature in [relayer-example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33). The signer address must be the Validators Manager configured in Vault settings.
 
 ### API Endpoints
 
-The Relayer provides several endpoints to handle different validator operations:
+The Relayer must implement the following endpoints to handle different validator operations:
 
-#### Register New Validators
+### Validator Registration
 
 **POST** `/validators`
 
@@ -141,7 +136,7 @@ Response:
 }
 ```
 
-#### Fund Compounding Validators
+### Validator Funding
 
 **POST** `/fund`
 
@@ -173,7 +168,7 @@ Response:
 }
 ```
 
-#### Get Signature for Withdraw Funds from Validators Transaction
+### Partial and Full Validator Withdrawals
 
 **POST** `/withdraw`
 
@@ -189,7 +184,7 @@ Request Body:
 **Parameters:**
 - `vault` - Address of the vault contract to which the validators will be withdrawn
 - `public_keys` - List of public keys of validators to withdraw from
-- `amounts` - List of amounts to withdraw from each validator. Value provided in Gwei
+- `amounts` - List of amounts to withdraw from each validator. If the amount is 0, the Operator requests a full withdrawal. Otherwise, the value must be provided in Gwei.
 
 Response:
 ```json
@@ -198,7 +193,7 @@ Response:
 }
 ```
 
-#### Get Signature for Consolidate Validators Transaction
+### Validator Consolidation
 
 **POST** `/consolidate`
 
@@ -223,7 +218,7 @@ Response:
 }
 ```
 
-#### Fetch Info About Relayer
+### Relayer Info
 
 **GET** `/info`
 
@@ -239,5 +234,5 @@ Multiple relayers are possible for various use-cases. You can implement your own
 :::
 
 :::custom-tips[Relayer Example]
-See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example/tree/b053c5cce36b856824d7465bddee60293d736ba1) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
+See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
 :::

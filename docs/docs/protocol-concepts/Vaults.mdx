@@ -24,16 +24,16 @@ All deposits, reward distribution, and withdrawals are handled by smart contract
 
 ### Validator registration
 
-Vaults collect user deposits and automatically manage the validator lifecycle through smart contracts.
-When a Vault accumulates enough assets – 32 ETH on Ethereum or 1 GNO on Gnosis – the system initiates validator registration.
+Vaults collect user deposits and manage the validator lifecycle through smart contracts.
+When a Vault accumulates enough assets — 32 ETH on Ethereum or 1 GNO on Gnosis — the system initiates validator registration.
 
-<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" style={{textDecoration: 'underline', color: '#018970'}}>operator service software ↗</a> that handles validator registration, exit coordination, and maintains validators throughout their lifecycle.</>}>The Vault operator</Tooltip>
+<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" style={{textDecoration: 'underline', color: '#018970'}}>operator service software ↗</a> that automates essential Vault management tasks — such as validator registration, consolidations, and withdrawals.</>}>The Vault operator</Tooltip>
 runs specialized software (the [operator ↗](https://github.com/stakewise/v3-operator) service) alongside their Ethereum [consensus →](../../operator/prerequisites#consensus-client) and [execution →](../../operator/prerequisites#execution-client) clients
-that monitors deposit levels and handles the technical validator creation process.
+that monitors deposit levels and handles the technical validator setup process.
 
 When sufficient funds are available, this service submits validator registration requests to the StakeWise [Oracle network →](./Oracles).
 The Operator Service must receive 8 out of 11 approvals from Oracles to register a validator for the Vault.
-The service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files. Once approved, validators enter the Beacon Chain's activation queue - [network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
+The service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files. Once approved, validators enter the Beacon Chain's activation queue. [Network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
 
 Vaults support two types of validators (`0x01` or `0x02`)<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
 The default type is `0x02`. When registering validators, the system prioritizes funding existing `0x02` validators up to their maximum capacity before creating new validators.
@@ -59,7 +59,7 @@ For more details on how Oracles handle the validator registration approval proce
 
 Once validators are registered and active, they earn:
 - **Consensus layer rewards**: Block proposals, attestations, and sync committee participation
-- **Execution layer rewards**: MEV, transaction fees, and block tips
+- **Execution layer rewards**: <Tooltip content={<><strong>MEV (Maximum Extractable Value)</strong> <br /> Additional profits that validators can earn when proposing blocks by reordering, including, or excluding transactions within a block. MEV opportunities include arbitrage, liquidations, and sandwich attacks.</>}>MEV</Tooltip>, transaction fees, and block tips
 
 Validators may receive rewards only between their activation and exit epochs.
 Note that, after submitting a voluntary exit, there may be a delay while the validator moves through the exit queue until its exit epoch is passed.
@@ -67,8 +67,8 @@ The validator is expected to participate as usual during this period.
 
 The Vault initially holds rewards as liquid ETH until there is enough to register additional validators.
 
-After the [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade,
-[EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251) allows Vaults to merge multiple 32 ETH validators into fewer `0x02` validators with higher effective balances.
+After the <Tooltip content={<><strong>Pectra upgrade</strong> <br /> A major Ethereum network upgrade that includes EIP-7251 and other improvements to the consensus and execution layers, enabling features like increased validator maximum effective balance.</>}>[Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade</Tooltip>,
+<Tooltip content={<><strong>EIP-7251</strong> <br /> Ethereum Improvement Proposal that increases the maximum effective balance of validators from 32 ETH to 2048 ETH, enabling validator consolidation and partial withdrawals.</>}>[EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)</Tooltip> allows Vaults to merge multiple 32 ETH validators into fewer `0x02` validators with higher effective balances.
 This can improve efficiency and reduce infrastructure overhead, and allows partial withdrawals of rewards above 32 ETH.
 Each Vault decides whether to:
 
@@ -136,7 +136,7 @@ Receive staking deposits from any wallet and issue non-transferable Vault shares
 
 Allow operator to build their own DeFi ecosystem using the Vault's Token.
 Operator sets its name and symbol (e.g. mntETH), which will be visible in most portfolio tracking applications.
-Users still can mint osToken and transfer their stake in the Vault as long as they don't have osToken minted.
+Users can mint osToken and transfer their stake in the Vault as long as they don't have osToken minted.
 
 Tokenless Vaults avoid potential tax events when exchanging ETH for a Vault token.
 
@@ -153,7 +153,7 @@ Receive staking deposits from any wallets except those on a blocklist.
 Meta Vaults do not register validators directly -
 instead, they delegate accumulated assets to sub-Vaults, which are managed by the Vault Admin.
 Each sub-Vault must have at least one registered validator.
-Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic, with the default `BalancedCurator` distributing assets evenly across eligible sub-Vaults.
+Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic. The default `BalancedCurator` distributes assets evenly across eligible sub-Vaults.
 `Curator` contract can be changed by the Admin.
 
 MetaVaults can be deployed using the `EthMetaVaultFactory` contract, and currently,

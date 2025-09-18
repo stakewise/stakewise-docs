@@ -28,7 +28,7 @@ Complete the following steps before proceeding:
   2. [Validators Manager →](../validators-manager), which is set to the wallet address of the Relayer.
 :::
 
-## Running Operator API
+## `start-relayer` Command
 
 To run the Operator API, use the command below:
 
@@ -64,19 +64,43 @@ For additional parameter information, use the `--help` flag:
 
 ### Operator-Relayer Flow
 
-When the Operator detects sufficient balance (32 ETH) for validator operations, it requests the necessary data from the Relayer service. The Relayer responds with:
+The Operator requests validator credentials and signatures from the Relayer for three main operations: validator registration, funding compound validators, and withdrawals.
 
-- Validator public key, deposit signature, deposit amount
-- Validator exit signature
-- Validators Manager signature
+<Tabs groupId="operator-flows">
+  <TabItem value="registration" label="Registration" default>
+    When the Operator detects sufficient balance (32 ETH) for validator operations, it requests the necessary data from the Relayer service. The Relayer responds with:
 
-The Operator then uses this data to execute the validator operation on the Vault contract.
+    - Validator public key, deposit signature, deposit amount
+    - Validator exit signature
+    - Validators Manager signature
 
-To produce the exit signature, the Relayer should use the validator index passed in the request. The Operator passes the start validator index. You should increment this index for each validator except the first one.
+    The Operator then uses this data to execute the validator operation on the Vault contract.
+
+    To produce the exit signature, the Relayer should use the validator index passed in the request. The Operator passes the start validator index. You should increment this index for each validator except the first one.
+
+    Once the Operator receives registration data, it requests Oracles approvals and submits the registration to the Vault contract.
+  </TabItem>
+
+  <TabItem value="funding" label="Funding">
+    When the Operator needs to fund existing compound validators (0x02), it calls the `/fund` endpoint with:
+    - Vault address
+    - Public keys of validators to fund
+    - Amounts to deposit (in Gwei)
+
+    The Relayer responds with validator deposit signatures and a Validators Manager signature. The Operator uses this data to execute the funding transaction on the Vault contract.
+  </TabItem>
+
+  <TabItem value="withdrawals" label="Withdrawals">
+    For validator withdrawals, the Operator calls the `/withdraw` endpoint with:
+    - Vault address
+    - Public keys of validators to withdraw from
+    - Amounts to withdraw (in Gwei)
+
+    The Relayer responds with a Validators Manager signature that authorizes the withdrawal. The Operator then submits the withdrawal transaction to the Vault contract.
+  </TabItem>
+</Tabs>
 
 The Validators Manager signature is an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature. See EIP-712 message structure in [vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must be the Validators Manager configured in Vault settings.
-
-Once the Operator receives registration data, it requests Oracles approvals and submits the registration to the Vault contract.
 
 ### API Endpoints
 
@@ -100,7 +124,7 @@ Request Body:
 - `vault` - Address of the vault contract to which the validators will be registered
 - `validators_start_index` - Validator index for the first validator in the batch
 - `amounts` - List of deposit amounts for each validator. Value provided in Gwei
-- `validator_type` - Type of validator to create. Possible values: `V1` or `V2`
+- `validator_type` - Type of validator to create. Possible values: `0x01` or `0x02`
 
 Response:
 ```json

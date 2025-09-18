@@ -7,16 +7,23 @@ sidebar_position: 4
 
 The Operator Service supports consolidation of legacy `0x01` validators to `0x02` compound validators using the `consolidate` command, enabling variable validator balances up to 2048 ETH.
 This reduces the validator count and infrastructure overhead by merging multiple 32 ETH validators into fewer, higher-balance validators.
-The Operator Service uses a `check_vault_version` function to verify that Vaults support Pectra features before attempting consolidation.
+The Operator Service uses a `check_vault_version` function to verify the Vault's version.
 
 :::custom-warning[Validators Manager Required]
-  The wallet executing this command must be set as the Validators Manager in the Vault settings.
+  The wallet executing this command must be set as the Validators Manager in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
 :::
 
-Optionally specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate selected validators.
+You can either specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate specific validators, or run without these parameters for automatic consolidation. By default, the following logic applies:
+
+1. If there are no `0x02` validators, take the oldest `0x01` validator and convert it to `0x02` with confirmation prompt
+2. If there is a `0x02` validator, take the oldest `0x01` validators to top up its balance to 2048 ETH / 64 GNO
 
 ```bash
-./operator consolidate --vault=0x000...  --source-public-keys=0x001,0x002 --target-public-key=0x003
+# Automatic consolidation
+./operator consolidate --vault=0x000...
+
+# Manual consolidation with specific keys
+./operator consolidate --vault=0x000... --source-public-keys=0x001,0x002 --target-public-key=0x003
 ```
 
 ## Usage Options

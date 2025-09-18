@@ -10,19 +10,22 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Relayer (API Mode)
 
-The Operator API facilitates the initiation of validator registrations via API calls, proving particularly useful in cases where the Operator independently oversees the creation and storage of validator keys.
+The Relayer is a service that provides validator credentials and signatures via API calls. The Operator Service requests this complete validator data package via API calls, and the Relayer returns it signed by the validators manager.
 
-Within this framework, keystores are generated and preserved externally from the Operator. Similarly, exit signatures are produced outside the Operator.
+The Operator API facilitates validator operations via API calls, including validator registrations, funding compound validators, consolidations, and withdrawals.
+This proves particularly useful when validator keys are managed externally from the Operator Service.
 
-In essence, the Operator acts as an intermediary for communication with the Vault contract.
+In this framework, validator credentials and signatures are provided by the Relayer service, which can generate keys internally or integrate with external key management systems.
+
+In essence, the Operator communicates with the Vault contract using credentials and signatures provided by the Relayer service.
 
 ## Prerequisites
 
 Complete the following steps before proceeding:
 
 :::custom-notes[Required Setup Steps]
-  1. [Installation ↗](../installation)
-  2. [Validator Keys ↗](../validator-keys)
+  1. [Installation →](../installation)
+  2. [Validators Manager →](../validators-manager), which is set to the wallet address of the Relayer.
 :::
 
 ## Running Operator API
@@ -48,7 +51,7 @@ RELAYER_ENDPOINT=https://relayer
 For additional parameter information, use the `--help` flag:
 
 ```bash
-./operator start-api --help
+./operator start-relayer --help
 ```
 
 :::custom-notes[Docker Usage Notes]
@@ -59,70 +62,54 @@ For additional parameter information, use the `--help` flag:
 
 ## Relayer API
 
-:::custom-info[Info]
-  Relayer API is supported since Operator release v2.0.0
-:::
-
 ### Operator-Relayer Flow
 
-The Operator Service continuously monitors Vault balance changes. When 32 ETH becomes available, the following process occurs:
+When the Operator detects sufficient balance (32 ETH) for validator operations, it requests the necessary data from the Relayer service. The Relayer responds with:
 
-**Step 1: Balance Detection**
-- Operator detects sufficient balance (32 ETH) in the Vault
-- Operator predicts the next validator index for registration
+- Validator public key, deposit signature, deposit amount
+- Validator exit signature
+- Validators Manager signature
 
-**Step 2: Data Request**
-- Operator sends a request to the Relayer service
-- Request includes validator start index and batch size information
+The Operator then uses this data to execute the validator operation on the Vault contract.
 
-**Step 3: Registration Data Provision**
-The Relayer must provide comprehensive validator registration data:
+To produce the exit signature, the Relayer should use the validator index passed in the request. The Operator passes the start validator index. You should increment this index for each validator except the first one.
 
-:::custom-warning[Registration Data Requirements]
-  - **Validator public key** - The public key for the validator
-  - **Deposit signature** - Signature for the deposit transaction
-  - **Deposit amount** - Amount being deposited (typically 32 ETH)
-  - **Validator exit signature** - Pre-signed exit signature for the validator
-  - **Validators manager signature** - Authorization signature from validators manager
-:::
+The Validators Manager signature is an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature. See EIP-712 message structure in [vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must be the Validators Manager configured in Vault settings.
 
-**Step 4: Signature Generation**
-- **Exit Signature**: Relayer uses the validator index from the request. For batch operations, increment the index for each validator (except the first)
-- **Manager Signature**: Must be an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature following the message structure defined in the [Vault contract ↗](https://github.com/stakewise/v3-core/blob/main/contracts/validators/ValidatorsChecker.sol#L187). The signer address must match the validators manager configured in Vault settings.
+Once the Operator receives registration data, it requests Oracles approvals and submits the registration to the Vault contract.
 
-**Step 5: Registration Completion**
-- Operator receives registration data from Relayer
-- Operator requests approval from [Oracles ↗](/docs/protocol-concepts/Oracles) network
-- Upon approval, Operator submits the registration transaction to the Vault contract
+### API Endpoints
 
-### Request format:
+The Relayer provides several endpoints to handle different validator operations:
 
-```
-POST /validators
+#### Register New Validators
 
+**POST** `/validators`
+
+Request Body:
+```json
 {
   "vault": "0x1234...",
   "validators_start_index": int,
-  "validators_batch_size": int,
-  "validators_total": int
+  "amounts": int[],
+  "validator_type": "ValidatorType"
 }
 ```
 
-:::custom-warning[Request Parameters]
-  - `validators_start_index` - validator index for the first validator in the batch
-  - `validators_batch_size` - number of validators in current batch. Maximum batch size is determined by protocol config, currently 10.
-  - `validators_total` - hint for Relayer. Does not affect Relayer response. Relayer may use this value to allocate larger portions of validators in background. `validators_total` should be more than or equal to `validators_batch_size`.
-:::
+**Parameters:**
+- `vault` - Address of the vault contract to which the validators will be registered
+- `validators_start_index` - Validator index for the first validator in the batch
+- `amounts` - List of deposit amounts for each validator. Value provided in Gwei
+- `validator_type` - Type of validator to create. Possible values: `V1` or `V2`
 
-### Response format:
-
+Response:
 ```json
 {
   "validators": [
     {
       "public_key": "string",
       "deposit_signature": "string",
-      "amount_gwei": int,
+      "amount": int,
       "exit_signature": "string"
     }
   ],
@@ -130,11 +117,103 @@ POST /validators
 }
 ```
 
-Multiple relayers are possible for various use-cases. You can implement your own relayer using the API specification provided below to meet your specific requirements.
+#### Fund Compounding Validators
+
+**POST** `/fund`
+
+Request Body:
+```json
+{
+  "vault": "0x1234...",
+  "public_keys": ["string"],
+  "amounts": [int]
+}
+```
+
+**Parameters:**
+- `vault` - Address of the vault contract to which the validators will be funded
+- `public_keys` - List of public keys of validators to fund
+- `amounts` - List of amounts to fund into each validator. Value provided in Gwei
+
+Response:
+```json
+{
+  "validators": [
+    {
+      "public_key": "string",
+      "deposit_signature": "string",
+      "amount": int
+    }
+  ],
+  "validators_manager_signature": "string"
+}
+```
+
+#### Get Signature for Withdraw Funds from Validators Transaction
+
+**POST** `/withdraw`
+
+Request Body:
+```json
+{
+  "vault": "0x1234...",
+  "public_keys": ["string"],
+  "amounts": [int]
+}
+```
+
+**Parameters:**
+- `vault` - Address of the vault contract to which the validators will be withdrawn
+- `public_keys` - List of public keys of validators to withdraw from
+- `amounts` - List of amounts to withdraw from each validator. Value provided in Gwei
+
+Response:
+```json
+{
+  "validators_manager_signature": "string"
+}
+```
+
+#### Get Signature for Consolidate Validators Transaction
+
+**POST** `/consolidate`
+
+Request Body:
+```json
+{
+  "vault": "0x1234...",
+  "source_public_keys": ["string"],
+  "target_public_keys": ["string"]
+}
+```
+
+**Parameters:**
+- `vault` - Address of the vault contract to which the validators will be consolidated
+- `source_public_keys` - List of public keys of validators to consolidate from
+- `target_public_keys` - List of public keys of validators to consolidate to
+
+Response:
+```json
+{
+  "validators_manager_signature": "string"
+}
+```
+
+#### Fetch Info About Relayer
+
+**GET** `/info`
+
+Response:
+```json
+{
+  "network": "string"
+}
+```
+
+:::custom-info[Multiple Relayers]
+Multiple relayers are possible for various use-cases. You can implement your own relayer using the API specification provided above to meet your specific requirements.
+:::
 
 :::custom-tips[Relayer Example]
-See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
-The relayer acts as an intermediary between validators and the StakeWise operator service, handling validator credential generation and management.
-
-You may use it as a starting point for your own Relayer.
+See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example/tree/b053c5cce36b856824d7465bddee60293d736ba1) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
 :::

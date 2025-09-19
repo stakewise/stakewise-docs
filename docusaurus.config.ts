@@ -108,21 +108,6 @@ const config: Config = {
           sidebarId: 'contractsSidebar',
         },
         {
-          label: 'X',
-          href: 'https://x.com/stakewise_io',
-          position: 'right',
-        },
-        {
-          label: 'Discord',
-          href: 'https://discord.com/invite/2BSdr2g',
-          position: 'right',
-        },
-        {
-          label: 'Telegram',
-          href: 'https://t.me/stakewise_io',
-          position: 'right',
-        },
-        {
           type: 'html',
           position: 'right',
           value: `

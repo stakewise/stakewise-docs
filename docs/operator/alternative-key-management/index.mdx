@@ -5,14 +5,14 @@ sidebar_position: 0
 
 # Alternative Key Management
 
-Validator keystores don’t need to be stored locally — you may prefer to manage them externally for better security or flexibility.
+Validator keystores don’t need to be stored locally—you may prefer to manage them externally for better security or flexibility.
 
 This section covers three alternatives:
 
-[Remote Signer →](./remote-signer) – isolate signing operations from your Operator Service.
+[Remote Signer →](./remote-signer) – Use external signing services (like [Web3Signer ↗](https://docs.web3signer.consensys.io/)) while keeping validator keys isolated from the Operator Service.
 
-[HashiCorp Vault →](./hashicorp-vault) – integrate with enterprise-grade key management.
+[HashiCorp Vault →](./hashicorp-vault) – Store validator signing keys in HashiCorp Vault instead of local files.
 
-[Relayer (API Mode) →](./api-mode) – fully decouple key creation and storage from the Operator Service.
+[Relayer (API Mode) →](./api-mode) – External service manages validator keystores and signs operations with the Validators Manager wallet via API calls.
 
 Dive into each section to learn how these options work and how to implement them in your setup.

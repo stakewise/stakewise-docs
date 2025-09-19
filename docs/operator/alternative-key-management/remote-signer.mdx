@@ -10,7 +10,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Remote Signer
 
-You may not want the Operator Service to have direct access to the validator keys. Validator keystores do not need to be present directly in the Operator.
+The Remote Signer allows you to isolate signing operations from your Operator Service. Validator keystores do not need to be present directly in the Operator.
 The Operator can query a remote signer like [Web3Signer ↗](https://docs.web3signer.consensys.io/) to get signatures for validator deposit and exit messages.
 ## Prerequisites
 
@@ -22,7 +22,7 @@ Complete the following steps before proceeding:
   3. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>
 :::
 
-## Setup Remote Signer (Optional)
+## Setup Remote Signer
 
 Upload the keystores to a remote signer. If you already have private keys uploaded to the remote signer, proceed to [Running the Operator](#running-the-operator) below.
 

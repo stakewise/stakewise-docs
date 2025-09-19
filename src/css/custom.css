@@ -380,6 +380,19 @@ details.custom-details {
   text-decoration-color: black !important;
 }
 
+/* Tooltip links styling to match admonition links */
+.tooltip-link {
+  color: var(--coral);
+  text-decoration: underline;
+  text-decoration-color: var(--coral);
+}
+
+.tooltip-link:hover {
+  color: black;
+  text-decoration: underline;
+  text-decoration-color: black !important;
+}
+
 /* Custom font for bash code blocks - aggressive override */
 code[class*="language-bash"],
 pre[class*="language-bash"],

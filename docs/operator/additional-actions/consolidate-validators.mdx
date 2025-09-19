@@ -10,7 +10,7 @@ This reduces the validator count and infrastructure overhead by merging multiple
 The Operator Service uses a `check_vault_version` function to verify the Vault's version.
 
 :::custom-warning[Validators Manager Required]
-  The wallet executing this command must be set as the Validators Manager in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+  The wallet executing this command must be set as the [Validators Manager →](../validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
 :::
 
 You can either specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate specific validators, or run without these parameters for automatic consolidation. By default, the following logic applies:
@@ -63,8 +63,8 @@ To convert validators while keeping the same public key:
 <summary>Example Output</summary>
 
 ```bash
-Enter the comma separated list of API endpoints for execution nodes: : https://example.com
-Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter the comma separated list of API endpoints for execution nodes: : https://execution-node
+Enter the comma separated list of API endpoints for consensus nodes: https://consensus-node
 Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
 Consolidating 2 validators:
     0x001 -> 0x003
@@ -78,6 +78,6 @@ Validators has been successfully consolidated
 </details>
 
 :::custom-warning[Important Notes]
-The target public key must be a compounding validator.
-The consolidation process requires oracle signatures, which are automatically fetched during the operation.
+The `--target-public-key` must be a compounding validator.
+The consolidation process requires Oracle signatures, which are automatically fetched during the operation.
 :::

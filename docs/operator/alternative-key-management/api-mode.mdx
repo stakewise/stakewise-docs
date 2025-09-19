@@ -57,60 +57,20 @@ For additional parameter information, use the `--help` flag:
 For Docker-specific setup instructions, see *Installation*: [Docker Setup →](../installation#docker-setup)
 :::
 
-## Operator-Relayer Flow
+## How API Mode Works
 
-The Operator requests signatures from the Relayer for three main operations:
+The Operator never handles validator keys directly. Instead, it sends requests to your Relayer service, which:
 
-<Tabs groupId="operator-flows">
-  <TabItem value="registration" label="Registration" default>
-    **Trigger:** When sufficient balance (32 ETH) is detected
+1. **Manages validator keystores** internally or via external systems
+2. **Signs operations** with the Validators Manager wallet
+3. **Returns signed data** for the Operator to submit to the Vault contract
 
-    **Process:**
-    1. Operator requests validator data from Relayer
-    2. Relayer responds with signed data package
-    3. Operator submits registration to Vault contract
-
-    **Required data:**
-    - Validator public key, deposit signature, amount
-    - Validator exit signature
-    - Validators Manager signature
-
-    :::custom-notes[Exit Signature Details]
-    The Relayer should use the validator index passed in the request. The Operator passes the start validator index - increment this for each validator except the first one.
-    :::
-  </TabItem>
-
-  <TabItem value="funding" label="Funding">
-    **Trigger:** When funding existing compound validators (`0x02`)
-
-    **Process:**
-    1. Operator calls `/fund` endpoint
-    2. Relayer responds with signatures
-    3. Operator executes funding transaction
-
-    **Required data:**
-    - Vault address
-    - Public keys of validators to fund
-    - Amounts to deposit (in Gwei)
-  </TabItem>
-
-  <TabItem value="withdrawals" label="Withdrawals">
-    **Trigger:** For partial or full validator withdrawals
-
-    **Process:**
-    1. Operator calls `/withdraw` endpoint
-    2. Relayer responds with authorization signature
-    3. Operator submits withdrawal transaction
-
-    **Required data:**
-    - Vault address
-    - Public keys of validators to withdraw from
-    - Amounts to withdraw (in Gwei)
-  </TabItem>
-</Tabs>
+This architecture completely isolates key management from the Operator Service while maintaining full functionality.
 
 :::custom-info[Technical Implementation]
-The Validators Manager signature uses [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712). See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33). The signer address must be the Validators Manager configured in Vault settings.
+All operations require an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
+The Relayer must sign using the same wallet address configured as Validators Manager in your Vault settings.
+See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33).
 :::
 
 The Relayer must implement the following endpoints to handle different validator operations:

@@ -5,14 +5,58 @@ sidebar_position: 5
 
 # Exit Validators
 
-The Operator Service can trigger validator exits when needed, though exits are typically handled automatically by Oracles.
+The Operator Service automatically triggers validator exits when required.
+By default, it checks every **12 hours** (configurable via `PARTIAL_WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
+If partial withdrawals are not possible, the Operator Service initiates **full exits**.
+If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
+You can also use [manual exit](#manual-exit), although this command should only be used in extreme scenarios.
+
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <pre style={{
+    display: 'inline-block',
+    textAlign: 'left',
+    background: 'var(--ifm-color-emphasis-200)',
+    color: 'var(--ifm-color-primary)',
+    padding: '2rem',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Monaco, monospace',
+    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
+    lineHeight: '1.8'
+  }}>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>💰 Withdrawal Process</strong>
+
+    🔍 Check Queued Assets &rarr; 💡 Partial Withdrawals? &rarr; 🎯 Withdraw Excess
+                                            │
+                                            &rarr; 🚪 Full Validator Exits
+                                            │
+                                            &rarr; ⏰ Oracle Fallback (24h)
+  </pre>
+</div>
+
+:::custom-info[Processing Time]
+On mainnet, partial withdrawals typically complete faster (≈27–28 hours), while full exits can take **up to one month** to finalize.
+:::
 
 :::custom-info[Prerequisites]
-- Wallet must be set as Validators Manager in Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+- Wallet must be set as [Validators Manager →](../validators-manager) in Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
 - Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
 :::
 
-## Basic Exit Command
+## Disable Automatic Withdrawals
+
+You can disable partial withdrawals if you prefer to rely solely on full exits.
+Use the `--disable-withdrawals` flag when starting the Operator Service:
+
+```bash
+./operator start \
+  --vaults=0x3320a...68 \
+  --disable-withdrawals
+```
+
+## Manual Exit
+
+Manual exits should only be used in specific scenarios: emergency, maintenance, testing, etc.
 
 ```bash
 ./operator exit-validators
@@ -22,37 +66,18 @@ The Operator Service can trigger validator exits when needed, though exits are t
 <summary>Example Output</summary>
 
 ```bash
-Enter the comma separated list of API endpoints for execution nodes: : https://example.com
-Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter the comma separated list of API endpoints for execution nodes: : https://execution-node
+Enter the comma separated list of API endpoints for consensus nodes: https://consensus-node
 Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Fetching vault validators...
 Are you sure you want to exit 3 validators with indexes: 513571, 513572, 513861? [y/N]: y
-Validators 513571, 513572, 513861 exits successfully initiated
+Exits for validators with index(es) 513571, 513572, 513861 are successfully initiated
 ```
-
 </details>
 
-:::custom-info[Automatic Processing]
-Validator exits are processed through the withdrawal queue system. The operator prioritizes partial withdrawals over full exits for better efficiency and faster processing times.
-:::
+### Configuration Options
 
-:::custom-warning[Oracle Fallback]
-If the operator does not initiate partial or full withdrawals within 24 hours, the oracle system will automatically execute full withdrawals to ensure funds are not stuck.
-:::
-
-## Advanced Options
-
-### Disable Withdrawals
-
-Use `--disable-withdrawals` flag when starting the Operator Service to rely solely on oracle-managed full exits:
-
-```bash
-./operator start-local \
-  --vaults=0x3320a...68 \
-  --disable-withdrawals
-```
-
-### Withdrawal Intervals
-
-:::custom-info[Environment Variables]
-**`PARTIAL_WITHDRAWALS_INTERVAL`** - Controls how often partial withdrawals are processed (default: 24 hours)
-:::
+- `--indexes` - Comma separated list of indexes of validators to exit (mutually exclusive with `--count`)
+- `--count` - The number of validators to exit. Default is all the active validators (mutually exclusive with `--indexes`)
+- `--relayer-endpoint` - Relayer endpoint URL for API mode operations
+- `--no-confirm` - Skips confirmation messages when provided

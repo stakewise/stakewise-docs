@@ -69,8 +69,8 @@ This architecture completely isolates key management from the Operator Service w
 
 :::custom-info[Technical Implementation]
 All operations require an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
+See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33) of signing.
 The Relayer must sign using the same wallet address configured as Validators Manager in your Vault settings.
-See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33).
 :::
 
 The Relayer must implement the following endpoints to handle different validator operations:

@@ -14,7 +14,8 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 Vaults are isolated staking pools that process ETH and GNO deposits for staking, distribute rewards, and handle withdrawals in a trustless and non-custodial manner.
 
-ETH and GNO deposits into any Vault can only be used to launch validators for that specific Vault. Any rewards (or penalties) accumulated by these validators will belong to the Vault. This makes every Vault isolated from others, allowing depositors to customize their staking experience to their needs.
+ETH and GNO deposits into any Vault can only be used to launch validators for that specific Vault. Any rewards (or penalties) accumulated by these validators will belong to the Vault.
+This isolates each Vault, allowing depositors to customize their staking experience to their needs.
 
 Individuals, professional node operators, DAOs, communities, and institutions can deploy a Vault to enable ETH and GNO staking on specific terms, like a bespoke staking fee, unique mix of operators, custom MEV strategy, capacity, branding, and optional ERC-20 Vault Token issuance.
 
@@ -77,8 +78,7 @@ Each Vault decides whether to:
 - Keep rewards as <Tooltip content={<><strong>Unbounded ETH</strong> <br /> ETH that is not locked in validators (32 ETH increments). This includes excess deposits, staking rewards, and MEV that have not been allocated to new validators yet.</>}>unbounded ETH</Tooltip>
 within the Vault for greater liquidity.
 
-Because direct Beacon Chain state queries are not feasible in the EVM<sup><a href="#fn-4" id="fnref-4">4</a></sup>,
-rewards are calculated off-chain by the StakeWise Oracle Network.
+Rewards are calculated off-chain by the StakeWise Oracle Network.
 
 :::custom-notes[Deep Dive]
 For detailed information about the reward distribution process, see the [Oracles →](./Oracles) chapter.
@@ -90,7 +90,7 @@ Users can mint osTokens for instant liquidity or withdraw. When a user chooses t
 As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
-Partial withdrawals for compound validators (`0x02`) are now supported. They are significantly faster and more efficient than full validator exits, which can now also be processed via execution request call<sup><a href="#fn-5" id="fnref-5">5</a></sup>.
+Partial withdrawals for compound validators (`0x02`) are now supported. They are significantly faster and more efficient than full validator exits, which can now also be processed via execution request call<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
 The withdrawal fulfillment process is automated by the [Operator Service →](../../operator/operator-service), which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
 More details on partial withdrawals are available in the *Operator*: [*Withdrawals* →](/operator/intro#withdrawals) section.
 
@@ -112,7 +112,7 @@ Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en
 
 osTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vault using their shares as backing (aka collateral), giving liquidity without unstaking. osToken can be traded or used in DeFi while the underlying stake continues earning rewards.
 
-The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint - this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#fn-6" id="fnref-6">6</a></sup>.
+The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint - this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#fn-5" id="fnref-5">5</a></sup>.
 
 :::custom-notes[Deep Dive]
 For more details on how osToken works, see [osToken →](osToken).
@@ -135,10 +135,10 @@ Receive staking deposits from any wallet and issue non-transferable Vault shares
 #### ERC-20 Vaults - For Custom Utility & Liquidity Ecosystem
 
 Allow operator to build their own DeFi ecosystem using the Vault's Token.
-Operator sets its name and symbol (e.g. mntETH), which will be visible in most portfolio tracking applications.
+The Vault operator sets its name and symbol (e.g. mntETH), which will be visible in most portfolio tracking applications.
 Users can mint osToken and transfer their stake in the Vault as long as they don't have osToken minted.
 
-Tokenless Vaults avoid potential tax events when exchanging ETH for a Vault token.
+Tokenless Vaults help avoid potential tax events triggered by exchanging ETH for a Vault token.
 
 #### Private Vaults - Restricted Access
 
@@ -150,10 +150,9 @@ Receive staking deposits from any wallets except those on a blocklist.
 
 #### Meta Vaults - Diversified Strategy
 
-Meta Vaults do not register validators directly -
+Meta Vaults do not register validators directly —
 instead, they delegate accumulated assets to sub-Vaults, which are managed by the Vault Admin.
-Each sub-Vault must have at least one registered validator.
-Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic. The default `BalancedCurator` distributes assets evenly across eligible sub-Vaults.
+Each sub-Vault must have at least one registered validator, and deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic. The default `BalancedCurator` distributes assets evenly across eligible sub-Vaults.
 `Curator` contract can be changed by the Admin.
 
 MetaVaults can be deployed using the `EthMetaVaultFactory` contract, and currently,
@@ -195,7 +194,7 @@ Every Vault has several key roles for the internal management of the staking pro
 
 Can manage roles, modify the fee and recipients, and update the Vault's branding.
 
-Admin can be a single wallet, a multisig, or a DAO and can be changed through `setAdmin` function.
+Admin can be a single wallet, a multisig, or a DAO and can be changed through the `setAdmin` function.
 The function can only be called by the current Admin.
 
 #### Vault fee claimer
@@ -214,7 +213,7 @@ Can manage validator-related operations. Set this to the wallet address attached
 
 ### Branding
 
-Vault operators can set their Vault's name, description, and image simply through StakeWise interface and can be updated anytime by the Admin.
+Vault operators can set their Vault's name, description, and image simply through the StakeWise interface and can be updated anytime by the Admin.
 
 :::custom-stakewise[Authenticity Guarantee]
 Stakers can be confident about the authenticity of this information, i.e. a Vault branded by Operator A is indeed controlled and run by Operator A.
@@ -237,7 +236,7 @@ For complete details about Vault fee structures, limits, update restrictions, an
   representing their proportional ownership of the pool's assets. There are no minimum deposit requirements
   and no maximum limits except the Vault's capacity limit.
 
-  Vault shares use a shares-based accounting system where:
+  Vaults use a shares-based accounting system where:
   - Shares are non-transferable (unless the Vault is the ERC-20 Vault)
   - Shares may not appear in portfolio tracking applications
   - Share value increases automatically as staking rewards accumulate
@@ -250,8 +249,8 @@ For immediate liquidity, users can mint osTokens (`osETH` or `osGNO`) using thei
 StakeWise provides performance grades to help users evaluate Vault quality based on validator operational excellence. These grades reflect the average Vault performance over the last 7 days:
 
 **Scoring Grades:**
-* **Excellent (99.6–100%)**: No missed blocks or very few. Validators perform excellently in attestations, with less than 0.5% missed attestation rewards.
-* **Good (99.2–99.6%)**: No missed blocks or very few. Validators perform well in attestations, with less than 1% missed attestation rewards.
+* **Excellent (99.6–100%)**: No missed blocks or very few. Validators perform excellently in attestations, with fewer than 0.5% missed attestation rewards.
+* **Good (99.2–99.6%)**: No missed blocks or very few. Validators perform well in attestations, with fewer than 1% missed attestation rewards.
 * **Moderate (97.1–99.2%)**: The Vault has issues, with up to 3% missed attestations and/or blocks.
 * **Bad (0–97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
 
@@ -264,7 +263,7 @@ Performance grades help users identify well-operated Vaults but should be consid
 ### Vault Deployment
 
 Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state – including user balances –  and stores Vault-specific configuration set during initialization, which defines its core operational characteristics.
-Vaults are created through factory contracts such as EthVaultFactory by:
+Vaults are created through factory contracts such as [VaultFactory ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) by:
 
 1. Deploying a proxy that reserves storage for all Vault data and sets its initial configuration during the initializer call.
 2. Pointing the proxy to a shared implementation contract that contains the Vault's logic and module integration.
@@ -275,7 +274,7 @@ To mitigate economic attacks during the vulnerable initial phase of a Vault's li
 :::
 
 :::custom-notes[Deep Dive]
-All Vault factory addresses can be found [here ↗](https://github.com/stakewise/v3-core/blob/main/deployments/mainnet.json).
+All Vault factory addresses can be found in [Networks ↗](../../contracts/networks/).
 :::
 
 ### Modular Design
@@ -336,10 +335,10 @@ such as `EthVault` and `GnoVault`.
 </div>
 
 
-<div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>5.</span> To disable this, use the flag `--disable-withdrawals` — in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-5" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+<div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>4.</span> To disable this, use the flag `--disable-withdrawals` — in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
-<div id="fn-6" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>6.</span> To qualify for the higher LTV, Vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest Vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#fnref-6" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+<div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>5.</span> To qualify for the higher LTV, Vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest Vault version; Locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#fnref-5" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

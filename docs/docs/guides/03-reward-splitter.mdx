@@ -1,0 +1,50 @@
+---
+title: Reward Splitter
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Reward Splitter
+
+Reward Splitter automatically distributes Vault staking fees among multiple shareholders according to predefined percentages at regular intervals.
+
+## How to Set Up Reward Splitters
+
+### Prerequisites
+
+:::custom-notes[Requirements]
+You need a deployed Vault and admin access to its settings.
+:::
+
+### Configuration Process
+
+1. **Go to your Vault page** and click **"Settings"**
+2. **Select "Vault fee" tab** to access shareholder configuration
+3. **Click "Add shareholder"** to add a new fee recipient
+4. **Enter shareholder address** and set their percentage allocation
+5. **Add additional shareholders** as needed using "Add shareholder"
+6. **Verify total equals 100%** before proceeding
+7. **Click "Save"** and confirm the transaction in your wallet
+
+## Managing Shareholders
+
+You can modify your Reward Splitter anytime:
+
+- **Add new shareholders** - Include additional fee recipients
+- **Remove shareholders** - Use the delete button next to addresses
+- **Adjust percentages** - Modify allocation amounts
+- **Split evenly** - Automatically calculate equal distribution
+
+:::custom-notes[Configuration Updates]
+Changes require a new transaction and only affect future fee distributions.
+:::
+
+:::custom-notes[Further Reading]
+- [Vault fee management →](/docs/protocol-concepts/Fees#vault-fees)
+- [Vault creation guide →](/docs/guides/running-a-vault)
+- [Fee claiming →](/docs/guides/running-a-vault)
+:::

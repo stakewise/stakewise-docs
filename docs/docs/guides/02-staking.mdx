@@ -47,8 +47,6 @@ Below you'll find step-by-step instructions for each staking method.
   }}>
     <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}><img src="/img/icons8-flow-50.png" alt="Flow" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Staking Flow</strong>
     <img src="/img/icons8-ethereum.svg" alt="ETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Your Assets &rarr; <img src="/img/icons8-safe-40.png" alt="Vault" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> StakeWise Vaults &rarr; <img src="/img/osETH.svg" alt="osETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> osTokens &rarr; 💰 Earn Rewards
-    <span style={{marginLeft: '570px'}}>↓</span>
-    👛 Receive Assets &larr; 📥 Claim Rewards &larr; 🚪 Unstaking &larr; 🔥 Burn osTokens
   </pre>
 </div>
 
@@ -59,10 +57,10 @@ You'll need an Ethereum wallet such as [Rabby Wallet ↗](https://rabby.io/).
 The process will look very similar in other wallets.
 :::
 
-One-click staking converts your assets directly into osTokens, StakeWise's liquid staking tokens. You instantly start earning staking rewards while maintaining full liquidity through osTokens.
+One-click staking routes your assets through a MetaVault that automatically distributes them among selected Vaults. This converts your assets into osTokens, StakeWise's liquid staking tokens, while providing diversified exposure across multiple professional operators.
 
 :::custom-info[What are osTokens?]
-osTokens (osETH on Ethereum, osGNO on Gnosis Chain) represent your staked assets plus accumulated rewards. You can trade, use in DeFi, or convert back to the underlying asset anytime. [Learn more about osTokens →](/docs/protocol-concepts/osToken)
+osTokens (osETH on Ethereum, osGNO on Gnosis Chain) represent your staked assets plus accumulated rewards. Use osTokens to trade, borrow, restake, or instantly unstake your staked assets via liquidity pools. [Learn more about osTokens →](/docs/protocol-concepts/osToken)
 :::
 
 1. **Open [StakeWise App ↗](https://app.stakewise.io)** and connect your wallet
@@ -106,9 +104,6 @@ Vault staking gives you control over exactly how your assets are staked. Unlike 
 4. **Click "Stake"** and enter the amount you want to stake
 5. **Review terms** and confirm the transaction in your wallet
 
-:::custom-warning[Research Before Staking]
-Review each Vault's operator, fee, and performance history. Higher APY may come with different risk profiles.
-:::
 
 ### Making Your Stake Liquid (Optional)
 
@@ -141,7 +136,7 @@ Once staked in a Vault, you can:
 For advanced users who want to run their own validators while maintaining liquidity, StakeWise offers solo staking through personal Vaults. This gives you maximum control and the highest potential yields.
 
 :::custom-info[Advanced Feature]
-Solo staking requires technical expertise to run Ethereum validators. It's recommended for experienced users comfortable with node operation and command-line tools.
+Solo staking requires technical expertise to run Ethereum / Gnosis Chain validators. It's recommended for experienced users comfortable with node operation and command-line tools.
 :::
 
 **Benefits of solo staking with StakeWise:**
@@ -153,9 +148,29 @@ Solo staking requires technical expertise to run Ethereum validators. It's recom
 **To get started with solo staking:**
 1. **Create your own Vault** using our [Vault creation guide →](/docs/guides/running-a-vault)
 2. **Set up validator infrastructure** following our [operator documentation →](/operator/intro)
-3. **Stake in your Vault** and optionally mint osTokens for liquidity
+3. **Stake in your Vault** and optionally [mint osTokens for liquidity →](/docs/protocol-concepts/osToken#minting)
 
 ## How to unstake?
+
+Unstaking is as simple and straightforward as staking, varying just slightly depending on how you staked your assets.
+
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <pre style={{
+    display: 'inline-block',
+    textAlign: 'left',
+    background: 'var(--ifm-color-emphasis-200)',
+    color: 'var(--ifm-color-primary)',
+    padding: '2rem',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Monaco, monospace',
+    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
+    lineHeight: '1.8'
+  }}>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}><img src="/img/icons8-flow-50.png" alt="Flow" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Unstaking Flow</strong>
+    🔥 Burn osTokens &rarr; 🚪 Unstaking &rarr; 📥 Claim Rewards &rarr; 👛 Receive Assets
+  </pre>
+</div>
 
 ### From One-Click Staking
 
@@ -182,6 +197,6 @@ Burn osETH → Enter unstake amount → Confirm transaction → Join unstake que
 
 :::custom-notes[Processing Times]
 - **One-click unstaking**: Immediate conversion
-- **Vault burning**: Immediate once confirmed
-- **Vault unstaking**: 24-48 hours depending on queue
+- **osETH burning in Vaults**: Immediate once confirmed
+- **Vault unstaking**: 24-48 hours depending on the queue
 :::

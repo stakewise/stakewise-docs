@@ -117,13 +117,13 @@ The withdrawal fulfillment process is automated by the [Operator Service →](..
 
 
 
-# Exit Validators
+#### Exit Validators
 
 The Operator Service automatically triggers validator exits when required.
 By default, it checks every **12 hours** (configurable via `PARTIAL_WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
 If partial withdrawals are not possible, the Operator Service initiates **full exits**.
 If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
-You can also use [manual exit](#manual-exit), although this command should only be used in extreme scenarios.
+You can also use [manual exit](#exit-validators), although this command should only be used in extreme scenarios.
 
 
 

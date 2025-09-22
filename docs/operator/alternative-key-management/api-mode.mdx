@@ -83,16 +83,16 @@ Request Body:
 ```json
 {
   "vault": "0x1234...",
-  "validators_start_index": int,
-  "amounts": int[],
-  "validator_type": "ValidatorType"
+  "validators_start_index": 20551,
+  "amounts": [32000000000],
+  "validator_type": "0x02"
 }
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be registered
-- `validators_start_index` - Validator index for the first validator in the batch
-- `amounts` - List of deposit amounts for each validator. Value provided in Gwei
+- `vault` - Address of the vault contract to which the validators will be registered.
+- `validators_start_index` - Validator index for the first validator in the batch.
+- `amounts` - List of deposit amounts for each validator. Value provided in Gwei.
 - `validator_type` - Type of validator to create. Possible values: `0x01` or `0x02`
 
 Response:
@@ -100,13 +100,13 @@ Response:
 {
   "validators": [
     {
-      "public_key": "string",
-      "deposit_signature": "string",
-      "amount": int,
-      "exit_signature": "string"
+      "public_key":  "0xPubKey1",
+      "deposit_signature": "0xDepositSig1",
+      "amount": 32000000000,
+      "exit_signature": "0xExitSig1"
     }
   ],
-  "validators_manager_signature": "string"
+  "validators_manager_signature": "0xManagerSig"
 }
 ```
 
@@ -118,27 +118,27 @@ Request Body:
 ```json
 {
   "vault": "0x1234...",
-  "public_keys": ["string"],
-  "amounts": [int]
+  "public_keys":  ["0xPubKey1"],
+  "amounts": [2000000000]
 }
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be funded
-- `public_keys` - List of public keys of validators to fund
-- `amounts` - List of amounts to fund into each validator. Value provided in Gwei
+- `vault` - Address of the vault contract to which the validators will be funded.
+- `public_keys` - List of public keys of validators to fund.
+- `amounts` - List of amounts to fund into each validator. Value provided in Gwei.
 
 Response:
 ```json
 {
   "validators": [
     {
-      "public_key": "string",
-      "deposit_signature": "string",
-      "amount": int
+      "public_key": "0xPubKey1",
+      "deposit_signature": "0xDepositSig1",
+      "amount": 2000000000
     }
   ],
-  "validators_manager_signature": "string"
+  "validators_manager_signature": "0xManagerSig"
 }
 ```
 
@@ -150,20 +150,20 @@ Request Body:
 ```json
 {
   "vault": "0x1234...",
-  "public_keys": ["string"],
-  "amounts": [int]
+  "public_keys":  ["0xPubKey1", "0xPubKey2"],
+  "amounts": [55000000000, 0]
 }
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be withdrawn
-- `public_keys` - List of public keys of validators to withdraw from
-- `amounts` - List of amounts to withdraw from each validator. If the amount is 0, the Operator requests a full withdrawal. Otherwise, the value must be provided in Gwei.
+- `vault` - Address of the vault contract to which the validators will be withdrawn.
+- `public_keys` - List of public keys of validators to withdraw from.
+- `amounts` - List of amounts to withdraw from each validator. Value provided in Gwei.
 
 Response:
 ```json
 {
-  "validators_manager_signature": "string"
+  "validators_manager_signature": "0xManagerSig"
 }
 ```
 
@@ -175,20 +175,20 @@ Request Body:
 ```json
 {
   "vault": "0x1234...",
-  "source_public_keys": ["string"],
-  "target_public_keys": ["string"]
+  "source_public_keys": ["0xPubKey1", "0xPubKey2"],
+  "target_public_keys": ["0xPubKey3", "0xPubKey3"]
 }
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be consolidated
-- `source_public_keys` - List of public keys of validators to consolidate from
-- `target_public_keys` - List of public keys of validators to consolidate to
+- `vault` - Address of the vault contract to which the validators will be consolidated.
+- `source_public_keys` - List of public keys of validators to consolidate from.
+- `target_public_keys` - List of public keys of validators to consolidate to.
 
 Response:
 ```json
 {
-  "validators_manager_signature": "string"
+  "validators_manager_signature": "0xManagerSig"
 }
 ```
 
@@ -199,7 +199,7 @@ Response:
 Response:
 ```json
 {
-  "network": "string"
+  "network": "mainnet"
 }
 ```
 

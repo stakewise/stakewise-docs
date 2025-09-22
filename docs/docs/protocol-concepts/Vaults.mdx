@@ -115,21 +115,20 @@ If only part of the requested amount is available, they can claim that portion i
 Partial withdrawals for `0x02` compound validators are now supported. They are significantly faster and more efficient than full validator exits, which can now also be processed via execution request call<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
 The withdrawal fulfillment process is automated by the [Operator Service →](../../operator/intro), which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
 
-
-
-#### Exit Validators
-
-The Operator Service automatically triggers validator exits when required.
-By default, it checks every **12 hours** (configurable via `PARTIAL_WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
-If partial withdrawals are not possible, the Operator Service initiates **full exits**.
-If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
-You can also use [manual exit](#exit-validators), although this command should only be used in extreme scenarios.
-
-
-
 :::custom-info[Processing Time]
 On mainnet, partial withdrawals typically complete faster (≈27–28 hours), while full exits can take **up to one month** to finalize.
 :::
+
+#### Validator Exits
+
+The Operator Service automatically triggers validator exits when required.
+By default, the Operator Service checks every **12 hours** (configurable via `PARTIAL_WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
+If partial withdrawals are not possible, the Operator Service initiates **full exits**.
+If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
+
+
+
+
 
 
 
@@ -139,7 +138,7 @@ On mainnet, partial withdrawals typically complete faster (≈27–28 hours), wh
 
 The process is as follows:
 
-1. **Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault — i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
+1. **Regular check**. Every 12 hours (configurable), the Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault — i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
 2. **Initiate exits if needed**. If available ETH is insufficient, the Operator Service initiates validator exits to free up the remaining amount.
 3. **Oracle enforcement of exits**. If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute full withdrawal after 24 hours.
 
@@ -381,7 +380,7 @@ such as `EthVault` and `GnoVault`.
 
 
 <div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> You can disable partial withdrawals if you prefer to rely solely on full exits. Use the `--disable-withdrawals` flag when starting the Operator Service:<br/>`./operator start --vaults=0x3320a...68 --disable-withdrawals`<br/>— in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+  <span>4.</span> You can disable partial withdrawals if you prefer to rely solely on full exits. Use the `--disable-withdrawals` flag when starting the Operator Service:<br/>`./operator start --vaults=0x3320a...68 --disable-withdrawals`<br/>— in this case, funds will be withdrawn via full exits using Oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
 <div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>

@@ -66,6 +66,14 @@ const config: Config = {
     respectPrefersColorScheme: true,
     image: 'img/og-image.png',
 
+    algolia: {
+      appId: '413SNHUF5R',
+      apiKey: '934a7ad553024345ec22b5f10a2afb89',
+      indexName: 'Documentation Website',
+      contextualSearch: true,
+      searchPagePath: 'search',
+    },
+
     docs: {
       sidebar: {
         autoCollapseCategories: true,

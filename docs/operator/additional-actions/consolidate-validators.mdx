@@ -7,7 +7,6 @@ sidebar_position: 4
 
 The Operator Service supports consolidation of legacy `0x01` validators to `0x02` compound validators using the `consolidate` command, enabling variable validator balances up to 2048 ETH.
 This reduces the validator count and infrastructure overhead by merging multiple 32 ETH validators into fewer, higher-balance validators.
-The Operator Service uses a `check_vault_version` function to verify the Vault's version.
 
 :::custom-warning[Validators Manager Required]
   The wallet executing this command must be set as the [Validators Manager →](../validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.

@@ -1,0 +1,32 @@
+---
+title: Manual Exit
+sidebar_position: 5
+---
+
+# Manual Exit
+
+Manual exits should only be used in specific scenarios: emergency, maintenance, testing, etc.
+
+```bash
+./operator exit-validators
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```bash
+Enter the comma separated list of API endpoints for execution nodes: : https://execution-node
+Enter the comma separated list of API endpoints for consensus nodes: https://consensus-node
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Fetching vault validators...
+Are you sure you want to exit 3 validators with indexes: 513571, 513572, 513861? [y/N]: y
+Exits for validators with index(es) 513571, 513572, 513861 are successfully initiated
+```
+</details>
+
+### Configuration Options
+
+- `--indexes` - Comma separated list of indexes of validators to exit (mutually exclusive with `--count`)
+- `--count` - The number of validators to exit. Default is all the active validators (mutually exclusive with `--indexes`)
+- `--relayer-endpoint` - Relayer endpoint URL for API mode operations
+- `--no-confirm` - Skips confirmation messages when provided

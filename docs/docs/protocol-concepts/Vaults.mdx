@@ -37,7 +37,7 @@ The Operator Service must receive 8 out of 11 approvals from Oracles to register
 The service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files. Once approved, validators enter the Beacon Chain's activation queue. [Network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
 
 Vaults support two types of validators (`0x01` or `0x02`)<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
-The default type is `0x02`. When registering validators, the system prioritizes funding existing `0x02` validators up to their maximum capacity before creating new validators.
+The default type is `0x02`. When registering validators, the Operator Service prioritizes funding existing `0x02` validators by selecting those with the highest current balance and topping them up to 2048 ETH before creating new validators.
 
 The technical process for registering validators involves coordination between the [Operator Service →](../../operator/intro) and the [Oracle network →](./Oracles):
 
@@ -85,22 +85,66 @@ For detailed information about the reward distribution process, see [Oracles →
 
 ### Withdrawals
 
-Users can mint osTokens for instant liquidity or withdraw. When a user chooses to unstake, they enter the Vault's **exit queue** and receive a **position ticket** that tracks their place in line.
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <pre style={{
+    display: 'inline-block',
+    textAlign: 'left',
+    background: 'var(--ifm-color-emphasis-200)',
+    color: 'var(--ifm-color-primary)',
+    padding: '2rem',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Monaco, monospace',
+    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
+    lineHeight: '1.8'
+  }}>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>💰 Withdrawal Process</strong>
+
+    🔍 Check Queued Assets &rarr; 💡 Partial Withdrawals? &rarr; 🎯 Withdraw Excess
+                                            │
+                                            &rarr; 🚪 Full Validator Exits
+                                            │
+                                            &rarr; ⏰ Oracle Fallback (24h)
+  </pre>
+</div>
+
+Users can mint osTokens for instant liquidity or withdraw. When users choose to unstake, they enter the Vault's **exit queue** and receive a **position ticket** that tracks their place in line.
 As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
 Partial withdrawals for `0x02` compound validators are now supported. They are significantly faster and more efficient than full validator exits, which can now also be processed via execution request call<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
 The withdrawal fulfillment process is automated by the [Operator Service →](../../operator/intro), which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
-More details on partial withdrawals are available in the *Operator*: [*Withdrawals* →](/operator/intro#withdrawals) section.
+
+
+
+# Exit Validators
+
+The Operator Service automatically triggers validator exits when required.
+By default, it checks every **12 hours** (configurable via `PARTIAL_WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
+If partial withdrawals are not possible, the Operator Service initiates **full exits**.
+If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
+You can also use [manual exit](#manual-exit), although this command should only be used in extreme scenarios.
+
+
+
+:::custom-info[Processing Time]
+On mainnet, partial withdrawals typically complete faster (≈27–28 hours), while full exits can take **up to one month** to finalize.
+:::
+
+
+
+
+
+
 
 The process is as follows:
 
 1. **Daily check**. On a daily cycle, Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault — i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
-2. **Initiate exits if needed**. If available ETH is insufficient, the operator initiates validator exits to free up the remaining amount.
-3. **Oracle enforcement of exits**. If the operator does not initiate partial or full withdrawals, the Oracle network will automatically execute full withdrawal after 24 hours.
+2. **Initiate exits if needed**. If available ETH is insufficient, the Operator Service initiates validator exits to free up the remaining amount.
+3. **Oracle enforcement of exits**. If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute full withdrawal after 24 hours.
 
 The exit queue advances whenever the Vault **syncs state** — both on **user actions**
-(entering the queue, deposits/withdrawals) and on **operator service-driven syncs** (e.g., harvest).
+(entering the queue, deposits/withdrawals) and on the **operator Service-driven syncs** (e.g., harvest).
 Throughout the process, user assets are safe in the Vault's smart contracts and are never controlled by any third party.
 
 Exit processing time depends on the Ethereum network congditions.
@@ -337,7 +381,7 @@ such as `EthVault` and `GnoVault`.
 
 
 <div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> To disable this, use the flag `--disable-withdrawals` — in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+  <span>4.</span> You can disable partial withdrawals if you prefer to rely solely on full exits. Use the `--disable-withdrawals` flag when starting the Operator Service:<br/>`./operator start --vaults=0x3320a...68 --disable-withdrawals`<br/>— in this case, funds will be withdrawn via full exits using oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
 <div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>

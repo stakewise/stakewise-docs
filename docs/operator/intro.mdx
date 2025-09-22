@@ -70,17 +70,17 @@ When a user requests to exit their stake, the Operator Service identifies the va
 It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
 If partial withdrawals are insufficient, it proceeds with full withdrawals.
 
+:::custom-info[Prerequisites]
+- Wallet must be set as [Validators Manager →](./validators-manager) in Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+- Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
+:::
+
 :::custom-notes[Exit Queue Monitoring]
 To minimize the number of withdrawals, the Operator Service checks the exit queue every 12 hours (this interval can be reconfigured).
 :::
 
 :::custom-notes[Deep Dive]
-For detailed instructions on exiting validators, see [Exit Validators →](./additional-actions/exit-validators)
-:::
-
-:::custom-info[Oracle Failsafe]
-The withdrawal functionality can also be disabled for the Operator Service.
-In that case, the [Oracles →](../../docs/protocol-concepts/Oracles) will use the exit signatures they received from the Operator Service during validator registration (more details [here →](../../docs/protocol-concepts/Vaults#validator-registration)).
+For detailed instructions on exiting validators manually, see [Manual Exit →](./additional-actions/manual-exit)
 :::
 
 ### Vault State Update

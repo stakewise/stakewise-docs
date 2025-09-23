@@ -9,12 +9,12 @@ import Admonition from '@theme/Admonition';
 
 # V4 Upgrade Guide
 
-This guide covers the key changes and upgrade steps for StakeWise Operator V4, including Pectra upgrade support, streamlined commands, and multi-Vault functionality.
+This guide covers the key changes and upgrade steps for StakeWise Operator V4, including Pectra upgrade support.
 
 :::custom-info[Prerequisites]
 Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility.
 
-Additionally, ensure your Operator Service wallet has the [Validators Manager →](./validators-manager) role assigned in your Vault settings for proper operation.
+Additionally, ensure your Operator Service wallet has the [Validators Manager →](validators-manager#step-2-assign-validators-manager-role) role assigned in your Vault settings for proper operation.
 :::
 
 ## Validator Changes
@@ -28,7 +28,7 @@ After the Pectra upgrade:
 To migrate `0x01` validators to `0x02`, use the `consolidate` command. Read more about it [here →](./additional-actions/consolidate-validators).
 :::
 
-When replenishing validators:
+When funding validators:
 1. Funds first **top up existing `0x02` validators** up to 2048 ETH or 64 GNO before registering new validators
 2. **New validators are registered** once the Vault accumulates another 32 ETH or 1 GNO
 
@@ -42,14 +42,13 @@ The Pectra upgrade introduces significantly improved withdrawal mechanisms:
 
 #### Partial Withdrawals (New!)
 - Supported for **`0x02` validators only**, enabling withdrawal of excess balance **without exiting the validator**
-- **Automated execution every 24 hours** by default (configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable)
-- Processes validators with **balances exceeding 32 ETH or 1 GNO**, prioritizing those with higher balances first
+- **Automated execution every 12 hours** by default (configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable)
+- Triggers partial withdrawals for validators with **balances exceeding 32 ETH or 1 GNO**, prioritizing those with higher balances first
 - Significantly faster than full validator exits, improving withdrawal queue processing times
 
 #### More Efficient Full Validator Exits
 - **Full validator exits** are now processed via **execution request calls** instead of the traditional oracle-based method
-- **Much faster processing** compared to the previous oracle-dependent system
-- **Automatic fallback**: If the Operator Service doesn't initiate withdrawals, oracles will automatically execute full withdrawal after 24 hours
+- **Automatic fallback**: If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute a full withdrawal after 24 hours using the exit signatures they have received during validator registration
 
 :::custom-info[Withdrawal Logic & Prioritization]
 When processing withdrawal requests:
@@ -60,8 +59,8 @@ When processing withdrawal requests:
 :::
 
 :::custom-notes[Configuration Options]
-- **Disable partial withdrawals**: Use `--disable-withdrawals` flag to process all withdrawals via full validator exits only
-- **Adjust frequency**: Set `PARTIAL_WITHDRAWALS_INTERVAL` environment variable to change the default 24-hour interval
+- **Disable partial withdrawals**: Use `--disable-withdrawals` flag to process all withdrawals via full validator exits using oracles
+- **Adjust frequency**: Set `PARTIAL_WITHDRAWALS_INTERVAL` environment variable to change the default 12-hour interval
 - **Minimum thresholds**: Partial withdrawals only occur when validator balance exceeds 32 ETH or 1 GNO
 :::
 
@@ -69,9 +68,9 @@ When processing withdrawal requests:
 Partial withdrawals are **not supported** for `0x01` validators. These will always require full validator exits for withdrawals.
 :::
 
-## Streamlined Start Commands
+## Simplified Start Commands
 
-The launch process has been streamlined by separating setup flows into dedicated commands:
+The launch process has been simplified by separating setup flows into dedicated commands:
 
 <Tabs>
 <TabItem value="default" label="Default Mode">

@@ -14,7 +14,7 @@ This guide covers the key changes and upgrade steps for StakeWise Operator V4, i
 :::custom-info[Prerequisites]
 Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility.
 
-Additionally, ensure your Operator Service wallet has the Validators Manager role assigned in your Vault settings for proper operation.
+Additionally, ensure your Operator Service wallet has the [Validators Manager →](./validators-manager) role assigned in your Vault settings for proper operation.
 :::
 
 ## Validator Changes
@@ -38,13 +38,35 @@ Funding will be disabled when using `0x01` validator type.
 
 ### Withdrawals
 
-The Pectra upgrade introduces **significantly improved withdrawal mechanisms**:
+The Pectra upgrade introduces significantly improved withdrawal mechanisms:
 
-- **Partial withdrawals** are now supported for `0x02` validators, allowing faster and more efficient withdrawals
-- **Full validator exits** are processed much faster via execution request calls instead of the traditional oracle-based method
+#### Partial Withdrawals (New!)
+- Supported for **`0x02` validators only**, enabling withdrawal of excess balance **without exiting the validator**
+- **Automated execution every 24 hours** by default (configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable)
+- Processes validators with **balances exceeding 32 ETH or 1 GNO**, prioritizing those with higher balances first
+- Significantly faster than full validator exits, improving withdrawal queue processing times
 
-:::custom-notes[Dive Deeper]
-You can learn more about how withdrawals are handled [here →](/docs/protocol-concepts/Vaults#withdrawals).
+#### More Efficient Full Validator Exits
+- **Full validator exits** are now processed via **execution request calls** instead of the traditional oracle-based method
+- **Much faster processing** compared to the previous oracle-dependent system
+- **Automatic fallback**: If the Operator Service doesn't initiate withdrawals, oracles will automatically execute full withdrawal after 24 hours
+
+:::custom-info[Withdrawal Logic & Prioritization]
+When processing withdrawal requests:
+
+1. **First Priority**: Partial withdrawals from `0x02` validators with excess balance (>32 ETH/1 GNO)
+2. **Second Priority**: Full validator exits if partial withdrawal capacity is insufficient
+3. **Fallback**: Oracle-triggered full exits after 24 hours if operator is inactive
+:::
+
+:::custom-notes[Configuration Options]
+- **Disable partial withdrawals**: Use `--disable-withdrawals` flag to process all withdrawals via full validator exits only
+- **Adjust frequency**: Set `PARTIAL_WITHDRAWALS_INTERVAL` environment variable to change the default 24-hour interval
+- **Minimum thresholds**: Partial withdrawals only occur when validator balance exceeds 32 ETH or 1 GNO
+:::
+
+:::custom-warning[Important for `0x01` Validators]
+Partial withdrawals are **not supported** for `0x01` validators. These will always require full validator exits for withdrawals.
 :::
 
 ## Streamlined Start Commands
@@ -96,16 +118,6 @@ To support this new flow, you must **assign your operator wallet as the Validato
 🔗 **Setup Guide**: [How to Set Up Validators Manager →](./validators-manager).
 :::
 
-## Multi-Vault Support
-
-The operator service can now **manage multiple Vaults simultaneously**, reducing setup complexity for multi-Vault users.
-
-### Key Changes
-- **Single Wallet & Keystores** – Shared across all Vaults (no `--vault` flag needed for `create-keys`/`create-wallets`)
-- **Migration** – Existing setups will auto-migrate to the new structure on first launch
-- **Launch Command** – Use `--vaults` with multiple addresses (e.g., `--vaults=0x1...23,0x4...56`)
-- **All validator keys** linked to the operator will be used for every connected Vault
-
 ## Automated Rewards Withdrawals
 
 It is now possible to **periodically withdraw rewards** for the Vault's fee shareholders.
@@ -119,10 +131,8 @@ For detailed instructions on fee claiming, see [Fee Claiming →](./additional-a
 ### Updated Parameters
 | Old Parameter | New Parameter | Notes |
 |---------------|---------------|-------|
-| `--vault` | `--vaults` | Now supports multiple comma-separated addresses |
 | `HOT_WALLET_FILE` | `WALLET_FILE` | Environment variable renamed |
 | `HOT_WALLET_PASSWORD_FILE` | `WALLET_PASSWORD_FILE` | Environment variable renamed |
 
 ### Removed Parameters
 - ❌ `--deposit-data-file` - No longer needed (automatic generation)
-- ❌ `--vault` - Deprecated in favor of `--vaults`

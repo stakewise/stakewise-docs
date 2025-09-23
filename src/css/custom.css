@@ -454,10 +454,10 @@ pre[class*="language-bash"],
 }
 
 .navbar__items--right > div:has(button[onclick*="stakewise"]) {
-  order: 2;
+  order: 3;
 }
 
 .navbar__items--right [class*="toggle"],
 .navbar__items--right [class*="colorMode"] {
-  order: 3;
+  order: 2;
 }

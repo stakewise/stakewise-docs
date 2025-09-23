@@ -17,7 +17,7 @@ After completing [Validators Manager →](validators-manager) setup, you're read
 You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
 
 :::custom-warning[Required Flags]
-- `--vaults` - Comma-separated list of Vault addresses
+- `--vault` - Your Vault address
 - `--consensus-endpoints` - Consensus client API endpoints
 - `--execution-endpoints` - Execution client API endpoints
 :::
@@ -30,7 +30,7 @@ By default, the Operator Service runs with locally stored keystores created duri
 
 ```bash
 ./operator start \
-  --vaults=0x001,0x002 \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
   --consensus-endpoints=https://consensus-node \
   --execution-endpoints=https://execution-node \
   --network=mainnet
@@ -50,7 +50,7 @@ If you **are using an existing wallet** (instead of the Operator Service generat
 
 
 :::custom-info[External Key Management]
-For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Management →](./alternative-key-management/remote-signer) section.
+For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Management →](./alternative-key-management) section.
 :::
 
 ### Running Options
@@ -63,7 +63,7 @@ Depending on your installation method, use the appropriate command format:
 
     ```bash
     ./operator start \
-      --vaults=0x001,0x002 \
+      --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
       --consensus-endpoints=https://consensus-node \
       --execution-endpoints=https://execution-node \
       --network=mainnet
@@ -81,7 +81,7 @@ Depending on your installation method, use the appropriate command format:
     -v ~/.stakewise/:/data \
     europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.0 \
     src/main.py start-local \
-    --vaults=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+    --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --data-dir=/data \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
@@ -93,7 +93,7 @@ Depending on your installation method, use the appropriate command format:
 
     ```bash
     PYTHONPATH=. poetry run python src/main.py start-local \
-    --vaults=0x834F... \
+    --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
     ```

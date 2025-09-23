@@ -15,7 +15,7 @@ Rated Network provides validator performance tracking and analytics. Self-report
 
 To use the `submit-rated-network` command, you will need to provide the following parameters:
 
-- `--vaults` - The comma separated list of your Vault addresses
+- `--vault` - Your Vault address
 - `--network` - The network of your Vault (e.g., mainnet, hoodi)
 - `--token` - OAuth token for authorization
 - `--data-dir` - Path where the Vault data will be placed (default: `~/.stakewise`)
@@ -23,7 +23,12 @@ To use the `submit-rated-network` command, you will need to provide the followin
 
 **Usage Example**
 ```bash
-./operator submit-rated-network --vaults=0x000...,0x111... --network=mainnet --pool-tag=my-pool --token=your-oauth-token --data-dir=/data
+./operator submit-rated-network \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+  --network=mainnet \
+  --pool-tag=my-pool \
+  --token=your-oauth-token \
+  --data-dir=/data
 ```
 
 :::custom-notes[Integration Complete]

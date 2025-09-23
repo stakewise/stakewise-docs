@@ -7,6 +7,9 @@
   --code: #f6f7f8; /* code background */
   --ifm-navbar-height: 4.5rem;
   --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --ifm-h1-font-size: 40px;
+  --ifm-h2-font-size: 32px;
+  --ifm-h3-font-size: 24px;
 }
 
 html[data-theme='dark'] {
@@ -93,15 +96,15 @@ h5 {
 }
 
 h1 {
-  font-size: 40px !important;
+  font-size: var(--ifm-h1-font-size);
 }
 
 h2 {
-  font-size: 32px !important;
+  font-size: var(--ifm-h2-font-size);
 }
 
 h3 {
-  font-size: 24px !important;
+  font-size: var(----ifm-h3-font-size);
 }
 
 a {
@@ -402,16 +405,16 @@ pre[class*="language-bash"],
 }
 
 /* DocSearch customization */
-.DocSearch-Button {
-  border-radius: 6px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
+.navbar .DocSearch-Button {
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1)
 }
-.DocSearch-Button:hover {
-  background: rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+.navbar .DocSearch-Button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.DocSearch-Button:hover .DocSearch-Button-Placeholder {
-  color: var(--coral) !important;
+.navbar .DocSearch-Button:hover .DocSearch-Button-Placeholder{
+  color: var(--coral);;
 }
 .DocSearch-Button:focus,
 .DocSearch-Button:active {
@@ -429,11 +432,13 @@ pre[class*="language-bash"],
 [data-theme='dark'] .DocSearch-Button:active {
   background: rgba(255, 255, 255, 0.1) !important;
 }
+
 /* Modal customization */
 .DocSearch-Modal {
   border-radius: 12px !important;
   box-shadow: 0 5px 40px rgba(0, 0, 0, 0.2) !important;
 }
+
 .DocSearch-Button-Key {
   background: var(--ifm-color-emphasis-200) !important;
   border: 1px solid var(--fog) !important;
@@ -444,18 +449,20 @@ pre[class*="language-bash"],
   display: none !important;
 }
 
+/* Navbar item ordering */
 .navbar__items--right {
-  display: flex !important;
+  display: flex;
 }
+
 .navbar__items--right > div:has(.DocSearch-Button) {
-  order: 1 !important;
+  order: 1;
 }
 
 .navbar__items--right > div:has(button[onclick*="stakewise"]) {
-  order: 2 !important;
+  order: 3;
 }
 
 .navbar__items--right [class*="toggle"],
 .navbar__items--right [class*="colorMode"] {
-  order: 3 !important;
+  order: 2;
 }

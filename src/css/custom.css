@@ -443,3 +443,19 @@ pre[class*="language-bash"],
 .DocSearch-Footer {
   display: none !important;
 }
+
+.navbar__items--right {
+  display: flex !important;
+}
+.navbar__items--right > div:has(.DocSearch-Button) {
+  order: 1 !important;
+}
+
+.navbar__items--right > div:has(button[onclick*="stakewise"]) {
+  order: 2 !important;
+}
+
+.navbar__items--right [class*="toggle"],
+.navbar__items--right [class*="colorMode"] {
+  order: 3 !important;
+}

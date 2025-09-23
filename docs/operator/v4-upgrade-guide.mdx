@@ -1,0 +1,127 @@
+---
+title: V4 Upgrade Guide
+sidebar_position: 10
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+
+# V4 Upgrade Guide
+
+This guide covers the key changes and upgrade steps for StakeWise Operator V4, including Pectra upgrade support, streamlined commands, and multi-Vault functionality.
+
+:::custom-info[Prerequisites]
+Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility.
+:::
+
+## Validator Changes
+### Registration
+After the Pectra upgrade:
+- **Validator balances are no longer limited** to 32 ETH or 1 GNO
+- **`0x02` validators are registered by default**
+- To register `0x01` validators, add the flag `--validators-type=0x01`
+
+:::custom-notes[Consolidations]
+To migrate `0x01` validators to `0x02`, use the `consolidate` command. Read more about it [here →](./additional-actions/consolidate-validators).
+:::
+
+### Funding
+When replenishing validators:
+1. Funds first **top up existing `0x02` validators** up to 2048 ETH or 64 GNO
+2. **New validators are registered** once the Vault accumulates another 32 ETH or 1 GNO
+
+:::custom-warning[Note]
+Funding will be disabled when using `0x01` validator type.
+:::
+
+### Withdrawals
+
+The Pectra upgrade introduces **significantly improved withdrawal mechanisms**:
+
+- **Partial withdrawals** are now supported for `0x02` validators, allowing faster and more efficient withdrawals
+- **Full validator exits** are processed much faster via execution request calls instead of the traditional oracle-based method
+
+:::custom-notes[Dive Deeper]
+You can learn more about how withdrawals are handled [here →](/docs/protocol-concepts/Vaults#withdrawals).
+:::
+
+## Streamlined Start Commands
+
+The launch process has been streamlined by separating setup flows into dedicated commands:
+
+<Tabs>
+<TabItem value="default" label="Default Mode">
+
+```bash
+# No changes needed for default mode
+```
+
+</TabItem>
+<TabItem value="remote" label="Remote Signer">
+
+```bash
+start-remote-signer
+```
+
+</TabItem>
+<TabItem value="hashi" label="Hashi Vault">
+
+```bash
+start-hashi-vault
+```
+
+</TabItem>
+<TabItem value="relayer" label="Relayer">
+
+```bash
+start-relayer
+```
+
+</TabItem>
+</Tabs>
+
+:::custom-notes[Reference]
+For detailed information about start commands, see [Start Operator Service →](./start-operator).
+:::
+
+## No More Deposit Data File
+
+V4 Operator **no longer requires pre-uploaded deposit data** for validator registration — it generates deposit data automatically during registration.
+
+:::custom-info[Important]
+To support this new flow, you must **assign your operator wallet as the Validators Manager** in the Vault settings.
+
+🔗 **Setup Guide**: [How to Set Up Validators Manager →](./validators-manager).
+:::
+
+## Multi-Vault Support
+
+The operator service can now **manage multiple Vaults simultaneously**, reducing setup complexity for multi-Vault users.
+
+### Key Changes
+- **Single Wallet & Keystores** – Shared across all Vaults (no `--vault` flag needed for `create-keys`/`create-wallets`)
+- **Migration** – Existing setups will auto-migrate to the new structure on first launch
+- **Launch Command** – Use `--vaults` with multiple addresses (e.g., `--vaults=0x1...23,0x4...56`)
+- **All validator keys** linked to the operator will be used for every connected Vault
+
+## Automated Rewards Withdrawals
+
+It is now possible to **periodically withdraw rewards** for the Vault's fee shareholders.
+
+:::custom-notes[Deep Dive]
+For detailed instructions on fee claiming, see [Fee Claiming →](./additional-actions/fee-claiming).
+:::
+
+## Parameter Changes
+
+### Updated Parameters
+| Old Parameter | New Parameter | Notes |
+|---------------|---------------|-------|
+| `--vault` | `--vaults` | Now supports multiple comma-separated addresses |
+| `HOT_WALLET_FILE` | `WALLET_FILE` | Environment variable renamed |
+| `HOT_WALLET_PASSWORD_FILE` | `WALLET_PASSWORD_FILE` | Environment variable renamed |
+
+### Removed Parameters
+- ❌ `--deposit-data-file` - No longer needed (automatic generation)
+- ❌ `--vault` - Deprecated in favor of `--vaults`

@@ -13,6 +13,8 @@ This guide covers the key changes and upgrade steps for StakeWise Operator V4, i
 
 :::custom-info[Prerequisites]
 Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility.
+
+Additionally, ensure your Operator Service wallet has the Validators Manager role assigned in your Vault settings for proper operation.
 :::
 
 ## Validator Changes
@@ -26,9 +28,8 @@ After the Pectra upgrade:
 To migrate `0x01` validators to `0x02`, use the `consolidate` command. Read more about it [here →](./additional-actions/consolidate-validators).
 :::
 
-### Funding
 When replenishing validators:
-1. Funds first **top up existing `0x02` validators** up to 2048 ETH or 64 GNO
+1. Funds first **top up existing `0x02` validators** up to 2048 ETH or 64 GNO before registering new validators
 2. **New validators are registered** once the Vault accumulates another 32 ETH or 1 GNO
 
 :::custom-warning[Note]

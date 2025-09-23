@@ -1,15 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;1,400&display=swap');
+
 :root {
   --coral: #018970; /* default (light) */
-  --fog:#FFFFFF4D; /* fog effect */
+  --fog: #FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
   --ifm-navbar-height: 4.5rem;
   --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  --ifm-h1-font-size: 40px;
-  --ifm-h2-font-size: 32px;
-  --ifm-h3-font-size: 24px;
 }
 
 html[data-theme='dark'] {
@@ -96,15 +94,15 @@ h5 {
 }
 
 h1 {
-  font-size: var(--ifm-h1-font-size);
+  font-size: 40px !important;
 }
 
 h2 {
-  font-size: var(--ifm-h2-font-size);
+  font-size: 32px !important;
 }
 
 h3 {
-  font-size: var(----ifm-h3-font-size);
+  font-size: 24px !important;
 }
 
 a {
@@ -225,15 +223,7 @@ html[data-theme='dark'] .crystal-bg {
     margin-left: 16px;
   }
 
-  html[data-theme='light'] .navbar-sidebar{
-    background-color: #f1f2fd;
-  }
-
-  html[data-theme='dark'] .navbar-sidebar {
-    background-color: #00060f;
-  }
-
-  html[data-theme='light'] .navbar-sidebar{
+  html[data-theme='light'] .navbar-sidebar {
     background-color: #f1f2fd;
   }
 
@@ -268,7 +258,6 @@ html[data-theme='dark'] blockquote {
 }
 
 @media (min-width: 961px) {
-
   .width-container {
     max-width: 1320px;
     padding-right: 60px;
@@ -405,29 +394,35 @@ pre[class*="language-bash"],
 }
 
 /* DocSearch customization */
-.navbar .DocSearch-Button {
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1)
+.DocSearch-Button {
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
 }
-.navbar .DocSearch-Button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+.DocSearch-Button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
-.navbar .DocSearch-Button:hover .DocSearch-Button-Placeholder{
-  color: var(--coral);;
+
+.DocSearch-Button:hover .DocSearch-Button-Placeholder {
+  color: var(--coral) !important;
 }
+
 .DocSearch-Button:focus,
 .DocSearch-Button:active {
   background: rgba(255, 255, 255, 0.1) !important;
   box-shadow: none !important;
 }
+
 .DocSearch-Button:focus .DocSearch-Button-Placeholder,
 .DocSearch-Button:active .DocSearch-Button-Placeholder {
   color: inherit !important;
 }
+
 [data-theme='dark'] .DocSearch-Button:hover {
   background: rgba(39, 40, 42, 0.8) !important;
 }
+
 [data-theme='dark'] .DocSearch-Button:focus,
 [data-theme='dark'] .DocSearch-Button:active {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -444,12 +439,12 @@ pre[class*="language-bash"],
   border: 1px solid var(--fog) !important;
   box-shadow: none !important;
 }
+
 /* Hide DocSearch footer */
 .DocSearch-Footer {
   display: none !important;
 }
 
-/* Navbar item ordering */
 .navbar__items--right {
   display: flex;
 }
@@ -459,10 +454,10 @@ pre[class*="language-bash"],
 }
 
 .navbar__items--right > div:has(button[onclick*="stakewise"]) {
-  order: 3;
+  order: 2;
 }
 
 .navbar__items--right [class*="toggle"],
 .navbar__items--right [class*="colorMode"] {
-  order: 2;
+  order: 3;
 }

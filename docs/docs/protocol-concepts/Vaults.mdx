@@ -140,9 +140,9 @@ If the Operator Service fails to exit validators within **24 hours**, **Oracles 
 
 The process is as follows:
 
-1. **Regular check**. Every 12 hours (configurable), the Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault — i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
-2. **Initiate exits if needed**. If available ETH is insufficient and partial witdrawals are not possible, the Operator Service initiates validator exits to free up the remaining amount.
-3. **Oracle enforcement of exits**. If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute full exits after 24 hours.
+1. **Regular check**. Every 12 hours, the Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault — i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
+2. **Initiate exits if needed**. If available ETH is insufficient, the Operator Service initiates validator exits to free up the remaining amount. If there are 0x02 validators in the vault, the operator service will trigger partial withdrawals from these validators. If the required amount is larger than what is available from partial withdrawals, the operator service will trigger validator exits through a vault contract call.
+3. **Oracle enforcement of exits**. If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute a full withdrawal after 24 hours using the exit signatures they have received during validator registration.
 
 The exit queue advances whenever the Vault **syncs state** — both on **user actions**
 (entering the queue, deposits/withdrawals) and on the **Operator Service-driven syncs**<sup><a href="#fn-5" id="fnref-5">5</a></sup>.

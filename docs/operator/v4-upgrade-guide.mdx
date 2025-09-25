@@ -42,7 +42,7 @@ The Pectra upgrade introduces significantly improved withdrawal mechanisms:
 
 #### Partial Withdrawals (New!)
 - Supported for **`0x02` validators only**, enabling withdrawal of excess balance **without exiting the validator**
-- **Automated execution every 12 hours** by default (configurable via `PARTIAL_WITHDRAWALS_INTERVAL` environment variable)
+- **Automated execution every 12 hours** by default (configurable via `WITHDRAWALS_INTERVAL` environment variable)
 - Triggers partial withdrawals for validators with **balances exceeding 32 ETH or 1 GNO**, prioritizing those with higher balances first
 - Significantly faster than full validator exits, improving withdrawal queue processing times
 
@@ -60,7 +60,7 @@ When processing withdrawal requests:
 
 :::custom-notes[Configuration Options]
 - **Disable partial withdrawals**: Use `--disable-withdrawals` flag to process all withdrawals via full validator exits using oracles
-- **Adjust frequency**: Set `PARTIAL_WITHDRAWALS_INTERVAL` environment variable to change the default 12-hour interval
+- **Adjust frequency**: Set `WITHDRAWALS_INTERVAL` environment variable to change the default 12-hour interval
 - **Minimum thresholds**: Partial withdrawals only occur when validator balance exceeds 32 ETH or 1 GNO
 :::
 

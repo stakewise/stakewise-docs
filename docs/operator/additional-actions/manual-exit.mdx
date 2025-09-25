@@ -7,6 +7,10 @@ sidebar_position: 5
 
 Manual exits should only be used in specific scenarios: emergency, maintenance, testing, etc.
 
+:::custom-warning[Validators Manager Required]
+  The wallet executing this command must be set as the [Validators Manager →](../validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+:::
+
 ```bash
 ./operator exit-validators
 ```

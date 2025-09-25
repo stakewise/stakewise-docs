@@ -124,7 +124,7 @@ On mainnet, partial withdrawals typically complete faster (≈27–28 hours), wh
 #### Validator Exits
 
 The Operator Service automatically triggers validator exits when required.
-By default, the Operator Service checks every **12 hours** (configurable via `PARTIAL_WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
+By default, the Operator Service checks every **12 hours** (configurable via `WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
 If partial withdrawals are not possible, the Operator Service initiates **full exits**.
 If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
 

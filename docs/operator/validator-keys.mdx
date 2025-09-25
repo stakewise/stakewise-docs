@@ -59,6 +59,7 @@ Follow the command prompts.
 
 ```
 Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]:
+Enter your vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c
 Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]:
 
 This is your seed phrase. Write it down and store it safely, it is the ONLY way to recover your validator keys.
@@ -97,16 +98,17 @@ Follow the command prompts.
 
 Enter the number of the validator keys to generate: 3
 Enter the mnemonic for generating the validator keys: fish monster write banner tired laptop slender ...
+Enter the vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6
 Creating validator keys:		  [####################################]  3/3
 Exporting validator keystores		  [####################################]  3/3
 
 Done. Generated 3 keys for StakeWise operator.
-Keystores saved to ~/.stakewise/mainnet/keystores file
+Keystores saved to ~/.stakewise/0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c/keystores file
 ```
 </details>
 
 :::custom-notes[Keystore Locations]
-  - Keystores are saved to `~/.stakewise/mainnet/keystores`
+  - Keystores are saved to `~/.stakewise/[vault address]/keystores`
   - **Default**: A single `password.txt` file contains the password for all generated keystores
   - **Per-keystore option**: Use the `--per-keystore` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
 :::
@@ -121,7 +123,7 @@ You can always add more validator keys to your Vault. For that, you need to gene
 
 Upload your keystores into your validator client:
 
-1. Locate your keystores in `~/.stakewise/mainnet/keystores`
+1. Locate your keystores in `~/.stakewise/[vault address]/keystores`
 2. Follow your consensus client's guide for importing keys
 3. Use the password from `password.txt` file
 4. Start the validator client with attached validator keys.

@@ -12,10 +12,10 @@ This reduces the validator count and infrastructure overhead by merging multiple
   The wallet executing this command must be set as the [Validators Manager →](../validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
 :::
 
-You can either specify `--source-public-keys` (`0x01` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate specific validators, or run without these parameters for automatic consolidation. By default, the following logic applies:
+You can either specify `--source-public-keys` (`0x01` or `0x02` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate specific validators, or run without these parameters for automatic consolidation. By default, the following logic applies:
 
 1. If there are no `0x02` validators, take the oldest `0x01` validator and convert it to `0x02` with confirmation prompt
-2. If there is a `0x02` validator, take the oldest `0x01` validators to top up its balance to 2048 ETH / 64 GNO
+2. If there is a `0x02` validator, take the oldest `0x01` validators and top up the `0x02` validator balance to 2048 ETH / 64 GNO with confirmation prompt
 
 ```bash
 # Automatic consolidation
@@ -38,7 +38,7 @@ You can either specify `--source-public-keys` (`0x01` validators) and `--target-
 
 ### Consolidate Using File
 
-For managing multiple validators, use a file containing public keys:
+For managing multiple validators, use a file containing public keys (one per line):
 
 ```bash
 ./operator consolidate \
@@ -78,5 +78,5 @@ Validators has been successfully consolidated
 
 :::custom-warning[Important Notes]
 The `--target-public-key` must be a compounding validator.
-The consolidation process requires Oracle signatures, which are automatically fetched during the operation.
+The consolidation process requires Oracle signatures in case of switching from `0x01` to `0x02`, which are automatically fetched during the operation.
 :::

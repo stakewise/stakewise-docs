@@ -22,7 +22,7 @@ The Validators Manager role provides permission to execute essential validator o
 
 - **Validator Registration**: Register both `0x01` legacy validators (32 ETH/1 GNO) and `0x02` compound validators (up to 2048 ETH/64 GNO)
 - **Validator Funding**: Top up existing `0x02` compound validators with additional ETH/GNO to maximize capital efficiency
-- **Validator Consolidation**: Migrate legacy `0x01` validators to more efficient `0x02` compound validators
+- **Validator Consolidation**: Migrate balance from one validator to another.
 - **Validator Withdrawals**: Trigger withdrawal requests for validators when needed
 
 ### Authorization Methods
@@ -56,9 +56,9 @@ Create a wallet for validator registrations and gas payments:
 <details className="custom-details">
 <summary>Example Output</summary>
 ```
-
+Enter the vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c
 Enter the mnemonic for generating the wallet: fish monster write banner tired laptop slender ...
-Done. The wallet and password saved to ~/.stakewise/mainnet/wallet directory. The wallet address is: 0x59d58...B48C4
+Done. The wallet and password saved to ~/.stakewise/0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c/wallet directory. The wallet address is: 0x59d58...B48C4
 ```
 </details>
 

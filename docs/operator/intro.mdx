@@ -71,12 +71,12 @@ It first triggers partial withdrawals for the `0x02` validators, starting with t
 If partial withdrawals are insufficient, it proceeds with full withdrawals.
 
 :::custom-info[Prerequisites]
-- Wallet must be set as [Validators Manager →](./validators-manager) in Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+- Wallet must be set as [Validators Manager →](./validators-manager) in Vault settings.
 - Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
 :::
 
 :::custom-notes[Exit Queue Monitoring]
-To minimize the number of withdrawals, the Operator Service checks the exit queue every 12 hours (this interval can be reconfigured).
+To minimize the number of withdrawal transactions, the Operator Service submits a withdrawal transaction once every 12 hours (this interval can be reconfigured).
 :::
 
 :::custom-notes[Deep Dive]

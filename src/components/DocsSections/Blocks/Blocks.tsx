@@ -21,12 +21,6 @@ const blocks: BlockProps[] = [
     text: 'Documentation for running and managing the StakeWise Operator Service',
     Svg: require("@site/static/icon/code.svg").default,
     href: '/operator/intro',
-  },
-  {
-    title: 'Contracts',
-    text: 'Learn about the architecture of the StakeWise Protocol smart contracts through guided examples',
-    Svg: require("@site/static/icon/code.svg").default,
-    href: '/contracts/networks',
   }
 ]
 

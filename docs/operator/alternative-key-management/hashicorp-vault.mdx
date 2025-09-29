@@ -21,8 +21,8 @@ The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](h
 Complete the following steps before proceeding:
 
 :::custom-notes[Required Setup Steps]
-  1. [Installation →](../installation)
-  2. [Validators Manager →](../validators-manager)
+  1. [Installation →](../installation) completed
+  2. [Validators Manager →](../validators-manager) set
   3. Validator keys stored in your [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance
 :::
 
@@ -49,10 +49,9 @@ Passing following options to `start-hashi-vault` command will enable loading val
 
 ```bash
 ./operator start-hashi-vault \
-  --vaults=0x001,0x002 \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
   --consensus-endpoints=https://consensus-node \
   --execution-endpoints=https://execution-node \
-  --network=mainnet \
   --hashi-vault-key-path=keystores1 \
   --hashi-vault-key-path=keystores2 \
   --hashi-vault-token=hvs.abcde \

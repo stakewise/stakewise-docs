@@ -17,8 +17,8 @@ The Operator can query a remote signer like [Web3Signer ↗](https://docs.web3si
 Complete the following steps before proceeding:
 
 :::custom-notes[Required Setup Steps]
-  1. [Installation →](../installation)
-  2. [Validators Manager →](../validators-manager)
+  1. [Installation →](../installation) completed
+  2. [Validators Manager →](../validators-manager) set
   3. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>
 :::
 
@@ -36,6 +36,7 @@ Upload the keystores to a remote signer. If you already have private keys upload
 <summary>Example Output</summary>
 
 ```
+Enter your vault address: 0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c
 Enter the URL of the remote signer (e.g. https://signer:9000): https://localhost:9000
 Successfully imported 10 keys into remote signer.
 Remove local keystores? [y/N]: y
@@ -47,8 +48,8 @@ Done. Successfully configured operator to use remote signer for 10 public key(s)
 ### `setup-remote-signer` Options
 
 - `--remote-signer-url` – The URL of the remote signer.
-- `--dappnode` – Use this flag when running with Dappnode Staking Brain. Must be provided together with the `--vault` and `--execution-endpoints` flags.
-- `--vault` – The Vault address. Required only if the `--dappnode` flag is set.
+- `--dappnode` – Use this flag when running with Dappnode Staking Brain. Must be provided together with the `--execution-endpoints` flag.
+- `--vault` – The Vault address.
 - `--execution-endpoints` – A comma-separated list of API endpoints for execution nodes. Used to retrieve the Vault validator fee recipient. Required only if the `--dappnode` flag is set.
 - `--data-dir` – The path where Vault data is stored. Default: `~/.stakewise`.
 - `--keystores-dir` – The directory containing validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard.
@@ -59,10 +60,9 @@ Provide the operator with the URL to your remote signer instance using the `--re
 
 ```bash
 ./operator start-remote-signer \
-  --vaults=0x001,0x002 \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
   --consensus-endpoints=https://consensus-node \
   --execution-endpoints=https://execution-node \
-  --network=mainnet \
   --remote-signer-url=https://remote-signer:9000
 ```
 

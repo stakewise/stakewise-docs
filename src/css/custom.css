@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;1,400&display=swap');
+
 :root {
   --coral: #018970; /* default (light) */
-  --fog:#FFFFFF4D; /* fog effect */
+  --fog: #FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
   --ifm-navbar-height: 4.5rem;
@@ -222,15 +223,7 @@ html[data-theme='dark'] .crystal-bg {
     margin-left: 16px;
   }
 
-  html[data-theme='light'] .navbar-sidebar{
-    background-color: #f1f2fd;
-  }
-
-  html[data-theme='dark'] .navbar-sidebar {
-    background-color: #00060f;
-  }
-
-  html[data-theme='light'] .navbar-sidebar{
+  html[data-theme='light'] .navbar-sidebar {
     background-color: #f1f2fd;
   }
 
@@ -265,7 +258,6 @@ html[data-theme='dark'] blockquote {
 }
 
 @media (min-width: 961px) {
-
   .width-container {
     max-width: 1320px;
     padding-right: 60px;
@@ -393,10 +385,79 @@ details.custom-details {
   text-decoration-color: black !important;
 }
 
-/* Custom font for bash code blocks - aggressive override */
+/* Custom font for bash code blocks - override */
 code[class*="language-bash"],
 pre[class*="language-bash"],
 .prism-code[class*="language-bash"],
 .language-bash * {
   font-family: Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace !important;
+}
+
+/* DocSearch customization */
+.DocSearch-Button {
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.DocSearch-Button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.DocSearch-Button:hover .DocSearch-Button-Placeholder {
+  color: var(--coral) !important;
+}
+
+.DocSearch-Button:focus,
+.DocSearch-Button:active {
+  background: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.DocSearch-Button:focus .DocSearch-Button-Placeholder,
+.DocSearch-Button:active .DocSearch-Button-Placeholder {
+  color: inherit !important;
+}
+
+[data-theme='dark'] .DocSearch-Button:hover {
+  background: rgba(39, 40, 42, 0.8) !important;
+}
+
+[data-theme='dark'] .DocSearch-Button:focus,
+[data-theme='dark'] .DocSearch-Button:active {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Modal customization */
+.DocSearch-Modal {
+  border-radius: 12px !important;
+  box-shadow: 0 5px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.DocSearch-Button-Key {
+  background: var(--ifm-color-emphasis-200) !important;
+  border: 1px solid var(--fog) !important;
+  box-shadow: none !important;
+}
+
+/* Hide DocSearch footer */
+.DocSearch-Footer {
+  display: none !important;
+}
+
+.navbar__items--right {
+  display: flex;
+}
+
+.navbar__items--right > div:has(.DocSearch-Button) {
+  order: 1;
+}
+
+.navbar__items--right > div:has(button[onclick*="stakewise"]) {
+  order: 3;
+}
+
+.navbar__items--right [class*="toggle"],
+.navbar__items--right [class*="colorMode"] {
+  order: 2;
 }

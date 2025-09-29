@@ -77,7 +77,7 @@ The Relayer must implement the following endpoints to handle different validator
 
 ### Validator Registration
 
-**POST** `/validators`
+**POST** `/register`
 
 Request Body:
 ```json
@@ -131,13 +131,6 @@ Request Body:
 Response:
 ```json
 {
-  "validators": [
-    {
-      "public_key": "0xPubKey1",
-      "deposit_signature": "0xDepositSig1",
-      "amount": 2000000000
-    }
-  ],
   "validators_manager_signature": "0xManagerSig"
 }
 ```

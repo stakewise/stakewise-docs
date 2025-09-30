@@ -1,8 +1,8 @@
 import { themes as prismThemes } from 'prism-react-renderer'
 import type * as Preset from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 
 const config: Config = {
@@ -120,14 +120,13 @@ const config: Config = {
           position: 'right',
           value: `
             <button
-              class="bg-white"
+              class="btn-primary"
               onclick="window.open('https://app.stakewise.io', '_blank')"
-              style="padding: 10px 20px; color: #00060f; border: none; border-radius: 5px; cursor: pointer;"
             >
               Open App
             </button>
           `,
-        }
+        },
       ],
     },
 
@@ -146,6 +145,7 @@ const config: Config = {
       additionalLanguages: ['json', 'bash', 'javascript', 'python'],
     },
   } satisfies Preset.ThemeConfig,
-};
+}
 
-export default config;
+
+export default config

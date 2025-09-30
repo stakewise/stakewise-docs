@@ -11,6 +11,8 @@
   :root[data-theme='light'] {
     --moon: #00060f;
     --moon-rgb: 0, 6, 15;
+    --coal: #27282a;
+    --coal-rgb: 39, 40, 42;
     --coral-rgb: 1, 137, 112;
     --coral: rgb(1, 137, 112);
 
@@ -31,6 +33,8 @@
   :root[data-theme='dark'] {
     --moon: #ffffff;
     --moon-rgb: 255, 255, 255;
+    --coal: #27282a;
+    --coal-rgb: 39, 40, 42;
     --coral-rgb: 64, 233, 222;
     --coral: rgb(64, 233, 222);
 
@@ -85,7 +89,7 @@
   *:focus {
     outline: none;
   }
-  
+
   input,
   textarea,
   button,
@@ -94,7 +98,7 @@
     border: none;
     border-radius: 0;
   }
-  
+
   legend,
   fieldset {
     display: block;
@@ -102,17 +106,17 @@
     padding: 0;
     border: 0;
   }
-  
+
   button,
   input[type='button'] {
     text-align: center;
     user-select: none;
   }
-  
+
   textarea {
     resize: none;
   }
-  
+
   input::-webkit-contacts-auto-fill-button,
   select::-webkit-contacts-auto-fill-button,
   textarea::-webkit-contacts-auto-fill-button {
@@ -128,7 +132,7 @@
     background-color: #fff;
     -webkit-box-shadow: inset 0 0 0 100rem #fff;
   }
-  
+
   select:-moz-focusring {
     color: transparent;
     text-shadow: 0 0 0 #000;
@@ -136,16 +140,16 @@
     -moz-appearance: radio-container;
     appearance: normal;
   }
-  
+
   select::-ms-expand {
     display: none;
   }
-  
+
   hr {
     height: 1px;
     border: none;
   }
-  
+
   b,
   strong {
     font-weight: 600;
@@ -154,11 +158,11 @@
   svg:not([fill]) {
     fill: currentColor;
   }
- 
+
   svg:not(:root) {
     overflow: hidden;
   }
-  
+
   :where([aria-busy='true' i]) {
     cursor: progress;
   }
@@ -170,7 +174,7 @@
   :where([aria-hidden='false' i][hidden]) {
     display: initial;
   }
-  
+
   :where([aria-hidden='false' i][hidden]:not(:focus)) {
     position: absolute;
     clip: rect(0, 0, 0, 0);

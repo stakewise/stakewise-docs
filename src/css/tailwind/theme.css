@@ -3,7 +3,11 @@
 
   /* Colors */
   --color-moon: var(--moon);
+  --color-moon-rgb: var(--moon-rgb);
+  --color-coal: var(--coal);
+  --color-coal-rgb: var(--coal-rgb);
   --color-coral: var(--coral);
+  --color-coral-rgb: var(--coral-rgb);
 
   /* Border radius */
   --radius-4: 4px;

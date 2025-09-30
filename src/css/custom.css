@@ -446,6 +446,7 @@ pre[class*="language-bash"],
 
 .navbar__items--right > div:has(.btn-primary) {
   order: 3;
+  padding-right: 0;
 }
 
 

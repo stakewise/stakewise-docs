@@ -47,12 +47,43 @@
     border-radius: var(--radius-12);
   }
 
-  /* Colors */
-  .bg-white {
-    background: white;
+  /* Buttons */
+  .btn-primary, .btn-crystal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-coal);
+    border-radius: 72px;
+    min-width: 44px;
+    height: 44px;
+    border: none;
+
+    box-shadow: inset 0 0 0 1px rgba(var(--color-coal-rgb), .25), 0 7px 15px 0 rgba(var(--color-coal-rgb), .12);
+
+    > svg {
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+      fill: var(--color-moon);
+      color: var(--color-moon);
+    }
   }
 
-  .bg-white:hover {
-    opacity: .8;
+  .btn-primary {
+    background: #ffffff;
+    padding: 0 16px;
+  }
+  .btn-primary:hover {
+    opacity: .9;
+    box-shadow: inset 0 0 0 2px rgba(var(--color-coal-rgb), .25), 0 3px 5px 0 rgba(var(--color-coal-rgb), .19);
+  }
+
+  .btn-crystal {
+    background-color: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(20rem);
+  }
+  .btn-crystal:hover {
+    opacity: .9;
+    box-shadow: inset 0 0 0 2px rgba(var(--color-coal-rgb), .25), 0 3px 5px 0 rgba(var(--color-coal-rgb), .19);
   }
 }

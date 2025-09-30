@@ -85,7 +85,7 @@ const config: Config = {
       hideOnScroll: true,
       logo: {
         alt: 'StakeWise Logo',
-        src: 'img/logo512.png',
+        src: 'img/logo.png',
         height: 32,
         width: 32,
       },

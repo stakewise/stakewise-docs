@@ -153,25 +153,28 @@ Once your Vault is created, you can manage all settings through the **"Settings"
 
 ## Getting Your Vault Running
 
-### Operator Service
+To start accepting ETH in your Vault, your infrastructure must be properly set up.
+Follow the steps below to get everything running.
 
-To make your Vault operational and begin accepting stakes, you'll need to set up the [Operator Service →](/operator/intro) – specialized software that automates validator management for your Vault.
+**🚀 Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity.
 
-The Operator Service runs seamlessly alongside any node setup, supporting your preferred execution/consensus clients, MEV relay, and distributed validator technology. It handles critical functions like validator registrations, withdrawals, state updates, and fee claims, and can be installed via binary, Docker, or built from source.
+### Setup Checklist ✅
 
-**🚀 Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity. Follow the steps below to get started.
+**1. Execution Client** – A fully synced execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/).
+Supported clients include Nethermind, Besu, Erigon, Geth, and Reth.
+[Detailed setup instructions →](/operator/prerequisites#execution-client).
 
-### Setup Steps
+**2. Consensus Client** – A fully synced consensus client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/).
+Supported clients include Lighthouse, Nimbus, Prysm, Teku, and Lodestar.
+[Detailed setup instructions →](/operator/prerequisites#consensus-client)
 
-**1. [Prerequisites→](/operator/prerequisites)** – Ensure your infrastructure is ready with fully synced [execution →](/operator/prerequisites#execution-client) and [consensus →](/operator/prerequisites#consensus-client) clients, plus an [upgraded Vault →](/operator/prerequisites#deployed-vault) (version 5 for Ethereum, version 3 for Gnosis).
+**3. MEV-Boost** – Set up MEV-Boost to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays.
+[Learn about MEV strategy options →](/docs/protocol-concepts/Vaults#mev-strategy) and [Smoothing Pool relays →](/operator/smoothing-pool-relays).
 
-**2. [Installation→](/operator/installation)** – Choose from multiple installation methods: download pre-built binaries, use Docker images, or build from source. The setup is straightforward with just a few simple commands.
+**4. Operator Service** – Specialized software that automates essential validator management tasks for your Vault, such as validator registrations, withdrawals, state updates, and fee claims.
+The Operator Service runs seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology. [Complete setup guide →](/operator/intro)
 
-**3. [Validator Keys→](/operator/validator-keys)** – Generate validator keystores using built-in tools or import existing keys. Validator keystores don't need to be stored locally—you may prefer to manage them externally using [alternative key management →](/operator/alternative-key-management) options like remote signers, HashiCorp Vault, or API mode.
-
-**4. [Validators Manager→](/operator/validators-manager)** – Create an operator wallet and assign it the Validators Manager role through your Vault settings. This wallet handles validator registrations, funding, and withdrawal operations.
-
-**5. [Start Operator Service→](/operator/start-operator)** – Launch the service with your Vault address and node endpoints using your preferred method (binary, Docker, or source). The Operator Service is highly configurable through the use of [optional flags →](/operator/start-operator#optional-flags).
+**5. Running Validators** – Your validators will be automatically registered and managed by the Operator Service once it is properly configured with your [validator keys →](/operator/validator-keys) and [Validators Manager →](/operator/validators-manager) wallet.
 
 :::custom-info[osETH Minting Thresholds]
 Your Vault's performance and parameters determine how much osETH can be minted against staked assets. Learn more about [LTV thresholds and eligibility criteria →](/docs/protocol-concepts/osToken#ltv-threshold-settings).

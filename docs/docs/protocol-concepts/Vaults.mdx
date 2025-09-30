@@ -288,16 +288,14 @@ For immediate liquidity, users can mint osTokens (`osETH` or `osGNO`) using thei
 
 ### Evaluating Vault Performance
 
-StakeWise provides performance grades to help users evaluate Vault quality based on validator operational excellence. These grades reflect the average Vault performance over the last 7 days:
-
-**Scoring Grades:**
-* **Excellent (99.6–100%)**: No missed blocks or very few. Validators perform excellently in attestations, with fewer than 0.5% missed attestation rewards.
-* **Good (99.2–99.6%)**: No missed blocks or very few. Validators perform well in attestations, with fewer than 1% missed attestation rewards.
-* **Moderate (97.1–99.2%)**: The Vault has issues, with up to 3% missed attestations and/or blocks.
-* **Bad (0–97.1%)**: Validators are not performing correctly, missing blocks or poorly handling attestations.
+StakeWise provides performance grades (Excellent, Good, Moderate, Bad) to help users evaluate Vault quality based on validator operational excellence. These grades reflect the average Vault performance over the last 7 days. [View detailed grade criteria →](/operator/additional-actions/vault-performance#-performance-grades).
 
 :::custom-warning[Important]
 Performance grades help users identify well-operated Vaults but should be considered alongside other factors like fees, capacity, and operator reputation.
+:::
+
+:::custom-notes[Technical Details]
+For operators seeking detailed information about performance calculations, scoring formulas, and optimization strategies, see [Vault Performance →](/operator/additional-actions/vault-performance).
 :::
 
 ## Technical Architecture

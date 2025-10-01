@@ -1,6 +1,6 @@
 ---
 title: Vault Performance
-sidebar_position: 8
+sidebar_position: 10
 ---
 
 import Tabs from '@theme/Tabs';
@@ -41,7 +41,7 @@ proposal_score = proposed_block_count / (proposed_block_count + missed_block_cou
 :::custom-warning[Fee Recipient Configuration]
 A block is considered **missing** if the transaction fee or MEV is sent to the incorrect address, which negatively impacts the Vault performance score.
 
-Verify that your validator clients are configured with the correct **fee recipient address**. You can locate this address on the Vault page in the **Details** section.
+Verify that your validator clients are configured with the correct **fee recipient address**. You can locate this address (Block reward recipient) on the Vault page in the **Details** section.
 :::
 
 The proposer score is determined from statistics collected over the **past 7 days**.

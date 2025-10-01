@@ -1,6 +1,5 @@
 import React from 'react'
 import Layout from '@theme/Layout'
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 
 import { DocsSections, FAQ, GitHub, Links, BrandAssets } from '@site/src/components'
 
@@ -8,12 +7,10 @@ import '@site/src/css/tailwind/config.css'
 
 
 const Home: React.FC = () => {
-  const { siteConfig } = useDocusaurusContext()
-
   const year = new Date().getFullYear()
 
   return (
-    <Layout title={siteConfig.title}>
+    <Layout>
       <div className="width-container">
         <DocsSections />
         <GitHub />

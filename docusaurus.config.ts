@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex'
 
 
 const config: Config = {
-  title: 'Welcome to StakeWise Docs',
+  title: 'StakeWise Docs',
   tagline: 'Documentation and Guides',
   url: 'https://docs.stakewise.io',
   favicon: 'img/favicon.ico',
@@ -64,7 +64,7 @@ const config: Config = {
 
   themeConfig: {
     respectPrefersColorScheme: true,
-    image: 'img/og-image.png',
+    image: 'img/opengraph.png',
 
     algolia: {
       appId: '413SNHUF5R',

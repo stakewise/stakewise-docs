@@ -98,11 +98,6 @@ When a user requests to exit their stake, the Operator Service identifies the va
 It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
 If partial withdrawals are insufficient, it proceeds with full withdrawals.
 
-:::custom-info[Prerequisites]
-- Wallet must be set as [Validators Manager →](./validators-manager) in Vault settings.
-- Vault must be upgraded to version 5 (Ethereum) or version 3 (Gnosis)
-:::
-
 :::custom-notes[Exit Queue Monitoring]
 To minimize the number of withdrawal transactions, the Operator Service submits a withdrawal transaction once every 12 hours (this interval can be reconfigured).
 :::

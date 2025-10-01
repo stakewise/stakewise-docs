@@ -16,24 +16,52 @@ At the core of StakeWise are individual staking pools called [Vaults →](/docs/
 
 **Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
 
-<div style={{textAlign: 'center', margin: '2rem 0'}}>
-  <pre style={{
-    display: 'inline-block',
-    textAlign: 'left',
-    background: 'var(--ifm-color-emphasis-200)',
-    color: 'var(--ifm-color-primary)',
-    padding: '2rem',
-    borderRadius: '12px',
-    fontSize: '14px',
-    fontFamily: 'Monaco, monospace',
-    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
-    lineHeight: '1.8'
-  }}>
-    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🏛️ Architecture Overview</strong>
+<div style={{ textAlign: "center", margin: "2rem 0" }}>
+  <div
+    style={{
+      display: "inline-block",
+      textAlign: "center",
+      background: "var(--ifm-color-emphasis-200)",
+      color: "var(--ifm-color-primary)",
+      padding: "2rem",
+      borderRadius: "12px",
+      fontSize: "14px",
+      fontFamily: "Monaco, monospace",
+      boxShadow: "0 10px 30px rgba(1,137,112,0.2)",
+      lineHeight: "1.8",
+    }}
+  >
+    <strong
+      style={{
+        fontSize: "16px",
+        borderBottom: "2px solid #018970",
+        paddingBottom: "0.5rem",
+        display: "inline-block",
+        marginBottom: "1rem",
+      }}
+    >
+      🏛️ Architecture Overview
+    </strong>
 
-     <img src="/img/icons8-safe-40.png" alt="Vault" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Your Vault &rarr; 🎯 Operator Service &rarr; ⛓️ Beacon Chain
-  </pre>
+    <div><img src="/img/vault.png" alt="Vault" style={{width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle'}} /> Your Vault</div>
+    <div>⇅</div>
+
+    <div>🎯 Operator Service</div>
+    <div style={{ display: "flex", justifyContent: "center", gap: "3rem" }}>
+      <div style={{marginRight: '60px'}}>⇅</div>
+      <div>⇅</div>
+    </div>
+
+    <div style={{ display: "flex", justifyContent: "center", gap: "3rem" }}>
+      <div>🛠️ Execution Node</div>
+      <div>⇆</div>
+      <div>
+        🔗 Consensus Node
+      </div>
+    </div>
+  </div>
 </div>
+
 
 
 ## Core Functions

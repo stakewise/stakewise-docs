@@ -16,7 +16,7 @@ A [Vault →](/docs/protocol-concepts/Vaults) is a customizable smart contract t
 
 Each Vault is isolated from others and relies on its own set of validators to produce rewards on the consensus layer. However, a Vault may participate in [MEV smoothing →](/docs/protocol-concepts/Vaults/#mev-strategy) to avoid volatility in the execution layer earnings.
 
-Staked ETH/GNO in any Vault can be made liquid by minting [osETH/osGNO →](/docs/protocol-concepts/osToken) — a liquid staking token.
+Staked ETH/GNO in any Vault can be made liquid by minting [osETH/osGNO →](/docs/protocol-concepts/osToken) – a liquid staking token.
 
 Choose your settings based on your intended use case:
 
@@ -56,10 +56,10 @@ The first step involves setting up the fundamental parameters for your Vault.
 Most of these settings **cannot be changed later**. Choose carefully before proceeding.
 :::
 
-- **📐 Vault Capacity**: Set maximum ETH capacity (default: unlimited ∞). [Learn more →](/docs/protocol-concepts/Vaults#capacity)
-- **💎 Vault Token** - Enable tradeable ERC-20 token (requires name & symbol)
-- **🔑 Private Vault** - Restrict to approved wallets only
-- **⚠️ Block List** - Prevent specific addresses from depositing
+- **📐 Vault Capacity** – Set maximum ETH capacity (default: unlimited ∞). [Learn more →](/docs/protocol-concepts/Vaults#capacity)
+- **💎 Vault Token** – Enable tradeable ERC-20 token (requires name & symbol)
+- **🔑 Private Vault** – Restrict to approved wallets only
+- **⚠️ Block List** – Prevent specific addresses from depositing
 
 :::custom-info[Vault Fees]
 **💰 Vault Fees** can be set during creation and updated later. [Learn more about fee management →](/docs/protocol-concepts/Fees#vault-fees)
@@ -116,7 +116,7 @@ At the bottom of your Vault page, you'll see the **"Details"** section containin
 
 :::custom-info[Next Steps After Creation]
 
-**Set up validators** - Essential for Vault operation
+**Set up validators** – Essential for Vault operation
 
 **Reach out to the [StakeWise team 📧](mailto:info@stakewise.io)** for Vault verification (better visibility and trust with potential stakers)
 :::
@@ -153,14 +153,25 @@ Once your Vault is created, you can manage all settings through the **"Settings"
 
 ## Getting Your Vault Running
 
-### Operator Service
+To start accepting ETH in your Vault, your infrastructure must be properly set up.
+Follow the steps below to get everything running.
 
-To make your Vault operational and begin accepting stakes, you'll need to set up the [Operator Service →](/operator/intro) – specialized software that automates validator management for your Vault.
+**🚀 Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity.
 
-The Operator Service runs seamlessly alongside any node setup, supporting your preferred execution/consensus clients, MEV relay, and distributed validator technology. It handles critical functions like validator registrations, withdrawals, state updates, and fee claims, and can be installed via binary, Docker, or built from source.
+### Setup Checklist ✅
 
-**🚀 Setup difficulty:** Moderate - requires running Ethereum nodes and basic command-line familiarity, but the process is well-documented with [automated installation options →](/operator/installation) available.
+**1. Execution Client** – A fully synced execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/).
+Supported clients include Nethermind, Besu, Erigon, Geth, and Reth.
+[Detailed setup instructions →](/operator/prerequisites#execution-client).
 
-:::custom-info[osETH Minting Thresholds]
-Your Vault's performance and parameters determine how much osETH can be minted against staked assets. Learn more about [LTV thresholds and eligibility criteria →](/docs/protocol-concepts/osToken#ltv-threshold-settings).
-:::
+**2. Consensus Client** – A fully synced consensus client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/).
+Supported clients include Lighthouse, Nimbus, Prysm, Teku, and Lodestar.
+[Detailed setup instructions →](/operator/prerequisites#consensus-client)
+
+**3. MEV-Boost** – Set up MEV-Boost to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays.
+[Learn about MEV strategy options →](/docs/protocol-concepts/Vaults#mev-strategy) and [Smoothing Pool relays →](/operator/smoothing-pool-relays).
+
+**4. Operator Service** – Specialized software that automates essential validator management tasks for your Vault, such as validator registrations, withdrawals, state updates, and fee claims.
+The Operator Service runs seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology. [Complete setup guide →](/operator/intro)
+
+**5. Running Validators** – You must upload the allocated validator keys to the validator client and start it. Instructions can be found on your consensus client’s page. The validators will be registered automatically via the Operator Service.

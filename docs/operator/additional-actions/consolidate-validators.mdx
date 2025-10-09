@@ -25,18 +25,12 @@ You can either specify `--source-public-keys` (`0x01` or `0x02` validators) and 
 ./operator consolidate --vault=0x000... --source-public-keys=0x001,0x002 --target-public-key=0x003
 ```
 
-## Usage Options
+## Usage
 
-:::custom-warning[Important Notes]
-You can pass `--max-validator-balance-gwei` to set a custom maximum validator balance in Gwei.
-The default is 1945000000000 Gwei (1945 ETH) for Ethereum and 1800000000000 Gwei (1800 mGNO) for Gnosis.
-:::
+### Optional Flags
 
-:::custom-warning[Important Notes]
-You can pass `--max-consolidation-request-fee-gwei` to set a custom maximum fee (in Gwei)
-for submitting a consolidation request per validator. The default is 1000 Gwei.
-:::
-
+- `--max-validator-balance-gwei` - Maximum balance for a single validator in Gwei (default: 1945000000000 Gwei for Ethereum, 1800000000000 Gwei for Gnosis). You can override this value to set a custom maximum balance.
+- `--max-consolidation-request-fee-gwei` - Maximum fee (in Gwei) for submitting a consolidation request per validator (default: 1000 Gwei). You can override this value to set a custom maximum fee.
 
 ### Consolidate Specific Validators
 

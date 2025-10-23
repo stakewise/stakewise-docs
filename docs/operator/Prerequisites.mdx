@@ -22,10 +22,18 @@ Your execution node must be fully synced and running. Any client that supports t
 - **[Geth ↗](https://launchpad.ethereum.org/en/geth)** — (Ethereum)
 - **[Reth ↗](https://github.com/paradigmxyz/reth)** — (Ethereum)
 
-:::custom-warning[Configure Erigon and Reth]
-Preserve event logs to ensure the Operator Service functions correctly. Both clients require specific configuration to prevent event log pruning:
+:::custom-warning[Configure execution client]
+Preserve event logs to ensure the Operator Service functions correctly. 
+Some clients require specific configuration to sync event logs and prevent event log pruning:
 
 <Tabs groupId="special-config" defaultValue="erigon">
+  <TabItem value="nethermind" label="Nethermind">
+    Nethermind must be run in FastSync mode:
+    ```bash
+    nethermind --Sync.FastSync=true
+    ```
+    Avoid SnapSync mode as it skips historical event logs, keeping only recent ones.
+  </TabItem>
   <TabItem value="erigon" label="Erigon">
     ```bash
     # Ethereum Mainnet
@@ -49,7 +57,6 @@ Preserve event logs to ensure the Operator Service functions correctly. Both cli
   </TabItem>
 </Tabs>
 
-Alternatively, to save disk space, you can use the block number at which the protocol configuration was updated. The actual values are defined in the [network config ↗](https://github.com/stakewise/v3-operator/blob/master/src/config/networks.py) within the Operator sources. See the `CONFIG_UPDATE_EVENT_BLOCK` field for the selected network.
 :::
 
 ## Consensus Client

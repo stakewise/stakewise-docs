@@ -63,6 +63,14 @@ To convert validators while keeping the same public key:
   --target-public-key=0x001
 ```
 
+### Exclude Specific Validators Using File
+
+```bash
+./operator consolidate \
+  --vault=0x000... \
+  --exclude-public-keys-file=exclude_public_keys.txt
+```
+
 <details className="custom-details">
 <summary>Example Output</summary>
 
@@ -82,6 +90,8 @@ Validators has been successfully consolidated
 </details>
 
 :::custom-warning[Important Notes]
-The `--target-public-key` must be a compounding validator.
+When consolidating validators, the `--target-public-key` must be a compounding (`0x02`) validator, 
+except when converting a legacy `0x01` validator to `0x02` using the same key.  
+
 The consolidation process requires Oracle signatures in case of switching from `0x01` to `0x02`, which are automatically fetched during the operation.
 :::

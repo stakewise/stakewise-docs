@@ -52,6 +52,8 @@ For managing multiple validators, use a file containing public keys (one per lin
   --target-public-key=0x003
 ```
 
+File format: list each public key on a separate line. Both 0x-prefixed and non-prefixed forms are accepted.
+
 ### Convert `0x01` to `0x02` (Same Key)
 
 To convert validators while keeping the same public key:
@@ -70,6 +72,8 @@ To convert validators while keeping the same public key:
   --vault=0x000... \
   --exclude-public-keys-file=exclude_public_keys.txt
 ```
+
+File format: list each public key on a separate line. Both 0x-prefixed and non-prefixed forms are accepted.
 
 <details className="custom-details">
 <summary>Example Output</summary>

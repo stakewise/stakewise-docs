@@ -1,0 +1,31 @@
+---
+title: Getting Your Vault Running
+sidebar_position: 3
+---
+
+import Admonition from '@theme/Admonition';
+
+# Getting Your Vault Running
+
+To start accepting ETH in your Vault, your infrastructure must be properly set up.
+Follow the steps below to get everything running.
+
+**🚀 Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity.
+
+## Setup Checklist ✅
+
+**1. Execution Client** – A fully synced execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/).
+Supported clients include Nethermind, Besu, Erigon, Geth, and Reth.
+[Detailed setup instructions →](/operator/Prerequisites#execution-client).
+
+**2. Consensus Client** – A fully synced consensus client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/).
+Supported clients include Lighthouse, Nimbus, Prysm, Teku, and Lodestar.
+[Detailed setup instructions →](/operator/Prerequisites#consensus-client)
+
+**3. MEV-Boost** – Set up MEV-Boost to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays.
+[Learn about MEV strategy options →](/docs/vaults/customization#mev-strategy) and [Smoothing Pool relays →](/operator/smoothing-pool-relays).
+
+**4. Operator Service** – Specialized software that automates essential validator management tasks for your Vault, such as validator registrations, withdrawals, state updates, and fee claims.
+The Operator Service runs seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology. [Complete setup guide →](/operator/intro)
+
+**5. Running Validators** – You must upload the allocated validator keys to the validator client and start it. Instructions can be found on your consensus client's page. The validators will be registered automatically via the Operator Service.

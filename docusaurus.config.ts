@@ -99,7 +99,7 @@ const config: Config = {
         },
         {
           label: 'Guides',
-          to: 'docs/guides/staking',
+          to: 'docs/guides/intro',
           activeBaseRegex: `/docs/guides/`,
           sidebarId: 'guidesSidebar',
         },

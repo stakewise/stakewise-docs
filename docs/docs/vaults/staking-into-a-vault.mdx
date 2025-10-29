@@ -1,0 +1,29 @@
+---
+title: Staking into a Vault
+sidebar_position: 3
+description: "Learn how to stake into a Vault and evaluate Vault performance"
+---
+
+# Staking into a Vault
+
+When staking into a Vault, users deposit ETH or GNO and receive Vault shares representing their proportional ownership of the pool's assets. There are no minimum deposit requirements and no maximum limits except the Vault's capacity limit.
+
+Vaults use a shares-based accounting system where:
+- Shares are non-transferable (unless the Vault is an ERC-20 Vault)
+- Shares may not appear in portfolio tracking applications
+- Share value increases automatically as staking rewards accumulate
+- No token swaps or conversions occur during staking
+
+For immediate liquidity, users can mint osTokens (`osETH` or `osGNO`) using their Vault shares as collateral.
+
+## Evaluating Vault Performance
+
+StakeWise provides performance grades (Excellent, Good, Moderate, Bad) to help users evaluate Vault quality based on validator operational excellence. These grades reflect the average Vault performance over the last 7 days. [View detailed grade criteria →](/operator/vault-performance#-performance-grades).
+
+:::custom-warning[Important]
+Performance grades help users identify well-operated Vaults but should be considered alongside other factors like fees, capacity, and operator reputation.
+:::
+
+:::custom-notes[Technical Details]
+For operators seeking detailed information about performance calculations, scoring formulas, and optimization strategies, see [Vault Performance →](/operator/vault-performance).
+:::

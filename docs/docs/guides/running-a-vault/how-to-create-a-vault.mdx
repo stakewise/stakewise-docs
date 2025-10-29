@@ -1,0 +1,94 @@
+---
+title: How to Create a Vault
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# How to Create a Vault
+
+### Getting Started
+
+:::custom-notes[Wallet Requirements]
+You'll need an Ethereum wallet such as [Rabby Wallet ↗](https://rabby.io/).
+The process will look very similar in other wallets.
+:::
+
+1. Navigate to the [StakeWise App ↗](https://app.stakewise.io) and go to the **"Operate"** section
+2. Click the **"Create Vault"** button on the **"Operate your vault"** page to begin the setup process
+
+### Step 1: Configure Vault Parameters
+
+The first step involves setting up the fundamental parameters for your Vault.
+
+:::custom-warning[Permanent Settings]
+Most of these settings **cannot be changed later**. Choose carefully before proceeding.
+:::
+
+- **📐 Vault Capacity** – Set maximum ETH capacity (default: unlimited ∞). [Learn more →](/docs/vaults/customization#capacity)
+- **💎 Vault Token** – Enable tradeable ERC-20 token (requires name & symbol)
+- **🔑 Private Vault** – Restrict to approved wallets only
+- **⚠️ Block List** – Prevent specific addresses from depositing
+
+:::custom-info[Vault Fees]
+**💰 Vault Fees** can be set during creation and updated later. [Learn more about fee management →](/docs/fees/intro#vault-fees)
+:::
+
+:::custom-warning[Required Acknowledgment]
+You must check **"I understand that the parameters above cannot be changed later"** before proceeding.
+:::
+
+### Step 2: Block Rewards Destination
+
+Choose how block rewards are distributed. This is a **permanent decision**.
+
+Most operators choose [Smoothing Pool →](/docs/vaults/customization#smoothing-pool--pooled-rewards) for stable returns, while [Vault Escrow →](/docs/vaults/customization#own-escrow--own-rewards) gives you full control but with volatile rewards.
+
+:::custom-warning[Required Acknowledgment]
+You must check **"I understand that block rewards destination cannot be changed later"** before proceeding.
+:::
+
+### Step 3: Add Branding
+
+Customize your Vault's appearance with name, description, and logo.
+
+:::custom-notes[Branding Can Be Changed Later]
+Unlike Vault parameters, you can update branding anytime via your Vault interface: press **Settings → Branding → Edit → Save**.
+:::
+
+### Step 4: Summary
+
+Review all your settings before final submission. This is your last chance to verify everything is correct, such as name, type, MEV strategy, fees, and capacity.
+
+:::custom-warning[Risk Acknowledgment]
+You must check **"I understand the risks of operating the Vault and confirm my configuration choices"** before proceeding.
+:::
+
+Click **"Create Vault"** to submit your configuration and create the Vault.
+
+### Step 5: Transaction Confirmation
+
+Complete the blockchain transaction to deploy your Vault.
+
+1. **Review Details**: Verify the transaction details in your wallet
+2. **Confirm**: Click **"Confirm"** to submit the transaction
+3. **Wait**: Transaction confirms (~12 sec)
+
+Once the transaction confirms, your Vault is live and operational! 🎉
+
+Your new Vault appears:
+- ✅ Listed on the Operate page as "Your Name Vault"
+- 📅 Shows creation date: "Created [date]"
+- 🔧 Displays MEV strategy and Vault type
+
+At the bottom of your Vault page, you'll see the **"Details"** section containing all the important information about your Vault.
+
+:::custom-info[Next Steps After Creation]
+
+**Set up validators** – Essential for Vault operation
+
+**Reach out to the [StakeWise team 📧](mailto:info@stakewise.io)** for Vault verification (better visibility and trust with potential stakers)
+:::

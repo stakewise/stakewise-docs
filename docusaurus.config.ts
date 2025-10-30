@@ -116,6 +116,12 @@ const config: Config = {
           sidebarId: 'contractsSidebar',
         },
         {
+          label: 'SDK',
+          to: '/sdk/',
+          activeBaseRegex: `/SDK/`,
+          sidebarId: 'sdkSidebar',
+        },
+        {
           type: 'html',
           position: 'right',
           value: `

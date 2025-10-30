@@ -77,7 +77,7 @@ Depending on your installation method, use the appropriate command format:
     docker run --restart on-failure:10 \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.9 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.11 \
     src/main.py start-local \
     --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --data-dir=/data \
@@ -103,6 +103,7 @@ Depending on your installation method, use the appropriate command format:
 - `--verbose` - Enable debug mode, prints full output on error
 - `--log-level` - Logging detail level, value can be one of: 'ERROR', 'WARNING', 'INFO', 'DEBUG'
 - `--min-deposit-amount-gwei` - The minimum amount (in Gwei) that must accumulate in the Vault to trigger validator registration or a top-up. The default is 10,000,000,000 Gwei (10 ETH/GNO)
+- `--vault-min-balance-gwei` - The amount of assets (ETH/GNO) in Gwei that should be kept in the vault and not sent for staking. The default is 0.
 - `--max-validator-balance-gwei` - The maximum balance (in Gwei) a validator can have before it is no longer eligible for top-ups. The default is 1945000000000 Gwei (1945 ETH) for Ethereum and 1800000000000 Gwei (1800 mGNO) for Gnosis.
 - `--max-withdrawal-request-fee-gwei` - The maximum fee (in Gwei) for submitting a withdrawal request per validator. The default is 1000 Gwei.
 - `--min-deposit-delay` - The minimum delay that must pass between validator registration or top-up transactions. Adjust this to control the frequency of registration transactions. The default is 3600 seconds (1 hour)

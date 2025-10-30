@@ -449,4 +449,6 @@ pre[class*="language-bash"],
   padding-right: 0;
 }
 
-
+.theme-doc-sidebar-menu {
+  padding-bottom: 50px;
+}

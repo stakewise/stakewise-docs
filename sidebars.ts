@@ -42,6 +42,18 @@ const sidebars: SidebarsConfig = {
       ],
     },
     'docs/fees/intro',
+    {
+      type: 'category',
+      label: 'Governance',
+      link: {
+        type: 'doc',
+        id: 'docs/governance/intro',
+      },
+      items: [
+        'docs/governance/stakewise-dao',
+        'docs/governance/dao-treasury',
+      ],
+    },
 
   ],
   guidesSidebar: [

@@ -101,7 +101,7 @@ Users can mint osTokens for instant liquidity or withdraw. When users choose to 
 As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
-Partial withdrawals for `0x02` compound validators are now supported. They are significantly faster and more efficient than full validator exits, which can now also be triggered from the execution layer via [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002)<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
+Partial withdrawals for `0x02` compound validators are now supported and can now be triggered from the execution layer via [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002)<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
 The withdrawal fulfillment process is automated by the [Operator Service →](../../operator/intro), which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
 
 :::custom-info[Processing Time]

@@ -1,0 +1,38 @@
+---
+title: Vault Administration
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+
+# Vault Administration
+
+Once your Vault is created, you can manage all settings through the **"Settings"** button in the StakeWise interface.
+
+## What You Can Control
+
+<Tabs groupId="vault-settings">
+  <TabItem value="branding" label="🎨 Branding" default>
+    **Update anytime:**
+    - 📝 Vault name
+    - 📋 Description
+    - 🖼️ Logo
+  </TabItem>
+  <TabItem value="fees" label="💰 Fees">
+    **Manage fees:**
+    - Set rates: 0-100% of staking rewards
+    - Update frequency: Once every 3 days, limited to 20% increase per update
+    - Special case: If initial fee is 0%, first increase is limited to 1%
+    - Configure multiple recipients with percentage splits
+    - Enable automatic periodic claims
+  </TabItem>
+  <TabItem value="roles" label="👥 Roles">
+    **Delegate permissions:**
+    - **Admin**: Full Vault control
+    - **Fee Claimer**: Claim fees for shareholders
+    - **Validators Manager**: Authorize validator registrations, funding, and withdrawals ([Learn more →](/operator/validators-manager))
+    - **Whitelist/Blocklist Manager**: Update accounts that can deposit (whitelist) or cannot deposit (blocklist). Only appears for Private Vaults or Vaults with blocklist functionality enabled
+  </TabItem>
+</Tabs>

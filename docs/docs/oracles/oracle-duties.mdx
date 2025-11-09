@@ -1,7 +1,7 @@
 ---
-title: Oracles
-sidebar_position: 3
-description: "Learn how Oracles validate transactions and distribute rewards"
+title: Oracle Duties
+sidebar_position: 1
+description: "Learn about validator registration approval, reward distribution, and validator exits"
 ---
 
 import Admonition from '@theme/Admonition';
@@ -10,40 +10,17 @@ import Admonition from '@theme/Admonition';
 import Tooltip from '@site/src/components/Tooltip/Tooltip';
 ```
 
-# Oracles
-
-## Introduction
-
-Oracles are specialized entities that connect blockchains to external data sources, enabling smart contracts to access real-world information.
-
-In the StakeWise protocol, Oracles monitor validator performance data on the Beacon Chain and reach consensus on validator registration approvals, reward distribution, and exit processes within Vaults.
-
-Oracles are a crucial part of the protocol, and they must remain sufficiently decentralized and maintain high uptime for StakeWise to work seamlessly.
-
-The protocol operates with [11 Oracles](#oracle-network-participants) selected and [approved ↗](https://vote.stakewise.io/#/proposal/0x54ceedefd1060fbad17ab6181be5a90da4c686dc071d1f6121d24c0398700be6)
-by the StakeWise DAO through governance processes.
-These Oracles form a decentralized network of independent nodes that ensures protocol resilience and prevents single points of failure.
-This distributed approach eliminates centralized control, reduces regulatory capture risks, and ensures protocol longevity through consensus-based decision making.
-
-Oracle decisions require threshold-based consensus depending on the operation.
-Validator registration requires 8 out of 11 Oracle signatures, while reward updates need 6 out of 11 signatures.
-
-Through Oracle consensus, all Vaults stay synced with the Beacon Chain, display accurate information, trigger secure and timely new validator registrations, and fulfill exit requests.
-These duties are performed automatically using Oracle software developed by the StakeWise team, with no manual actions involved.
-
-Oracles are one of the protocol’s building blocks to deliver seamless staking and unstaking experiences.
-
-## Oracle Duties
+# Oracle Duties
 
 Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes and are responsible for validator registration, reward distribution, and validator exits.
 
-### Validator Registration Approval
+## Validator Registration Approval
 
 Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
 The [Operator Service →](../../operator/start-operator) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
 When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
-This is done to maintain the protocol’s ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
+This is done to maintain the protocol's ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
 The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
 
 :::custom-notes[Approval Process]
@@ -57,10 +34,10 @@ The operator must receive **8 out of 11 approvals** from Oracles to register a v
 This process ensures Oracles approve validators based on current Beacon Chain state, bridging the consensus and execution layers while preventing stale approvals and replay attacks.
 
 :::custom-notes[Deep Dive]
-For details on how the Operator Service initiates and prepares validator registration, see the [Validator Registration →](./Vaults#validator-registration) section in Vaults.
+For details on how the Operator Service initiates and prepares validator registration, see the [Validator Registration →](../vaults/how-vaults-work#validator-registration) section in Vaults.
 :::
 
-### Reward Distribution
+## Reward Distribution
 
 Oracles periodically vote on the consensus rewards/penalties accumulated by the Vaults in the Beacon Chain and execution rewards (MEV & priority fees) for the Vaults connected to the Smoothing Pool.
 
@@ -79,7 +56,7 @@ The reward distribution process consists of the following steps:
 
 The reward update process has protocol-wide impact.
 
-### Validator Exits
+## Validator Exits
 
 The validator exit process is automated and trustless.
 Validator exits require exit signatures that are generated during the [Validator Registration →](../../operator/start-operator) process.
@@ -89,17 +66,3 @@ As part of registration, the Operator Service encrypts exit signatures using Sha
 :::custom-notes[Key Benefit]
 This approach ensures validators can be exited on demand while maintaining protocol security through decentralized signature management.
 :::
-
-## Oracle Network Participants
-
-1. [Chorus One ↗](https://chorus.one/)
-2. [Stake.fish ↗](https://stake.fish/)
-3. [Telekom ↗](https://www.telekom-mms.com/) (formerly T-Systems MMS)
-4. [Finoa Consensus Services ↗](https://www.finoa.io/)
-5. [Bitfly ↗](https://gobitfly.com/) (operators of the [Beaconchain ↗](https://beaconcha.in/) explorer)
-6. [SenseiNode ↗](https://www.senseinode.com/)
-7. [Gateway.fm ↗](https://gateway.fm/)
-8. [Gnosis Chain ↗](https://www.gnosis.io/) team
-9. [P2P ↗](https://p2p.org/)
-10. [DSRV ↗](https://www.dsrvlabs.com/)
-11. [StakeWise Labs ↗](https://x.com/stakewise_io) (the development team)

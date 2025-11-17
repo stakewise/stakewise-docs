@@ -1,0 +1,46 @@
+---
+title: Oracles
+sidebar_position: 0
+description: "Learn how Oracles validate transactions and distribute rewards"
+---
+
+import Admonition from '@theme/Admonition';
+
+```mdx-code-block
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
+```
+
+# Oracles
+
+Oracles are specialized entities that connect blockchains to external data sources, enabling smart contracts to access real-world information.
+
+In the StakeWise protocol, Oracles monitor validator performance data on the Beacon Chain and reach consensus on validator registration approvals, reward distribution, and exit processes within Vaults.
+
+Oracles are a crucial part of the protocol, and they must remain sufficiently decentralized and maintain high uptime for StakeWise to work seamlessly.
+
+The protocol operates with [11 Oracles](#oracle-network-participants) selected and [approved ↗](https://vote.stakewise.io/#/proposal/0x54ceedefd1060fbad17ab6181be5a90da4c686dc071d1f6121d24c0398700be6)
+by the StakeWise DAO through governance processes.
+These Oracles form a decentralized network of independent nodes that ensures protocol resilience and prevents single points of failure.
+This distributed approach eliminates centralized control, reduces regulatory capture risks, and ensures protocol longevity through consensus-based decision making.
+
+Oracle decisions require threshold-based consensus depending on the operation.
+Validator registration requires 8 out of 11 Oracle signatures, while reward updates need 6 out of 11 signatures.
+
+Through Oracle consensus, all Vaults stay synced with the Beacon Chain, display accurate information, trigger secure and timely new validator registrations, and fulfill exit requests.
+These duties are performed automatically using Oracle software developed by the StakeWise team, with no manual actions involved.
+
+Oracles are one of the protocol's building blocks to deliver seamless staking and unstaking experiences.
+
+## Oracle Network Participants
+
+1. [Chorus One ↗](https://chorus.one/)
+2. [Stake.fish ↗](https://stake.fish/)
+3. [Telekom ↗](https://www.telekom-mms.com/) (formerly T-Systems MMS)
+4. [Finoa Consensus Services ↗](https://www.finoa.io/)
+5. [Bitfly ↗](https://gobitfly.com/) (operators of the [Beaconchain ↗](https://beaconcha.in/) explorer)
+6. [SenseiNode ↗](https://www.senseinode.com/)
+7. [Gateway.fm ↗](https://gateway.fm/)
+8. [Gnosis Chain ↗](https://www.gnosis.io/) team
+9. [P2P ↗](https://p2p.org/)
+10. [DSRV ↗](https://www.dsrvlabs.com/)
+11. [StakeWise Labs ↗](https://x.com/stakewise_io) (the development team)

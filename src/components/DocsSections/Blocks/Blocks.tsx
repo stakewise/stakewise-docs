@@ -14,7 +14,7 @@ const blocks: BlockProps[] = [
     title: 'Guides',
     text: 'Step-by-step tutorials for staking, running a Vault, and DeFi strategies',
     Svg: require("@site/static/icon/file.svg").default,
-    href: '/docs/guides/staking',
+    href: '/docs/guides/intro',
   },
   {
     title: 'Operator',

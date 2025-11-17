@@ -10,9 +10,9 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Overview
 
-**StakeWise** is a decentralized liquid staking protocol that allows anyone to participate in Ethereum staking without the traditional barriers of technical complexity or capital requirements. The protocol enables users to stake their ETH while maintaining liquidity through [osToken →](/docs/protocol-concepts/osToken), StakeWise's liquid staking token.
+**StakeWise** is a decentralized liquid staking protocol that allows anyone to participate in Ethereum staking without the traditional barriers of technical complexity or capital requirements. The protocol enables users to stake their ETH while maintaining liquidity through [osToken →](/docs/ostoken/intro), StakeWise's liquid staking token.
 
-At the core of StakeWise are individual staking pools called [Vaults →](/docs/protocol-concepts/Vaults). Anyone – from solo stakers to professional operators – can create and operate their own Vault, offering flexible staking solutions that serve diverse needs: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking services to others.
+At the core of StakeWise are individual staking pools called [Vaults →](/docs/vaults/intro). Anyone – from solo stakers to professional operators – can create and operate their own Vault, offering flexible staking solutions that serve diverse needs: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking services to others.
 
 **Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
 
@@ -82,7 +82,7 @@ The Operator Service periodically checks whether the Vault has accumulated enoug
 By default, the Operator Service registers new `0x02` validators, prioritizing funding existing compound validators when possible; otherwise, it registers new validators up to the maximum balance.
 
 :::custom-notes[Deep Dive]
-For detailed information about the validator registration process, see [Validator Registration →](/docs/protocol-concepts/Vaults#validator-registration)
+For detailed information about the validator registration process, see [Validator Registration →](/docs/vaults/how-vaults-work#validator-registration)
 :::
 
 ### Validator Consolidation

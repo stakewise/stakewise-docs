@@ -1,0 +1,37 @@
+---
+title: Running a Vault
+sidebar_position: 0
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Running a Vault
+
+This comprehensive guide walks you through creating your own StakeWise Vault step by step.
+
+A [Vault →](/docs/vaults/intro) is a customizable smart contract that can be deployed by anyone to stake their own capital and/or offer staking to others, all in a non-custodial way.
+
+Each Vault is isolated from others and relies on its own set of validators to produce rewards on the consensus layer. However, a Vault may participate in [MEV smoothing →](/docs/vaults/customization#mev-strategy) to avoid volatility in the execution layer earnings.
+
+Staked ETH/GNO in any Vault can be made liquid by minting [osETH/osGNO →](/docs/ostoken/intro) – a liquid staking token.
+
+Choose your settings based on your intended use case:
+
+| Use case | Recommended settings |
+|----------|---------------------|
+| 🏠 **Liquid solo staking** | • 0% fee • Private Vault • No Vault token • Smoothing Pool |
+| 🌐 **Community staking pool** | • Custom capacity & fee • Public Vault • No Vault token • Smoothing Pool |
+| 🏢 **Node operator service** | • Custom capacity & fee • Private Vault per customer • No Vault token • Smoothing Pool (compliance dependent) |
+| 💎 **Service with custom LST** | • Custom capacity & fee • Public Vault • Enable Vault token • Smoothing Pool (compliance dependent) |
+| 🔒 **Service without LST** | • Custom capacity & fee • Public Vault • No Vault token • Disable osToken access |
+
+:::custom-notes[New to these terms?]
+Learn about [Vault token →](/docs/vaults/customization#erc-20-vaults--for-custom-utility--liquidity-ecosystem), [Smoothing Pool →](/docs/vaults/customization#smoothing-pool--pooled-rewards), [osToken →](/docs/ostoken/intro), and [Public vs Private Vaults →](/docs/vaults/customization#vault-type).
+:::
+
+💡 Don't see your use case above? Contact the [StakeWise team 📧](mailto:info@stakewise.io) for personalized guidance.
+
+Next you'll find step-by-step instructions to create your Vault and get it running.

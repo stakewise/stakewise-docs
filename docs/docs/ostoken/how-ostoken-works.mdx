@@ -1,36 +1,21 @@
 ---
-title: osToken
-sidebar_position: 2
-description: "Learn what osToken is and how to get it"
+title: How osToken Works
+sidebar_position: 1
+description: "Learn about osToken minting, burning, exchange rate, and peg maintenance"
 ---
 
 import Admonition from '@theme/Admonition';
 
-# osToken
-
-## Introduction
-
-osToken is a liquid staking token that accrues staking rewards when held. It is a generic name for StakeWise's network-specific ERC-20 tokens:
-
-- **osETH** on Ethereum
-- **osGNO** on Gnosis Chain
-
-osToken is issued against assets staked in a Vault to allow using staked capital in decentralized applications to trade, borrow, lend, and restake. Hence, osTokens represent the underlying staked assets and the rewards earned.
-
-Short for **Overcollateralized Staked Token**, osToken requires that the value of staked assets exceed the value of osToken issued. This overcollateralization acts as a safety buffer, protecting holders and the protocol from validator penalties or underperformance of permissionless Vaults.
-
-A defining feature is that osToken can be minted against validators run by anyone – from solo stakers to professional operators – making access to liquid staking fully permissionless and non-custodial.
-
-## How osToken Works
+# How osToken Works
 
 osToken turns staked ETH or GNO into liquid, yield-bearing assets. Its operation is governed by four core mechanisms:
 minting, burning, exchange rate appreciation, and peg maintenance.
 
-### Minting
+## Minting
 
 Minting involves staking assets into a Vault and issuing osTokens against those staked assets acting as collateral. Minting limits are in place to ensure each issued token is fully backed. These limits are set by the **Loan-to-Value (LTV) ratio**.
 
-#### Loan-to-Value Limits
+### Loan-to-Value Limits
 
 The LTV ratio determines what portion of your stake can be tokenized with osToken:
 
@@ -41,7 +26,7 @@ The LTV ratio determines what portion of your stake can be tokenized with osToke
 
 This ensures that even if some validators get slashed, there are enough assets to back all outstanding osTokens.
 
-#### LTV Threshold Settings
+### LTV Threshold Settings
 
 The StakeWise DAO sets **Loan-to-Value (LTV) thresholds** that determine how much osToken can be minted against staked assets in each Vault.
 
@@ -72,7 +57,7 @@ StakeWise DAO has the capability to increase or decrease the osETH minting thres
   - Overcollateralization: `10 ETH` remains as safety buffer
 :::
 
-#### Minting & Buying Options
+### Minting & Buying Options
 
 osToken can be acquired via four methods:
 
@@ -84,10 +69,10 @@ osToken can be acquired via four methods:
 All methods yield the same asset that appreciates through the same exchange rate mechanism.
 
 :::custom-notes[Deep Dive]
-Find step-by-step instructions for each staking option in the [Staking Guide →](/docs/guides/staking).
+Find step-by-step instructions for each staking option in the [Staking Guide →](/docs/guides/staking/intro).
 :::
 
-#### Position Health
+### Position Health
 
 Position health is continuously tracked through LTV thresholds:
 
@@ -105,7 +90,7 @@ Position health is continuously tracked through LTV thresholds:
 Users can maintain healthy positions by keeping LTV well below limits, adding more collateral, or burning osToken.
 In 99.99% (osETH) / 99.95% (osGNO) Vaults, redemptions and liquidations do not apply, positions remain healthy by design.
 
-### Burning
+## Burning
 
 Burning is the process of returning minted osTokens to the Vault in exchange for unlocking the staked collateral that backs them.
 To fully unstake, a user must burn the entire amount of osTokens they minted, plus any protocol fees accrued.
@@ -138,7 +123,7 @@ Bob stakes **100 ETH** and mints **50 osETH** at an exchange rate of **1.05 ETH/
 - Position health: `52.5 ÷ 100 = 52.5%` → safely below **90%**
 - Maximum unstakable ETH: `100 − (52.5 ÷ 0.9) = 41.667 ETH`
 
-After unstaking **41.667 ETH**, Bob’s position health = **90%**
+After unstaking **41.667 ETH**, Bob's position health = **90%**
 :::
 
 :::custom-notes[Alice's 99.99% LTV Position]
@@ -147,10 +132,10 @@ Alice stakes **100 ETH** and mints **50 osETH** at the same **1.05** rate.
 - Position health: `52.5 ÷ 100 = 52.5%` → well below **99.99%**
 - Maximum unstakable ETH: `100 − (52.5 ÷ 0.9999) = 47.495 ETH`
 
-After unstaking **47.495 ETH**, Alice’s position health = **99.99%**
+After unstaking **47.495 ETH**, Alice's position health = **99.99%**
 :::
 
-### Peg Maintenance
+## Peg Maintenance
 
 osToken maintains a soft peg to its underlying asset (ETH or GNO) through minting, redemptions, and liquidations.
 Minting helps prevent secondary market premiums on osTokens.
@@ -158,7 +143,7 @@ Redemption acts as early intervention when positions drift toward risky erosion 
 while liquidation serves as the last resort for closing thinly collateralized positions.
 Together, they create arbitrage opportunities that keep osToken's market price closely aligned with its fair exchange rate.
 
-#### Redemption Mechanism
+### Redemption Mechanism
 
 In **90% LTV Vaults**, the redemption mechanism activates when a position's Loan-to-Value (LTV) reaches the **redemption threshold of 91.5%**.
 At this point, anyone can burn part of that position's osTokens in exchange for an equivalent share of the Vault's collateral.
@@ -191,7 +176,7 @@ Bob stakes **100 ETH** and mints **87.238 osETH** at an exchange rate of **1.05 
 Positions in **99.99% LTV Vaults** are also subject to redemption, with amounts redeemed determined by the protocol's redemption request volume.
 The LTV of redeemed positions will remain above or equal to 99.99% after redemption, not affecting the position owner in any scenario.
 
-#### Liquidation Mechanism
+### Liquidation Mechanism
 
 Liquidation is the system's final safeguard, closing unhealthy positions to protect overcollateralization.
 In **90% LTV Vaults**, if a position exceeds the **92% LTV liquidation threshold**, anyone can close it entirely by burning all minted osTokens against the collateral.
@@ -222,7 +207,7 @@ Alice stakes **100 ETH** and mints **87.629 osETH** at an exchange rate of **1.0
 
 Positions in **99.99% LTV Vaults** are exempt from liquidation, as their APY parity ensures position health remains stable.
 
-### Exchange Rate Appreciation
+## Exchange Rate Appreciation
 
 osToken is a **repricing token**, meaning its redemption value increases over time as staking rewards accrue.
 Each osToken represents a growing share of the underlying staked ETH or GNO.
@@ -233,7 +218,7 @@ As rewards accrue, the redemption value increases, creating the "repricing" effe
 The fair exchange rate is reflected through `convertToAssets` and `convertToShares` functions in the [osTokenVaultController ↗](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306#code) contract,
 which manages osToken supply, collateral, and reward accrual.
 
-### Reward Accrual & Fee Mechanism
+## Reward Accrual & Fee Mechanism
 
 A decentralized Oracle network uses the [VaultUserLtvTracker ↗](https://etherscan.io/address/0xe0ae8b04922d6e3fa06c2496a94ef2875efcc7bb#code) contract to identify the user with the highest osToken LTV position across all Vaults.
 Oracles then set the `avgRewardPerSecond` parameter to match that user's Vault APY performance.
@@ -258,5 +243,5 @@ your debt grows by **0.000001**—your proportional share of the protocol's accu
 :::
 
 :::custom-info[Learn More]
-For comprehensive information about all protocol fees, see the [Fees →](./Fees) chapter.
+For comprehensive information about all protocol fees, see the [Fees →](../fees/intro) chapter.
 :::

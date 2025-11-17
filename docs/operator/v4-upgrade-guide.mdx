@@ -9,7 +9,7 @@ import Admonition from '@theme/Admonition';
 
 # V4 Upgrade Guide
 
-This guide covers the key changes and upgrade steps for StakeWise Operator V4, including Pectra upgrade support.
+This guide covers the key changes and upgrade steps for StakeWise Operator V4, including support for the Pectra upgrade (activated on 07-May-2025 at epoch 364032).
 
 :::custom-info[Prerequisites]
 Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility. See [Prerequisites →](./Prerequisites#deployed-vault) for details on checking and upgrading your Vault version.
@@ -19,8 +19,8 @@ Additionally, ensure your Operator Service wallet has the [Validators Manager �
 
 ## Validator Changes
 ### Registration
-After the Pectra upgrade:
-- **Validator balances are no longer limited** to 32 ETH or 1 GNO
+After the Pectra upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)):
+- **Validator balances are no longer limited** to 32 ETH or 1 GNO (now up to 2048 ETH or 64 GNO)
 - **`0x02` validators are registered by default**
 - To register `0x01` validators, add the flag `--validators-type=0x01`
 
@@ -47,7 +47,7 @@ The Pectra upgrade introduces significantly improved withdrawal mechanisms:
 - Significantly faster than full validator exits, improving withdrawal queue processing times
 
 #### More Efficient Full Validator Exits
-- **Full validator exits** are now processed via **execution request calls** instead of the traditional oracle-based method
+- **Full validator exits** are now processed via **execution layer triggerable exits** ([EIP-7002 ↗](https://eips.ethereum.org/EIPS/eip-7002)) instead of the traditional oracle-based method
 - **Automatic fallback**: If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute a full withdrawal after 24 hours using the exit signatures they have received during validator registration
 
 :::custom-info[Withdrawal Logic & Prioritization]

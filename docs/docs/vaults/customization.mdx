@@ -1,0 +1,127 @@
+---
+title: Customization
+sidebar_position: 2
+description: "Learn how to customize Vault settings, types, fees, and management roles"
+---
+
+# Customization
+
+Each Vault is highly customizable.
+Core parameters such as Vault type, capacity, and MEV strategy are immutable and set once upon deployment,
+while management roles, branding, and fees can be changed later.
+
+## Vault Type
+
+All Vault types support osToken minting. The Vault types differ in their specific characteristics and restrictions.
+
+### Standard Vaults — Most Common
+
+Receive staking deposits from any wallet and issue non-transferable Vault shares that earn rewards.
+
+### ERC-20 Vaults — For Custom Utility & Liquidity Ecosystem
+
+Allow Vault operators to build their own DeFi ecosystem using the Vault's token.
+The operator sets the token's name and symbol (e.g., mntETH), which will be visible in most portfolio tracking applications.
+Users can mint osToken and transfer their stake in the Vault as long as they don't have osToken minted.
+
+:::custom-info[Note]
+Standard Vaults (tokenless) help avoid potential tax events that could be triggered by exchanging ETH for a Vault token.
+:::
+
+### Private Vaults — Restricted Access
+
+Receive staking deposits from wallets that have been whitelisted by the Vault Admin.
+
+### Blocklist Vaults — Open with Exceptions
+
+Receive staking deposits from any wallets except those on a blocklist.
+
+### Meta Vaults — Diversified Strategy
+
+Meta Vaults do not register validators directly —
+instead, they delegate accumulated assets to sub-Vaults, which are managed by the Vault Admin.
+Each sub-Vault must have at least one registered validator.
+
+Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic. The default `BalancedCurator` distributes assets evenly across eligible sub-Vaults.
+The Curator contract can be changed by the Admin.
+
+MetaVaults can be deployed using the `EthMetaVaultFactory` contract, and currently,
+only the factory owner is permitted to deploy new MetaVaults.
+
+## Capacity
+
+Vault capacity is an immutable deposit limit that Vault operators set once during initialization to control the maximum amount of ETH their Vault can accept. When left unset, Vaults have unlimited capacity by default. The capacity is enforced on every
+deposit transaction, reverting with a `CapacityExceeded` error if exceeded. Capacity helps control validator set size based on operator infrastructure capabilities.
+
+## MEV Strategy
+
+MEV (Maximum Extractable Value) represents additional profits that validators can earn when proposing blocks.
+Vaults can use either a Smoothing Pool or Own Escrow for collecting the block rewards.
+
+### Smoothing Pool — Pooled Rewards
+
+Rewards are pooled across multiple Vaults and distributed evenly, providing more stable and predictable returns regardless of block proposal frequency.
+
+For example, a Vault with only a few validators can receive periodic small payouts from the Smoothing Pool, which come from the block proposal rewards contributed by other participating Vaults.
+In return, when the Vault does get the chance to earn a block proposal reward, it will flow to the Smoothing Pool as well, to be shared amongst all participating Vaults.
+
+The main advantage of using the Smoothing Pool is achieving a consistent level of rewards from block production, and a consistent Vault APY.
+
+Any Vault that opts into using the Smoothing Pool is required to operate one of the StakeWise DAO-approved MEV relays. This is necessary to ensure a consistently high contribution to the Smoothing Pool from every participating Vault.
+
+### Own Escrow — Own Rewards
+
+Rewards are collected solely by individual Vaults.
+Own Escrow allows a Vault to choose an independent approach to earning block production rewards,
+like using any relay of choice, because it does not rely on sharing such rewards with other Vaults.
+Own Escrow targets maximum value capture but with increased variability.
+
+## Management Roles
+
+Every Vault has several key roles for the internal management of the staking process:
+
+### Admin
+
+Primary controller of the Vault. Responsible for overall Vault configuration.
+  - Manage all roles and permissions
+  - Modify fees and fee recipients
+  - Update Vault branding (name, description, image)
+  - Configure Vault settings and parameters
+
+The Admin can be a single wallet, multisig, or DAO and can be changed through the `setAdmin` function.
+Only the current Admin can call this function.
+
+### Vault fee claimer
+
+Can claim accumulated Vault fees on behalf of shareholders.
+
+### Whitelist / Blocklist manager
+
+Access controller for deposit permissions.
+  - Add/remove accounts authorized to deposit (whitelist)
+  - Add/remove accounts prohibited from depositing (blocklist)
+
+This role only appears for Private Vaults or Vaults with blocklist functionality enabled.
+
+### Validators manager
+
+Technical operator responsible for validator operations.
+
+## Branding
+
+Vault operators can set their Vault's name, description, and image simply through the StakeWise interface and these can be updated anytime by the Admin.
+
+:::custom-stakewise[Authenticity Guarantee]
+Stakers can be confident about the authenticity of this information, i.e., a Vault branded by Operator A is indeed controlled and run by Operator A.
+Verification is a manual process managed by the core StakeWise team.
+:::
+
+## Fee
+
+Vault operators can charge fees on staking rewards to compensate for infrastructure and management costs.
+These fees are set by the Vault Admin and can be updated over time,
+subject to protocol-enforced restrictions to protect users from sudden changes.
+
+:::custom-notes[Deep Dive]
+For complete details about Vault fees, see [Fees →](../fees/intro).
+:::

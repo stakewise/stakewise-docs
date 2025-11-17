@@ -69,7 +69,7 @@ const config: Config = {
     algolia: {
       appId: '413SNHUF5R',
       apiKey: '934a7ad553024345ec22b5f10a2afb89',
-      indexName: 'Documentation Website',
+      indexName: 'StakeWise Docs',
       contextualSearch: true,
       searchPagePath: 'search',
     },

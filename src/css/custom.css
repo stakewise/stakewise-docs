@@ -6,12 +6,16 @@
   --fog: #FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
+  --grey: #666666;
+  --blue: #e3f2fd;
   --ifm-navbar-height: 4.5rem;
   --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 html[data-theme='dark'] {
   --coral: #40E9DE;
+  --blue: #2c3d4a;
+  --grey: #aaaaaa;
   --fog: #FFFFFF1A;
   --ifm-color-info-dark: #40E9DE;
 }

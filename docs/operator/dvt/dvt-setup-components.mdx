@@ -1,0 +1,17 @@
+# DVT setup components
+
+## DVT cluster of distributed validators
+Performs validator duties
+
+## StakeWise Operator
+StakeWise [operator ↗](https://github.com/stakewise/v3-operator) registers validators in Vault contract.
+Operator doesn’t have access to validator keystores.
+
+## DVT Relayer
+DVT [relayer ↗](https://github.com/stakewise/dvt-relayer) is a service providing validators' registration data to Stakewise Operator in DVT setup.
+It specifically handles validators whose private keys were generated through distributed key generation (DKG) procedures.
+In production environments, the DVT relayer should not have access to DV keystores.
+
+## DVT sidecars
+DVT [sidecar ↗](https://github.com/stakewise/dvt-operator-sidecar) is a service that works in conjunction with DVT-relayer and which should be running on each DVT operator in DVT cluster.
+DVT sidecar loads DV keystores, polls validator exits from Relayer, and pushes exit signature shares to Relayer on behalf of DVT operators.

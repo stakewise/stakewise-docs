@@ -1,17 +1,27 @@
 # DVT setup components
 
+The DVT setup consists of four components working together to enable distributed validator operations.
+
 ## DVT cluster of distributed validators
-Performs validator duties
+
+The distributed validator cluster performs validator duties (attestations, proposals) through a network of operators running DVT clients.
 
 ## StakeWise Operator
-StakeWise [operator ↗](https://github.com/stakewise/v3-operator) registers validators in Vault contract.
-Operator doesn’t have access to validator keystores.
+
+StakeWise [operator ↗](https://github.com/stakewise/v3-operator) registers validators in the Vault contract. The operator doesn't have access to validator keystores.
 
 ## DVT Relayer
-DVT [relayer ↗](https://github.com/stakewise/dvt-relayer) is a service providing validators' registration data to Stakewise Operator in DVT setup.
-It specifically handles validators whose private keys were generated through distributed key generation (DKG) procedures.
-In production environments, the DVT relayer should not have access to DV keystores.
+
+DVT [relayer ↗](https://github.com/stakewise/dvt-relayer) provides validator registration data to the StakeWise Operator. It handles validators whose private keys were generated through distributed key generation (DKG) and coordinates validator exit requests.
+
+:::custom-warning[Security]
+In production, the DVT relayer should not have access to DV keystores.
+:::
 
 ## DVT sidecars
-DVT [sidecar ↗](https://github.com/stakewise/dvt-operator-sidecar) is a service that works in conjunction with DVT-relayer and which should be running on each DVT operator in DVT cluster.
-DVT sidecar loads DV keystores, polls validator exits from Relayer, and pushes exit signature shares to Relayer on behalf of DVT operators.
+
+DVT [sidecar ↗](https://github.com/stakewise/dvt-operator-sidecar) runs on each DVT operator node in the cluster. It loads DV keystores, polls validator exits from the Relayer, and pushes exit signature shares back to the Relayer.
+
+:::custom-notes[Deployment]
+One sidecar instance required per DVT operator in the cluster.
+:::

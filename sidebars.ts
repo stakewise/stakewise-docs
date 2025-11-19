@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
         'docs/vaults/how-vaults-work',
         'docs/vaults/customization',
         'docs/vaults/staking-into-a-vault',
+        'docs/vaults/vault-performance',
         'docs/vaults/technical-architecture',
       ],
     },

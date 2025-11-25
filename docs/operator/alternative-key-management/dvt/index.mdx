@@ -1,10 +1,13 @@
 # DVT
 
-Distributed Validator Technology (DVT) is a validator security mechanism that distributes key management and signing operations across multiple participants, avoiding a single point of failure and increasing validator resilience.
-Validators have two public-private key pairs: active keys for consensus participation (block proposals, attestations) and withdrawal credentials that determine where staked funds can be sent upon exit.
-While withdrawal credentials can remain offline, validator keys must stay online continuously, creating security risks if compromised.
+Distributed Validator Technology (DVT) is a security mechanism that distributes validator key management and signing operations across multiple participants. This eliminates single points of failure and increases validator resilience.
 
-DVT mitigates this by encrypting and splitting the original key into shares distributed across multiple nodes, allowing stakers to keep the master key in cold storage.
+Validators have two public-private key pairs: active keys for consensus participation (block proposals, attestations) and withdrawal credentials that determine where staked funds can be sent upon exit. While withdrawal credentials can remain offline, validator keys must stay online continuously, making them vulnerable to compromise.
+
+DVT addresses this vulnerability by encrypting and splitting the validator key into shares distributed across multiple nodes. Stakers can keep the original key in cold storage while the network operates using these shares. A threshold number of shares (e.g., 3 out of 4) can collectively produce valid signatures, meaning one node can fail without disrupting validator operations. The system relies on distributed key generation, threshold signature schemes, and multiparty computation to ensure no single node ever possesses the complete key.
+
+StakeWise Vaults support both [Obol ↗](https://docs.obol.org/learn/readme/key-concepts) and [SSV ↗](https://docs.ssv.network/) DVT technologies, offering an additional layer of security and decentralization. This gives operators flexibility in how they secure their validators.
+
 
 <div style={{display: 'flex', justifyContent: 'center', margin: '20px 0', padding: '0 20px'}}>
   <div style={{position: 'relative', width: '100%', maxWidth: '500px', minHeight: '350px'}}>
@@ -59,10 +62,6 @@ DVT mitigates this by encrypting and splitting the original key into shares dist
   </div>
 </div>
 
-<div style={{textAlign: 'center', fontSize: '0.9em', color: '#666', marginTop: '10px'}}>
+<div style={{textAlign: 'center', fontSize: '0.9em', color: 'var(--grey)', marginTop: '10px'}}>
   Each node holds one encrypted key share.
 </div>
-
-A threshold number of these shares (for example, 3 out of 4) can collectively produce the signatures needed for validator operations. The system relies on cryptographic components including distributed key generation, threshold signature schemes, and multiparty computation to ensure that no single node ever possesses the complete key.
-
-StakeWise Vaults stand out for their compatibility with both [Obol ↗](https://docs.obol.org/learn/readme/key-concepts) and [SSV ↗](https://docs.ssv.network/) DVT technologies, offering an additional layer of security and decentralization to the network. This interoperability greatly bolsters the long-term sustainability of public blockchain networks, empowering stakeholders with diverse options for securing and leveraging their assets.

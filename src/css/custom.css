@@ -6,6 +6,7 @@
   --fog: #FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.2);
   --grey: #666666;
   --blue: #e3f2fd;
   --ifm-navbar-height: 4.5rem;

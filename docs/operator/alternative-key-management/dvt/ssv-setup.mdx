@@ -1,8 +1,14 @@
 # SSV Setup
 
-<p style={{fontSize: '1.2em', color: '#6c757d', marginTop: '-10px', marginBottom: '20px'}}>The below is a quick walkthrough on how to setup validators on StakeWise V3 that run on SSV.</p>
+<p style={{fontSize: '1.2em', color: '#6c757d', marginTop: '-10px', marginBottom: '20px'}}>A complete guide to running StakeWise validators using SSV Network's distributed validator technology.</p>
 
-DVT networks like SSV enable to run ethereum validators in a decentralized way by splitting the validator keys between independent operators. SSV is built as a permissionless DVT network in which anyone can become a DVT node operator, and be included in clusters (a set of operators responsible for operating an ethereum validator).
+[SSV Network ↗](https://ssv.network) is a permissionless DVT network that provides a simple infrastructure for splitting and distributing a validator key into multiple key shares to run a validator across multiple non-trusting nodes.
+
+**In this guide, you will:**
+1. 🔑 Generate encrypted operator keys
+2. 🖥️ Run your own SSV node
+3. ✍️ Register as an SSV operator
+4. 🔐 Distribute your validator keys to cluster operators
 
 ## Prerequisites
 
@@ -11,58 +17,65 @@ Before proceeding, ensure you have the following:
 1. Install [Docker Engine ↗](https://docs.docker.com/engine/install/)
 2. Ensure Docker is running:
 ```bash
-$ docker ps
+docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 3. [Create Vault →](/docs/guides/running-a-vault/how-to-create-a-vault)
 4. [Setup Operator Service →](/operator/intro)
 
-## Step 1: Register SSV Operator
+:::custom-notes[Hardware Requirements]
+SSV node requires (in addition to your beacon/execution nodes): ⚙️ 2 cores, ⚡️ 2GB RAM, 💾 20GB storage, 🚀 >8K IOPS. See [full requirements ↗](https://docs.ssv.network/operators/operator-node/node-setup/hardware-requirements).
+:::
 
-You can use the [SSV UI ↗](https://app.ssv.network/connect) for that. After registration run SSV Node.
+## Become SSV Operator
 
-<img src="/img/ssv setup 1.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Click Join As Operator</p>
+To join the SSV network as an operator, you must run an SSV node—the software that implements the SSV protocol and communicates with the network's smart contracts. It connects to your beacon and execution clients, receives encrypted KeyShares, and collaborates with other operators in a DVT cluster to perform validator duties—without ever holding the full private key.
 
-<img src="/img/ssv setup 2.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Click Register Operator</p>
+Becoming an SSV Operator involves generating keys, running the node software, and then registering as an operator through the [SSV webapp ↗](https://app.ssv.network/connect) to start earning rewards.
 
-<img src="/img/ssv setup 3.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Generate Operator Keys and fill operator public key field</p>
+While there are different [setup options ↗](https://docs.ssv.network/operators/operator-node/node-setup/#other-setup-options) with the [SSV Stack ↗](https://docs.ssv.network/operators/operator-node/node-setup/) being the most straightforward option, this guide covers **Manual Setup** offering full customization and control. Let's get started 🚀.
 
-### Generate Operator Keys (Encrypted)
+### Step 1: Generate Operator Keys (Encrypted)
 
-The most secure way to run your Operator node, is to generate an Encrypted key pair. This way, your Public Key (PK) and Secret Key (SK) will be encrypted with a password of your choosing.
+The most secure way to run your Operator node is to generate an encrypted key pair. This way, your **Public Key** and **Secret Key** will be encrypted with a password of your choosing.
 
-#### Password file
+#### Password File
 
-You will need to create a file (named `password` in this example) containing the password you chose for your Secret Key:
+You will need to create a file (named `password` in this example) containing the password you choose for your Secret Key:
 
 ```bash
 echo "<MY_OPERATOR_PASSWORD>" >> password
 ```
 
-#### Key pair generation and encryption
+#### Key Pair Generation and Encryption
 
 The node Docker image will generate keys for you, then encrypt them with a password you provide, using the following command:
 
 ```bash
-docker run --name ssv-node-key-generation -v "$(pwd)/password":/password -it "bloxstaking/ssv-node:latest" /go/bin/ssvnode generate-operator-keys --password-file=password && docker cp ssv-node-key-generation:/encrypted_private_key.json ./encrypted_private_key.json && docker rm ssv-node-key-generation
+docker run --name ssv-node-key-generation \
+  -v "$(pwd)/password":/password \
+  -v "$(pwd)":/data \
+  -it "ssvlabs/ssv-node:latest" \
+  sh -c "/go/bin/ssvnode generate-operator-keys --password-file=/password && cp /encrypted_private_key.json /data/" \
+  && docker rm ssv-node-key-generation
 ```
 
-Here is an example of the generated file.
+This command will generate `encrypted_private_key.json` containing your encrypted Operator Key and the Public Key needed for registration.
 
-```json title="encrypted_private_key.json"
+<details className="custom-details">
+<summary>encrypted_private_key.json</summary>
+
+```json {22}
 {
   "checksum": {
     "function": "sha256",
-    "message": "affa5deb755d8ad13a039117dc6850d2a25ad62a870a1e1f8d4ef...",
+    "message": "4abcbd7fffd92cd911f490d21fc6a8cd4a1f8fcfeab2e1da38d51d99103e4252",
     "params": {}
   },
   "cipher": {
     "function": "aes-128-ctr",
-    "message": "3022f3b5043b77eda7f336dd0218e6b7e633a3f42f7ae92ed9...",
-    "params": { "iv": "12e787716b0e3c30f2d68ed05464c16f" }
+    "message": "ee58cc1bc1ab53a3333f97d4bc3c8eb...",
+    "params": { "iv": "e4f98b6bbde33006f1178b4bbe0b32c1" }
   },
   "kdf": {
     "function": "pbkdf2",
@@ -71,38 +84,33 @@ Here is an example of the generated file.
       "c": 262144,
       "dklen": 32,
       "prf": "hmac-sha256",
-      "salt": "bc71d3213fe17f15879e6bc468b30eeeb2d0969176491d87f9b00a37bf314a4c"
+      "salt": "17d70de541658cd9e5f02105ea1887e7a2a8f0e3dd8b9769f12b821b1e0bc96f"
     }
   },
-  "publicKey": "LS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tCk1JSUJJak..."
+  "pubkey": "LS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBNDF5..."
 }
 ```
 
+</details>
+
 :::custom-notes[Public Key]
-Pay close attention to the **publicKey** field, as the name says, it contains the public key, which is needed to register the Operator on the ssv.network.
+Pay close attention to the **pubkey** field in the output, as it contains the public key needed to register the Operator later on the SSV network.
+To extract just the public key value, run:
+```bash
+grep -o '"pubkey":"[^"]*"' encrypted_private_key.json
+```
 :::
 
+### Step 2: Run SSV Node
 
-<img src="/img/ssv setup 4.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Set Operator Fee and click Next</p>
+#### Create Configuration File
 
-<img src="/img/ssv setup 5.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Click Register Operator</p>
+Create a `config.yaml` file and replace the placeholders (`ETH2_NODE`, `ETH1_WEBSOCKET_ADDRESS`, `ENCRYPTED_PRIVATE_KEY_JSON`, `PASSWORD_FILE`) with your actual values.
 
-<img src="/img/ssv setup 6.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Done</p>
+<details className="custom-details">
+<summary>config.yaml</summary>
 
-## Step 2: Run SSV Node
-
-For more information, refer to the [SSV Operator Node Documentation ↗](https://docs.ssv.network/operators/operator-node/node-setup/).
-
-### Create Configuration File
-
-Copy the following `config.yaml` file, just be sure to replace all the placeholders (`ETH2_NODE`, `ETH1_WEBSOCKET_ADDRESS`, `OPERATOR_SECRET_KEY`, etc.) with actual values.
-
-In particular, substitute `ENCRYPTED_PRIVATE_KEY_JSON` with the operator encrypted private key file generated above (e.g. `encrypted_private_key.json`) and `PASSWORD_FILE` with the file containing the password used to generate the encrypted key itself.
-
-```yaml title="config.yaml"
+```yaml
 global:
   # Console output log level
   LogLevel: info
@@ -110,7 +118,8 @@ global:
   # Debug logs file path
   LogFilePath: ./data/debug.log
 
-  # Number of log files preserved (roughly equivalent to number of days)
+  # Number of log files preserved, 500MB each (time duration depends on number of validators and other factors).
+  # Roughly equates to half a day.
   # Increase if you want to preserve log files for longer. This would require more disk space
   LogFileBackups: 10
 
@@ -121,17 +130,25 @@ db:
 ssv:
   # The SSV network to join to
   # Mainnet = Network: mainnet (default)
-  # Testnet (Goerli)  = Network: jato-v2
-  # Testnet (Hoodi) = Network: hoodi
+  # Hoodi = Network: hoodi
+  # Sepolia = Network: sepolia
   Network: mainnet
 
   ValidatorOptions:
-    # Whether to enable MEV block production. Requires the connected Beacon node to be MEV-enabled.
-    BuilderProposals: false
+    # Block proposals are by default controlled by Beacon Node.
+    # Requires the connected Beacon node to be MEV-enabled.
+    # Please see https://docs.ssv.network/operators/operator-node/setup-sidecars/configuring-mev
 
 eth2:
   # HTTP URL of the Beacon node to connect to.
   BeaconNodeAddr: <ETH2_NODE> # e.g. http://example.url:5052
+
+  # Enables improved attestation accuracy by scoring responses from multiple Beacon nodes.
+  # Will have no effect with only 1 endpoint.
+  WithWeightedAttestationData: false
+
+  # Enables parallel Attestation and Sync Committee submissions to multiple Beacon nodes.
+  WithParallelSubmissions: false
 
 eth1:
   # WebSocket URL of the Eth1 node to connect to.
@@ -149,147 +166,184 @@ KeyStore:
   PrivateKeyFile: <ENCRYPTED_PRIVATE_KEY_JSON> # e.g. ./encrypted_private_key.json
   PasswordFile: <PASSWORD_FILE> # e.g. ./password
 
-# This enables monitoring at the specified port, see https://docs.ssv.network/run-a-node/operator-node/maintenance/monitoring
+# Enables Doppelganger Protection for validators, see https://github.com/ssvlabs/ssv/blob/v2.3.0/doppelganger/README.md
+EnableDoppelgangerProtection: false
+
+# This enables monitoring at the specified port, see https://docs.ssv.network/operators/operator-node/monitoring/
 MetricsAPIPort: 15000
+# This enables node health endpoint for troubleshooting, see https://docs.ssv.network/operators/operator-node/maintenance/troubleshooting
+SSVAPIPort: 16000
 ```
 
-:::custom-notes[WebSocket Required]
+</details>
+
+:::custom-warning[WebSocket Required]
 Make sure your `ETH1Addr` endpoint is communicating over WebSocket and not over HTTP in order to support subscriptions and notifications.
 :::
 
-### Start the Node using Docker
+#### Start the Node
 
-:::custom-warning[Important - No Multiple Instances]
-Do not run multiple instances of SSV Node with the same set Operator keys.
+:::custom-warning[Potential Slashing]
+Do not run multiple instances of SSV Node with the same set operator keys.
 
-This does not increase validator resiliency and could lead to validator slashing.
+This does not increase validator resiliency and **could lead to validator slashing** 🔥.
 :::
-
-Now, for the part you've been waiting for... actually starting your SSV node!
 
 To start your node, run the following Docker command in the same folder you created the `config.yaml` file in the previous step:
 
 ```bash
 docker run --restart unless-stopped --name ssv_node -e \
-CONFIG_PATH=/config.yaml -p 13001:13001 -p 12001:12001/udp -p 15000:15000 \
+CONFIG_PATH=/config.yaml -p 13001:13001 -p 12001:12001/udp -p 15000:15000 -p 16000:16000 \
 -v "$(pwd)/config.yaml":/config.yaml \
 -v "$(pwd)":/data \
 -v "$(pwd)/password":/password \
 -v "$(pwd)/encrypted_private_key.json":/encrypted_private_key.json \
--it "bloxstaking/ssv-node:latest" make BUILD_PATH="/go/bin/ssvnode" start-node
+-it "ssvlabs/ssv-node:latest" make BUILD_PATH="/go/bin/ssvnode" start-node
 ```
 
 :::custom-notes[Running in Background]
-This command will keep the terminal busy, showing the container's logs. It is useful to make sure that the node start up sequence runs correctly.
-
-You can detach the terminal at any time by hitting Ctrl-c key combination, or closing the terminal itself. The node will be stopped, but it will restart automatically, thanks to the `--restart unless-stopped` startup parameter.
-
-If you are sure that the node works, and don't care about the logs, you can add the `-d` parameter right after `docker run`.
+This command shows container logs to verify startup. Press Ctrl-c to detach—the node will restart automatically due to `--restart unless-stopped`. To run in background, add `-d` after `docker run`.
 :::
 
-### Peer-to-peer ports configuration and firewall
+#### Peer-to-peer Ports Configuration and Firewall
 
-When you set up your firewall on your SSV node machine, make sure to expose the ports that you set in the container creation command. The defaults are 12001 UDP and 13001 TCP.
+When you set up your firewall on your SSV node machine, make sure to expose the ports that you set in the container creation command.
+The defaults are **12001 UDP** and **13001 TCP**. Additional ones are **15000 TCP** for Metrics and **16000 TCP** for Health endpoint.
 
-If you don't want to use the default ports, they can be changed in your `config.yaml` file. Be aware, they must be changed on the container creation command as well (simply changing the host port mappings on the Docker command isn't enough!).
+If you don't want to use the default ports, they can be changed in your `config.yaml` file. Be aware, they **must be changed on the container creation command** as well (simply changing the host port mappings on the Docker command isn't enough!).
 
-You can also add your `HostAddress` to the config, which is the public static IP address of the machine.
-
-```yaml
-p2p:
-  HostAddress: 206.22.63.189
-  UdpPort: 12001
-  TcpPort: 13001
-```
-
-## Step 3: Split validator between SSV Operators
-
-### Offline Key Splitting
-
-Offline key splitting is the most secure option, although less convenient, as it requires running a command line tool. For more information, refer to the specific User Guide on how to use the [ssv-keys CLI tool ↗](https://docs.ssv.network/developers/SSV-SDK/examples/generate-and-validate-keyshares).
-
-Before continue download [ssv-keys ↗](https://github.com/bloxapp/ssv-keys/releases).
-
-:::custom-notes[Bulk Operations Support]
-The latest SSV Smart Contract updates added support for bulk operations, and the latest release of `ssv-keys` has been made compatible with bulk operations. With version 1.1.0 (and above), it is possible to generate keyshares for multiple keystores in a single operation.
+:::custom-notes[Best Practices]
+Ensure optimal performance and correctness of your node by following recommendations such as multiple endpoints for failover for EL and CL clients, `./data/db` folder backup, weighted attestation data, parallel submissions, and Doppelganger protection to prevent double-signing.
+The complete guide can be found [here ↗](https://docs.ssv.network/operators/operator-node/node-setup/best-practices).
 :::
 
-<img src="/img/ssv%20setup%207.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Select your validator cluster and press Add validator button</p>
+### Step 3: Register on SSV Network
 
-<img src="/img/ssv%20setup%208.png" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Press Offline button</p>
+After successfully running an SSV node, an operator must register it to the SSV Network in order to be discoverable by validators.
+You'll need your **operator public key** (generated in Step 1) and your desired **operator fee** ([more on fees ↗](https://docs.ssv.network/learn/protocol-overview/tokenomics/fees)). The wallet address you use to register will be the only address with management permissions.
+Follow these steps using the SSV Network [web app ↗](https://app.ssv.network):
 
-<img src="/img/ssv%20setup%209.png" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Select Command Line Interface, copy command from 4 step and press next.</p>
+1. Click **Join As Operator**
 
-### Generate keyshares
+<img src="/img/ssv-setup-1.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-Run the `ssv-keys` command with your operator information:
+2. Click **Register Operator**
+
+<img src="/img/ssv-setup-2.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+3. Paste your **Operator Public Key** from the previous step and click **Register Operator**
+
+<img src="/img/ssv-setup-3.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+4. Set Operator **Annual fee** and click **Next**
+
+<img src="/img/ssv-setup-4.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+:::custom-notes[Operator Fee]
+Your fee (in SSV tokens) is charged per validator that selects you. Earnings accumulate in your balance and can be withdrawn anytime. You can update your fee later—decreases take effect immediately, increases require a waiting period to [protect stakers ↗](https://docs.ssv.network/operators/operator-onboarding/update-fee).
+:::
+
+5. Double-check everything and click **Confirm**
+<img src="/img/ssv-setup-5.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+6. Confirm the transaction and wait for it to be processed
+
+<img src="/img/confirm-tx.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+7. Congratulations 🥳. Your Operator is successfully registered, and stakers can now choose it to operate their validators.
+
+<img src="/img/ssv-setup-6.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+:::custom-notes[Operator Management]
+Once registered, you can apply for the [Verified Operator Program ↗](https://docs.ssv.network/operators/operator-onboarding/verified-operators) to earn this badge <img src="https://app.ssv.network/images/operator_type/verified.svg" alt="Verified" style={{width: '16px', height: '16px', verticalAlign: 'middle', marginRight: '4px', display: 'inline'}} />and signal trustworthiness to stakers. You can also set [operator metadata ↗](https://docs.ssv.network/operators/operator-management/setting-operator-metadata) like description and name, [update fees ↗](https://docs.ssv.network/operators/operator-management/updating-operator-fees), enable [permissioned mode ↗](https://docs.ssv.network/operators/operator-onboarding/permissioned-operators) to restrict validator registration to whitelisted addresses only, and [more ↗](https://docs.ssv.network/operators/operator-management).
+:::
+
+## Split Validator Keys Among Operators
+
+This section walks you through distributing your StakeWise validator keys to a cluster of SSV operators using the SSV webapp.
+The process involves selecting operators, generating encrypted keyshares offline using the CLI, and completing registration through the webapp.
+
+### Select Operators and Generate Keyshares
+
+1. Download the ssv-keys CLI for your system from the [releases page ↗](https://github.com/ssvlabs/ssv-keys/releases)
 
 ```bash
-$ ./ssv-keys-mac --operator-keys=LS0tL.... --operator-ids=66,391,393,442 --owner-address=0xd676090f860......b9f72b1e356 --owner-nonce=11
+# macOS
+curl -L https://github.com/ssvlabs/ssv-keys/releases/latest/download/ssv-keys-mac -o ssv-keys
+chmod +x ssv-keys  # Make the file executable
+
+# Linux
+curl -L https://github.com/ssvlabs/ssv-keys/releases/latest/download/ssv-keys-linux -o ssv-keys
+chmod +x ssv-keys
 ```
 
-The command will prompt you for keystore information and generate keyshares:
+2. Press **Distribute Validators**
+<img src="/img/distribute-validator-keys-1.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
+3. Select **Generate new key shares**
+<img src="/img/distribute-validator-keys-2.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+4. Choose the cluster size and operators to run your validator, and click **Next**
+<img src="/img/distribute-validator-keys-3.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+5. Select the **Offline** method to split your key
+<img src="/img/distribute-validator-keys-4.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+6. Select **Command Line Interface**, copy the command provided with all values pre-filled (operator keys, IDs, your wallet address, and nonce), and press **Next**
+<img src="/img/distribute-validator-keys-5.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+7. Run the copied command in your terminal
+
+```bash
+./ssv-keys-mac --operator-keys=LS0tLS1CRUdJTiB... --operator-ids=5,6,7,8 --owner-address=0xf27...10aD9 --owner-nonce=0
 ```
-✔ Enter the path to your keystore file or directory containing multiple keystore files … /Users/user/.stakewise/0x738a85....d5bf373c48b981b3/keystores
+
+When prompted, provide:
+```bash {11}
+✔ Enter the path to your keystore file or directory containing multiple keystore files … /Users/user/.stakewise/0x43aee97f4122b4982915bcfd3d6acd0758fd1b52/keystores/keystore-m_12381_3600_0_0_0-1763993024.json
 ✔ Provide the keystore file password … ******************** <- type keystores password here
-? Please provide a target path to generate the output to › /Users/user/ssv-keys/
+✔ Please provide a target path to generate the output to … /Users/user/ssv-keys/
 
-2/13 ✅ keystore-m_12381_3600_70_0_0-1712126593.json
-3/13 ✅ keystore-m_12381_3600_71_0_0-1712126593.json
-4/13 ✅ keystore-m_12381_3600_72_0_0-1712126593.json
-5/13 ✅ keystore-m_12381_3600_73_0_0-1712126593.json
-6/13 ✅ keystore-m_12381_3600_74_0_0-1712126593.json
-7/13 ✅ keystore-m_12381_3600_75_0_0-1712126593.json
-8/13 ✅ keystore-m_12381_3600_76_0_0-1712126594.json
-9/13 ✅ keystore-m_12381_3600_77_0_0-1712126594.json
-10/13 ✅ keystore-m_12381_3600_78_0_0-1712126594.json
-11/13 ✅ keystore-m_12381_3600_79_0_0-1712126594.json
-12/13 ✅ keystore-m_12381_3600_80_0_0-1712126594.json
-13/13 ❌ password.txt
+1/1 ✅ keystore-m_12381_3600_0_0_0-1763993024.json
 
-11 of 13 keystore files successfully validated. 2 failed validation
+1 of 1 keystore files successfully validated. 0 failed validation
 
+Generating Keyshares file, this might take a few minutes do not close terminal.
 Key distribution successful! Find your key shares file at:
-/Users/user/ssv-keys/keyshares-1712562491.json
+/Users/user/ssv-keys/keyshares-1763995534.json
 ```
+This splits your validator key into encrypted shares using Shamir Secret Sharing (SSS), with each share encrypted for a specific operator.
 
-<img src="/img/ssv%20setup%2010.png" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Upload /Users/user/ssv-keys/keyshares-1712562491.json file to Enter KeyShared File window.</p>
+### Complete Registration
 
-<img src="/img/ssv%20setup%2011.png" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Once uploaded, if successfully validated, advance to the next screen clicking Next.</p>
+8. Upload the generated **KeyShares File**
+<img src="/img/distribute-validator-keys-6.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-You can select the operational runway period of your validator, in accordance with the **Yearly Fee** of previously selected operators. This will dictate the initial amount of SSV to be deposited in the cluster, but it can always be managed later.
+9. Click **Next**
+<img src="/img/distribute-validator-keys-7.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-<img src="/img/ssv setup 12.avif" alt="SSV Setup" />
-<p style={{fontSize: '0.9em', textAlign: 'center', color: 'var(--grey)', fontStyle: 'italic', marginTop: '5px'}}>Once uploaded, if successfully validated, advance to the next screen clicking Next.</p>
+10. Choose your funding period. The required SSV amount depends on your selected operators' fees and duration.
+<img src="/img/distribute-validator-keys-8.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-:::custom-warning[Important - Fee Management and Liquidation Risk]
-Please read carefully and understand how fees are managed and the risks of account [liquidation ↗](https://docs.ssv.network/learn/protocol-overview/tokenomics/liquidations/) if your account balance falls below the Threshold Balance.
+11. Review cluster fees and acknowledge the risks, then click **Next**.
+<img src="/img/distribute-validator-keys-9.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+:::custom-warning[Liquidation Risk]
+Understand [how fees are managed ↗](https://docs.ssv.network/operators/operator-management/updating-operator-fees/) and keep your cluster balance above the **Liquidation Collateral** threshold. If liquidated, your validators will stop being operated, which could lead to penalties on the Beacon Chain. [Learn more ↗](https://docs.ssv.network/learn/protocol-overview/tokenomics/liquidations/)
 :::
 
-:::custom-warning[Important - Stop Other Validator Clients]
-The following screen alerts you of the potential dangers of registering a validator on the SSV network, if the same set of validator keys is also being used by other consensus and validator clients.
-
-Please make sure to stop any other running validator setup, if you have any.
+:::custom-warning[Critical - Stop Other Validator Clients]
+Ensure you have shut down any existing validator clients running this key before proceeding. Running the same validator key on multiple systems simultaneously will result in slashing.
 :::
+12. Acknowledge the risk and click **Next**
+<img src="/img/distribute-validator-keys-10.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-<img src="/img/ssv%20setup%2013.avif" alt="SSV Setup" style={{marginBottom: '20px'}} />
+13. The next screen presents a summary of your validator setup.
+Review transaction details and complete two transactions:
+     1. Click **Approve SSV** and confirm in your wallet
+     2. Click **Register Validator** and confirm in your wallet
+<img src="/img/distribute-validator-keys-11.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-<img src="/img/ssv%20setup%2014.avif" alt="SSV Setup" />
+14. Congratulations! 🎉 Your validator is now registered on the SSV network and being managed by your selected operators.
 
-The next screen presents a summary of your validator setup.
-
-<img src="/img/ssv%20setup%2015.avif" alt="SSV Setup" />
-
-By clicking on **Register validator(s)**, you'll be proposed to sign transactions to confirm your choice and transfer the SSV balance necessary to cover for the operational costs.
-
-:::custom-notes[First Time Registration]
-Note: If this is the first time you are registering a validator to ssv.network, you will be required to make two transactions - one to approve the SSV smart contract and another one to register the validator.
-:::
-
-## Step 4: Deposit to Vault ;)
+## Deposit to Vault 😃

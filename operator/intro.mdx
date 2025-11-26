@@ -1,0 +1,121 @@
+---
+title: 1. Overview
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Overview
+
+**StakeWise** is a decentralized liquid staking protocol that allows anyone to participate in Ethereum staking without the traditional barriers of technical complexity or capital requirements. The protocol enables users to stake their ETH while maintaining liquidity through [osToken →](/docs/ostoken/intro), StakeWise's liquid staking token.
+
+At the core of StakeWise are individual staking pools called [Vaults →](/docs/vaults/intro). Anyone – from solo stakers to professional operators – can create and operate their own Vault, offering flexible staking solutions that serve diverse needs: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking services to others.
+
+**Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
+
+<div style={{ textAlign: "center", margin: "2rem 0" }}>
+  <div
+    style={{
+      display: "inline-block",
+      textAlign: "center",
+      background: "var(--ifm-color-emphasis-200)",
+      color: "var(--ifm-color-primary)",
+      padding: "2rem",
+      borderRadius: "12px",
+      fontSize: "14px",
+      fontFamily: "Monaco, monospace",
+      boxShadow: "0 10px 30px rgba(1,137,112,0.2)",
+      lineHeight: "1.8",
+    }}
+  >
+    <strong
+      style={{
+        fontSize: "16px",
+        borderBottom: "2px solid #018970",
+        paddingBottom: "0.5rem",
+        display: "inline-block",
+        marginBottom: "1rem",
+      }}
+    >
+      🏛️ Architecture Overview
+    </strong>
+
+    <div><img src="/img/vault.png" alt="Vault" style={{width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle'}} /> Your Vault</div>
+    <div>⇅</div>
+
+    <div>🎯 Operator Service</div>
+    <div style={{ display: "flex", justifyContent: "center", gap: "3rem" }}>
+      <div style={{marginRight: '60px'}}>⇅</div>
+      <div>⇅</div>
+    </div>
+
+    <div style={{ display: "flex", justifyContent: "center", gap: "3rem" }}>
+      <div>🛠️ Execution Node</div>
+      <div>⇆</div>
+      <div>
+        🔗 Consensus Node
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+## Core Functions
+
+The Operator Service integrates seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology.
+
+The Operator Service automates essential Vault management tasks:
+
+### Validator Registration
+
+The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validators and sends a registration transaction to the Vault.
+
+:::custom-notes[Validator Types]
+- **`0x01` Legacy validators**: Fixed stake (32 ETH/1 GNO), no top-up funding available
+- **`0x02` Compound validators**: Variable stake up to 2048 ETH or 64 GNO, supports automatic funding
+:::
+
+By default, the Operator Service registers new `0x02` validators, prioritizing funding existing compound validators when possible; otherwise, it registers new validators up to the maximum balance.
+
+:::custom-notes[Deep Dive]
+For detailed information about the validator registration process, see [Validator Registration →](/docs/vaults/how-vaults-work#validator-registration)
+:::
+
+### Validator Consolidation
+The Operator Service consolidates legacy `0x01` validators to `0x02` compound validators.
+
+:::custom-notes[Deep Dive]
+For detailed instructions on consolidating validators, see [Consolidate Validators →](./additional-actions/consolidate-validators)
+:::
+
+### Withdrawals
+
+When a user requests to exit their stake, the Operator Service identifies the validators from which to withdraw the assets.
+It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
+If partial withdrawals are insufficient, it proceeds with full withdrawals.
+
+:::custom-notes[Exit Queue Monitoring]
+To minimize the number of withdrawal transactions, the Operator Service submits a withdrawal transaction once every 12 hours (this interval can be reconfigured).
+:::
+
+:::custom-notes[Deep Dive]
+For detailed instructions on exiting validators manually, see [Manual Exit →](./additional-actions/manual-exit)
+:::
+
+### Vault State Update
+Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.).
+
+### Automated Fee Claims
+By default, the fees earned by the Vault's fee recipient remain locked in the validators. You can enable periodic fee claims through the Operator Service. In this case, the earned fees will be claimed from the Vault and sent directly to the fee recipients.
+
+:::custom-notes[Deep Dive]
+For detailed instructions on enabling fee claiming, see [Fee Claiming →](./additional-actions/fee-claiming)
+:::
+
+## Next Steps
+
+Before running the Operator Service, you must first ensure your infrastructure meets the necessary [Prerequisites →](./Prerequisites) outlined in the next section.

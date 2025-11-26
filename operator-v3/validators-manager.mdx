@@ -1,0 +1,99 @@
+---
+title: 5. Validators Manager
+sidebar_position: 5
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Validators Manager
+
+The Validators Manager is a critical role within StakeWise Vaults that grants specific permissions to perform validator-related operations. This role acts as the authorization mechanism for managing validators throughout their lifecycle.
+
+After generating your validator keys, you need to set up a wallet to handle validator registrations and assign it the Validators Manager role. The Operator Service provides built-in functionality to generate this operator wallet, or you can use existing wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline).
+
+## What is the Validators Manager?
+
+The Validators Manager role provides permission to execute essential validator operations within your Vault. This role can be assigned to a wallet address and grants the authority to:
+
+### Core Functions
+
+- **Validator Registration**: Register both `0x01` legacy validators (32 ETH/1 GNO) and `0x02` compound validators (up to 2048 ETH/64 GNO)
+- **Validator Funding**: Top up existing `0x02` compound validators with additional ETH/GNO to maximize capital efficiency
+- **Validator Consolidation**: Migrate balance from one validator to another.
+- **Validator Withdrawals**: Trigger withdrawal requests for validators when needed
+
+### Authorization Methods
+
+Operations can be executed in two ways:
+1. **Direct execution**: By a wallet address that has been assigned the Validators Manager role
+2. **Signature-based**: By providing a valid Validators Manager signature when the wallet is stored outside the Operator Service, such as in [Relayer (API Mode) →](./alternative-key-management/api-mode)
+
+:::custom-info[Role Flexibility]
+The signature-based approach allows for more complex authorization workflows, such as multi-signature setups or automated systems that can execute operations with proper authorization.
+:::
+
+## Step 1: Create Operator Wallet
+
+The first step is creating a dedicated wallet that will be assigned the Validators Manager role and handle validator operations.
+
+:::custom-info[Wallet Options]
+You have two options for the Validators Manager wallet:
+- **Create a new wallet** using the command below (recommended for dedicated operator setups)
+- **Use an existing wallet** by manually configuring the Validators Manager role in your Vault settings
+
+If using an existing wallet, skip to [Step 2 →](#step-2-assign-validators-manager-role) and use your existing wallet address.
+:::
+
+Create a wallet for validator registrations and gas payments:
+
+```bash
+./operator create-wallet
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Enter the vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c
+Enter the mnemonic for generating the wallet: fish monster write banner tired laptop slender ...
+Done. The wallet and password saved to ~/.stakewise/0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c/wallet directory. The wallet address is: 0x59d58...B48C4
+```
+</details>
+
+You may reuse the same mnemonic as your validator keys or generate a separate one for added security.
+
+:::custom-warning[Wallet Balance Warning]
+  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
+
+    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
+    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
+    - Monitor balance regularly to prevent registration failures
+:::
+
+## Step 2: Assign Validators Manager Role
+
+You must assign the Validators Manager role to the wallet address created in the previous step. This setup can be completed via the StakeWise UI and must be performed by the Vault Admin.
+
+### Using StakeWise UI
+
+1. Connect using a Vault Admin wallet and navigate to the [Operate page ↗](https://app.stakewise.io/operate)
+2. Select the Vault for which you want to change the Validators Manager role
+3. In the upper right corner, click on **"Settings"** and open the **"Roles"** tab
+4. Enter the wallet address in the **"Validators manager"** field
+5. Click **"Save"** to create a transaction that you will need to sign with your wallet
+
+:::custom-notes[UI Access]
+The **"Settings"** button is only visible to the Vault Admin or current Validators Manager.
+:::
+
+:::custom-tips[Role Assignment]
+The Validators Manager role will be updated once the transaction is confirmed on the network. Make sure to use the exact wallet address generated in [Step 1 →](#step-1-create-operator-wallet).
+:::
+
+## Next Steps
+
+:::custom-info[Ready to Launch]
+🎉 Your Validators Manager is now set up! The Operator Service will use this role to automatically handle validator registrations, funding, and other operations as needed. Continue to [Start Operator →](start-operator) to launch your Operator Service.
+:::

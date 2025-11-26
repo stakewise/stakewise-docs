@@ -1,0 +1,34 @@
+---
+title: Recover Validators
+sidebar_position: 6
+---
+
+# Recover Validator Keystores
+
+You can recover validator keystores that are active.
+
+:::custom-warning[Slashing Prevention]
+Make sure there are no validators running with recovered validator keystores and **2 epochs** have passed, otherwise you can get slashed.
+:::
+
+:::custom-info[Security Notice]
+For security purposes, make sure to protect your mnemonic as it can be used to generate your validator keys.
+:::
+
+```bash
+./operator recover
+```
+
+```
+Enter the mnemonic for generating the validator keys: leaf circle ground star...
+Enter your vault address: 0x001...
+Enter comma separated list of API endpoints for execution nodes: https://execution-node
+Enter comma separated list of API endpoints for consensus nodes: https://consensus-node
+Enter the network name: mainnet
+Fetching registered validators for vault 0x001...
+Fetched 1 registered validators
+Fetching validators statuses...
+Fetched statuses for registered validators
+Vault has 1 registered validator(s), recover active keystores from provided mnemonic? [Y/n]: y
+Successfully recovered 1 keystores for vaults 0x001...
+```

@@ -1,0 +1,86 @@
+---
+title: Remote Signer
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Remote Signer
+
+The Remote Signer allows you to isolate signing operations from your Operator Service. Validator keystores do not need to be present directly in the Operator.
+The Operator can query a remote signer like [Web3Signer ↗](https://docs.web3signer.consensys.io/) to get signatures for validator deposit and exit messages.
+## Prerequisites
+
+Complete the following steps before proceeding:
+
+:::custom-notes[Required Setup Steps]
+  1. [Installation →](../Installation) completed
+  2. [Validators Manager →](../validators-manager) set
+  3. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>
+:::
+
+## Setup Remote Signer
+
+Upload the keystores to a remote signer. If you already have private keys uploaded to the remote signer, proceed to [Start Operator Service](#start-operator-service) below.
+
+### Example Usage
+
+```bash
+./operator setup-remote-signer
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter your vault address: 0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c
+Enter the URL of the remote signer (e.g. https://signer:9000): https://localhost:9000
+Successfully imported 10 keys into remote signer.
+Remove local keystores? [y/N]: y
+Removed keystores from local filesystem.
+Done. Successfully configured operator to use remote signer for 10 public key(s)!
+```
+</details>
+
+### `setup-remote-signer` Options
+
+- `--remote-signer-url` – The URL of the remote signer.
+- `--dappnode` – Use this flag when running with Dappnode Staking Brain. Must be provided together with the `--execution-endpoints` flag.
+- `--vault` – The Vault address.
+- `--execution-endpoints` – A comma-separated list of API endpoints for execution nodes. Used to retrieve the Vault validator fee recipient. Required only if the `--dappnode` flag is set.
+- `--data-dir` – The path where Vault data is stored. Default: `~/.stakewise`.
+- `--keystores-dir` – The directory containing validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard.
+
+## Start Operator Service
+
+Provide the operator with the URL to your remote signer instance using the `--remote-signer-url` flag:
+
+```bash
+./operator start-remote-signer \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+  --consensus-endpoints=https://consensus-node \
+  --execution-endpoints=https://execution-node \
+  --remote-signer-url=https://remote-signer:9000
+```
+
+You should see a message similar to this one after starting the operator:
+
+```
+Using remote signer at http://remote-signer:9000 for 20 public keys
+```
+
+:::custom-info[Additional Configuration]
+This setup supports various optional flags to provide more flexibility and customization. See all available options in the [Start Operator →](../start-operator#optional-flags) setup.
+:::
+
+:::custom-tips[Successful Configuration]
+  When properly configured, the Operator Service will connect to your remote signer and manage validator operations without requiring local access to private keys.
+:::
+
+<div id="user-content-fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span>
+  Web3Signer is an open-source remote signing service developed by Consensys, which can sign payloads using `secp256k1` and `BLS12-381` keys. It supports keys stored either in external vaults or encrypted on disk, and is designed for use with both the Ethereum execution layer and consensus layer.  <a href="#user-content-fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

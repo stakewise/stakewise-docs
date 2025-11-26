@@ -1,0 +1,134 @@
+---
+title: 3. Installation
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Installation
+
+The Operator Service can be installed in several ways: as a binary, via Docker, or built from source.
+Choose your preferred method and follow the instructions below.
+
+:::custom-warning[Vault Version Requirements]
+This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [Prerequisites →](./Prerequisites#deployed-vault) section for details on checking your Vault version and instructions for older versions.
+:::
+
+<Tabs groupId="installation-methods">
+  <TabItem value="binary" label="Binary" default>
+
+    ### Download
+
+    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version
+    2. Select the binary file for your node's hardware
+    3. Download and decompress the file
+    4. Run commands from inside the `v3-operator` folder:
+
+    ```bash
+    ./operator COMMAND --flagA=123 --flagB=xyz
+    ```
+    :::custom-notes[Note]
+      The use of flags is optional.
+    :::
+
+    ### Install Script (Linux and macOS)
+
+    To install the latest release, run:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s
+    ```
+
+    The binary will be placed in `~/bin`. Add it to your PATH:
+
+    ```bash
+    export PATH=$PATH:~/bin
+    ```
+
+    To install a specific version to a custom location:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
+    ```
+
+    Run commands with:
+
+    ```bash
+    operator COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+  <TabItem value="docker" label="Docker Image">
+
+    ### Pull Official Image
+
+    ```bash
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14
+    ```
+
+    ### Build From Source
+
+    Alternatively, build the Docker image locally:
+
+    ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14 .
+    ```
+
+    ### Run Commands
+
+    ```bash
+    docker run --rm -ti \
+    -u $(id -u):$(id -g) \
+    -v ~/.stakewise/:/data \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14 \
+    src/main.py COMMAND \
+    --flagA=123 \
+    --flagB=xyz
+    ```
+
+    :::custom-notes[Note]
+      The use of flags is optional.
+    :::
+
+    ### Configuration
+
+    When operating within Docker, it's necessary to specify the `--data-dir` variable, such as `--data-dir=/data`. Ensure the `data-dir` is mapped to a directory on the host.
+
+    The `database-dir` should also be mapped to a host directory or Docker volume, with write permissions enabled for the directory linked to `database-dir`. Setting up permissions is not required if using volumes.
+
+  </TabItem>
+  <TabItem value="source" label="Source Files">
+
+    ### Requirements
+
+    - [Python 3.10+ ↗](https://www.python.org/downloads/)
+    - [Poetry ↗](https://python-poetry.org/docs/)
+
+    ### Setup
+
+    ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
+    poetry install --only main
+    ```
+
+    ### Run Commands
+
+    Run commands from within the `v3-operator` folder using the below format:
+
+    ```bash
+    PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
+    ```
+    :::custom-notes[Note]
+        The use of flags is optional.
+    :::
+  </TabItem>
+</Tabs>
+
+## Next Steps
+
+Once installed, continue with [Validator Keys →](validator-keys).

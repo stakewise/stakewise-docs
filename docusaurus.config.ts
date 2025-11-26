@@ -60,6 +60,40 @@ const config: Config = {
 
   plugins: [
     './src/plugins/tailwind-config.js',
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'operator',
+        path: 'operator',
+        routeBasePath: 'operator',
+        sidebarPath: './sidebarsOperator.ts',
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+        showLastUpdateTime: true,
+        breadcrumbs: true,
+        admonitions: {
+          keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes', 'custom-stakewise'],
+          extendDefaults: true,
+        },
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'operator-v3',
+        path: 'operator-v3',
+        routeBasePath: 'operator/v3',
+        sidebarPath: './sidebarsOperatorV3.ts',
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+        showLastUpdateTime: true,
+        breadcrumbs: true,
+        admonitions: {
+          keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes', 'custom-stakewise'],
+          extendDefaults: true,
+        },
+      },
+    ],
   ],
 
   themeConfig: {
@@ -105,9 +139,21 @@ const config: Config = {
         },
         {
           label: 'Operator',
-          to: '/operator/intro',
-          activeBaseRegex: `/operator/`,
-          sidebarId: 'operatorSidebar',
+          type: 'dropdown',
+          items: [
+            {
+              label: 'v4 (Current)',
+              type: 'docSidebar',
+              sidebarId: 'operatorSidebar',
+              docsPluginId: 'operator',
+            },
+            {
+              label: 'v3',
+              type: 'docSidebar',
+              sidebarId: 'operatorV3Sidebar',
+              docsPluginId: 'operator-v3',
+            },
+          ],
         },
         {
           label: 'Contracts',

@@ -10,9 +10,10 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Overview
 
-:::custom-warning[Operator v3 Documentation (Legacy)]
-This documentation is for Operator v3, which does not support Pectra upgrade features and `0x02` validators.
-To use Pectra-related features, please refer to [Operator v4 Documentation →](/operator/intro)
+:::custom-warning[Operator V3 Documentation]
+You must run Operator Service v3.1.10 and follow this documentation page if your Vault version is below 5 on Ethereum or below 3 on Gnosis.
+You can check your Vault contract version in the Details section of the Vault page or on the contract page in the block explorer.
+If your Vault version is higher, please refer to the [latest documentation →](/operator/intro).
 :::
 
 **StakeWise** is a decentralized liquid staking protocol that allows anyone to participate in Ethereum staking without the traditional barriers of technical complexity or capital requirements. The protocol enables users to stake their ETH while maintaining liquidity through [osToken →](/docs/ostoken/intro), StakeWise's liquid staking token.
@@ -73,53 +74,37 @@ At the core of StakeWise are individual staking pools called [Vaults →](/docs/
 
 The Operator Service integrates seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology.
 
-The Operator Service automates essential Vault management tasks:
+The Operator Service is indispensable in order to successfully register validators on the platform and manage ongoing validator operations, including exit signature rotation and Vault state updates.
 
 ### Validator Registration
 
-The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validators and sends a registration transaction to the Vault.
+The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validators (32 ETH for Ethereum, 1 GNO for Gnosis) and sends a registration transaction to the Vault.
 
-:::custom-notes[Validator Types]
-- **`0x01` Legacy validators**: Fixed stake (32 ETH/1 GNO), no top-up funding available
-- **`0x02` Compound validators**: Variable stake up to 2048 ETH or 64 GNO, supports automatic funding
-:::
-
-By default, the Operator Service registers new `0x02` validators, prioritizing funding existing compound validators when possible; otherwise, it registers new validators up to the maximum balance.
+Validator registration requires pre-generated deposit data files that must be uploaded to your Vault.
 
 :::custom-notes[Deep Dive]
 For detailed information about the validator registration process, see [Validator Registration →](/docs/vaults/how-vaults-work#validator-registration)
 :::
 
-### Validator Consolidation
-The Operator Service consolidates legacy `0x01` validators to `0x02` compound validators.
+### Exit Signatures Rotation
 
-:::custom-notes[Deep Dive]
-For detailed instructions on consolidating validators, see [Consolidate Validators →](./additional-actions/consolidate-validators)
-:::
+Exit signatures can become invalid if the oracle set changes. The Operator Service periodically checks active validators and updates outdated exit signatures by submitting rotation transactions to the Vault.
 
-### Withdrawals
+### Validator Exits
 
-When a user requests to exit their stake, the Operator Service identifies the validators from which to withdraw the assets.
-It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
-If partial withdrawals are insufficient, it proceeds with full withdrawals.
-
-:::custom-notes[Exit Queue Monitoring]
-To minimize the number of withdrawal transactions, the Operator Service submits a withdrawal transaction once every 12 hours (this interval can be reconfigured).
-:::
+Validator exits are handled by StakeWise Oracles. You can manually trigger validator exits if needed.
 
 :::custom-notes[Deep Dive]
 For detailed instructions on exiting validators manually, see [Manual Exit →](./additional-actions/manual-exit)
 :::
 
-### Vault State Update
-Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.).
+### Vault State Update (Optional)
 
-### Automated Fee Claims
-By default, the fees earned by the Vault's fee recipient remain locked in the validators. You can enable periodic fee claims through the Operator Service. In this case, the earned fees will be claimed from the Vault and sent directly to the fee recipients.
+Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours by passing the `--harvest-vault` flag to the start command, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.).
 
-:::custom-notes[Deep Dive]
-For detailed instructions on enabling fee claiming, see [Fee Claiming →](./additional-actions/fee-claiming)
-:::
+### Automated Withdrawals (Reward Splitter)
+
+You can enable periodic withdrawal of rewards for the vault's fee shareholders by passing the `--claim-fee-splitter` flag to the start command. This requires setting the operator wallet as the Fee Claimer in the vault settings.
 
 ## Next Steps
 

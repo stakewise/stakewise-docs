@@ -13,33 +13,22 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 The Operator Service can be installed in several ways: as a binary, via Docker, or built from source.
 Choose your preferred method and follow the instructions below.
 
-:::custom-warning[Vault Version Requirements]
-This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [Prerequisites →](./Prerequisites#deployed-vault) section for details on checking your Vault version and instructions for older versions.
-:::
-
 <Tabs groupId="installation-methods">
   <TabItem value="binary" label="Binary" default>
 
     ### Download
 
-    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version
+    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases/tag/v3.1.10)
     2. Select the binary file for your node's hardware
     3. Download and decompress the file
-    4. Run commands from inside the `v3-operator` folder:
-
-    ```bash
-    ./operator COMMAND --flagA=123 --flagB=xyz
-    ```
-    :::custom-notes[Note]
-      The use of flags is optional.
-    :::
+    4. Run commands from withing the `v3-operator` folder.
 
     ### Install Script (Linux and macOS)
 
-    To install the latest release, run:
+    To install a specific version to a custom location:
 
     ```bash
-    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s
+    curl -sSfL https://github.com/stakewise/v3-operator/blob/v3.1.10/scripts/install.sh | sh -s
     ```
 
     The binary will be placed in `~/bin`. Add it to your PATH:
@@ -47,25 +36,21 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ```bash
     export PATH=$PATH:~/bin
     ```
-
-    To install a specific version to a custom location:
-
-    ```bash
-    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
-    ```
-
     Run commands with:
 
     ```bash
     operator COMMAND --flagA=123 --flagB=xyz
     ```
+    :::custom-notes[Note]
+      The use of flags is optional.
+    :::
   </TabItem>
   <TabItem value="docker" label="Docker Image">
 
     ### Pull Official Image
 
     ```bash
-    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10
     ```
 
     ### Build From Source
@@ -75,7 +60,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ```bash
     git clone https://github.com/stakewise/v3-operator.git
     cd v3-operator
-    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14 .
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 .
     ```
 
     ### Run Commands
@@ -84,7 +69,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     docker run --rm -ti \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \
     src/main.py COMMAND \
     --flagA=123 \
     --flagB=xyz
@@ -113,6 +98,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ```bash
     git clone https://github.com/stakewise/v3-operator.git
     cd v3-operator
+    git checkout v3.1.10
     poetry install --only main
     ```
 

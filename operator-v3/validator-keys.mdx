@@ -10,9 +10,11 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Validator Keys
 
-After installing the Operator Service, you need to generate validator keystores for your Vault. These keystores contain the cryptographic keys that your validators will use to sign attestations and propose blocks on the Ethereum network.
+After installing the Operator Service, you need to generate **validator keystores** for your Vault. These keystores contain the cryptographic keys that your validators will use to sign attestations and propose blocks on the Ethereum network.
 
-The Operator Service provides built-in functionality to generate validator keys and keystores.
+You will also need to create and upload a **deposit data file** to connect your node to the Vault, and set up a **hot wallet** for the Operator Service to handle validator registrations.
+
+The Operator Service provides built-in functionality to generate all of the above.
 Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores.
 
 This section walks you through the validator key generation process using the Operator Service built-in tools.
@@ -34,9 +36,15 @@ This section walks you through the validator key generation process using the Op
 
      📝 Initialize Mnemonic
        ↓
-     🔐 Generate Validator Keys &rarr; 📁 Keystores + 🔑 Passwords
+     🔐 Generate Validator Keys &rarr; 📁 Keystores + 📄 Deposit Data File
+       ↓
+     💼 Create Hot Wallet
+       ↓
+     📤 Upload Deposit Data File to Vault
        ↓
      ✅ Import Keys to Consensus Client
+       ↓
+     🚀 Run Operator Service
   </pre>
 </div>
 
@@ -56,27 +64,26 @@ Follow the command prompts.
 
 <details className="custom-details">
 <summary>Example Output</summary>
-
 ```
-Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]:
-Enter your vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c
-Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]:
+Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]: hoodi
+Enter your vault address: 0xf27...10ad9
+Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]: english
 
 This is your seed phrase. Write it down and store it safely, it is the ONLY way to recover your validator keys.
 
-fish monster write banner tired laptop slender ...
+where town man expand behind ...
 
 Press any key when you have written down your mnemonic.
 
 Please type your mnemonic (separated by spaces) to confirm you have written it down
 
-: fish monster write banner tired laptop slender ...
+: where town man expand behind ...
 
 done.
-Successfully initialized configuration for StakeWise operator
+Successfully initialized configuration for vault 0xf27...10ad9
 ```
-
 </details>
+
 
 :::custom-warning[Important Security Notice]
   Keep your mnemonic safe. It is the only way to recover your validator keys.
@@ -95,21 +102,29 @@ Follow the command prompts.
 <details className="custom-details">
 <summary>Example Output</summary>
 ```
-
+Enter the vault address: 0xf27...10ad9
 Enter the number of the validator keys to generate: 3
-Enter the mnemonic for generating the validator keys: fish monster write banner tired laptop slender ...
-Enter the vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6
-Creating validator keys:		  [####################################]  3/3
+Enter the mnemonic for generating the validator keys: where town man expand behind ...
+Creating validator keys:		      [####################################]  3/3
+Generating deposit data JSON		  [####################################]  3/3
 Exporting validator keystores		  [####################################]  3/3
-
-Done. Generated 3 keys for StakeWise operator.
-Keystores saved to ~/.stakewise/0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c/keystores file
+Done. Generated 3 keys for 0xf27...10ad9 vault.
+Keystores saved to /Users/user/.stakewise/0xf27...10ad9/keystores file
+Deposit data saved to /Users/user/.stakewise/0xf27...10ad9/deposit_data.json file
 ```
 </details>
 
-:::custom-notes[Keystore Locations]
-  - Keystores are saved to `~/.stakewise/[vault address]/keystores`
-  - **Default**: A single `password.txt` file contains the password for all generated keystores
+This command generates the following files in your Vault directory (`~/.stakewise/[vault address]/`):
+
+`config.json` - Configuration file for your Vault.
+
+`deposit_data.json` - Contains validator registration information including public key, withdrawal credentials, and cryptographic signature. This file must be uploaded to your Vault (Step 5) to authorize the Operator Service to register your validators.
+
+`keystores/` directory containing:
+  - Validator keystores following [EIP-2334 ↗](https://eips.ethereum.org/EIPS/eip-2334) for deterministic key generation.
+  - `password.txt` - Password for all generated keystores.
+
+:::custom-notes[Note]
   - **Per-keystore option**: Use the `--per-keystore-password` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
 :::
 
@@ -118,6 +133,14 @@ Keystores saved to ~/.stakewise/0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c/keyst
 :::
 
 You can always add more validator keys to your Vault. For that, you need to generate new validator keys.
+
+### Alternative Key Management
+
+Validator keystores don't need to be stored locally. You can instead use:
+
+- **[Remote Signer →](./alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
+- **[HashiCorp Vault →](./alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
+- **[API Mode →](./alternative-key-management/api-mode)** — Run Operator as API service with external key management
 
 ## Step 3: Import Validator Keys
 
@@ -128,18 +151,95 @@ Upload your keystores into your validator client:
 3. Use the password from `password.txt` file
 4. Start the validator client with attached validator keys.
 
-:::custom-warning[Fee Recipient Configuration Required]
-You must use the **"Block reward recipient"** address from the **"Details"** section on the Vault page as the `suggested-fee-recipient` in your validator client. An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
+## Step 4: Create Hot Wallet
+
+Run the `create-wallet` command to create your hot wallet using your mnemonic.
+
+:::custom-notes[Note]
+This mnemonic can be the same as the one used to generate the validator keys, or a new mnemonic if you desire.
 :::
 
-## Alternative Key Management
+```bash
+./operator create-wallet
+```
 
-Validator keystores don't need to be stored locally. You can instead use:
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Enter the vault address: 0xf27...10ad9
+Enter the mnemonic for generating the wallet: where town man expand behind ...
+Done. The wallet and password saved to /Users/user/.stakewise/0xf27...10ad9/wallet directory. The wallet address is: 0x9A739D3...E4921685
+```
+</details>
 
-- **[Remote Signer →](./alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
-- **[HashiCorp Vault →](./alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
-- **[API Mode →](./alternative-key-management/api-mode)** — Run Operator as API service with external key management
+:::custom-warning[Fund Your Hot Wallet]
+Send some ETH (or xDAI for Gnosis) to this wallet for gas expenses. Each validator registration costs ~0.01 ETH at 30 Gwei gas price.
+:::
+
+## Step 5: Upload Deposit Data File to Vault
+
+Once you have created your validator keys, deposit data file, and hot wallet, you need to upload the deposit data file to the Vault to allow the Operator Service to register validators on your behalf.
+
+:::custom-notes[Multiple Operators]
+If your Vault has multiple node operators, you must first merge all operator deposit data files into a single file using the `merge-deposit-data` command before uploading.
+:::
+
+The deposit data file can be uploaded through the StakeWise UI or via the Operator Service. Only the **Vault Admin** or **Keys Manager** can perform this action.
+
+<Tabs>
+<TabItem value="ui" label="StakeWise UI">
+
+1. Connect your wallet and navigate to the [Operate page ↗](https://app.stakewise.io/operate)
+2. Select your Vault from the list
+3. Click **Settings** in the upper right corner and open the **Deposit Data** tab
+4. Upload your deposit data file by dragging and dropping it, or clicking to browse your files
+5. Click **Save** and confirm the transaction in your wallet
+
+The deposit data file will be uploaded once the transaction is confirmed on the network.
+
+</TabItem>
+<TabItem value="operator" label="Operator Service">
+
+If you cannot use the UI, you can upload the deposit data using the Operator Service.
+
+First, calculate the Merkle tree root of your deposit data:
+
+```bash
+./operator get-validators-root
+```
+
+```bash
+Enter the vault address: 0xf27...10ad9
+The validator deposit data Merkle tree root: 0x6048426ae17705a90603d7a544378bc5eb0a4ae80bb23543e0e48b323081f2b8
+```
+
+Next, find your Vault version by calling the `version` method on your Vault contract.
+
+For Vault version 1:
+  - Call the `setValidatorsRoot` method on your Vault contract
+
+For Vault version 2 or higher:
+  - Call the `setDepositDataRoot` method on the `DepositDataRegistry` contract
+
+:::custom-notes[Contract Addresses]
+`DepositDataRegistry` contracts:
+  - Ethereum: https://etherscan.io/address/0x75AB6DdCe07556639333d3Df1eaa684F5735223e
+  - Gnosis: https://gnosisscan.io/address/0x58e16621B5c0786D6667D2d54E28A20940269E16
+
+You can interact with these contracts via Etherscan or CLI tools like [eth-cli ↗](https://github.com/protofire/eth-cli). The ABI is available [here ↗](https://github.com/stakewise/v3-core/blob/v3.0.0/abi/IDepositDataRegistry.json).
+:::
+
+Steps via Etherscan:
+
+1. Navigate to the `DepositDataRegistry` contract address for your network
+2. Select the **Contract** tab, then **Write Contract**
+3. Connect your wallet (must be Vault Admin or Keys Manager)
+4. Find the `setDepositDataRoot` function
+5. Enter your Vault address and the Merkle tree root from the command above
+6. Click **Write** and confirm the transaction
+</TabItem>
+</Tabs>
 
 ## Next Steps
 
-With your validator keys generated and imported, continue to [Validators Manager →](validators-manager) to create your operator wallet and configure the necessary Vault permissions for validator management.
+🎉 Your Operator Service is now set up! Continue to [Start Operator →](start-operator) to launch your Operator Service.

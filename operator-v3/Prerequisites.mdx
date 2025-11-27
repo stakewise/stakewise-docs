@@ -23,17 +23,10 @@ Your execution node must be fully synced and running. Any client that supports t
 - **[Reth ↗](https://github.com/paradigmxyz/reth)** — (Ethereum)
 
 :::custom-warning[Configure execution client]
-Preserve event logs to ensure the Operator Service functions correctly. 
+Preserve event logs to ensure the Operator Service functions correctly.
 Some clients require specific configuration to sync event logs and prevent event log pruning:
 
 <Tabs groupId="special-config" defaultValue="erigon">
-  <TabItem value="nethermind" label="Nethermind">
-    Nethermind must be run in FastSync mode:
-    ```bash
-    nethermind --Sync.FastSync=true
-    ```
-    Avoid SnapSync mode as it skips historical event logs, keeping only recent ones.
-  </TabItem>
   <TabItem value="erigon" label="Erigon">
     ```bash
     # Ethereum Mainnet
@@ -87,24 +80,6 @@ If you don’t have a Vault yet, follow these steps:
 :::
 
 You must have an active StakeWise Vault deployed and ready for operation.
-
-:::custom-warning[Vault Version Requirements]
-The Operator Service requires:
-
-- **Ethereum**: Vault version 5
-- **Gnosis**: Vault version 3
-
-**How to check your Vault version:**
-You can find your Vault version in the **Details** section of your Vault page.
-
-**How to upgrade:**
-If your Vault is below the required version, log in as a Vault Admin and click "Upgrade" at the top of the Vault page.
-
-**Using older Vault versions:**
-If you have an older Vault and cannot upgrade, follow the documentation [here ↗](https://v3-docs.stakewise.io/for-operators/operator-service).
-:::
-
-
 
 ### Finding Your Vault Address
 

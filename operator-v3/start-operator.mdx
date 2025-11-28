@@ -10,38 +10,27 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Start Operator
 
-After completing [Validators Manager →](validators-manager) setup, you're ready to start the Operator Service to begin automated validator registrations.
-
-## Start Operator Service
-
 You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
 
-:::custom-warning[Required Flags]
-- `--vault` - Your Vault address
-- `--consensus-endpoints` - Consensus client API endpoints
-- `--execution-endpoints` - Execution client API endpoints
-:::
+## Prerequisites
+
+If you **did not** use Operator Service to generate validator keys, you will need to add the following flag:
+
+- `--keystores-dir` - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. The folder must contain either a single `password.txt` password file  for all keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt` (e.g., `keystore1.json`, `keystore1.txt`)
+
+If you **did not** use Operator Service to generate the hot wallet, you will need to add the following flags:
+
+- `--hot-wallet-file` - Path to the password-protected `.txt` file containing your hot wallet private key
+- `--hot-wallet-password-file` - Path to a `.txt` file containing the password to open the protected hot wallet private key file
+
+If you **did not** use Operator Service to generate deposit data file, or you use combined deposit data file from multiple operators, you will need to add the following flag:
+
+- `--deposit-data-file` - Path to the deposit data file (Vault directory is default)
+
 
 There are several ways to run the Operator Service, depending on how you store private keys.
 
-### Local Keystores
-
-By default, the Operator Service runs with locally stored keystores created during key creation.
-
-```bash
-./operator start \
-  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-  --consensus-endpoints=https://consensus-node \
-  --execution-endpoints=https://execution-node
-```
-
-
-
-:::custom-info[External Key Management]
-For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Management →](./alternative-key-management) section.
-:::
-
-### Running Options
+## Running Options
 
 Depending on your installation method, use the appropriate command format:
 
@@ -51,7 +40,7 @@ Depending on your installation method, use the appropriate command format:
 
     ```bash
     ./operator start \
-      --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+      --vault=0xf27...10ad9 \
       --consensus-endpoints=https://consensus-node \
       --execution-endpoints=https://execution-node
     ```
@@ -68,7 +57,7 @@ Depending on your installation method, use the appropriate command format:
     -v ~/.stakewise/:/data \
     europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.14 \
     src/main.py start-local \
-    --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+    --vault=0xf27...10ad9 \
     --data-dir=/data \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
@@ -80,44 +69,65 @@ Depending on your installation method, use the appropriate command format:
 
     ```bash
     PYTHONPATH=. poetry run python src/main.py start-local \
-    --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+    --vault=0xf27...10ad9 \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
     ```
   </TabItem>
 </Tabs>
 
-### Optional Flags
-
-| Flag | Description |
-|------|-------------|
-| <nobr>`--keystores-dir`</nobr> | The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. Required if you didn't use Operator Service to generate keys. The folder must contain either a single `password.txt` password file for all keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt` (e.g., `keystore1.json`, `keystore1.txt`) |
-| <nobr>`--keystores-password-file`</nobr> | Absolute path to the password file for decrypting keystores. Required if you didn't use Operator Service to generate keys |
-| <nobr>`--wallet-file`</nobr> | Path to the wallet keystore file. Required if you are using an existing wallet instead of the Operator Service generated wallet |
-| <nobr>`--wallet-password-file`</nobr> | Path to the password file for the wallet keystore. Required if you are using an existing wallet |
-| <nobr>`--verbose`</nobr> | Enable debug mode, prints full output on error |
-| <nobr>`--log-level`</nobr> | Logging detail level, value can be one of: 'ERROR', 'WARNING', 'INFO', 'DEBUG' |
-| <nobr>`--min-deposit-amount-gwei`</nobr> | The minimum amount (in Gwei) that must accumulate in the Vault to trigger validator registration or a top-up. Default: 10,000,000,000 Gwei (10 ETH/GNO) |
-| <nobr>`--vault-min-balance-gwei`</nobr> | The amount of assets (ETH/GNO) in Gwei that should be kept in the vault and not sent for staking. Default: 0 |
-| <nobr>`--max-validator-balance-gwei`</nobr> | The maximum balance (in Gwei) a validator can have before it is no longer eligible for top-ups. Default: 1945000000000 Gwei (1945 ETH) for Ethereum, 1800000000000 Gwei (1800 mGNO) for Gnosis |
-| <nobr>`--max-withdrawal-request-fee-gwei`</nobr> | The maximum fee (in Gwei) for submitting a withdrawal request per validator. Default: 1000 Gwei |
-| <nobr>`--min-deposit-delay`</nobr> | The minimum delay that must pass between validator registration or top-up transactions. Adjust this to control the frequency of registration transactions. Default: 3600 seconds (1 hour) |
-| <nobr>`--max-fee-per-gas-gwei`</nobr> | The maximum fee per gas for transactions. Adjust it if you want to limit the maximum gas fee you're willing to pay. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
-| <nobr>`--validator-type`</nobr> | Set to `0x01` if you want to register `0x01` validators. Default: `0x02` validators are registered |
-| <nobr>`--harvest-vault`</nobr> | Keeps your Vault synced by calling the `updateState` function of the Vault contract every 12 hours. This simplifies contract interactions and reduces gas costs for your users. By default, the Vault state is also updated whenever users interact with the Vault (deposits, withdrawals, etc.) |
-| <nobr>`--claim-fee-splitter`</nobr> | Claims fees periodically to the addresses of the shareholders. See [Fee Claiming →](./additional-actions/fee-claiming) for details |
-| <nobr>`--disable-withdrawals`</nobr> | Disables submitting partial and full withdrawals. This reduces gas costs but increases withdrawal times for users. Oracles will instead submit the exit signatures received from the Operator Service during validator registration |
-| <nobr>`--disable-validators-registration`</nobr> | Disables registering new validators |
-| <nobr>`--disable-validators-funding`</nobr> | Disables topping up existing `0x02` validators |
-| <nobr>`--concurrency`</nobr> | Number of CPU cores used to both load and create keystores |
-
-:::custom-tips[Performance Optimization]
-For optimal performance, set `--concurrency` to half your CPU cores (e.g., `--concurrency=4` for 8-core systems) to prevent overloading during keystore operations.
-:::
-
 :::custom-notes[Setup Complete]
 Congratulations 🎉! Your Operator Service is now running and ready to trigger validator registrations within your Vault. Monitor the logs to ensure validators are being registered successfully.
 :::
+
+## Optional Flags
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--min-validators-registration`</nobr> | Minimum number of validators required to start registration |
+| <nobr>`--pool-size`</nobr> | Number of processes in a pool |
+| <nobr>`--log-level`</nobr> | The log level. Options: `fatal`, `error`, `warning`, `info`, `debug` |
+| <nobr>`--log-format`</nobr> | The log record format. Options: `plain` or `json` |
+| <nobr>`--hashi-vault-parallelism`</nobr> | How many requests to K/V secrets engine to do in parallel |
+| <nobr>`--hashi-vault-key-prefix`</nobr> | Key prefix(es) in the K/V secret engine under which validator signing keys are stored |
+| <nobr>`--hashi-vault-key-path`</nobr> | Key path(s) in the K/V secret engine where validator signing keys are stored |
+| <nobr>`--hashi-vault-token`</nobr> | Authentication token for accessing HashiCorp Vault |
+| <nobr>`--hashi-vault-url`</nobr> | The base URL of the vault service (e.g., `http://vault:8200`) |
+| <nobr>`--remote-signer-url`</nobr> | The base URL of the remote signer (e.g., `http://signer:9000`) |
+| <nobr>`--vault`</nobr> | Address of the Vault to register validators for |
+| <nobr>`--consensus-endpoints`</nobr> | Comma separated list of API endpoints for consensus nodes |
+| <nobr>`--execution-jwt-secret`</nobr> | JWT secret key used for signing and verifying JSON Web Tokens when connecting to execution nodes |
+| <nobr>`--execution-endpoints`</nobr> | Comma separated list of API endpoints for execution nodes |
+| <nobr>`--harvest-vault`</nobr> | Whether to submit vault harvest transactions. Default: `false` |
+| <nobr>`-v, --verbose`</nobr> | Enable debug mode. Default: `false` |
+| <nobr>`--metrics-port`</nobr> | The Prometheus metrics port. Default: `9100` |
+| <nobr>`--metrics-prefix`</nobr> | The Prometheus metrics prefix. Default: `sw_operator` |
+| <nobr>`--metrics-host`</nobr> | The Prometheus metrics host. Default: `127.0.0.1` |
+| <nobr>`--enable-metrics`</nobr> | Whether to enable metrics server. Default: disabled |
+| <nobr>`--network`</nobr> | The network of the Vault. Options: `mainnet`, `hoodi`, `gnosis`, `chiado`. Default: network specified at `init` command |
+| <nobr>`--deposit-data-file`</nobr> | Path to the `deposit_data.json` file. Default: file generated with `create-keys` command |
+| <nobr>`--keystores-dir`</nobr> | Absolute path to the directory with all the encrypted keystores. Default: directory generated with `create-keys` command |
+| <nobr>`--keystores-password-file`</nobr> | Absolute path to the password file for decrypting keystores. Default: file generated with `create-keys` command |
+| <nobr>`--hot-wallet-file`</nobr> | Absolute path to the hot wallet. Default: file generated with `create-wallet` command |
+| <nobr>`--hot-wallet-password-file`</nobr> | Absolute path to the hot wallet password file. Default: file generated with `create-wallet` command |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum fee per gas for transactions. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
+| <nobr>`--database-dir`</nobr> | The directory where the database will be created or read from. Default: `~/.stakewise/<vault>` |
+| <nobr>`--data-dir`</nobr> | Path where the vault data will be placed. Default: `~/.stakewise` |
+
+:::custom-tips[Reduce CPU Load]
+The `--pool-size` flag can be passed with both `start` and `create-keys` commands. This flag defines the number of CPU cores used to load and create keystores. By default, Operator Service will use 100% of the CPU cores.
+Setting `--pool-size` to `(number of CPU cores) / 2` is a safe way to ensure that Operator Service does not take up too much CPU load and impact node performance during the creation and loading of keystores.
+:::
+
+:::custom-info[Environment Variables]
+Operator Service can be configured via environment variables instead of CLI flags. Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/master/.env.example) and save it as `.env`. Adjust as necessary based on your node configuration.
+
+Load environment variables before running Operator Service:
+```bash
+export $(grep -v '^#' .env | xargs)
+:::
+
+You can check the environment variables are set and loaded correctly by running `env`.
 
 ## Next Steps
 

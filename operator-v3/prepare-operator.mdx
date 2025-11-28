@@ -117,7 +117,7 @@ Deposit data saved to /Users/user/.stakewise/0xf27...10ad9/deposit_data.json fil
 This command generates the following files in your Vault directory (`~/.stakewise/[vault address]/`):
 
 1. `config.json` - Configuration file for your Vault.
-2. `deposit_data.json` - Contains validator registration information including public keys, withdrawal credentials, and cryptographic signatures. This file must be uploaded to your Vault (Step 5) to authorize the Operator Service to register your validators.
+2. `deposit_data.json` - Contains validator registration information including public keys, withdrawal credentials, and cryptographic signatures. This file must be uploaded to your Vault ([Step 5: Upload Deposit Data File →](./prepare-operator#step-5-upload-deposit-data-file-to-vault)) to authorize the Operator Service to register your validators.
 3. `keystores/` directory containing: validator keystores and `password.txt` for all generated keystores.
 
 :::custom-notes[Note]
@@ -128,7 +128,17 @@ This command generates the following files in your Vault directory (`~/.stakewis
   Protect your password files as carefully as your keystores — anyone with access to them can decrypt your keys. This applies to both the single `password.txt` file and individual per-keystore password files.
 :::
 
-You can always add more validator keys to your Vault by repeating this step.
+### Add Validator Keys to Vault
+
+You can always add more validator keys to your Vault:
+
+1. Generate new validator keys and deposit data as described in this step
+2. Upload the deposit data file to your Vault as described in [Step 5: Upload Deposit Data File →](./prepare-operator#step-5-upload-deposit-data-file-to-vault)
+
+:::custom-warning[Important]
+Uploading a new deposit data file will overwrite the existing file and consequently overwrite previously unused validator keys.
+This can be done at any point, but only by the Vault Admin or Keys Manager.
+:::
 
 ### Alternative Key Management
 

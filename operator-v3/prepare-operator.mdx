@@ -1,5 +1,5 @@
 ---
-title: 4. Validator Keys
+title: 4. Prepare Operator
 sidebar_position: 4
 ---
 
@@ -8,14 +8,14 @@ import TabItem from '@theme/TabItem';
 import Admonition from '@theme/Admonition';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# Validator Keys
+# Prepare Operator
 
 After installing the Operator Service, you need to generate **validator keystores** for your Vault. These keystores contain the cryptographic keys that your validators will use to sign attestations and propose blocks on the Ethereum network.
 
 You will also need to create and upload a **deposit data file** to connect your node to the Vault, and set up a **hot wallet** for the Operator Service to handle validator registrations.
 
 The Operator Service provides built-in functionality to generate all of the above.
-Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores.
+Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores, and existing wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline) for the Operator wallet.
 
 This section walks you through the validator key generation process using the Operator Service built-in tools.
 
@@ -32,17 +32,17 @@ This section walks you through the validator key generation process using the Op
     boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
     lineHeight: '1.8'
   }}>
-    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🔑 Validator Keys Setup</strong>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🤖 Prepare Operator</strong>
 
      📝 Initialize Mnemonic
        ↓
      🔐 Generate Validator Keys &rarr; 📁 Keystores + 📄 Deposit Data File
        ↓
+     ✅ Import Keys to Consensus Client
+       ↓
      💼 Create Hot Wallet
        ↓
      📤 Upload Deposit Data File to Vault
-       ↓
-     ✅ Import Keys to Consensus Client
        ↓
      🚀 Run Operator Service
   </pre>
@@ -116,13 +116,9 @@ Deposit data saved to /Users/user/.stakewise/0xf27...10ad9/deposit_data.json fil
 
 This command generates the following files in your Vault directory (`~/.stakewise/[vault address]/`):
 
-`config.json` - Configuration file for your Vault.
-
-`deposit_data.json` - Contains validator registration information including public key, withdrawal credentials, and cryptographic signature. This file must be uploaded to your Vault (Step 5) to authorize the Operator Service to register your validators.
-
-`keystores/` directory containing:
-  - Validator keystores following [EIP-2334 ↗](https://eips.ethereum.org/EIPS/eip-2334) for deterministic key generation.
-  - `password.txt` - Password for all generated keystores.
+1. `config.json` - Configuration file for your Vault.
+2. `deposit_data.json` - Contains validator registration information including public keys, withdrawal credentials, and cryptographic signatures. This file must be uploaded to your Vault (Step 5) to authorize the Operator Service to register your validators.
+3. `keystores/` directory containing: validator keystores and `password.txt` for all generated keystores.
 
 :::custom-notes[Note]
   - **Per-keystore option**: Use the `--per-keystore-password` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
@@ -132,7 +128,7 @@ This command generates the following files in your Vault directory (`~/.stakewis
   Protect your password files as carefully as your keystores — anyone with access to them can decrypt your keys. This applies to both the single `password.txt` file and individual per-keystore password files.
 :::
 
-You can always add more validator keys to your Vault. For that, you need to generate new validator keys.
+You can always add more validator keys to your Vault by repeating this step.
 
 ### Alternative Key Management
 
@@ -172,8 +168,12 @@ Done. The wallet and password saved to /Users/user/.stakewise/0xf27...10ad9/wall
 ```
 </details>
 
-:::custom-warning[Fund Your Hot Wallet]
-Send some ETH (or xDAI for Gnosis) to this wallet for gas expenses. Each validator registration costs ~0.01 ETH at 30 Gwei gas price.
+:::custom-warning[Wallet Balance Warning]
+  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
+
+    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
+    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
+    - Monitor balance regularly to prevent registration failures
 :::
 
 ## Step 5: Upload Deposit Data File to Vault

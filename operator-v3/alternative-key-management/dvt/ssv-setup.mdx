@@ -65,28 +65,11 @@ This command will generate `encrypted_private_key.json` containing your encrypte
 <details className="custom-details">
 <summary>encrypted_private_key.json</summary>
 
-```json {22}
+```json
 {
-  "checksum": {
-    "function": "sha256",
-    "message": "4abcbd7fffd92cd911f490d21fc6a8cd4a1f8fcfeab2e1da38d51d99103e4252",
-    "params": {}
-  },
-  "cipher": {
-    "function": "aes-128-ctr",
-    "message": "ee58cc1bc1ab53a3333f97d4bc3c8eb...",
-    "params": { "iv": "e4f98b6bbde33006f1178b4bbe0b32c1" }
-  },
-  "kdf": {
-    "function": "pbkdf2",
-    "message": "",
-    "params": {
-      "c": 262144,
-      "dklen": 32,
-      "prf": "hmac-sha256",
-      "salt": "17d70de541658cd9e5f02105ea1887e7a2a8f0e3dd8b9769f12b821b1e0bc96f"
-    }
-  },
+  "checksum": { ... },
+  "cipher": { ... },
+  "kdf": { ... },
   "pubkey": "LS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBNDF5..."
 }
 ```
@@ -210,7 +193,7 @@ This command shows container logs to verify startup. Press Ctrl-c to detach—th
 When you set up your firewall on your SSV node machine, make sure to expose the ports that you set in the container creation command.
 The defaults are **12001 UDP** and **13001 TCP**. Additional ones are **15000 TCP** for Metrics and **16000 TCP** for Health endpoint.
 
-If you don't want to use the default ports, they can be changed in your `config.yaml` file. Be aware, they **must be changed on the container creation command** as well (simply changing the host port mappings on the Docker command isn't enough!).
+If you don't want to use the default ports, they can be changed in your `config.yaml` file. Be aware, they **must be changed on the container creation command** as well.
 
 :::custom-notes[Best Practices]
 Ensure optimal performance and correctness of your node by following recommendations such as multiple endpoints for failover for EL and CL clients, `./data/db` folder backup, weighted attestation data, parallel submissions, and Doppelganger protection to prevent double-signing.
@@ -345,5 +328,3 @@ Review transaction details and complete two transactions:
 <img src="/img/distribute-validator-keys-11.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
 14. Congratulations! 🎉 Your validator is now registered on the SSV network and being managed by your selected operators.
-
-## Deposit to Vault 😃

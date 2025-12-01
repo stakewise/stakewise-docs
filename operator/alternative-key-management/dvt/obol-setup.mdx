@@ -33,6 +33,8 @@ When using the `create-keys` command, add the `--per-keystore-password` flag to 
 
 ## Step 1: Setup Obol Cluster
 
+[Charon ↗](https://docs.obol.org/learn/charon/intro) is Obol's implementation of DVT that acts as a middleware between validator clients and the beacon node, intercepting and proxying API traffic. It uses an event-driven, multi-component architecture where each component handles a specific task in the signing workflow—from scheduling duties and reaching consensus, to collecting partial signatures and aggregating them into valid beacon chain signatures.
+
 ### Create Environment Configuration
 
 First, create a `.env` file with Charon settings:
@@ -44,10 +46,16 @@ Addresses must be in lowercase.
 ```bash
 cat <<EOF > .env
 export VAULT_CONTRACT_ADDR=[ENTER YOUR VAULT CONTRACT ADDRESS HERE]
-export FEE_RECIPIENT_ADDR=[ENTER YOUR VAULT FEE RECIPIENT ADDRESS HERE]
+export FEE_RECIPIENT_ADDR=[ENTER YOUR BLOCK REWARD RECIPIENT ADDRESS HERE]
 export NETWORK=[ENTER YOUR NETWORK NAME]
 EOF
 ```
+
+:::custom-notes[Finding Your Addresses]
+- **Vault Contract Address**: Found in the Vault page URL or Details section
+- **Block Reward Recipient**: Located in the "Block reward recipient" field on your Vault page settings
+:::
+
 
 ### Create the Cluster
 
@@ -73,9 +81,9 @@ docker run --rm -v "$(pwd):/opt/charon" -v "$HOME/.stakewise:/.stakewise" obolne
 | <nobr>`--name`</nobr> | The cluster name |
 | <nobr>`--cluster-dir`</nobr> | Parent directory containing `.charon` subdirectories from the required threshold of nodes (default `"./"`) |
 | <nobr>`--withdrawal-addresses`</nobr> | Comma separated list of Ethereum addresses to receive returned stake and rewards. Provide single address or one per validator |
-| <nobr>`--fee-recipient-addresses`</nobr> | Comma separated list of fee recipient addresses. Provide single address or one per validator |
+| <nobr>`--fee-recipient-addresses`</nobr> | Comma separated list of fee recipient addresses. Provide single address or one per validator. **Must match** the "Block reward recipient" address on your Vault page |
 | <nobr>`--nodes`</nobr> | Number of Charon nodes in the cluster. Minimum is 3 |
-| <nobr>`--network`</nobr> | Ethereum network. Options: mainnet, goerli, sepolia, hoodi, holesky, gnosis, chiado (default "mainnet") |
+| <nobr>`--network`</nobr> | Ethereum network. Options: mainnet, hoodi, gnosis, chiado (default "mainnet") |
 | <nobr>`--split-existing-keys`</nobr> | Split existing validator private key into distributed key shares |
 | <nobr>`--split-keys-dir`</nobr> | Directory containing keys to split. Expects `keystore-*.json` and `keystore-*.txt`. Requires `--split-existing-keys` |
 :::
@@ -118,8 +126,6 @@ Backup the `./.charon` folder before proceeding to deployment.
 :::
 
 ## Step 2: Run Nodes, Validators and Charon Client
-
-[Charon ↗](https://docs.obol.org/learn/charon/intro) is Obol's implementation of DVT that acts as a middleware between validator clients and the beacon node, intercepting and proxying API traffic. It uses an event-driven, multi-component architecture where each component handles a specific task in the signing workflow—from scheduling duties and reaching consensus, to collecting partial signatures and aggregating them into valid beacon chain signatures.
 
 This `docker-compose.yml` launches a full Obol/Charon distributed validator stack for Ethereum mainnet,
 consisting of Geth (execution client), Lighthouse (consensus client), MEV-boost, Charon (relay + 3 nodes), and validator clients (3x Teku: one per Charon node) (vc0/vc1/vc2).
@@ -287,7 +293,8 @@ services:
       validator-client
       --network=auto
       --beacon-node-api-endpoint="http://node0:3600"
-      --validators-proposer-default-fee-recipient=[ENTER YOUR VAULT FEE RECIPIENT ADDRESS HERE]
+      --validators-proposer-default-fee-recipient=[ENTER YOUR BLOCK REWARD RECIPIENT ADDRESS HERE]
+      --validators-builder-registration-default-enabled=true
       --validator-keys="/opt/charon/validator_keys:/opt/charon/validator_keys"
       --validators-keystore-locking-enabled=false
     volumes:
@@ -303,7 +310,8 @@ services:
       validator-client
       --network=auto
       --beacon-node-api-endpoint="http://node1:3600"
-      --validators-proposer-default-fee-recipient=[ENTER YOUR VAULT FEE RECIPIENT ADDRESS HERE]
+      --validators-proposer-default-fee-recipient=[ENTER YOUR BLOCK REWARD RECIPIENT ADDRESS HERE]
+      --validators-builder-registration-default-enabled=true
       --validator-keys="/opt/charon/validator_keys:/opt/charon/validator_keys"
       --validators-keystore-locking-enabled=false
     volumes:
@@ -319,7 +327,8 @@ services:
       validator-client
       --network=auto
       --beacon-node-api-endpoint="http://node2:3600"
-      --validators-proposer-default-fee-recipient=[ENTER YOUR VAULT FEE RECIPIENT ADDRESS HERE]
+      --validators-proposer-default-fee-recipient=[ENTER YOUR BLOCK REWARD RECIPIENT ADDRESS HERE]
+      --validators-builder-registration-default-enabled=true
       --validator-keys="/opt/charon/validator_keys:/opt/charon/validator_keys"
       --validators-keystore-locking-enabled=false
     volumes:
@@ -329,8 +338,8 @@ services:
 
 </details>
 
-:::custom-warning[Fee Recipient Address]
-Replace `[ENTER YOUR VAULT FEE RECIPIENT ADDRESS HERE]` inside `docker-compose.yml` file with your Block reward recipient address.
+:::custom-warning[Block Reward Recipient Address]
+Replace `[ENTER YOUR BLOCK REWARD RECIPIENT ADDRESS HERE]` inside `docker-compose.yml` file with your Block reward recipient address.
 :::
 
 1. Copy the `docker-compose.yml` file below to the same directory as your `.charon` folder

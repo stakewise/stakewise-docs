@@ -2,11 +2,11 @@
 
 Distributed Validator Technology (DVT) is a security mechanism that distributes validator key management and signing operations across multiple participants. This eliminates single points of failure and increases validator resilience.
 
-Validators have two public-private key pairs: active keys for consensus participation (block proposals, attestations) and withdrawal credentials that determine where staked funds can be sent upon exit. While withdrawal credentials can remain offline, validator keys must stay online continuously, making them vulnerable to compromise.
+Validators have a single public-private key pair (the validator key) for consensus participation (block proposals, attestations) and a withdrawal address that determines where staked funds are sent upon exit. Validator keys must stay online continuously, making them vulnerable to compromise.
 
 DVT addresses this vulnerability by encrypting and splitting the validator key into shares distributed across multiple nodes. Stakers can keep the original key in cold storage while the network operates using these shares. A threshold number of shares (e.g., 3 out of 4) can collectively produce valid signatures, meaning one node can fail without disrupting validator operations. The system relies on distributed key generation, threshold signature schemes, and multiparty computation to ensure no single node ever possesses the complete key.
 
-StakeWise Vaults support both [Obol ↗](https://docs.obol.org/learn/readme/key-concepts) and [SSV ↗](https://docs.ssv.network/) DVT technologies, offering an additional layer of security and decentralization. This gives operators flexibility in how they secure their validators.
+StakeWise Vaults support both [Obol ↗](https://obol.org) and [SSV ↗](https://docs.ssv.network/) DVT technologies, offering an additional layer of security and decentralization. This gives operators flexibility in how they secure their validators.
 
 
 <div style={{display: 'flex', justifyContent: 'center', margin: '20px 0', padding: '0 20px'}}>

@@ -1,0 +1,72 @@
+---
+title: What is StakeWise
+sidebar_position: 3
+toc_min_heading_level: 2
+toc_max_heading_level: 5
+---
+
+```mdx-code-block
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
+```
+
+# What is StakeWise?
+
+StakeWise is a liquid staking protocol that gives you the benefits of permissionless and non-custodial liquid staking without the trade-offs.
+
+Operating across Ethereum and Gnosis Chain, StakeWise creates a comprehensive staking network that serves diverse participants through three distinct approaches:
+
+**[Vaults →](../vaults/intro)**: For advanced users seeking full control, choose from diverse staking pool offerings with distinct fee structures, MEV strategies, and risk profiles, empowering you to easily earn staking yields with complete control over your assets and validator selection. Instant liquidity and DeFi integrations are available on-demand by opting to receive osToken when staking.
+
+**[One-click staking →](../guides/staking/one-click-staking)**: For users who want to start earning immediately without thinking twice, go for streamlined staking that automatically allocates your stake across proven Vaults that minimize fees and maximize your yield. osToken is issued automatically, granting access to instant liquidity and DeFi by default.
+
+**[Run own Vault →](../guides/running-a-vault/how-to-create-a-vault)**: For users and organizations that seek to run their own nodes to access liquidity for their stake, or offer a staking service to others, Vaults allow you to set up isolated, non-custodial, and customizable staking environments that preserve optional access to liquidity via osToken. Vaults already handle billions of US dollars worth of staked assets, powering solutions from [MetaMask ↗](https://metamask.io/), [Chorus One ↗](https://chorus.one/), [Blockchain.com ↗](http://Blockchain.com), [Ledger Live ↗](https://www.ledger.com/ledger-live), and others.
+
+StakeWise also continuously develops innovative strategies to maximize your rewards, such as [Boost →](../guides/defi/boost-feature), with more features coming soon.
+
+## Architecture
+StakeWise's modular architecture is built on three foundational pillars: Vaults, osToken, and Oracles.
+
+### Vaults — Customizable Smart Contracts
+Vaults are isolated, highly customizable smart contracts that function as individual staking pools.
+Pool operators can accept deposits from stakers, earn fees, and offer tailored staking services.
+This open marketplace model democratizes liquid staking, giving you the freedom to choose how and where to stake.
+
+**Key Features**
+
+- **Permissionless & Customizable**: Launch your own Vault without approval, control fees, MEV strategies, and validator selection. Make your Vault private or <Tooltip content={<><strong>OFAC-compliant</strong> <br /> Compliance with the Office of Foreign Assets Control regulations, which may restrict access to certain jurisdictions or sanctioned entities.</>}>OFAC-compliant</Tooltip>.
+
+- **Open Marketplace**: Choose from diverse Vaults based on your preferences for decentralization, yield, or specialized strategies.
+
+- **Risk Isolation**: Each Vault operates independently — issues in one do not affect others.
+
+:::custom-notes[Deep Dive]
+Learn more about [Vaults →](../vaults/intro)
+:::
+
+### osToken — Overcollateralized Staking Token
+osToken is StakeWise's liquid staking token: osETH on Ethereum and osGNO on Gnosis Chain.
+Designed with safety and composability at its core, osToken accrues staking rewards while maintaining full liquidity for DeFi participation.
+It can be minted by staking in Vaults or acquired directly on a DEX to start earning rewards instantly.
+
+**Key Features**
+
+- **Protected & Rewarding**: Overcollateralized by design, with auto-compounding rewards and integrated slashing protection.
+
+- **DeFi Ready**: Fully composable and compatible with lending, trading, and yield-farming protocols.
+
+:::custom-notes[Deep Dive]
+Learn more about [osToken →](../ostoken/intro)
+:::
+
+### Oracles — Decentralized Infrastructure Layer
+The decentralized Oracle network connects StakeWise smart contracts to Ethereum's <Tooltip content={<><strong>Beacon Chain</strong> <br /> Ethereum's consensus layer, a peer-to-peer network of consensus clients that handles block gossip and consensus logic. It is responsible for things like block and attestation handling, running the fork choice algorithm, and managing rewards and penalties for validators.</>}>Beacon Chain</Tooltip>, enabling transparent and trustless operations while preserving the protocol's security and non-custodial design.
+
+**Key Functions**
+
+- **Validator Lifecycle**: Manages validator registration, consolidations, rewards, penalties, and exits.
+
+- **Token Stability**: Maintains accurate osToken exchange rates and safeguards peg stability. [Learn more →](../ostoken/how-ostoken-works#reward-accrual--fee-mechanism)
+
+:::custom-notes[Deep Dive]
+Learn more about [Oracles →](../oracles/intro)
+:::

@@ -4,7 +4,19 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 const sidebars: SidebarsConfig = {
   docsSidebar: [
     'docs/overview',
-    'docs/intro',
+    {
+      type: 'category',
+      label: 'StakeWise Protocol',
+      link: {
+        type: 'doc',
+        id: 'docs/stakewise-protocol/intro',
+      },
+      items: [
+        'docs/stakewise-protocol/understanding-liquid-staking',
+        'docs/stakewise-protocol/what-is-stakewise',
+        'docs/stakewise-protocol/governance-swise-token',
+      ],
+    },
     {
       type: 'category',
       label: 'Vaults',
@@ -97,7 +109,6 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/guides/defi/boost-feature',
-        'docs/guides/defi/swise-eth-liquidity',
       ],
     },
     {

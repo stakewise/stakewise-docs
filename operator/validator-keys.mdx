@@ -1,0 +1,145 @@
+---
+title: 4. Validator Keys
+sidebar_position: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Validator Keys
+
+After installing the Operator Service, you need to generate validator keystores for your Vault. These keystores contain the cryptographic keys that your validators will use to sign attestations and propose blocks on the Ethereum network.
+
+The Operator Service provides built-in functionality to generate validator keys and keystores.
+Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores.
+
+This section walks you through the validator key generation process using the Operator Service built-in tools.
+
+<div style={{textAlign: 'center', margin: '2rem 0'}}>
+  <pre style={{
+    display: 'inline-block',
+    textAlign: 'left',
+    background: 'var(--ifm-color-emphasis-200)',
+    color: 'var(--ifm-color-primary)',
+    padding: '2rem',
+    borderRadius: '12px',
+    fontSize: '14px',
+    fontFamily: 'Monaco, monospace',
+    boxShadow: '0 10px 30px rgba(1,137,112,0.2)',
+    lineHeight: '1.8'
+  }}>
+    <strong style={{fontSize: '16px', borderBottom: '2px solid #018970', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🔑 Validator Keys Setup</strong>
+
+     📝 Initialize Mnemonic
+       ↓
+     🔐 Generate Validator Keys &rarr; 📁 Keystores + 🔑 Passwords
+       ↓
+     ✅ Import Keys to Consensus Client
+  </pre>
+</div>
+
+## Step 1: Initialize Mnemonic
+
+:::custom-notes[Initialize Configuration]
+  Run the `init` command to set up your mnemonic used to derive your validator keys.
+:::
+
+For example, if running Operator Service from binary:
+
+```bash
+./operator init
+```
+
+Follow the command prompts.
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```
+Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]:
+Enter your vault address: 0xF82...d9E6c
+Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]:
+
+This is your seed phrase. Write it down and store it safely, it is the ONLY way to recover your validator keys.
+
+fish monster write banner tired laptop slender ...
+
+Press any key when you have written down your mnemonic.
+
+Please type your mnemonic (separated by spaces) to confirm you have written it down
+
+: fish monster write banner tired laptop slender ...
+
+done.
+Successfully initialized configuration for StakeWise operator
+```
+
+</details>
+
+:::custom-warning[Important Security Notice]
+  Keep your mnemonic safe. It is the only way to recover your validator keys.
+:::
+
+## Step 2: Generate Validator Keys
+
+Generate validator keystores from your mnemonic using:
+
+```bash
+./operator create-keys
+```
+
+Follow the command prompts.
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+
+Enter the number of the validator keys to generate: 3
+Enter the mnemonic for generating the validator keys: fish monster write banner tired laptop slender ...
+Enter the vault address: 0xF82...cd9E6
+Creating validator keys:		  [####################################]  3/3
+Exporting validator keystores		  [####################################]  3/3
+
+Done. Generated 3 keys for StakeWise operator.
+Keystores saved to ~/.stakewise/0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c/keystores file
+```
+</details>
+
+:::custom-notes[Keystore Locations]
+  - Keystores are saved to `~/.stakewise/[vault address]/keystores`
+  - **Default**: A single `password.txt` file contains the password for all generated keystores
+  - **Per-keystore option**: Use the `--per-keystore-password` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
+:::
+
+:::custom-warning[Important]
+  Protect your password files as carefully as your keystores — anyone with access to them can decrypt your keys. This applies to both the single `password.txt` file and individual per-keystore password files.
+:::
+
+You can always add more validator keys to your Vault. For that, you need to generate new validator keys.
+
+## Step 3: Import Validator Keys
+
+Upload your keystores into your validator client:
+
+1. Locate your keystores in `~/.stakewise/[vault address]/keystores`
+2. Follow your consensus client's guide for importing keys
+3. Use the password from `password.txt` file
+4. Start the validator client with attached validator keys.
+
+:::custom-warning[Fee Recipient Configuration Required]
+You must use the **"Block reward recipient"** address from the **"Details"** section on the Vault page as the `suggested-fee-recipient` in your validator client. An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
+:::
+
+## Alternative Key Management
+
+Validator keystores don't need to be stored locally. You can instead use:
+
+- **[Remote Signer →](./alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
+- **[HashiCorp Vault →](./alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
+- **[API Mode →](./alternative-key-management/api-mode)** — Run Operator as API service with external key management
+
+## Next Steps
+
+With your validator keys generated and imported, continue to [Validators Manager →](validators-manager) to create your operator wallet and configure the necessary Vault permissions for validator management.

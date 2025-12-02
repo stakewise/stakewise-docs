@@ -1,5 +1,5 @@
 ---
-title: Boost feature
+title: Boost Feature
 sidebar_position: 1
 ---
 
@@ -50,9 +50,9 @@ The strategy extracts the difference between additional staking rewards and Aave
 
 Boost eliminates depeg-related liquidation risks through Aave's use of StakeWise's native price feed for osTokens instead of volatile secondary market prices. This means osToken price fluctuations on DEXs cannot trigger liquidations, as your collateral value always equals the osToken redemption value rather than market price. This design ensures that temporary market volatility doesn't endanger your boosted position.
 
-#### Escape Hatch
+#### Automatic Unboost
 
-As an additional safety layer, Boost includes an "escape hatch" mechanism that activates when positions approach the liquidation threshold. When any boosted position reaches 94.5% LTV, anyone in the community can trigger an automatic unboosting transaction to protect the user. The StakeWise core team actively monitors all boosted positions and will trigger these protective exits when necessary, with all funds always remaining under the original owner's control.
+As an additional safety layer, Boost includes an automatic unboost mechanism that activates when positions approach the liquidation threshold. When any boosted position reaches 94.5% LTV, anyone in the community can trigger an automatic unboosting transaction to protect the user. The StakeWise core team actively monitors all boosted positions and will trigger these protective exits when necessary, with all funds always remaining under the original owner's control.
 
 ### How to Use Boost
 

@@ -1,0 +1,29 @@
+---
+title: Manual Exit
+sidebar_position: 3
+---
+
+# Manual Exit
+
+Manual exits should only be used in specific scenarios: emergency, maintenance, testing, etc.
+
+```bash
+./operator validators-exit
+```
+Follow the prompts to confirm your consensus node endpoint, Vault address, and the validator indexes to exit.
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Enter the comma separated list of API endpoints for consensus nodes: https://example.com
+Enter your vault address: 0xf27...10ad9
+Are you sure you want to exit 3 validators with indexes: 513571, 513572, 513861? [y/N]: y
+Validators 513571, 513572, 513861 exits successfully initiated
+```
+</details>
+
+### Configuration Options
+
+- `--count` - The number of validators to exit.
+- `--remote-signer-url` - The base URL of the remote signer, e.g. http://signer:9000
+- `--data-dir` - Path where the vault data is placed. Default is ~/.stakewise.

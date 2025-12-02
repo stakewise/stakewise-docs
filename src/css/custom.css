@@ -6,14 +6,21 @@
   --fog: #FFFFFF4D; /* fog effect */
   --ifm-color-info-dark: #018970;
   --code: #f6f7f8; /* code background */
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.2);
+  --grey: #666666;
+  --blue: #e3f2fd;
   --ifm-navbar-height: 4.5rem;
   --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --navbar-bg: #c0d4c6; /* navbar background */
 }
 
 html[data-theme='dark'] {
   --coral: #40E9DE;
+  --blue: #2c3d4a;
+  --grey: #aaaaaa;
   --fog: #FFFFFF1A;
   --ifm-color-info-dark: #40E9DE;
+  --navbar-bg: #2b3c3f; /* navbar background */
 }
 
 html {
@@ -131,12 +138,8 @@ a:hover {
   padding: 2px;
 }
 
-html[data-theme='light'] .navbar {
-  background: #c0d4c6;
-}
-
-html[data-theme='dark'] .navbar {
-  background: #2b3c3f;
+.navbar {
+  background: var(--navbar-bg);
 }
 
 html[data-theme='light'] .menu {
@@ -451,4 +454,23 @@ pre[class*="language-bash"],
 
 .theme-doc-sidebar-menu {
   padding-bottom: 50px;
+}
+
+/* Dropdown menu styling to match navbar */
+.dropdown__menu {
+  background: var(--navbar-bg);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme='dark'] .dropdown__menu {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Dropdown menu items hover effect */
+html[data-theme='light'] .dropdown__link:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+html[data-theme='dark'] .dropdown__link:hover {
+  background: rgba(255, 255, 255, 0.1);
 }

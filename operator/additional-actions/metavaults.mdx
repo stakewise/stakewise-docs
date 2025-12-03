@@ -1,0 +1,78 @@
+---
+title: Meta Vaults
+sidebar_position: 10
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Meta Vaults
+
+## What are Meta Vaults?
+
+MetaVaults don't run validators directly, instead, they delegate assets to other Vaults (called sub-vaults within the MetaVault system) that handle the actual validator operations. Sub-vaults can themselves also be MetaVaults.
+
+### How MetaVaults Work
+
+MetaVaults receive user deposits and distribute them across sub-vaults according to the curator strategy.
+
+The **Curator** is a new contract that manages how ETH is allocated to and withdrawn from sub-vaults. To be used, a curator contract must be approved by the DAO and added to the `CuratorsRegistry` contract.
+
+Currently, there is one curator contract available — the `BalancedCurator` — which distributes and withdraws assets evenly across all 100% LTV Vaults.
+
+### Benefits of MetaVaults
+
+**Customizable asset placement:** Multiple layers of Vaults can sit on top of each other to enable sophisticated setups that utilize a mix of underlying validators to maximize redundancy, liquidity, and rewards. For example, a separate MetaVault can be deployed per each institutional customer, tapping into a single underlying sub-Vault that runs all validators, to allow asset segregation among users while maximizing validator fleet efficiency.
+
+**Flexible fee structures:** Different MetaVaults can charge different fees for different clients — especially helpful for establishing flexible fee structures for institutional clients.
+
+## `process-metavaults` Command
+
+The `process-metavaults` command updates states and processes deposits and exits for one or more meta vaults.
+
+### Command Usage
+
+```bash
+./operator process-metavaults [OPTIONS]
+```
+
+:::custom-warning[Required Parameters]
+The following parameters are required:
+- `--network` - The network: `mainnet`, `hoodi`, `gnosis`, or `chiado`
+- `--execution-endpoints` - Comma separated API endpoints for execution nodes
+- `--graph-endpoint` - API endpoint for graph node
+- `--vaults` - Comma separated addresses of meta vaults to process
+- **Wallet authentication** - Either `--wallet-file` and `--wallet-password-file`, OR `WALLET_PRIVATE_KEY` environment variable
+:::
+
+### Optional Flags
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--min-deposit-amount-gwei`</nobr> | Minimum amount in gwei that must accumulate in the vault to trigger deposits to the sub-vaults. Minimum allowed: 1,000,000,000 Gwei (1 ETH/GNO). Default: 10,000,000,000 Gwei (10 ETH/GNO) |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum fee per gas for transactions. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
+| <nobr>`-v, --verbose`</nobr> | Enable debug mode. Default: false |
+
+## Example
+
+```bash
+./operator process-metavaults \
+ --wallet-file=/Users/user/wallet.json \
+ --wallet-password-file=/home/user/wallet-pass.txt
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```bash
+Starting operator service, version v4.0.15
+Started meta vault processing
+Fetching meta vaults
+Processing meta vault: 0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
+Getting state update calls for meta vault 0x34284C27A2304132aF751b0dEc5bBa2CF98eD039
+Sub vault 0xba447498DC4c169f2b4f427B2c4D532320457E89 is not harvestable, skipping
+No sub vault exit requests to claim for meta vault 0x34284C27A2304132aF751b0dEc5bBa2CF98eD039
+Meta vault 0x34284C27A2304132aF751b0dEc5bBa2CF98eD039 state is up-to-date, no updates needed
+```
+</details>

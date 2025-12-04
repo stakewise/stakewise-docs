@@ -64,6 +64,16 @@ Done. The wallet and password saved to ~/.stakewise/0xF82f6E46d0d0a9536b9CA4bc48
 
 You may reuse the same mnemonic as your validator keys or generate a separate one for added security.
 
+:::custom-info[Note]
+Instead of creating a wallet with the `create-wallet` command, you can authenticate using a private key directly through an environment variable:
+
+```bash
+export WALLET_PRIVATE_KEY="0xyour_private_key_here"
+```
+
+If both `WALLET_PRIVATE_KEY` and wallet keystore files are configured, the private key takes precedence over the wallet files.
+:::
+
 :::custom-warning[Wallet Balance Warning]
   Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
 

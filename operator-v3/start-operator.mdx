@@ -55,10 +55,7 @@ Depending on your installation method, use the appropriate command format:
     docker run --restart on-failure:10 \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-<<<<<<< HEAD
-=======
     europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \
->>>>>>> operator-versioning
     src/main.py start-local \
     --vault=0xf27...10ad9 \
     --data-dir=/data \

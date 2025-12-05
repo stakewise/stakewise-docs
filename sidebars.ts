@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
         'docs/vaults/staking-into-a-vault',
         'docs/vaults/vault-performance',
         'docs/vaults/technical-architecture',
+        'docs/vaults/meta-vaults',
       ],
     },
     {

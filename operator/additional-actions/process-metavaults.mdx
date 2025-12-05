@@ -27,6 +27,7 @@ The `process-meta-vaults` command updates states and processes deposits and exit
 :::custom-warning[Required Parameters]
 The following parameters are required:
 - `--vaults` - Comma separated addresses of meta vaults to process
+- `--execution-endpoints` - Comma separated API endpoints for execution nodes
 - Either `--wallet-file` and `--wallet-password-file` flags or `WALLET_PRIVATE_KEY` environment variable
 :::
 
@@ -35,7 +36,6 @@ The following parameters are required:
 | Flag | Description |
 |------|-------------|
 | <nobr>`--network`</nobr> | The network: `mainnet`, `hoodi`, `gnosis`, or `chiado` |
-| <nobr>`--execution-endpoints`</nobr> | Comma separated API endpoints for execution nodes |
 | <nobr>`--graph-endpoint`</nobr> | API endpoint for graph node |
 | <nobr>`--min-deposit-amount-gwei`</nobr> | Minimum amount in gwei that must accumulate in the vault to trigger deposits to the sub-vaults. Default: 10,000,000,000 Gwei (10 ETH/GNO) |
 | <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum fee per gas for transactions. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
@@ -47,7 +47,8 @@ The following parameters are required:
 ./operator process-meta-vaults \
  --vaults=0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
  --wallet-file=/Users/user/wallet.json \
- --wallet-password-file=/home/user/wallet-pass.txt
+ --wallet-password-file=/home/user/wallet-pass.txt \
+ --execution-endpoints=https://execution-node
 ```
 
 <details className="custom-details">

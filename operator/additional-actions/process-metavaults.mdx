@@ -1,0 +1,66 @@
+---
+title: Process Meta Vaults
+sidebar_position: 10
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Process Meta Vaults
+
+:::custom-notes[Learn More]
+To learn more about what Meta Vaults are and how they work, see the [Meta Vaults →](/docs/vaults/meta-vaults)
+:::
+
+## `process-meta-vaults` Command
+
+The `process-meta-vaults` command updates states and processes deposits and exits for one or more meta vaults.
+
+### Command Usage
+
+```bash
+./operator process-meta-vaults [OPTIONS]
+```
+
+:::custom-warning[Required Parameters]
+The following parameters are required:
+- `--vaults` - Comma separated addresses of meta vaults to process
+- `--execution-endpoints` - Comma separated API endpoints for execution nodes
+- Either `--wallet-file` and `--wallet-password-file` flags or `WALLET_PRIVATE_KEY` environment variable
+:::
+
+### Optional Flags
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--network`</nobr> | The network: `mainnet`, `hoodi`, `gnosis`, or `chiado` |
+| <nobr>`--graph-endpoint`</nobr> | API endpoint for graph node |
+| <nobr>`--min-deposit-amount-gwei`</nobr> | Minimum amount in gwei that must accumulate in the vault to trigger deposits to the sub-vaults. Default: 10,000,000,000 Gwei (10 ETH/GNO) |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum fee per gas for transactions. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
+| <nobr>`-v, --verbose`</nobr> | Enable debug mode. Default: false |
+
+## Example
+
+```bash
+./operator process-meta-vaults \
+ --vaults=0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
+ --wallet-file=/Users/user/wallet.json \
+ --wallet-password-file=/home/user/wallet-pass.txt \
+ --execution-endpoints=https://execution-node
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```bash
+Starting operator service, version v4.0.17
+Started meta vault processing
+Fetching meta vaults
+Processing meta vault: 0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
+Getting state update calls for meta vault 0x34284C27A2304132aF751b0dEc5bBa2CF98eD039
+Sub vault 0xba447498DC4c169f2b4f427B2c4D532320457E89 is not harvestable, skipping
+No sub vault exit requests to claim for meta vault 0x34284C27A2304132aF751b0dEc5bBa2CF98eD039
+Meta vault 0x34284C27A2304132aF751b0dEc5bBa2CF98eD039 state is up-to-date, no updates needed
+```
+</details>

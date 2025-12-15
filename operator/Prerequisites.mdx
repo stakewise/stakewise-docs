@@ -10,9 +10,25 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Prerequisites
 
-Before installing the Operator Service, ensure your node infrastructure meets the technical requirements below for reliable operation.
+Before installing the Operator Service, you need to decide how to set up your node infrastructure.
 
-## Execution Client
+:::custom-info[Two Setup Options]
+**Option 1: Automated Node Setup (Recommended for Beginners)**
+- Use the Operator Service's built-in commands to automatically install and manage Reth (execution) and Lighthouse (consensus) clients
+- See [Automated Node Setup →](node-setup) for the simplified setup process
+- Skip the manual client setup sections below
+
+**Option 2: Manual Node Setup (Advanced)**
+- Manually install and configure your preferred execution and consensus clients
+- Provides more flexibility and control over client selection
+- Continue reading below for manual setup requirements
+:::
+
+## Manual Node Setup Requirements
+
+If you choose manual setup, ensure your node infrastructure meets the technical requirements below for reliable operation.
+
+### Execution Client
 
 Your execution node must be fully synced and running. Any client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/api-documentation/) can be used:
 
@@ -59,7 +75,7 @@ Some clients require specific configuration to sync event logs and prevent event
 
 :::
 
-## Consensus Client
+### Consensus Client
 
 Your consensus node must also be fully synced and running. Any client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
 
@@ -129,4 +145,8 @@ You will need the Vault contract address for Operator Service configuration:
 </Tabs>
 :::
 
-🎉 Congratulations! Your infrastructure is now ready for the [Operator Service Installation →](Installation).
+## Next Steps
+
+Choose your path forward:
+- **Automated Setup**: Proceed to [Automated Node Setup →](node-setup) to install and manage nodes automatically
+- **Manual Setup**: If you've manually set up your execution and consensus clients, continue to [Operator Service Installation →](Installation)

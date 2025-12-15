@@ -1,0 +1,94 @@
+---
+title: 3. Automated Node Setup
+sidebar_position: 3
+---
+
+# Automated Node Setup
+
+Starting with v4.1.0, the Operator Service can automatically install and manage [Reth ↗](https://github.com/paradigmxyz/reth) (execution) and [Lighthouse ↗](https://github.com/sigp/lighthouse) (consensus) clients.
+
+:::custom-info[Choose Your Setup Path]
+- **Automated** (this page): Let the Operator Service handle Reth and Lighthouse
+- **Manual**: Install your preferred clients manually, then skip to [Installation →](Installation)
+:::
+
+## Workflow
+
+1. Run `node-install --network=mainnet` to download Reth and Lighthouse
+2. Run `node-start --vault=YOUR_VAULT` to start syncing
+3. Run `node-status --vault=YOUR_VAULT` to monitor sync progress
+
+## `node-install`
+
+Installs Reth and Lighthouse binaries to the data directory.
+
+```bash
+./operator node-install --network=mainnet
+```
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `--network` | Network for your vault: `mainnet`, `hoodi`, or `gnosis` (required) |
+| `--data-dir` | Path where node data will be placed. Default: `~/.stakewise` |
+| `--lighthouse-version` | Lighthouse version to install. Default: `v8.0.0` |
+| `--reth-version` | Reth version to install. Default: `v1.8.2` |
+
+## `node-start`
+
+Starts execution, consensus, and validator nodes.
+
+```bash
+./operator node-start \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf
+```
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `--vault` | Your Vault contract address (required) |
+| `--data-dir` | Path where node data will be placed. Default: `~/.stakewise` |
+| `--print-execution-logs` | Print execution node logs |
+| `--print-consensus-logs` | Print consensus node logs |
+| `--print-validator-logs` | Print validator node logs |
+| `--no-confirm` | Skip confirmation messages |
+
+## `node-status`
+
+Displays sync status of execution and consensus clients, plus validator information.
+
+```bash
+./operator node-status \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf
+```
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `--vault` | Your Vault contract address (required) |
+| `--data-dir` | Path where node data is located. Default: `~/.stakewise` |
+| `--output-format` | Output format: `text` or `json`. Default: `text` |
+| `-v, --verbose` | Enable debug mode |
+| `--enable-file-logging` | Log output to file in nodes directory |
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Consensus node status:
+  Is syncing: True
+  Head slot: 1914271
+  Sync distance: 15562
+  Estimated time to sync: 1h 26m 12s
+Execution node status:
+  Is syncing: True
+  Block number: 1769633
+  Sync distance: 27305
+  Estimated time to sync: 9h 20m 38s
+Validator activity:
+  Active validators: 0
+  Total validators: 10
+```
+</details>

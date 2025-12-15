@@ -65,7 +65,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ### Pull Official Image
 
     ```bash
-    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.0
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.1
     ```
 
     ### Build From Source
@@ -75,7 +75,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ```bash
     git clone https://github.com/stakewise/v3-operator.git
     cd v3-operator
-    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.0 .
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.1 .
     ```
 
     ### Run Commands
@@ -84,7 +84,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     docker run --rm -ti \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.0 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.1 \
     src/main.py COMMAND \
     --flagA=123 \
     --flagB=xyz

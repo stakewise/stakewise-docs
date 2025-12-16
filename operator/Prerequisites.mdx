@@ -37,7 +37,7 @@ Some clients require specific configuration to sync event logs and prevent event
   <TabItem value="erigon" label="Erigon">
     ```bash
     # Ethereum Mainnet
-    erigon --prune=receipts --prune.to=21471500
+    erigon --prune=receipts --prune.to=18470089
 
     # For other networks, adjust the block number to the Keeper contract creation block
     ```
@@ -45,11 +45,10 @@ Some clients require specific configuration to sync event logs and prevent event
   These flags prevent pruning of event logs as required by the Operator Service.
   </TabItem>
   <TabItem value="reth" label="Reth">
-    Add the following setting to your `reth.toml`:
+    Add the following option to Reth command:
 
-    ```toml
-    [prune.segments.receipts_log_filter.0x6b5815467da09daa7dc83db21c9239d98bb487b5]
-    before = 21471500
+    ```bash
+    --prune.receiptslogfilter=0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5:before:18470089
     ```
 
     The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239D98Bb487b5#code) on Ethereum Mainnet is located at

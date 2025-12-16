@@ -48,7 +48,10 @@ Some clients require specific configuration to sync event logs and prevent event
     Add the following option to Reth command:
 
     ```bash
+    # Ethereum Mainnet
     --prune.receiptslogfilter=0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5:before:18470089
+
+    # For other networks, adjust the block number to the Keeper contract creation block
     ```
 
     The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239D98Bb487b5#code) on Ethereum Mainnet is located at

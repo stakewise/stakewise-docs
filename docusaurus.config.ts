@@ -157,7 +157,7 @@ const config: Config = {
         },
         {
           label: 'Contracts',
-          to: '/contracts/networks',
+          to: '/contracts/api',
           activeBaseRegex: `/contracts/`,
           sidebarId: 'contractsSidebar',
         },
@@ -194,7 +194,7 @@ const config: Config = {
       theme: prismThemes.github,
       defaultLanguage: 'typescript',
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['json', 'bash', 'javascript', 'python'],
+      additionalLanguages: ['json', 'bash', 'javascript', 'python', 'solidity'],
     },
   } satisfies Preset.ThemeConfig,
 }

@@ -16,6 +16,11 @@ At the core of StakeWise are individual staking pools called [Vaults →](/docs/
 
 **Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
 
+:::custom-tips[Experimental Feature Available]
+Many users confuse the Operator Service with a complete staking setup. This causes difficulties during configuration, as execution and consensus clients must be installed and run manually.
+To simplify this process, we added a new experimental feature that allows the Operator Service to handle these steps automatically. See [Automated Node Setup →](node-setup).
+:::
+
 <div style={{ textAlign: "center", margin: "2rem 0" }}>
   <div
     style={{

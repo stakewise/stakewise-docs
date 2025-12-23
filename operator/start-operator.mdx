@@ -66,7 +66,7 @@ Depending on your installation method, use the appropriate command format:
     docker run --restart on-failure:10 \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.0.17 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.2 \
     src/main.py start-local \
     --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --data-dir=/data \
@@ -91,6 +91,7 @@ Depending on your installation method, use the appropriate command format:
 
 | Flag | Description |
 |------|-------------|
+| <nobr>`--run-nodes`</nobr> | Start and manage local Reth (execution), Lighthouse (consensus), and validator nodes alongside the Operator Service. Requires nodes to be installed first via `node-install`. See [Automated Node Setup →](node-setup) |
 | <nobr>`--keystores-dir`</nobr> | The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. Required if you didn't use Operator Service to generate keys. The folder must contain either a single `password.txt` password file for all keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt` (e.g., `keystore1.json`, `keystore1.txt`) |
 | <nobr>`--keystores-password-file`</nobr> | Absolute path to the password file for decrypting keystores. Required if you didn't use Operator Service to generate keys |
 | <nobr>`--wallet-file`</nobr> | Absolute path to the wallet. Default is the file generated with `create-wallet` command |

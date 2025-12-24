@@ -10,7 +10,7 @@ description: "Configuration contract for OsToken minting and liquidation paramet
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IOsTokenConfig
 
-Configuration for minting and liquidating OsToken shares
+Configuration for minting and liquidating OsToken shares.
 
 
 ## Events
@@ -68,22 +68,6 @@ struct Config {
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _owner, Config memory defaultConfig, address _redeemer) Ownable(msg.sender);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_owner`|`address`|The address of the contract owner|
-|`defaultConfig`|`Config`|The OsToken default configuration|
-|`_redeemer`|`address`|The address of the redeemer|
-
 
 ### redeemer
 

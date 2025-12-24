@@ -214,22 +214,6 @@ struct OsTokenPosition {
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(address osToken_, address osTokenVaultController_, address owner_, uint256 exitQueueUpdateDelay_)
-    Ownable(owner_);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`osToken_`|`address`|The address of the OsToken contract|
-|`osTokenVaultController_`|`address`|The address of the OsTokenVaultController contract|
-|`owner_`|`address`|The address of the owner|
-|`exitQueueUpdateDelay_`|`uint256`|The delay in seconds for exit queue updates|
-
 
 ### exitQueueUpdateDelay
 

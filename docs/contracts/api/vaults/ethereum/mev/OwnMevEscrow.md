@@ -44,14 +44,6 @@ event Harvested(uint256 assets);
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _vault) ;
-```
 
 ### vault
 

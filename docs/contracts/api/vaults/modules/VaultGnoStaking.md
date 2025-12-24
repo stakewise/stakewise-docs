@@ -10,7 +10,7 @@ description: "Abstract contract defining Gnosis staking functionality for vaults
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](./VaultAdmin), [VaultState →](./VaultState), [VaultValidators →](./VaultValidators), [VaultEnterExit →](./VaultEnterExit), IVaultGnoStaking
 
-Defines the Gnosis staking functionality for the Vault
+Defines the Gnosis staking functionality for the Vault.
 
 
 ## Events
@@ -31,26 +31,6 @@ event XdaiSwapped(uint256 amount, uint256 assets);
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(address gnoToken, address tokensConverterFactory) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`gnoToken`|`address`|The address of the GNO token|
-|`tokensConverterFactory`|`address`|The address of the tokens converter factory|
-
 
 ### deposit
 
@@ -102,4 +82,3 @@ Function for receiving xDAI and forwarding it to the tokens converter
 ```solidity
 receive() external payable;
 ```
-

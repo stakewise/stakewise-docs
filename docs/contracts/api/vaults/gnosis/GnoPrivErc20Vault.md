@@ -10,45 +10,10 @@ description: "Gnosis staking vault with whitelist and ERC-20 token functionality
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [GnoErc20Vault →](./GnoErc20Vault), [VaultWhitelist →](../modules/VaultWhitelist), IGnoPrivErc20Vault
 
-Defines the Gnosis staking Vault with whitelist and ERC-20 token
+Defines the Gnosis staking Vault with whitelist and [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) token.
 
 
 ## Functions
-### constructor
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(GnoErc20VaultConstructorArgs memory args) GnoErc20Vault(args);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`GnoErc20VaultConstructorArgs`|The arguments for initializing the GnoErc20Vault contract|
-
-
-### initialize
-
-Initializes or upgrades the GnoErc20Vault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params)
-    external
-    virtual
-    override(IGnoErc20Vault, GnoErc20Vault)
-    reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the GnoErc20Vault contract|
-
 
 ### deposit
 
@@ -132,4 +97,3 @@ function version() public pure virtual override(IVaultVersion, GnoErc20Vault) re
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`uint8`|The version of the Vault implementation contract|
-

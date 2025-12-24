@@ -10,7 +10,7 @@ description: "Abstract contract defining validators management functionality for
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [ReentrancyGuardUpgradeable ↗](https://github.com/Badger-Finance/badger-system/blob/master/deps/@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol), [VaultAdmin →](./VaultAdmin), [VaultState →](./VaultState), IVaultValidators
 
-Defines the validators functionality for the Vault
+Defines the validators functionality for the Vault.
 
 
 ## Events
@@ -137,35 +137,6 @@ event ValidatorsManagerUpdated(address indexed caller, address indexed validator
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(
-    address depositDataRegistry,
-    address validatorsRegistry,
-    address validatorsWithdrawals,
-    address validatorsConsolidations,
-    address consolidationsChecker
-) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`depositDataRegistry`|`address`|The address of the deposit data registry contract|
-|`validatorsRegistry`|`address`|The contract address used for registering validators in beacon chain|
-|`validatorsWithdrawals`|`address`|The contract address used for withdrawing validators in beacon chain|
-|`validatorsConsolidations`|`address`|The contract address used for consolidating validators in beacon chain|
-|`consolidationsChecker`|`address`|The contract address used for verifying consolidation approvals|
-
 
 ### validatorsManager
 

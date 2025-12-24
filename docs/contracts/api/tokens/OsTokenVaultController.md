@@ -10,7 +10,7 @@ description: "Controller contract for managing osToken minting, burning, and rew
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IOsTokenVaultController
 
-Over-collateralized staked token controller
+Over-collateralized staked token controller.
 
 
 ## Events
@@ -136,32 +136,6 @@ event KeeperUpdated(address keeper);
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(
-    address _keeper,
-    address registry,
-    address osToken,
-    address _treasury,
-    address _owner,
-    uint16 _feePercent,
-    uint256 _capacity
-) Ownable(msg.sender);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_keeper`|`address`|The address of the Keeper contract|
-|`registry`|`address`|The address of the VaultsRegistry contract|
-|`osToken`|`address`|The address of the OsToken contract|
-|`_treasury`|`address`|The address of the DAO treasury|
-|`_owner`|`address`|The address of the owner of the contract|
-|`_feePercent`|`uint16`|The fee percent applied on the rewards|
-|`_capacity`|`uint256`|The amount after which the osToken stops accepting deposits|
-
 
 ### capacity
 

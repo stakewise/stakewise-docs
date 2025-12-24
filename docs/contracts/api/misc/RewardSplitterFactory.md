@@ -10,7 +10,7 @@ description: "Factory contract for deploying RewardSplitter proxies"
 
 **Inherits:** IRewardSplitterFactory
 
-Factory for deploying the RewardSplitter contract
+Factory for deploying the RewardSplitter contract.
 
 
 ## Events
@@ -32,20 +32,6 @@ event RewardSplitterCreated(address owner, address vault, address rewardSplitter
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _implementation) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_implementation`|`address`|The implementation address of RewardSplitter|
-
 
 ### implementation
 

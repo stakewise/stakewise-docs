@@ -8,7 +8,7 @@ description: "Utility library for calculating EIP712 typed data hashes"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/EIP712Utils.sol)
 
-Includes functionality for calculating EIP712 hashes
+Includes functionality for calculating [EIP712 ↗](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) hashes.
 
 
 ## Functions
@@ -34,4 +34,3 @@ function computeDomainSeparator(string memory name, address verifyingContract) e
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`bytes32`|The hash of the EIP712 typed data|
-

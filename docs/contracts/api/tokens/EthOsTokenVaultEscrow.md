@@ -10,7 +10,7 @@ description: "Contract for initiating assets exits from the vault without burnin
 
 **Inherits:** [ReentrancyGuard ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol), [OsTokenVaultEscrow →](./OsTokenVaultEscrow)
 
-Used for initiating assets exits from the vault without burning osToken on Ethereum
+Used for initiating assets exits from the Vault without burning osToken on Ethereum.
 
 
 ## Events
@@ -31,34 +31,6 @@ event AssetsReceived(address indexed sender, uint256 value);
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(
-    address osTokenVaultController,
-    address osTokenConfig,
-    address initialOwner,
-    address _authenticator,
-    uint64 _liqThresholdPercent,
-    uint256 _liqBonusPercent
-)
-    ReentrancyGuard()
-    OsTokenVaultEscrow(
-        osTokenVaultController, osTokenConfig, initialOwner, _authenticator, _liqThresholdPercent, _liqBonusPercent
-    );
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
-|`osTokenConfig`|`address`|The address of the OsTokenConfig contract|
-|`initialOwner`|`address`|The address of the contract owner|
-|`_authenticator`|`address`|The address of the OsTokenVaultEscrowAuth contract|
-|`_liqThresholdPercent`|`uint64`|The liquidation threshold percent|
-|`_liqBonusPercent`|`uint256`|The liquidation bonus percent|
-
 
 ### receive
 

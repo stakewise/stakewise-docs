@@ -10,7 +10,7 @@ description: "Contract for managing Vault's deposit data and validator registrat
 
 **Inherits:** [Multicall →](../base/Multicall), IDepositDataRegistry
 
-Defines the functionality for the Vault's deposit data management
+Defines the functionality for the Vault's deposit data management.
 
 
 ## Events
@@ -78,19 +78,6 @@ modifier onlyValidVault(address vault) ;
 |Name|Type|Description|
 |----|----|-----------|
 |`vault`|`address`|The address of the vault|
-
-
-### constructor
-
-
-```solidity
-constructor(address vaultsRegistry) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vaultsRegistry`|`address`|The address of the vaults registry contract|
 
 
 ### depositDataIndexes

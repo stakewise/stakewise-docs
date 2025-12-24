@@ -10,7 +10,7 @@ description: "Abstract contract for initiating assets exits from the vault witho
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [Multicall →](../base/Multicall), IOsTokenVaultEscrow
 
-Used for initiating assets exits from the vault without burning osToken
+Used for initiating assets exits from the Vault without burning osToken.
 
 ## Structs
 ### Position
@@ -187,30 +187,6 @@ event AuthenticatorUpdated(address newAuthenticator);
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(
-    address osTokenVaultController,
-    address osTokenConfig,
-    address initialOwner,
-    address _authenticator,
-    uint64 _liqThresholdPercent,
-    uint256 _liqBonusPercent
-) Ownable(msg.sender);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
-|`osTokenConfig`|`address`|The address of the OsTokenConfig contract|
-|`initialOwner`|`address`|The address of the contract owner|
-|`_authenticator`|`address`|The address of the OsTokenVaultEscrowAuth contract|
-|`_liqThresholdPercent`|`uint64`|The liquidation threshold percent|
-|`_liqBonusPercent`|`uint256`|The liquidation bonus percent|
-
 
 ### liqThresholdPercent
 

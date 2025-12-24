@@ -10,7 +10,7 @@ description: "Factory for deploying Ethereum staking vaults"
 
 **Inherits:** IEthVaultFactory
 
-Factory for deploying Ethereum staking Vaults
+Factory for deploying Ethereum staking Vaults.
 
 
 ## Events
@@ -32,21 +32,6 @@ event VaultCreated(address indexed admin, address indexed vault, address ownMevE
 |`params`|`bytes`|The encoded parameters for initializing the Vault contract|
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _implementation, IVaultsRegistry vaultsRegistry) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_implementation`|`address`|The implementation address of Vault|
-|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
-
 
 ### implementation
 

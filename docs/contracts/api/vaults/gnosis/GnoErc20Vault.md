@@ -8,9 +8,9 @@ description: "Gnosis staking vault with ERC-20 token"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoErc20Vault.sol)
 
-**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultToken →](../modules/VaultToken), [VaultGnoStaking →](../modules/VaultGnoStaking), Multicall, IGnoErc20Vault
+**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultToken →](../modules/VaultToken), [VaultGnoStaking →](../modules/VaultGnoStaking), [Multicall →](../../base/Multicall), IGnoErc20Vault
 
-Defines the Gnosis staking Vault with ERC-20 token
+Defines the Gnosis staking Vault with [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) token.
 
 
 ## Structs
@@ -82,49 +82,6 @@ struct GnoErc20VaultInitParams {
 
 
 ## Functions
-### constructor
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(GnoErc20VaultConstructorArgs memory args)
-    VaultImmutables(args.keeper, args.vaultsRegistry)
-    VaultValidators(
-        args.depositDataRegistry,
-        args.validatorsRegistry,
-        args.validatorsWithdrawals,
-        args.validatorsConsolidations,
-        args.consolidationsChecker
-    )
-    VaultEnterExit(args.exitingAssetsClaimDelay)
-    VaultOsToken(args.osTokenVaultController, args.osTokenConfig, args.osTokenVaultEscrow)
-    VaultMev(args.sharedMevEscrow)
-    VaultGnoStaking(args.gnoToken, args.tokensConverterFactory);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`GnoErc20VaultConstructorArgs`|The arguments for initializing the GnoErc20Vault contract|
-
-
-### initialize
-
-Initializes or upgrades the GnoErc20Vault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params) external virtual override reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the GnoErc20Vault contract|
-
 
 ### transfer
 

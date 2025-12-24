@@ -10,36 +10,4 @@ description: "Gnosis-specific implementation of RewardSplitter for distributing 
 
 **Inherits:** [RewardSplitter →](./RewardSplitter)
 
-The GnoRewardSplitter can be used on Gnosis networks
-to split the rewards of the fee recipient of the vault based on configures shares
-
-
-## Functions
-### constructor
-
-Constructor for GnoRewardSplitter
-
-
-```solidity
-constructor(address gnoToken) RewardSplitter();
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`gnoToken`|`address`|The address of the GNO token|
-
-
-### initialize
-
-Initializes the RewardSplitter contract
-
-
-```solidity
-function initialize(address _vault) external override initializer;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_vault`|`address`|The address of the vault to which the RewardSplitter will be connected|
+The GnoRewardSplitter can be used on Gnosis networks to split the rewards of the fee recipient of the Vault based on configures shares.

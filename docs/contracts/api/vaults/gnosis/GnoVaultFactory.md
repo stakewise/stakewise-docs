@@ -10,7 +10,7 @@ description: "Factory for deploying Gnosis staking Vaults"
 
 **Inherits:** IGnoVaultFactory
 
-Factory for deploying Gnosis staking Vaults
+Factory for deploying Gnosis staking Vaults.
 
 
 ## Events
@@ -33,22 +33,6 @@ event VaultCreated(address indexed admin, address indexed vault, address ownMevE
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _implementation, IVaultsRegistry vaultsRegistry, address gnoToken);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_implementation`|`address`|The implementation address of Vault|
-|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
-|`gnoToken`|`address`|The address of the GNO token|
-
 
 ### implementation
 

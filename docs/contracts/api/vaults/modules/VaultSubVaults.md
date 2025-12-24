@@ -10,7 +10,7 @@ description: "Abstract contract defining sub-vaults management functionality for
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [ReentrancyGuardUpgradeable ↗](https://github.com/Badger-Finance/badger-system/blob/master/deps/@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol), [VaultAdmin →](./VaultAdmin), [VaultState →](./VaultState), IVaultSubVaults
 
-Defines the functionality for managing the Vault sub-vaults
+Defines the functionality for managing the Vault sub-vaults.
 
 ## Structs
 ### SubVaultState
@@ -137,25 +137,6 @@ event SubVaultsCuratorUpdated(address indexed caller, address indexed curator);
 |`curator`|`address`|The address of the new sub-vaults curator|
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(address curatorsRegistry) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`curatorsRegistry`|`address`|The address of the CuratorsRegistry contract|
-
 
 ### subVaultsCurator
 

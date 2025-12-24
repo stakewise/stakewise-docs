@@ -8,7 +8,7 @@ description: "Utility library for managing validator operations and deposits"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/ValidatorUtils.sol)
 
-Includes functionality for managing the validators
+Includes functionality for managing the validators.
 
 
 ## Functions

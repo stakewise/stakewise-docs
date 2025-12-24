@@ -11,8 +11,8 @@ description: "Abstract contract for checking validators manager signature and de
 **Inherits:** [Multicall →](../base/Multicall), IValidatorsChecker
 
 Defines the functionality for:
-checking validators manager signature
-checking deposit data root
+- checking validators manager signature
+- checking deposit data root
 
 
 ## Structs
@@ -62,28 +62,6 @@ enum Status {
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(
-    address validatorsRegistry,
-    address keeper,
-    address vaultsRegistry,
-    address depositDataRegistry,
-    address genesisVaultPoolEscrow
-) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`validatorsRegistry`|`address`|The address of the beacon chain validators registry contract|
-|`keeper`|`address`|The address of the Keeper contract|
-|`vaultsRegistry`|`address`|The address of the VaultsRegistry contract|
-|`depositDataRegistry`|`address`|The address of the DepositDataRegistry contract|
-|`genesisVaultPoolEscrow`|`address`|The address of the genesis vault pool escrow contract|
-
 
 ### updateVaultState
 

@@ -10,20 +10,10 @@ description: "Ethereum-specific implementation of RewardSplitter for distributin
 
 **Inherits:** [ReentrancyGuardUpgradeable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/utils/ReentrancyGuardUpgradeable.sol), [RewardSplitter →](./RewardSplitter)
 
-The EthRewardSplitter can be used on Ethereum networks
-to split the rewards of the fee recipient of the vault based on configured shares
+The EthRewardSplitter can be used on Ethereum networks to split the rewards of the fee recipient of the Vault based on configured shares.
 
 
 ## Functions
-### constructor
-
-Constructor for EthRewardSplitter
-
-
-```solidity
-constructor() RewardSplitter();
-```
-
 ### receive
 
 Allows to claim rewards from the vault and receive them to the reward splitter address
@@ -32,17 +22,3 @@ Allows to claim rewards from the vault and receive them to the reward splitter a
 ```solidity
 receive() external payable;
 ```
-
-### initialize
-
-Initializes the RewardSplitter contract
-
-
-```solidity
-function initialize(address _vault) external override initializer;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_vault`|`address`|The address of the vault to which the RewardSplitter will be connected|

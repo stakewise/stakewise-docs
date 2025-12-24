@@ -8,7 +8,7 @@ description: "Library for managing exit queue checkpoints of burned shares and e
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/ExitQueue.sol)
 
-ExitQueue represent checkpoints of burned shares and exited assets
+ExitQueue represent checkpoints of burned shares and exited assets.
 
 
 ## Structs

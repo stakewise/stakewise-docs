@@ -9,7 +9,7 @@ Welcome to the StakeWise Contracts API documentation. This section contains comp
 
 ## Contract Categories
 
-- **[Base →](./base/ERC20Upgradeable)** - Base contracts for ERC20 tokens and multicall utilities
+- **Base** - Base contracts for ERC20 tokens and multicall utilities
 - **Curators** - Curator strategy contracts for managing assets in sub-vaults
 - **Keeper** - Oracle system for updating Vault rewards and approving validator registrations
 - **Libraries** - Shared utility libraries used across contracts

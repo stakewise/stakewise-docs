@@ -10,7 +10,7 @@ description: "Abstract contract defining state manipulation functionality for va
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultFee →](./VaultFee), IVaultState
 
-Defines Vault's state manipulation
+Defines Vault's state manipulation.
 
 
 ## Events
@@ -256,4 +256,3 @@ function updateState(IKeeperRewards.HarvestParams calldata harvestParams) public
 |Name|Type|Description|
 |----|----|-----------|
 |`harvestParams`|`IKeeperRewards.HarvestParams`|The parameters for harvesting Keeper rewards|
-

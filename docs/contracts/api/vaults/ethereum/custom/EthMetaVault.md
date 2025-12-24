@@ -8,9 +8,9 @@ description: "Meta vault that delegates stake to sub-vaults on Ethereum"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/custom/EthMetaVault.sol)
 
-**Inherits:** [VaultImmutables →](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../../modules/VaultAdmin), [VaultVersion →](../../modules/VaultVersion), [VaultFee →](../../modules/VaultFee), [VaultState →](../../modules/VaultState), [VaultEnterExit →](../../modules/VaultEnterExit), [VaultOsToken →](../../modules/VaultOsToken), [VaultSubVaults →](../../modules/VaultSubVaults), Multicall, IEthMetaVault
+**Inherits:** [VaultImmutables →](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../../modules/VaultAdmin), [VaultVersion →](../../modules/VaultVersion), [VaultFee →](../../modules/VaultFee), [VaultState →](../../modules/VaultState), [VaultEnterExit →](../../modules/VaultEnterExit), [VaultOsToken →](../../modules/VaultOsToken), [VaultSubVaults →](../../modules/VaultSubVaults), [Multicall →](../../../base/Multicall), IEthMetaVault
 
-Defines the Meta Vault that delegates stake to the sub vaults on Ethereum
+Defines the Meta Vault that delegates stake to the sub vaults on Ethereum.
 
 ## Structs
 ### EthMetaVaultConstructorArgs
@@ -65,44 +65,6 @@ struct EthMetaVaultInitParams {
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthMetaVaultConstructorArgs memory args)
-    VaultImmutables(args.keeper, args.vaultsRegistry)
-    VaultEnterExit(args.exitingAssetsClaimDelay)
-    VaultOsToken(args.osTokenVaultController, args.osTokenConfig, args.osTokenVaultEscrow)
-    VaultSubVaults(args.curatorsRegistry);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthMetaVaultConstructorArgs`|The arguments for initializing the EthMetaVault contract|
-
-
-### initialize
-
-Initializes or upgrades the EthMetaVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params) external payable virtual override reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the EthVault contract|
-
 
 ### isStateUpdateRequired
 

@@ -10,7 +10,7 @@ description: "Over-collateralized staked token with controller-based minting and
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [ERC20Permit ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC20Permit.sol), IOsToken
 
-OsToken is an over-collateralized staked token
+OsToken is an over-collateralized staked token.
 
 
 ## Events
@@ -31,26 +31,6 @@ event ControllerUpdated(address indexed controller, bool registered);
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _owner, address vaultController, string memory _name, string memory _symbol)
-    ERC20(_name, _symbol)
-    ERC20Permit(_name)
-    Ownable(_owner);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_owner`|`address`|The address of the contract owner|
-|`vaultController`|`address`|The address of the OsTokenVaultController contract|
-|`_name`|`string`|The name of the ERC20 token|
-|`_symbol`|`string`|The symbol of the ERC20 token|
-
 
 ### controllers
 

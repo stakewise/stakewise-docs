@@ -10,7 +10,7 @@ description: "Rewards management system for updating Vault and osToken rewards"
 
 **Inherits:** [KeeperOracles →](./KeeperOracles), IKeeperRewards
 
-Defines the functionality for updating Vaults' and OsToken rewards
+Defines the functionality for updating Vaults' and OsToken rewards.
 
 
 ## Structs
@@ -159,28 +159,6 @@ event RewardsMinOraclesUpdated(uint256 oracles);
 
 
 ## Functions
-### constructor
-
-```solidity
-constructor(
-    address sharedMevEscrow,
-    IVaultsRegistry vaultsRegistry,
-    IOsTokenVaultController osTokenVaultController,
-    uint256 _rewardsDelay,
-    uint256 maxAvgRewardPerSecond
-) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sharedMevEscrow`|`address`|The address of the shared MEV escrow contract|
-|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
-|`osTokenVaultController`|`IOsTokenVaultController`|The address of the OsTokenVaultController contract|
-|`_rewardsDelay`|`uint256`|The delay in seconds between rewards updates|
-|`maxAvgRewardPerSecond`|`uint256`|The maximum possible average reward per second|
-
-
 ### prevRewardsRoot
 
 Previous Rewards Root

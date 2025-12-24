@@ -10,7 +10,7 @@ description: "Abstract contract defining admin functionality for vaults"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), IVaultAdmin
 
-Defines the admin functionality for the Vault
+Defines the admin functionality for the Vault.
 
 
 ## Events
@@ -89,4 +89,3 @@ function setAdmin(address newAdmin) external override;
 |Name|Type|Description|
 |----|----|-----------|
 |`newAdmin`|`address`|The new admin address|
-

@@ -10,7 +10,7 @@ description: "Abstract contract defining blocklisting functionality for vaults"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](./VaultAdmin), IVaultBlocklist
 
-Defines the functionality for blocking addresses for the Vault
+Defines the functionality for blocking addresses for the Vault.
 
 
 ## Events
@@ -112,4 +112,3 @@ function setBlocklistManager(address _blocklistManager) external override;
 |Name|Type|Description|
 |----|----|-----------|
 |`_blocklistManager`|`address`|The address of the new blocklist manager|
-

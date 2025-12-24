@@ -10,7 +10,7 @@ description: "Genesis vault for Gnosis staking migrated from StakeWise Legacy"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [GnoVault →](./GnoVault), IGnoGenesisVault
 
-Defines the Genesis Vault for Gnosis staking migrated from StakeWise Legacy
+Defines the Genesis Vault for Gnosis staking migrated from StakeWise Legacy.
 
 
 ## Events
@@ -49,39 +49,6 @@ event GenesisVaultCreated(address admin, uint256 capacity, uint16 feePercent, st
 
 
 ## Functions
-### constructor
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(GnoVaultConstructorArgs memory args, address poolEscrow, address rewardGnoToken) GnoVault(args);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`GnoVaultConstructorArgs`|The arguments for initializing the GnoVault contract|
-|`poolEscrow`|`address`|The address of the pool escrow from StakeWise Legacy|
-|`rewardGnoToken`|`address`|The address of the rGNO token from StakeWise Legacy|
-
-
-### initialize
-
-Initializes or upgrades the GnoVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata) external virtual override(IGnoVault, GnoVault) reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes`||
-
 
 ### vaultId
 

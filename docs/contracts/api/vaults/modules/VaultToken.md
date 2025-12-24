@@ -10,7 +10,7 @@ description: "Abstract contract defining ERC20 token functionality for vaults"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [ERC20Upgradeable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/token/ERC20/ERC20Upgradeable.sol), [VaultState →](./VaultState), IVaultToken
 
-Defines the token functionality for the Vault
+Defines the token functionality for the Vault.
 
 
 ## Functions
@@ -31,4 +31,3 @@ Returns the amount of tokens owned by `account`.
 ```solidity
 function balanceOf(address account) external view returns (uint256);
 ```
-

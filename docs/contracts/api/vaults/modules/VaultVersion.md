@@ -10,7 +10,7 @@ description: "Abstract contract defining versioning and upgrade functionality fo
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [UUPSUpgradeable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/UUPSUpgradeable.sol), [VaultAdmin →](./VaultAdmin), IVaultVersion
 
-Defines the versioning functionality for the Vault
+Defines the versioning functionality for the Vault.
 
 
 ## Functions
@@ -71,4 +71,3 @@ function version() public pure virtual override returns (uint8);
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`uint8`|The version of the Vault implementation contract|
-

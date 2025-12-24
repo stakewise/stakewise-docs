@@ -8,9 +8,9 @@ description: "Core Gnosis staking vault implementation"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoVault.sol)
 
-**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultGnoStaking →](../modules/VaultGnoStaking), Multicall, IGnoVault
+**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultGnoStaking →](../modules/VaultGnoStaking), [Multicall →](../../base/Multicall), IGnoVault
 
-Defines the Gnosis staking Vault
+Defines the Gnosis staking Vault.
 
 
 ## Structs
@@ -77,49 +77,6 @@ struct GnoVaultInitParams {
 |`metadataIpfsHash`|`string`|The IPFS hash of the Vault's metadata file|
 
 ## Functions
-### constructor
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(GnoVaultConstructorArgs memory args)
-    VaultImmutables(args.keeper, args.vaultsRegistry)
-    VaultValidators(
-        args.depositDataRegistry,
-        args.validatorsRegistry,
-        args.validatorsWithdrawals,
-        args.validatorsConsolidations,
-        args.consolidationsChecker
-    )
-    VaultEnterExit(args.exitingAssetsClaimDelay)
-    VaultOsToken(args.osTokenVaultController, args.osTokenConfig, args.osTokenVaultEscrow)
-    VaultMev(args.sharedMevEscrow)
-    VaultGnoStaking(args.gnoToken, args.tokensConverterFactory);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`GnoVaultConstructorArgs`|The arguments for initializing the GnoVault contract|
-
-
-### initialize
-
-Initializes or upgrades the GnoVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params) external virtual override reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the GnoVault contract|
-
 
 ### enterExitQueue
 

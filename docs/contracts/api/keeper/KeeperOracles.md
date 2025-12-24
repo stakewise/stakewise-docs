@@ -8,9 +8,9 @@ description: "Oracle signature verification system for off-chain oracle whitelis
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/keeper/KeeperOracles.sol)
 
-**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), EIP712, IKeeperOracles
+**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [EIP712 ↗](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md), IKeeperOracles
 
-Defines the functionality for verifying signatures of the whitelisted off-chain oracles
+Defines the functionality for verifying signatures of the whitelisted off-chain oracles.
 
 
 ## Events
@@ -58,12 +58,6 @@ event ConfigUpdated(string configIpfsHash);
 
 
 ## Functions
-### constructor
-
-```solidity
-constructor() Ownable(msg.sender) EIP712("KeeperOracles", "1");
-```
-
 ### isOracle
 
 Function for verifying whether oracle is registered or not

@@ -10,29 +10,10 @@ description: "Abstract contract defining MEV escrow functionality for vaults"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultState →](./VaultState), IVaultMev
 
-Defines the Vaults' MEV functionality
+Defines the Vaults' MEV functionality.
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(address sharedMevEscrow) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sharedMevEscrow`|`address`|The address of the shared MEV escrow|
-
 
 ### mevEscrow
 
@@ -47,4 +28,3 @@ function mevEscrow() public view override returns (address);
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`address`|The MEV escrow contract address|
-

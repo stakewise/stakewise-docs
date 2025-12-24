@@ -8,7 +8,7 @@ description: "Registry for managing curator addresses for sub-vaults"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/curators/CuratorsRegistry.sol)
 
-**Inherits:** Ownable2Step, ICuratorsRegistry
+**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), ICuratorsRegistry
 
 Defines the registry functionality that keeps track of Curators for the sub-vaults.
 
@@ -46,12 +46,6 @@ event CuratorRemoved(address indexed sender, address indexed curator);
 
 
 ## Functions
-### constructor
-
-```solidity
-constructor() Ownable(msg.sender);
-```
-
 ### isCurator
 
 Checks if an address is a curator
@@ -71,22 +65,6 @@ function isCurator(address curator) external view returns (bool);
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`bool`|True if the address is a curator, false otherwise|
-
-
-### initialize
-
-Initializes the CuratorsRegistry
-
-
-```solidity
-function initialize(address _owner) external override onlyOwner;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_owner`|`address`|The address of the owner|
-
 
 ### addCurator
 

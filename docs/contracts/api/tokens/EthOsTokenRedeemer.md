@@ -14,23 +14,6 @@ This contract is used to redeem OsTokens for the underlying asset.
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(address osToken_, address osTokenVaultController_, address owner_, uint256 exitQueueUpdateDelay_)
-    ReentrancyGuard()
-    OsTokenRedeemer(osToken_, osTokenVaultController_, owner_, exitQueueUpdateDelay_);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`osToken_`|`address`|The address of the OsToken contract|
-|`osTokenVaultController_`|`address`|The address of the OsTokenVaultController contract|
-|`owner_`|`address`|The address of the owner|
-|`exitQueueUpdateDelay_`|`uint256`|The delay in seconds for exit queue updates|
-
 
 ### swapAssetsToOsTokenShares
 

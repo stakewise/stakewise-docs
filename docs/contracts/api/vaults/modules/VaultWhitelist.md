@@ -10,7 +10,7 @@ description: "Abstract contract defining whitelisting functionality for vaults"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](./VaultAdmin), IVaultWhitelist
 
-Defines the whitelisting functionality for the Vault
+Defines the whitelisting functionality for the Vault.
 
 
 ## Events
@@ -112,4 +112,3 @@ function setWhitelister(address _whitelister) external override;
 |Name|Type|Description|
 |----|----|-----------|
 |`_whitelister`|`address`|The address of the new whitelister|
-

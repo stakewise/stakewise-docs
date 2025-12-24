@@ -10,7 +10,7 @@ description: "Abstract contract defining Ethereum staking functionality for vaul
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultState →](./VaultState), [VaultValidators →](./VaultValidators), [VaultEnterExit →](./VaultEnterExit), [VaultMev →](./VaultMev), IVaultEthStaking
 
-Defines the Ethereum staking functionality for the Vault
+Defines the Ethereum staking functionality for the Vault.
 
 
 ## Functions
@@ -89,4 +89,3 @@ Donate assets to the Vault. Must transfer ETH together with the call.
 ```solidity
 function donateAssets() external payable override;
 ```
-

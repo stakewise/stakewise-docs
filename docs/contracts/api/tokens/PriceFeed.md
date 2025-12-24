@@ -10,7 +10,7 @@ description: "Price feed oracle for osToken compatible with Balancer and Chainli
 
 **Inherits:** IBalancerRateProvider, IChainlinkAggregator, IChainlinkV3Aggregator
 
-Price feed for osToken (e.g osETH price in ETH)
+Price feed for osToken (e.g osETH price in ETH).
 
 
 ## State Variables
@@ -31,21 +31,6 @@ address public immutable osTokenVaultController
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address _osTokenVaultController, string memory _description) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
-|`_description`|`string`|The description of the price feed|
-
 
 ### description
 

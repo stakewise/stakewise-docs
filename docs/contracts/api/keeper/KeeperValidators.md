@@ -10,7 +10,7 @@ description: "Validator registration approval and exit signature management syst
 
 **Inherits:** [KeeperOracles →](./KeeperOracles), [KeeperRewards →](./KeeperRewards), IKeeperValidators
 
-Defines the functionality for approving validators' registrations and updating exit signatures
+Defines the functionality for approving validators' registrations and updating exit signatures.
 
 
 ## Structs
@@ -90,18 +90,6 @@ event ValidatorsMinOraclesUpdated(uint256 oracles);
 
 
 ## Functions
-### constructor
-
-```solidity
-constructor(IValidatorsRegistry validatorsRegistry) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`validatorsRegistry`|`IValidatorsRegistry`|The address of the beacon chain validators registry contract|
-
-
 ### exitSignaturesNonces
 
 Get nonce for the next vault exit signatures update

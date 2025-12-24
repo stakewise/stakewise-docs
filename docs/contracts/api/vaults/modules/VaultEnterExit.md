@@ -10,7 +10,7 @@ description: "Abstract contract defining enter and exit functionality for vaults
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultState →](./VaultState), IVaultEnterExit
 
-Defines the functionality for entering and exiting the Vault
+Defines the functionality for entering and exiting the Vault.
 
 
 ## Events
@@ -87,25 +87,6 @@ event ExitedAssetsClaimed(
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(uint256 exitingAssetsClaimDelay) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`exitingAssetsClaimDelay`|`uint256`|The minimum delay after which the assets can be claimed after joining the exit queue|
-
 
 ### getExitQueueIndex
 
@@ -206,4 +187,3 @@ Can be called only by the admin when the vault is not collateralized.
 ```solidity
 function rescueAssets() external override;
 ```
-

@@ -10,48 +10,9 @@ description: "Ethereum staking vault with ERC-20 token and whitelist functionali
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [EthErc20Vault →](./EthErc20Vault), [VaultWhitelist →](../modules/VaultWhitelist), IEthPrivErc20Vault
 
-Defines the Ethereum staking Vault with whitelist and ERC-20 token
+Defines the Ethereum staking Vault with whitelist and [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) token.
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthErc20VaultConstructorArgs memory args) EthErc20Vault(args);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthErc20VaultConstructorArgs`|The arguments for initializing the EthErc20Vault contract|
-
-
-### initialize
-
-Initializes or upgrades the EthErc20Vault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params)
-    external
-    payable
-    virtual
-    override(IEthErc20Vault, EthErc20Vault)
-    reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the EthErc20Vault contract|
-
 
 ### vaultId
 

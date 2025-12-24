@@ -8,7 +8,7 @@ description: "Custom Ethereum non-ERC20 vault with blocklist, own MEV and withou
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/custom/EthFoxVault.sol)
 
-**Inherits:** [VaultImmutables →](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../../modules/VaultAdmin), [VaultVersion →](../../modules/VaultVersion), [VaultFee →](../../modules/VaultFee), [VaultState →](../../modules/VaultState), [VaultValidators →](../../modules/VaultValidators), [VaultEnterExit →](../../modules/VaultEnterExit), [VaultMev →](../../modules/VaultMev), [VaultEthStaking →](../../modules/VaultEthStaking), [VaultBlocklist →](../../modules/VaultBlocklist), Multicall, IEthFoxVault
+**Inherits:** [VaultImmutables →](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../../modules/VaultAdmin), [VaultVersion →](../../modules/VaultVersion), [VaultFee →](../../modules/VaultFee), [VaultState →](../../modules/VaultState), [VaultValidators →](../../modules/VaultValidators), [VaultEnterExit →](../../modules/VaultEnterExit), [VaultMev →](../../modules/VaultMev), [VaultEthStaking →](../../modules/VaultEthStaking), [VaultBlocklist →](../../modules/VaultBlocklist), [Multicall →](../../../base/Multicall), IEthFoxVault
 
 Custom Ethereum non-ERC20 vault with blocklist, own MEV and without osToken minting.
 
@@ -109,50 +109,6 @@ event EthFoxVaultCreated(
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthFoxVaultConstructorArgs memory args)
-    VaultImmutables(args.keeper, args.vaultsRegistry)
-    VaultValidators(
-        args.depositDataRegistry,
-        args.validatorsRegistry,
-        args.validatorsWithdrawals,
-        args.validatorsConsolidations,
-        args.consolidationsChecker
-    )
-    VaultEnterExit(args.exitingAssetsClaimDelay)
-    VaultMev(args.sharedMevEscrow);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthFoxVaultConstructorArgs`|The arguments for initializing the EthFoxVault contract|
-
-
-### initialize
-
-Initializes or upgrades the EthFoxVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata) external payable virtual override reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes`||
-
 
 ### deposit
 

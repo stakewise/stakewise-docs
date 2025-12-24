@@ -10,22 +10,10 @@ description: "Contract for checking signatures of oracles for validators consoli
 
 **Inherits:** [EIP712 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/EIP712.sol), IConsolidationsChecker
 
-Defines the functionality for checking signatures of oracles for validators consolidations
+Defines the functionality for checking signatures of oracles for validators consolidations.
 
 
 ## Functions
-### constructor
-
-
-```solidity
-constructor(address keeper) EIP712("ConsolidationsChecker", "1");
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`keeper`|`address`|The address of the Keeper contract|
-
 
 ### verifySignatures
 

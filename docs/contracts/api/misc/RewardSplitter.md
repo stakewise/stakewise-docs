@@ -10,7 +10,7 @@ description: "Abstract contract for splitting vault rewards among shareholders b
 
 **Inherits:** IRewardSplitter, [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [Multicall →](../base/Multicall)
 
-The RewardSplitter can be used to split the rewards of the fee recipient of the vault based on configured shares
+The RewardSplitter can be used to split the rewards of the fee recipient of the Vault based on configured shares.
 
 
 ## Structs
@@ -168,13 +168,6 @@ Modifier to check if the caller is the vault admin
 
 ```solidity
 modifier onlyVaultAdmin() ;
-```
-
-### constructor
-
-
-```solidity
-constructor() ;
 ```
 
 ### setClaimer

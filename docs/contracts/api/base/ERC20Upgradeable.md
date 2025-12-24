@@ -8,9 +8,9 @@ description: "Modern and gas-efficient upgradeable ERC20 token implementation wi
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/base/ERC20Upgradeable.sol)
 
-**Inherits:** Initializable, IERC20Permit, IERC20, IERC20Metadata
+**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [IERC20Permit ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/IERC20Permit.sol), [IERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol), [IERC20Metadata ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/IERC20Metadata.sol)
 
-Modern and gas efficient ERC20 + EIP-2612 implementation.
+Modern and gas efficient [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) + [EIP-2612 ↗](https://eips.ethereum.org/EIPS/eip-2612) implementation.
 
 
 ## State Variables
@@ -64,19 +64,6 @@ mapping(address => uint256) public override nonces
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Implementation Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor() ;
-```
 
 ### approve
 

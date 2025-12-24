@@ -10,7 +10,7 @@ description: "Factory for deploying Ethereum meta vaults"
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IEthMetaVaultFactory
 
-Factory for deploying Ethereum meta Vaults
+Factory for deploying Ethereum meta Vaults.
 
 
 ## Events
@@ -33,22 +33,6 @@ event MetaVaultCreated(address indexed caller, address indexed admin, address in
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address initialOwner, address _implementation, IVaultsRegistry vaultsRegistry) Ownable(initialOwner);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`initialOwner`|`address`|The address of the contract owner|
-|`_implementation`|`address`|The implementation address of Vault|
-|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
-
 
 ### implementation
 

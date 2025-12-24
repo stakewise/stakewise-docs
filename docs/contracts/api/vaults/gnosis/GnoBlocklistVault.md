@@ -10,40 +10,9 @@ description: "Gnosis staking vault with blocklist functionality"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [GnoVault →](./GnoVault), [VaultBlocklist →](../modules/VaultBlocklist), IGnoBlocklistVault
 
-Defines the Gnosis staking Vault with blocking addresses functionality
+Defines the Gnosis staking Vault with blocking addresses functionality.
 
 ## Functions
-### constructor
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(GnoVaultConstructorArgs memory args) GnoVault(args);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`GnoVaultConstructorArgs`|The arguments for initializing the GnoVault contract|
-
-
-### initialize
-
-Initializes or upgrades the GnoVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params) external virtual override(IGnoVault, GnoVault) reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the GnoVault contract|
-
 
 ### deposit
 

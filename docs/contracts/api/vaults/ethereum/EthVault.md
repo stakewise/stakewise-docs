@@ -8,9 +8,9 @@ description: "Core Ethereum staking vault implementation"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthVault.sol)
 
-**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultEthStaking →](../modules/VaultEthStaking), Multicall, IEthVault
+**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultEthStaking →](../modules/VaultEthStaking), [Multicall →](../../base/Multicall), IEthVault
 
-Defines the Ethereum staking Vault
+Defines the Ethereum staking Vault.
 
 ## Structs
 ### EthVaultConstructorArgs
@@ -73,51 +73,6 @@ struct EthVaultInitParams {
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthVaultConstructorArgs memory args)
-    VaultImmutables(args.keeper, args.vaultsRegistry)
-    VaultValidators(
-        args.depositDataRegistry,
-        args.validatorsRegistry,
-        args.validatorsWithdrawals,
-        args.validatorsConsolidations,
-        args.consolidationsChecker
-    )
-    VaultEnterExit(args.exitingAssetsClaimDelay)
-    VaultOsToken(args.osTokenVaultController, args.osTokenConfig, args.osTokenVaultEscrow)
-    VaultMev(args.sharedMevEscrow);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthVaultConstructorArgs`|The arguments for initializing the EthVault contract|
-
-
-### initialize
-
-Initializes or upgrades the EthVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params) external payable virtual override reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the EthVault contract|
-
 
 ### depositAndMintOsToken
 

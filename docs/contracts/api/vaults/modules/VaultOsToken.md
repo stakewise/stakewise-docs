@@ -10,7 +10,7 @@ description: "Abstract contract defining OsToken minting functionality for vault
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [VaultState →](./VaultState), [VaultEnterExit →](./VaultEnterExit), IVaultOsToken
 
-Defines the functionality for minting OsToken
+Defines the functionality for minting OsToken.
 
 ## Structs
 ### OsTokenPosition
@@ -118,27 +118,6 @@ event OsTokenRedeemed(
 |`assets`|`uint256`|The amount of assets received|
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(address osTokenVaultController, address osTokenConfig, address osTokenVaultEscrow) ;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
-|`osTokenConfig`|`address`|The address of the OsTokenConfig contract|
-|`osTokenVaultEscrow`|`address`|The address of the OsTokenVaultEscrow contract|
-
 
 ### osTokenPositions
 

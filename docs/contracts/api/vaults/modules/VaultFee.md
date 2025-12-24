@@ -10,7 +10,7 @@ description: "Abstract contract defining fee functionality for vaults"
 
 **Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](./VaultAdmin), IVaultFee
 
-Defines the fee functionality for the Vault
+Defines the fee functionality for the Vault.
 
 
 ## Events
@@ -104,4 +104,3 @@ function setFeePercent(uint16 _feePercent) external override;
 |Name|Type|Description|
 |----|----|-----------|
 |`_feePercent`|`uint16`|The new fee percent|
-

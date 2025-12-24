@@ -4,7 +4,7 @@
 **Inherits:**
 [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IVaultsRegistry
 
-Defines the registry functionality that keeps track of Vaults, Factories and Vault upgrades
+Defines the registry functionality that keeps track of Vaults, Factories and Vault upgrades.
 
 
 ## Events
@@ -145,15 +145,6 @@ function factories(address factory) external view returns (bool);
 |`<none>`|`bool`|`true` for the whitelisted Factory, `false` otherwise|
 
 
-### constructor
-
-Constructor
-
-
-```solidity
-constructor() Ownable(msg.sender);
-```
-
 ### addVault
 
 Function for adding Vault to the registry. Can only be called by the whitelisted Factory.
@@ -227,18 +218,3 @@ function removeFactory(address factory) external override onlyOwner;
 |Name|Type|Description|
 |----|----|-----------|
 |`factory`|`address`|The address of the factory to remove from the whitelist|
-
-
-### initialize
-
-Function for initializing the registry. Can only be called once during the deployment.
-
-
-```solidity
-function initialize(address _owner) external override onlyOwner;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_owner`|`address`|The address of the owner of the contract|

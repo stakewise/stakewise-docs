@@ -10,7 +10,7 @@ description: "Genesis vault for Ethereum staking migrated from StakeWise Legacy"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [EthVault →](./EthVault), IEthGenesisVault
 
-Defines the Genesis Vault for Ethereum staking migrated from StakeWise Legacy
+Defines the Genesis Vault for Ethereum staking migrated from StakeWise Legacy.
 
 ## Events
 ### Migrated
@@ -48,42 +48,6 @@ event GenesisVaultCreated(address admin, uint256 capacity, uint16 feePercent, st
 
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthVaultConstructorArgs memory args, address poolEscrow, address rewardEthToken) EthVault(args);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthVaultConstructorArgs`|The arguments for initializing the EthVault contract|
-|`poolEscrow`|`address`|The address of the pool escrow contract|
-|`rewardEthToken`|`address`|The address of the reward ETH token contract|
-
-
-### initialize
-
-Initializes or upgrades the EthVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata) external payable virtual override(IEthVault, EthVault) reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes`||
-
 
 ### vaultId
 

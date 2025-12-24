@@ -45,14 +45,6 @@ event Harvested(address indexed caller, uint256 assets);
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address vaultsRegistry) ;
-```
 
 ### harvest
 

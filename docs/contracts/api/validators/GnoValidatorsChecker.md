@@ -10,30 +10,4 @@ description: "Contract for checking validators registration on Gnosis"
 
 **Inherits:** [ValidatorsChecker →](./ValidatorsChecker)
 
-Defines functionality for checking validators registration on Gnosis
-
-
-## Functions
-### constructor
-
-
-```solidity
-constructor(
-    address validatorsRegistry,
-    address keeper,
-    address vaultsRegistry,
-    address depositDataRegistry,
-    address genesisVaultPoolEscrow,
-    address gnoToken
-) ValidatorsChecker(validatorsRegistry, keeper, vaultsRegistry, depositDataRegistry, genesisVaultPoolEscrow);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`validatorsRegistry`|`address`|The address of the beacon chain validators registry contract|
-|`keeper`|`address`|The address of the Keeper contract|
-|`vaultsRegistry`|`address`|The address of the VaultsRegistry contract|
-|`depositDataRegistry`|`address`|The address of the DepositDataRegistry contract|
-|`genesisVaultPoolEscrow`|`address`|The address of the genesis vault pool escrow contract|
-|`gnoToken`|`address`|The address of the Gnosis token contract|
+Defines functionality for checking validators registration on Gnosis.

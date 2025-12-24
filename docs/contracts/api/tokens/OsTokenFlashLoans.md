@@ -31,20 +31,6 @@ event OsTokenFlashLoan(address indexed caller, uint256 amount);
 
 
 ## Functions
-### constructor
-
-Constructor
-
-
-```solidity
-constructor(address osToken) ReentrancyGuard();
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`osToken`|`address`|The address of the OsToken contract|
-
 
 ### flashLoan
 

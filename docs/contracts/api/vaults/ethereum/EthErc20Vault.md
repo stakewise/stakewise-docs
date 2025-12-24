@@ -8,9 +8,9 @@ description: "Ethereum staking vault with ERC-20 token functionality"
 
 [Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthErc20Vault.sol)
 
-**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultToken →](../modules/VaultToken), [VaultEthStaking →](../modules/VaultEthStaking), Multicall, IEthErc20Vault
+**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultToken →](../modules/VaultToken), [VaultEthStaking →](../modules/VaultEthStaking), [Multicall →](../../base/Multicall), IEthErc20Vault
 
-Defines the Ethereum staking Vault with ERC-20 token
+Defines the Ethereum staking Vault with [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) token.
 
 ## Structs
 ### EthErc20VaultConstructorArgs
@@ -76,51 +76,6 @@ struct EthErc20VaultInitParams {
 |`metadataIpfsHash`|`string`|The IPFS hash of the Vault's metadata file|
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthErc20VaultConstructorArgs memory args)
-    VaultImmutables(args.keeper, args.vaultsRegistry)
-    VaultValidators(
-        args.depositDataRegistry,
-        args.validatorsRegistry,
-        args.validatorsWithdrawals,
-        args.validatorsConsolidations,
-        args.consolidationsChecker
-    )
-    VaultEnterExit(args.exitingAssetsClaimDelay)
-    VaultOsToken(args.osTokenVaultController, args.osTokenConfig, args.osTokenVaultEscrow)
-    VaultMev(args.sharedMevEscrow);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthErc20VaultConstructorArgs`|The arguments for initializing the EthErc20Vault contract|
-
-
-### initialize
-
-Initializes or upgrades the EthErc20Vault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params) external payable virtual override reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the EthErc20Vault contract|
-
 
 ### depositAndMintOsToken
 

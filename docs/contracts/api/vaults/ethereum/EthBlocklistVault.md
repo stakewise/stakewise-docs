@@ -10,48 +10,9 @@ description: "Ethereum staking vault with blocklist functionality"
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [EthVault →](./EthVault), [VaultBlocklist →](../modules/VaultBlocklist), IEthBlocklistVault
 
-Defines the Ethereum staking Vault with blocking addresses functionality
+Defines the Ethereum staking Vault with blocking addresses functionality.
 
 ## Functions
-### constructor
-
-Since the immutable variable value is stored in the bytecode,
-its value would be shared among all proxies pointing to a given contract instead of each proxy's storage.
-
-:::custom-notes[Note]
-oz-upgrades-unsafe-allow: constructor
-:::
-
-
-```solidity
-constructor(EthVaultConstructorArgs memory args) EthVault(args);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`args`|`EthVaultConstructorArgs`|The arguments for initializing the EthVault contract|
-
-
-### initialize
-
-Initializes or upgrades the EthVault contract. Must transfer security deposit during the deployment.
-
-
-```solidity
-function initialize(bytes calldata params)
-    external
-    payable
-    virtual
-    override(IEthVault, EthVault)
-    reinitializer(_version);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`bytes`|The encoded parameters for initializing the EthVault contract|
-
 
 ### deposit
 

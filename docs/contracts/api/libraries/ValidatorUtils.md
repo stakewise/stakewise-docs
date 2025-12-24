@@ -10,6 +10,19 @@ description: "Utility library for managing validator operations and deposits"
 
 Includes functionality for managing the validators.
 
+## Structs
+### ValidatorDeposit
+
+```solidity
+struct ValidatorDeposit {
+    bytes publicKey;
+    bytes signature;
+    bytes withdrawalCredentials;
+    bytes32 depositDataRoot;
+    uint256 depositAmount;
+}
+```
+
 
 ## Functions
 ### isValidManagerSignature
@@ -171,17 +184,3 @@ function consolidateValidators(
 |`validators`|`bytes`|The validators data|
 |`consolidationsApproved`|`bool`|Whether the consolidations are approved|
 |`validatorsConsolidations`|`address`|The address of the validators consolidations contract|
-
-
-## Structs
-### ValidatorDeposit
-
-```solidity
-struct ValidatorDeposit {
-    bytes publicKey;
-    bytes signature;
-    bytes withdrawalCredentials;
-    bytes32 depositDataRoot;
-    uint256 depositAmount;
-}
-```

@@ -1,6 +1,7 @@
 {
   "label": "Networks",
-  "position": 0,
+  "position": 9,
+  "collapsed": true,
   "link": {
     "type": "doc",
     "id": "contracts/networks/index"

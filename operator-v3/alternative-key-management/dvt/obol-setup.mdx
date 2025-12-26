@@ -82,7 +82,7 @@ docker run --rm -v "$(pwd):/opt/charon" -v "$HOME/.stakewise:/.stakewise" obolne
 | <nobr>`--withdrawal-addresses`</nobr> | Comma separated list of Ethereum addresses to receive returned stake and rewards. Provide single address or one per validator |
 | <nobr>`--fee-recipient-addresses`</nobr> | Comma separated list of fee recipient addresses. Provide single address or one per validator. **Must match** the "Block reward recipient" address on your Vault page |
 | <nobr>`--nodes`</nobr> | Number of Charon nodes in the cluster. Minimum is 3 |
-| <nobr>`--network`</nobr> | Ethereum network. Options: mainnet, hoodi, gnosis, chiado (default "mainnet") |
+| <nobr>`--network`</nobr> | Ethereum network. Options: mainnet, hoodi, gnosis (default "mainnet") |
 | <nobr>`--split-existing-keys`</nobr> | Split existing validator private key into distributed key shares |
 | <nobr>`--split-keys-dir`</nobr> | Directory containing keys to split. Expects `keystore-*.json` and `keystore-*.txt`. Requires `--split-existing-keys` |
 :::

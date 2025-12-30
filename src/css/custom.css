@@ -2,25 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;1,400&display=swap');
 
 :root {
-  --coral: #018970; /* default (light) */
-  --fog: #FFFFFF4D; /* fog effect */
-  --ifm-color-info-dark: #018970;
+  --ifm-color-info-dark: #5c0189;
   --code: #f6f7f8; /* code background */
   --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.2);
   --grey: #666666;
   --blue: #e3f2fd;
   --ifm-navbar-height: 4.5rem;
   --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  --navbar-bg: #c0d4c6; /* navbar background */
-}
-
-html[data-theme='dark'] {
-  --coral: #40E9DE;
-  --blue: #2c3d4a;
-  --grey: #aaaaaa;
-  --fog: #FFFFFF1A;
-  --ifm-color-info-dark: #40E9DE;
-  --navbar-bg: #2b3c3f; /* navbar background */
 }
 
 html {
@@ -47,11 +35,11 @@ body::before {
 }
 
 html[data-theme='dark'] body::before {
-  background-image: linear-gradient(171.89deg, #2e4145 2.92%, #4b605a 54.05%, #23414b 85.21%);
+  background-image: linear-gradient(171.89deg, #211E24 0%, #3C3642 60%, #3E3947 72%, #45404f 84%, #5E576B 100%);
 }
 
 html[data-theme='light'] body::before {
-  background-image: linear-gradient(171.89deg, #c4ddd2 2.92%, #f2e5c4 55.54%, #d0ccb1 87.6%);
+  background-image: linear-gradient(171.89deg, #F4F1F8 0%, #F4F1F8 60%, #EEE9F6 78%, #d9d2e6 90%, #d3cbe4 100%);
 }
 
 html[data-theme='dark'] .alert--success {
@@ -68,7 +56,7 @@ html[data-theme='dark'] .alert--warning {
 }
 
 .markdown a {
-  color: var(--coral);
+  color: var(--lavender);
 }
 
 p {
@@ -173,15 +161,15 @@ html[data-theme='light'] .crystal-button-block:hover {
 
 html[data-theme='dark'] .crystal-button-block {
   box-shadow: 0 7px 12px 0 rgba(39, 40, 42, .35);
-  background: rgba(39, 40, 42, .5);
-  border: solid 1px rgba(39, 40, 42, .5);
+  background: rgba(82, 77, 87, .5);
+  border: solid 1px rgba(82, 77, 87, .9);
 }
 
 html[data-theme='dark'] .crystal-button-block:hover {
   transform: scale(1.05);
   text-decoration: none;
-  background: rgba(39, 40, 42, .8);
-  border: solid 1px rgba(39, 40, 42, .8);
+  background: rgba(82, 77, 87, .8);
+  border: solid 1px rgb(82, 77, 87);
 }
 
 html[data-theme='light'] .crystal-bg {
@@ -192,8 +180,8 @@ html[data-theme='light'] .crystal-bg {
 
 html[data-theme='dark'] .crystal-bg {
   box-shadow: 0 7px 12px 0 rgba(39, 40, 42, .35);
-  background: rgba(39, 40, 42, .5);
-  border: solid 1px rgba(39, 40, 42, .5);
+  background: rgba(82, 77, 87, .5);
+  border: solid 1px rgba(82, 77, 87, .9);
 }
 
 .footer__link-item svg,
@@ -202,12 +190,12 @@ html[data-theme='dark'] .crystal-bg {
 }
 
 .alert a {
-  text-decoration-color: var(--color-coral) !important;
+  text-decoration-color: var(--color-lavender) !important;
 }
 
 /* Force admonition links to have same styling as regular links */
 .theme-admonition a {
-  color: var(--coral);
+  color: var(--lavender);
   text-decoration: none;
 }
 
@@ -275,7 +263,7 @@ ol {
 
 hr {
   border: none;
-  border-top: 1px solid var(--coral);
+  border-top: 1px solid var(--lavender);
 }
 
 /* Customized admonitions */
@@ -295,7 +283,7 @@ hr {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--coral);
+  color: var(--lavender);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -347,11 +335,11 @@ html[data-theme='dark'] .admonition-content code {
 
 /* Customized <details> and <summary> elements */
 details.custom-details > summary::before {
-  border-color: transparent transparent transparent var(--coral);
+  border-color: transparent transparent transparent var(--lavender);
 }
 
 details.custom-details > summary {
-  color: var(--coral);
+  color: var(--lavender);
   opacity: 0.8;
 }
 
@@ -365,7 +353,7 @@ details.custom-details {
 }
 
 .custom-details a {
-  color: var(--coral);
+  color: var(--lavender);
   text-decoration: none;
 }
 
@@ -377,9 +365,9 @@ details.custom-details {
 
 /* Tooltip links styling to match admonition links */
 .tooltip-link {
-  color: var(--coral);
+  color: var(--lavender);
   text-decoration: underline;
-  text-decoration-color: var(--coral);
+  text-decoration-color: var(--lavender);
 }
 
 .tooltip-link:hover {

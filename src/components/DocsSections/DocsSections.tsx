@@ -9,7 +9,7 @@ const DocsSections: React.FC = () => {
 
   return (
     <div className="pt-40 flex flex-col items-center w-full">
-      <h1 className="text-coral! text-center">{siteConfig.title}</h1>
+      <h1 className="text-lavender! text-center">{siteConfig.title}</h1>
       <h3 className="text-center">{siteConfig.tagline}</h3>
       <Blocks />
     </div>

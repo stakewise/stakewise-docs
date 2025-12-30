@@ -30,14 +30,20 @@ const config: Config = {
       {
         docs: {
           path: 'docs',
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatex],
+          remarkPlugins: [ remarkMath ],
+          rehypePlugins: [ rehypeKatex ],
           sidebarPath: './sidebars.ts',
           showLastUpdateTime: true,
           routeBasePath: '/',
           breadcrumbs: true,
           admonitions: {
-            keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes', 'custom-stakewise'],
+            keywords: [
+              'custom-info',
+              'custom-tips',
+              'custom-notes',
+              'custom-warning',
+              'custom-stakewise',
+            ],
             extendDefaults: true,
           },
         },
@@ -67,12 +73,18 @@ const config: Config = {
         path: 'operator',
         routeBasePath: 'operator',
         sidebarPath: './sidebarsOperator.ts',
-        remarkPlugins: [remarkMath],
-        rehypePlugins: [rehypeKatex],
+        remarkPlugins: [ remarkMath ],
+        rehypePlugins: [ rehypeKatex ],
         showLastUpdateTime: true,
         breadcrumbs: true,
         admonitions: {
-          keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes', 'custom-stakewise'],
+          keywords: [
+            'custom-info',
+            'custom-tips',
+            'custom-notes',
+            'custom-warning',
+            'custom-stakewise'
+          ],
           extendDefaults: true,
         },
       },
@@ -84,12 +96,18 @@ const config: Config = {
         path: 'operator-v3',
         routeBasePath: 'operator/v3',
         sidebarPath: './sidebarsOperatorV3.ts',
-        remarkPlugins: [remarkMath],
-        rehypePlugins: [rehypeKatex],
+        remarkPlugins: [ remarkMath ],
+        rehypePlugins: [ rehypeKatex ],
         showLastUpdateTime: true,
         breadcrumbs: true,
         admonitions: {
-          keywords: ['custom-info', 'custom-tips', 'custom-warning', 'custom-notes', 'custom-stakewise'],
+          keywords: [
+            'custom-info',
+            'custom-tips',
+            'custom-notes',
+            'custom-warning',
+            'custom-stakewise'
+          ],
           extendDefaults: true,
         },
       },

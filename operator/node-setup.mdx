@@ -9,12 +9,17 @@ sidebar_position: 11
 The automated node setup is an experimental feature that simplifies Reth and Lighthouse installation. It is functional and actively maintained, but still being refined.
 :::
 
-:::custom-notes[Prerequisites]
-Before using automated node setup, you must have a **deployed StakeWise Vault**. See the [Deployed Vault →](Prerequisites#deployed-vault) section in Prerequisites.
-:::
+## Prerequisites
+
+You must have the following steps completed before using automated node setup:
+- Deployed a StakeWise Vault. See the [Deployed Vault](Prerequisites#deployed-vault).
+- Installed the Operator Service. See the [Installation](installation).
+- Generated validator keys. See the [Validator Keys](validator-keys).
+- Configured the Validators Manager. See the [Validators Manager](validators-manager).
+
+## Workflow
 
 The Operator Service includes built-in commands to automatically install and manage [Reth ↗](https://github.com/paradigmxyz/reth) (execution) and [Lighthouse ↗](https://github.com/sigp/lighthouse) (consensus) clients.
-## Workflow
 
 1. Run `node-install --network=mainnet` to download Reth and Lighthouse
 2. Run `node-start --vault=YOUR_VAULT` to start syncing
@@ -39,8 +44,11 @@ Installs Reth and Lighthouse binaries to the data directory.
 
 ## `node-start`
 
-Starts execution, consensus, and validator nodes.
+:::custom-info[Recommendation]
+It is recommended to start the nodes together with the Operator Service using the `--run-nodes` flag in the `start` command. For more details, see the [Running the Operator Service](./start-operator).
+:::
 
+To start the node services and begin syncing:
 ```bash
 ./operator node-start \
   --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf

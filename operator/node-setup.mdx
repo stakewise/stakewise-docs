@@ -44,8 +44,11 @@ Installs Reth and Lighthouse binaries to the data directory.
 
 ## `node-start`
 
+:::custom-info[Recommendation]
 It is recommended to start the nodes together with the Operator Service using the `--run-nodes` flag in the `start` command. For more details, see the [Running the Operator Service →](./start-operator) section.
+:::
 
+To start the node services and begin syncing:
 ```bash
 ./operator node-start \
   --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf

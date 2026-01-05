@@ -9,47 +9,58 @@
   }
 
   :root[data-theme='light'] {
-    --moon: #00060f;
+    --moon: rgb(0, 6, 15);
     --moon-rgb: 0, 6, 15;
-    --coal: #27282a;
+    --coal: rgb(39, 40, 42);
     --coal-rgb: 39, 40, 42;
-    --coral-rgb: 1, 137, 112;
-    --coral: rgb(1, 137, 112);
+    --ash: rgb(255, 255, 255);
+    --ash-rgb: 255, 255, 255;
+    --lavender-rgb: 165, 120, 216;
+    --lavender: rgb(165, 120, 216);
 
-    --ifm-navbar-link-hover-color: rgb(1, 137, 112) !important;
-    --ifm-breadcrumb-color-active: rgb(1, 137, 112) !important;
-    --ifm-tabs-color-active-border: rgb(1, 137, 112) !important;
-    --ifm-menu-color-active: rgb(1, 137, 112) !important;
-    --ifm-tabs-color-active: rgb(1, 137, 112) !important;
-    --ifm-color-primary: rgb(1, 137, 112) !important;
+    --ifm-navbar-link-hover-color: rgb(165, 120, 216) !important;
+    --ifm-breadcrumb-color-active: rgb(165, 120, 216) !important;
+    --ifm-tabs-color-active-border: rgb(165, 120, 216) !important;
+    --ifm-menu-color-active: rgb(165, 120, 216) !important;
+    --ifm-tabs-color-active: rgb(165, 120, 216) !important;
+    --ifm-color-primary: rgb(165, 120, 216) !important;
 
     --ifm-color-emphasis-200: transparent !important;
 
     --ifm-card-background-color: rgba(26, 29, 28, .05) !important;
     --ifm-menu-color-background-hover: rgba(26, 29, 28, .05) !important;
     --ifm-menu-color-background-active: rgba(26, 29, 28, .05) !important;
+
+    --fog: #fff;
+    --navbar-bg: #e9e7ec;
   }
 
   :root[data-theme='dark'] {
-    --moon: #ffffff;
+    --moon: rgb(255, 255, 255);
     --moon-rgb: 255, 255, 255;
-    --coal: #27282a;
+    --coal: rgb(39, 40, 42);
     --coal-rgb: 39, 40, 42;
-    --coral-rgb: 64, 233, 222;
-    --coral: rgb(64, 233, 222);
+    --ash: rgb(82, 77, 87);
+    --ash-rgb: 82, 77, 87;
+    --lavender-rgb: 198, 182, 235;
+    --lavender: rgb(198, 182, 235);
 
-    --ifm-navbar-link-hover-color: rgb(64, 233, 222) !important;
-    --ifm-breadcrumb-color-active: rgb(64, 233, 222) !important;
-    --ifm-tabs-color-active-border: rgb(64, 233, 222) !important;
-    --ifm-menu-color-active: rgb(64, 233, 222) !important;
-    --ifm-tabs-color-active: rgb(64, 233, 222) !important;
-    --ifm-color-primary: rgb(64, 233, 222) !important;
+    --ifm-color-info-dark: rgb(198, 182, 235) !important;
+    --ifm-navbar-link-hover-color: rgb(198, 182, 235) !important;
+    --ifm-breadcrumb-color-active: rgb(198, 182, 235) !important;
+    --ifm-tabs-color-active-border: rgb(198, 182, 235) !important;
+    --ifm-menu-color-active: rgb(198, 182, 235) !important;
+    --ifm-tabs-color-active: rgb(198, 182, 235) !important;
+    --ifm-color-primary: rgb(198, 182, 235) !important;
 
     --ifm-color-emphasis-200: transparent !important;
 
     --ifm-card-background-color: rgba(26, 29, 28, .2) !important;
     --ifm-menu-color-background-hover:rgba(26, 29, 28, .2) !important;
     --ifm-menu-color-background-active: rgba(26, 29, 28, .2) !important;
+
+    --fog: rgb(82, 77, 87); /* fog effect */
+    --navbar-bg: rgba(82, 77, 87, .3);
   }
 
   ::-moz-selection {

@@ -21,7 +21,7 @@ To activate validator software, you need to be able to stake 32 ETH. </>}>valida
 Validators are essential to maintaining network consensus — the process by which all participants agree on the blockchain's new global state<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>.
 
 One of the important fields of the [validator object ↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36)
-is the <code style={{backgroundColor: '#f4f4f4', color: '#018970', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
+is the <code style={{backgroundColor: 'var(--ash)', color: 'var(--lavender)', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>,
 which represents the validator's "active" balance and determines its influence in the protocol.
 This balance serves as the validator's "weight" in consensus duties, which are:
 

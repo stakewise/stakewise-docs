@@ -32,11 +32,11 @@ body::before {
 }
 
 html[data-theme='dark'] body::before {
-  background-image: linear-gradient(171.89deg, #211E24 0%, #3C3642 60%, #3E3947 72%, #45404f 84%, #5E576B 100%);
+  background-image: linear-gradient(171.89deg, #211e24, #3c3642 60%, #3e3947 72%, #45404e 84%, #464152);
 }
 
 html[data-theme='light'] body::before {
-  background-image: linear-gradient(171.89deg, #F4F1F8 0%, #F4F1F8 60%, #EEE9F6 78%, #d9d2e6 90%, #d3cbe4 100%);
+  background-image: linear-gradient(171.89deg, #f4f1f8, #f4f1f8 60%, #eee9f6 78%, #ece7f4 90%, #e3dcf0);
 }
 
 html[data-theme='dark'] .alert--success {

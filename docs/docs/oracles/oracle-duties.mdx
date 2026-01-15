@@ -18,7 +18,7 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-The [Operator Service →](../../operator/start-operator) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
+The [Operator Service →](../../operator/intro) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
 When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
 This is done to maintain the protocol's ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
 The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
@@ -59,7 +59,7 @@ The reward update process has protocol-wide impact.
 ## Validator Exits
 
 The validator exit process is automated and trustless.
-Validator exits require exit signatures that are generated during the [Validator Registration →](../../operator/start-operator) process.
+Validator exits require exit signatures that are generated during the validator registration process.
 
 As part of registration, the Operator Service encrypts exit signatures using Shamir's secret sharing and distributes them to all Oracles.
 

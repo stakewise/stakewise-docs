@@ -14,7 +14,7 @@ This guide covers the key changes and upgrade steps for StakeWise Operator V4, i
 :::custom-info[Prerequisites]
 Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility. See [Prerequisites →](./Prerequisites#deployed-vault) for details on checking and upgrading your Vault version.
 
-Additionally, ensure your Operator Service wallet has the [Validators Manager →](validators-manager#step-2-assign-validators-manager-role) role assigned in your Vault settings for proper operation.
+Additionally, ensure your Operator Service wallet has the [Validators Manager →](/operator/validators-manager#step-2-assign-validators-manager-role) role assigned in your Vault settings for proper operation.
 :::
 
 ## Validator Changes
@@ -25,7 +25,7 @@ After the Pectra upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251
 - To register `0x01` validators, add the flag `--validators-type=0x01`
 
 :::custom-notes[Consolidations]
-To migrate `0x01` validators to `0x02`, use the `consolidate` command. Read more about it [here →](./additional-actions/consolidate-validators).
+To migrate `0x01` validators to `0x02`, use the `consolidate` command. Read more about it [here →](/operator/additional-actions/consolidate-validators).
 :::
 
 When funding validators:
@@ -114,7 +114,7 @@ V4 Operator **no longer requires pre-uploaded deposit data** for validator regis
 :::custom-info[Important]
 To support this new flow, you must **assign your operator wallet as the Validators Manager** in the Vault settings.
 
-🔗 **Setup Guide**: [How to Set Up Validators Manager →](./validators-manager).
+🔗 **Setup Guide**: [How to Set Up Validators Manager →](/operator/validators-manager).
 :::
 
 ## Automated Rewards Withdrawals
@@ -122,7 +122,7 @@ To support this new flow, you must **assign your operator wallet as the Validato
 It is now possible to **periodically withdraw rewards** for the Vault's fee shareholders.
 
 :::custom-notes[Deep Dive]
-For detailed instructions on fee claiming, see [Fee Claiming →](./additional-actions/fee-claiming).
+For detailed instructions on fee claiming, see [Fee Claiming →](/operator/additional-actions/fee-claiming).
 :::
 
 ## Parameter Changes

@@ -65,3 +65,34 @@ StakeWise Vaults support both [Obol ↗](https://obol.org) and [SSV ↗](https:/
 <div style={{textAlign: 'center', fontSize: '0.9em', color: 'var(--grey)', marginTop: '10px'}}>
   Each node holds one encrypted key share.
 </div>
+
+
+## DVT setup components
+
+### DVT cluster of distributed validators
+
+Performs validator duties
+
+### Stakewise Operator
+
+Registers validators in vault contract. Operator doesn’t have access to validator keystores.
+
+### DVT Relayer
+
+Used to collect exit signatures of the validators for passing them to oracles.
+
+### DVT sidecars
+
+Sidecars provide exit signature shares to DVT Relayer. Each distributed validator node should run DVT sidecar instance. Each sidecar should have access to validator key shares on related DVT node.
+
+## Validator registration procedure
+
+Operator reads validators from the deposit data file.
+
+On validator registration Operator sends request to the relayer:
+
+1. Operator sends a list of public keys from the deposit data to the relayer, then polls the relayers for the exit signature(s)
+2. Relayer creates VoluntaryExit(s) out of public keys and stores to DB. VoluntaryExits can be received through relayer API.
+3. DVT sidecars poll VoluntaryExits they can sign from the relayer, create exit signatures for them and post to the relayer.
+4. Relayer i) receives exit signature shares from the sidecars, ii) Restores exit signature from sidecar shares, verifies exit signature, creates shares for oracles, encrypts with oracle public keys and stores to DB. The encrypted shares for oracles are available through relayer API.
+5. Operator fetches encrypted signatures from relayer and registers the validator.

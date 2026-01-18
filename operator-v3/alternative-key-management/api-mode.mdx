@@ -143,3 +143,16 @@ POST /validators
 :::custom-tips[Relayer Example]
 See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example/tree/f6abdb3b8a307c8456bf37a00ea7691dc5155d79) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
 :::
+
+### DVT Relayer
+
+When using a DVT setup, a specialized DVT relayer is required. Unlike a regular relayer, 
+you do not need to set up a dedicated relayer instance. Instead, you can use the public DVT relayer 
+available at: [https://mainnet-dvt-relayer.stakewise.io/](https://mainnet-dvt-relayer.stakewise.io/).
+
+The Operator environment configuration is similar to that of a regular relayer. However, you must specify the relayer type as follows:
+
+```bash title=".env"
+RELAYER_TYPE=DVT
+# RELAYER_ENDPOINT environment variable is not required
+```

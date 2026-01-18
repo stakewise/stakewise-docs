@@ -95,7 +95,7 @@ On validator registration Operator sends request to the relayer:
 2. Relayer creates VoluntaryExit(s) out of public keys and stores to DB. VoluntaryExits can be received through relayer API.
 3. DVT sidecars poll VoluntaryExits they can sign from the relayer, create exit signatures for them and post to the relayer.
 4. Relayer processes exit signatures:
-  a. Receives exit signature shares from the sidecars.
-  b. Restores exit signatures from sidecar shares and verifies the restored signatures.
-  c. Creates shares for oracles, encrypts them with oracle public keys, and stores them to the DB. The encrypted shares for oracles are available through the relayer API.
+  - Receives exit signature shares from the sidecars.
+  - Restores exit signatures from sidecar shares and verifies the restored signatures.
+  - Creates shares for oracles, encrypts them with oracle public keys, and stores them to the DB. The encrypted shares for oracles are available through the relayer API.
 5. Operator fetches encrypted signatures from relayer and registers the validator.

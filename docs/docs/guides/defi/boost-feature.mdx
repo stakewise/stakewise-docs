@@ -13,24 +13,7 @@ StakeWise Boost enhances staking rewards by using osTokens as collateral to borr
 - **14x looping** in Vaults with 100% LTV
 - **Up to 3x boost** in staking rewards compared to normal staking
 
-<div style={{textAlign: 'center', margin: '2rem 0'}}>
-  <pre style={{
-    display: 'inline-block',
-    textAlign: 'left',
-    background: 'var(--ifm-color-emphasis-200)',
-    color: 'var(--ifm-color-primary)',
-    padding: '2rem',
-    borderRadius: '12px',
-    fontSize: '14px',
-    fontFamily: 'Monaco, monospace',
-    boxShadow: '0 10px 30px rgba(var(--lavender-rgb),0.2)',
-    lineHeight: '1.8'
-  }}>
-    <strong style={{fontSize: '16px', borderBottom: '2px solid var(--lavender)', paddingBottom: '0.5rem', display: 'inline-block', marginBottom: '1rem'}}>🚀 Boost Flow</strong>
-
-    <img src="/img/osETH.svg" alt="osETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> osTokens &rarr; <img src="/img/aave-aave-logo.svg" alt="Aave" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Aave Collateral &rarr; <img src="/img/ethereum.png" alt="ETH" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Borrow ETH &rarr; <img src="/img/icons8-flow-50.png" alt="Flow" style={{width: '16px', height: '16px', display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom'}} /> Stake Again &rarr; 💰 Enhanced APY
-  </pre>
-</div>
+![boost_flow](./img/boost_flow.png)
 
 :::custom-tips[Expected Returns]
 The strategy extracts the difference between additional staking rewards and Aave borrowing costs, historically delivering 4-6% APY with peaks around 7%.
@@ -76,9 +59,33 @@ To use Boost, you need osTokens in your wallet. If you don't have any, see the [
 4. **Confirm the transaction** – Your request enters the unboost queue
 5. **Monitor processing time** and claim assets when available
 
-:::custom-warning[User Best Practices]
-Monitor your position regularly and exit Boost if APY remains negative for more than 7 consecutive days. Stay connected with the StakeWise Discord community for real-time updates on market conditions.
+### Risks & Limitations
+
+Two market-driven conditions can affect your Boost position:
+
+#### Borrow Rate Exceeds Staking APY
+
+Boost generates returns from the spread between your Vault's staking APY and Aave's variable WETH borrow rate.
+Boost APY is positive when the borrow rate is lower than the staking APY, and negative when the borrow rate exceeds the staking APY.
+
+When the borrow rate is lower than the staking APY, your LTV gradually decreases, making your position progressively safer.
+When the borrow rate exceeds the staking APY, your LTV gradually increases.
+
+:::custom-warning[Negative APY Alert]
+If you see a negative APY on your Boost position, it means the WETH borrow rate on Aave currently exceeds your Vault's staking APY.
+If the APY remains negative for more than 7 consecutive days, consider exiting Boost manually.
+Stay connected with the StakeWise Discord community for real-time updates on market conditions.
 :::
+
+You can monitor the current WETH variable borrow rate in the **Borrow Info** section of the [WETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&marketName=proto_mainnet_v3).
+
+#### osETH Supply Cap Reached
+
+Boost deposits osETH as collateral on Aave, which enforces a maximum supply cap.
+When total supplied osETH reaches this cap, no additional osETH can be deposited, making it impossible to open new boosted positions.
+Existing boosted positions are not affected, but new boosts cannot be initiated until supply drops below the cap.
+
+You can monitor the current supply usage in the **Supply Info** section of the [osETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xf1c9acdc66974dfb6decb12aa385b9cd01190e38&marketName=proto_mainnet_v3).
 
 :::custom-notes[Further Reading]
 - [Maximize Your Rewards With StakeWise Boost ↗](https://blog.stakewise.io/productUpdate/maximize-your-rewards-with-stakewise-boost)

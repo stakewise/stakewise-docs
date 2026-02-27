@@ -16,6 +16,8 @@ Meta Vaults don't run validators directly, instead, they delegate assets to othe
 
 ### How Meta Vaults Work
 
+![Meta Vaults Architecture Diagram](./img/MetaVaults_Architecture_Diagram.png)
+
 Meta Vaults receive user deposits and distribute them across sub-vaults according to the curator strategy.
 
 The **Curator** is a new contract that manages how ETH is allocated to and withdrawn from sub-vaults. To be used, a curator contract must be approved by the DAO and added to the `CuratorsRegistry` contract.

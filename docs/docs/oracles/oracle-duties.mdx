@@ -18,6 +18,8 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
+![validator_registration_approval](./img/validator_registration_approval.png)
+
 The [Operator Service →](../../operator/intro) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
 When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
 This is done to maintain the protocol's ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
@@ -38,6 +40,8 @@ For details on how the Operator Service initiates and prepares validator registr
 :::
 
 ## Reward Distribution
+
+![reward_distribution](./img/reward_distribution.png)
 
 Oracles periodically vote on the consensus rewards/penalties accumulated by the Vaults in the Beacon Chain and execution rewards (MEV & priority fees) for the Vaults connected to the Smoothing Pool.
 

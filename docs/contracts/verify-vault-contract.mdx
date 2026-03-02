@@ -13,6 +13,12 @@ When you interact with your Vault, the proxy delegates calls to the implementati
 
 To interact with your Vault on Etherscan — call functions, view the ABI, or inspect the source code — you need to verify the proxy, which links it to the implementation contract.
 
+<style>{`
+  .markdown ol > li::marker {
+    font-weight: bold;
+  }
+`}</style>
+
 ## Step-by-Step Guide
 
 ![Vault verification](./img/vault-verification.gif)
@@ -21,33 +27,33 @@ To interact with your Vault on Etherscan — call functions, view the ABI, or in
   Vault contract verification walkthrough
 </p>
 
-**1. Find Your Vault Contract Address**
+1. **Find Your Vault Contract Address**
 
    If you need help finding your Vault contract address, see [Finding Your Vault Address →](/operator/Prerequisites#finding-your-vault-address) in the Prerequisites section.
 
-**2. Open the Contract on Block Explorer**
+2. **Open the Contract on Block Explorer**
 
    Click on your Vault address in the **Details** section to open the block explorer, or paste it directly into your network's explorer: [etherscan.io ↗](https://etherscan.io) for Ethereum Mainnet, [gnosisscan.io ↗](https://gnosisscan.io) for Gnosis Chain, or [hoodi.etherscan.io ↗](https://hoodi.etherscan.io) for Hoodi Testnet.
 
-**3. Go to the Contract Tab**
+3. **Go to the Contract Tab**
 
    On the contract page, click the **Contract** tab.
 
-**4. Verify the Proxy Contract**
+4. **Verify the Proxy Contract**
 
-   - Click the **More Options** button
-   - Select **Is this a proxy?** from the dropdown menu
-   - You will be redirected to the **Proxy Contract Verification** page
-   - Click **Verify**
-   - Wait for the verification to complete
-   - Click **Save** to confirm the verification
+    - Click the **More Options** button
+    - Select **Is this a proxy?** from the dropdown menu
+    - You will be redirected to the **Proxy Contract Verification** page
+    - Click **Verify**
+    - Wait for the verification to complete
+    - Click **Save** to confirm the verification
 
-**5. Access Contract Functions**
+5. **Access Contract Functions**
 
-   Return to your contract page on the block explorer. You should now see:
+    Return to your contract page on the block explorer. You should now see:
 
-   - **Read as Proxy** — query contract state (balance, fee percent, capacity, etc.)
-   - **Write as Proxy** — execute transactions
+    - **Read as Proxy** — query contract state (balance, fee percent, capacity, etc.)
+    - **Write as Proxy** — execute transactions
 
 :::custom-notes[Note]
 After verification, you can access all Vault functions directly through your network's block explorer.

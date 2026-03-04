@@ -11,13 +11,33 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 # Process Meta Vaults
 
 :::custom-info[Prerequisites]
-- **Operator installed**: Follow the [Installation →](../Installation) guide to set up the Operator Service
-- **Wallet ready**: [Initialize mnemonic →](../validator-keys#step-1-initialize-mnemonic), then [create operator wallet →](../validators-manager#step-1-create-operator-wallet), or use an existing one
+- **Operator installed**: Follow the [Installation →](../installation) guide to set up the Operator Service
+- **Wallet ready**: The operator needs a wallet to pay gas for transactions. See [Wallet Setup →](#wallet-setup) below.
 :::
+
+### Wallet Setup
+
+#### Option A — Create a new wallet
+
+Initialize a mnemonic with:
+```bash
+./operator init
+````
+Then create a wallet with:
+```bash
+./operator create-wallet
+```
+
+#### Option B — Use an existing wallet
+
+Export a private key from an existing wallet, then set it as an environment variable:
+```bash
+export WALLET_PRIVATE_KEY="0xyour_private_key_here"
+```
 
 ## `process-meta-vaults` Command
 
-The `process-meta-vaults` command updates states and processes deposits and exits for one or more meta vaults.
+The `process-meta-vaults` command triggers transactions to update states and process deposits and exits for one or more Meta Vaults.
 
 ### Command Usage
 
@@ -29,7 +49,8 @@ The `process-meta-vaults` command updates states and processes deposits and exit
 The following parameters are required:
 - `--vaults` - Comma separated addresses of meta vaults to process
 - `--execution-endpoints` - Comma separated API endpoints for execution nodes
-- Either `--wallet-file` and `--wallet-password-file` flags or `WALLET_PRIVATE_KEY` environment variable
+- If using [Option A →](#wallet-setup): `--wallet-file` and `--wallet-password-file` flags
+- If using [Option B →](#wallet-setup): the `WALLET_PRIVATE_KEY` environment variable is picked up automatically
 :::
 
 ### Optional Flags

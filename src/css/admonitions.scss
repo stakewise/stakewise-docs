@@ -1,0 +1,118 @@
+@use 'mixins' as *;
+
+.theme-admonition {
+  background: var(--fog);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+
+  a {
+    color: var(--lavender);
+    text-decoration: none;
+
+    &:hover {
+      color: black;
+      text-decoration: underline;
+      text-decoration-color: black !important;
+    }
+  }
+}
+
+.admonition-heading {
+  margin-bottom: 0.75rem;
+
+  h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--lavender);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.admonition-icon {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+}
+
+.admonition-content {
+  line-height: 1.6;
+
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin-bottom: 0.75rem;
+  }
+
+  ul, ol {
+    margin-bottom: 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  li {
+    margin-bottom: 0.25rem;
+  }
+
+  code {
+    background-color: var(--code);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+
+    @include dark-theme {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+// Details / Summary
+details.custom-details {
+  background-color: var(--fog);
+  border: none;
+
+  > summary {
+    color: var(--lavender);
+    opacity: 0.8;
+
+    &::before {
+      border-color: transparent transparent transparent var(--lavender);
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  a {
+    color: var(--lavender);
+    text-decoration: none;
+
+    &:hover {
+      color: black;
+      text-decoration: underline;
+      text-decoration-color: black !important;
+    }
+  }
+}
+
+// Tooltip
+.tooltip-link {
+  color: var(--lavender);
+  text-decoration: underline;
+  text-decoration-color: var(--lavender);
+
+  &:hover {
+    color: black;
+    text-decoration: underline;
+    text-decoration-color: black !important;
+  }
+}

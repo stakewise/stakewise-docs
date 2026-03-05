@@ -6,17 +6,17 @@ import Block, { BlockProps } from './Block/Block'
 const links: BlockProps[] = [
   {
     title: 'Discord',
-    Svg: require("@site/static/icon/discord.svg").default,
+    Svg: require("@site/static/icon/socials/discord.svg").default,
     href: 'https://discord.com/invite/2BSdr2g',
   },
   {
     title: 'Telegram',
-    Svg: require("@site/static/icon/telegram.svg").default,
+    Svg: require("@site/static/icon/socials/telegram.svg").default,
     href: 'https://t.me/stakewise_io',
   },
   {
     title: 'Twitter',
-    Svg: require("@site/static/icon/twitter.svg").default,
+    Svg: require("@site/static/icon/socials/twitter.svg").default,
     href: 'https://x.com/stakewise_io',
   },
   {

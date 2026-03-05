@@ -96,8 +96,10 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/guides/running-a-vault/how-to-create-a-vault',
-        'docs/guides/running-a-vault/setup-vault-infrastructure',
+        'docs/guides/running-a-vault/create-a-regular-vault',
+        'docs/guides/running-a-vault/create-a-meta-vault',
         'docs/guides/running-a-vault/vault-administration',
+        'docs/guides/running-a-vault/setup-vault-infrastructure',
       ],
     },
     'docs/guides/fee-splitter',

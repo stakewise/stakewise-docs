@@ -21,53 +21,7 @@ At the core of StakeWise are individual staking pools called [Vaults →](/docs/
 
 **Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
 
-<div style={{ textAlign: "center", margin: "2rem 0" }}>
-  <div
-    style={{
-      display: "inline-block",
-      textAlign: "center",
-      background: "var(--ifm-color-emphasis-200)",
-      color: "var(--ifm-color-primary)",
-      padding: "2rem",
-      borderRadius: "12px",
-      fontSize: "14px",
-      fontFamily: "Monaco, monospace",
-      boxShadow: "0 10px 30px rgba(var(--lavender-rgb),0.2)",
-      lineHeight: "1.8",
-    }}
-  >
-    <strong
-      style={{
-        fontSize: "16px",
-        borderBottom: "2px solid var(--lavender)",
-        paddingBottom: "0.5rem",
-        display: "inline-block",
-        marginBottom: "1rem",
-      }}
-    >
-      🏛️ Architecture Overview
-    </strong>
-
-    <div><img src="/img/vault.png" alt="Vault" style={{width: '16px', height: '16px', display: 'inline-block', verticalAlign: 'middle'}} /> Your Vault</div>
-    <div>⇅</div>
-
-    <div>🎯 Operator Service</div>
-    <div style={{ display: "flex", justifyContent: "center", gap: "3rem" }}>
-      <div style={{marginRight: '60px'}}>⇅</div>
-      <div>⇅</div>
-    </div>
-
-    <div style={{ display: "flex", justifyContent: "center", gap: "3rem" }}>
-      <div>🛠️ Execution Node</div>
-      <div>⇆</div>
-      <div>
-        🔗 Consensus Node
-      </div>
-    </div>
-  </div>
-</div>
-
-
+![architecture_overview](./img/architecture_overview.png)
 
 ## Core Functions
 
@@ -96,4 +50,4 @@ By default, Vault state updates occur automatically whenever users interact with
 
 ## Next Steps
 
-Before running the Operator Service, ensure your infrastructure meets the necessary [Prerequisites →](./Prerequisites) outlined in the next section.
+Before running the Operator Service, ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.

@@ -16,11 +16,11 @@ Vault performance represents the average performance of its validators. The scor
 
 :::custom-info[Performance Components]
 Vault efficiency consists of two main components:
-- **🎯 Proposer Performance** (20% weight)
-- **🗳️ Attester Performance** (80% weight)
+- **<img src="/img/rewards.png" alt="rewards" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Proposer Performance** (**20% weight**)
+- **<img src="/img/sparks.png" alt="sparks" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Attester Performance** (**80% weight**)
 :::
 
-## 🎯 Proposer Performance
+## Proposer Performance
 
 Block proposals depend on luck, but we penalize validators who miss MEV opportunities. Since MEV rewards can vary greatly between blocks, we focus only on the number of blocks processed and ignore reward sizes to avoid relying on chance.
 
@@ -46,7 +46,7 @@ Verify that your validator clients are configured with the correct **fee recipie
 
 The proposer score is determined from statistics collected over the **past 7 days**.
 
-## 🗳️ Attester Performance
+## Attester Performance
 
 ### Attestation Rewards
 
@@ -81,7 +81,7 @@ The attester score is determined from statistics collected over the **past 7 day
 Sync committee rewards are excluded from calculations as they constitute only 3% of consensus layer rewards and depend entirely on luck.
 :::
 
-## 📊 Final Scoring Formula
+## Final Scoring Formula
 
 The overall Vault performance combines both proposer and attester scores with weighted importance:
 
@@ -93,7 +93,7 @@ score = (8/10 * attestations_score + 2/10 * proposal_score) * 100
 This formula reflects that attestations are the primary source of validator rewards (80% weight), while block proposals provide additional value (20% weight).
 :::
 
-## 🏆 Performance Grades
+## Performance Grades
 
 Vault grades are calculated based on the average performance over the last **7 days**:
 

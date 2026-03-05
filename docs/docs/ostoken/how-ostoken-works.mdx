@@ -41,11 +41,11 @@ The StakeWise DAO sets **Loan-to-Value (LTV) thresholds** that determine how muc
 :::custom-notes[DAO-approved Vault Requirements]
 To qualify for the 99.99% LTV threshold, Vaults must meet all criteria:
 
-- **📊 Scale**: Minimum 10,000 ETH staked
-- **💰 Fee Cap**: Maximum 5% Vault fee
-- **🎯 Performance**: Consistently above median network performance
-- **🔄 Technology**: Latest Vault version deployed
-- **🔒 Collateral**: 5M SWISE tokens locked as slashing insurance
+- **Scale**: Minimum 10,000 ETH staked
+- **Fee Cap**: Maximum 5% Vault fee
+- **Performance**: Consistently above median network performance
+- **Technology**: Latest Vault version deployed
+- **Collateral**: 5M SWISE tokens locked as slashing insurance
 :::
 
 StakeWise DAO has the capability to increase or decrease the osETH minting threshold based on any given Vault's risk parameters.
@@ -76,16 +76,9 @@ Find step-by-step instructions for each staking option in the [Staking Guide →
 
 Position health is continuously tracked through LTV thresholds:
 
-| Status     | LTV Range     | Description                          |
-|------------|--------------|--------------------------------------|
-| Healthy    | ≤ 90%        | Within Vault's safe operating limit  |
-| Moderate   | (90%, 91%]   | Exceeds limit, partial redemption available |
-| Risky      | (91%, 92%]   | Approaching liquidation threshold    |
-| Unhealthy  | > 92%        | Eligible for liquidation             |
+![grade](./img/grade.png)
 
-:::custom-tips[Quick Tip]
-`[ ]` includes value, `( )` excludes value.
-:::
+Positions that exceed **91.5% LTV** become eligible for [redemption](#redemption-mechanism), and those above **92% LTV** are subject to [liquidation](#liquidation-mechanism).
 
 Users can maintain healthy positions by keeping LTV well below limits, adding more collateral, or burning osToken.
 In 99.99% (osETH) / 99.95% (osGNO) Vaults, redemptions and liquidations do not apply, positions remain healthy by design.
@@ -152,18 +145,18 @@ Importantly, the staker whose tokens are redeemed does not lose value – they k
 
 :::custom-notes[Formula: Redeemable Amount (90% LTV)]
 $$
-{\small Redeemable\ osETH = \frac{10 \times Minted\ osETH - 9 \times Staked\ ETH}{Exchange\ Rate}}
+{\small Redeemable\ osETH = \frac{10 \times Minted\ osETH \times Exchange\ Rate - 9 \times Staked\ ETH}{Exchange\ Rate}}
 $$
 :::
 
 :::custom-notes[Example: Bob's Redemption at 91.6% LTV]
 Bob stakes **100 ETH** and mints **87.238 osETH** at an exchange rate of **1.05 ETH/osETH**.
 
-- Value of minted osETH: `87.238 × 1.05 = 91.687 ETH`
-- Loan-to-Value: `91.687 ÷ 100 = 91.6%` → above **91.5% threshold**
+- Value of minted osETH: `87.238 × 1.05 = 91.6 ETH`
+- Loan-to-Value: `91.6 ÷ 100 = 91.6%` → above **91.5% threshold**
 
 **Redemption calculation:**
-- Redeemable osETH = `(10 × 87.238 - 9 × 100) ÷ 1.05 = 15.238`
+- Redeemable osETH = `(10 × 87.238 × 1.05 - 9 × 100) ÷ 1.05 = 15.238`
 - Redeemer burns **15.238 osETH** and receives **16 ETH**
 
 **After redemption:**

@@ -30,7 +30,10 @@ Then create a wallet with:
 
 #### Option B — Use an existing wallet
 
+<img src={require('./img/export-private-key-720.gif').default} alt="export-private-key" style={{maxWidth: '500px', width: '100%', borderRadius: '12px'}} />
+
 Export a private key from an existing wallet, then set it as an environment variable:
+
 ```bash
 export WALLET_PRIVATE_KEY="0xyour_private_key_here"
 ```
@@ -48,7 +51,7 @@ The `process-meta-vaults` command triggers transactions to update states and pro
 :::custom-warning[Required Parameters]
 The following parameters are required:
 - `--vaults` - Comma separated addresses of meta vaults to process
-- `--execution-endpoints` - Comma separated API endpoints for execution nodes
+- `--execution-endpoints` - Comma separated API endpoints for execution nodes. You can find public RPC endpoints on [Chainlist ↗](https://chainlist.org/chain/1)
 - If using [Option A →](#wallet-setup): `--wallet-file` and `--wallet-password-file` flags
 - If using [Option B →](#wallet-setup): the `WALLET_PRIVATE_KEY` environment variable is picked up automatically
 :::

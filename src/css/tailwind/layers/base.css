@@ -6,6 +6,11 @@
   /* Theme colors */
   :root {
     color-scheme: light dark;
+    --ifm-color-info-dark: #5c0189;
+    --code: #f6f7f8;
+    --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.2);
+    --grey: #666666;
+    --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   }
 
   :root[data-theme='light'] {
@@ -15,6 +20,8 @@
     --coal-rgb: 39, 40, 42;
     --ash: rgb(255, 255, 255);
     --ash-rgb: 255, 255, 255;
+    --snow: rgb(255, 255, 255);
+    --snow-rgb: 255, 255, 255;
     --lavender-rgb: 165, 120, 216;
     --lavender: rgb(165, 120, 216);
 
@@ -29,7 +36,12 @@
 
     --ifm-card-background-color: rgba(26, 29, 28, .05) !important;
     --ifm-menu-color-background-hover: rgba(26, 29, 28, .05) !important;
-    --ifm-menu-color-background-active: rgba(26, 29, 28, .05) !important;
+    --ifm-menu-color-background-active: transparent !important;
+    --ifm-breadcrumb-item-background-active: transparent !important;
+    --ifm-breadcrumb-padding-horizontal: 0 !important;
+    --ifm-breadcrumb-padding-vertical: 0 !important;
+
+    --ifm-menu-link-sublist-icon: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 15.5L12 8.5L19 15.5' stroke='%231C1C25' stroke-miterlimit='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
     --fog: #fff;
     --navbar-bg: #e9e7ec;
@@ -42,6 +54,8 @@
     --coal-rgb: 39, 40, 42;
     --ash: rgb(82, 77, 87);
     --ash-rgb: 82, 77, 87;
+    --snow: rgb(255, 255, 255);
+    --snow-rgb: 255, 255, 255;
     --lavender-rgb: 198, 182, 235;
     --lavender: rgb(198, 182, 235);
 
@@ -56,8 +70,13 @@
     --ifm-color-emphasis-200: transparent !important;
 
     --ifm-card-background-color: rgba(26, 29, 28, .2) !important;
-    --ifm-menu-color-background-hover:rgba(26, 29, 28, .2) !important;
-    --ifm-menu-color-background-active: rgba(26, 29, 28, .2) !important;
+    --ifm-menu-color-background-hover: rgba(26, 29, 28, .2) !important;
+    --ifm-menu-color-background-active: transparent !important;
+    --ifm-breadcrumb-item-background-active: transparent !important;
+    --ifm-breadcrumb-padding-horizontal: 0 !important;
+    --ifm-breadcrumb-padding-vertical: 0 !important;
+
+    --ifm-menu-link-sublist-icon: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 15.5L12 8.5L19 15.5' stroke='%23ffffff' stroke-miterlimit='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
     --fog: rgb(82, 77, 87); /* fog effect */
     --navbar-bg: rgba(82, 77, 87, .3);

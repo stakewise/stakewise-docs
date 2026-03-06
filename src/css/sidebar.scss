@@ -1,0 +1,35 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.menu {
+  @include light-theme {
+    background: rgba(26, 29, 28, .05);
+  }
+
+  @include dark-theme {
+    background: rgba(26, 29, 28, .2);
+  }
+}
+
+.menu__link--sublist-caret::after,
+.menu__caret::before {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  background-size: contain;
+  transition: transform 0.2s ease;
+}
+
+.menu__link--active,
+.menu__list-item-collapsible--active {
+  background: none !important;
+
+  .menu__link--sublist-caret,
+  .menu__caret {
+    background: none !important;
+  }
+}
+
+.theme-doc-sidebar-menu {
+  padding-bottom: 50px;
+}

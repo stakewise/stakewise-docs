@@ -9,7 +9,7 @@ const config: Config = {
   title: 'StakeWise Docs',
   tagline: 'Documentation and Guides',
   url: 'https://docs.stakewise.io',
-  favicon: 'img/favicon.ico',
+  favicon: 'icon/favicon.ico',
   baseUrl: '/',
   projectName: 'docs', // Usually your repo name.
   organizationName: 'stakewise', // Usually your GitHub org/user name.
@@ -48,7 +48,7 @@ const config: Config = {
           },
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.scss'),
         },
       }
     ],
@@ -65,6 +65,7 @@ const config: Config = {
   ],
 
   plugins: [
+    'docusaurus-plugin-sass',
     './src/plugins/tailwind-config.js',
     [
       '@docusaurus/plugin-content-docs',
@@ -133,26 +134,22 @@ const config: Config = {
     },
 
     navbar: {
-      title: 'StakeWise Docs',
       hideOnScroll: true,
       logo: {
         alt: 'StakeWise Logo',
-        src: 'img/logo.png',
+        src: 'img/stakewise/logo.png',
         height: 32,
         width: 32,
       },
       items: [
         {
           label: 'Concepts',
-          to: 'docs/overview',
-          type: "docSidebar",
-          activeBaseRegex: `/docs/`,
+          type: 'docSidebar',
           sidebarId: 'docsSidebar',
         },
         {
           label: 'Guides',
-          to: 'docs/guides/intro',
-          activeBaseRegex: `/docs/guides/`,
+          type: 'docSidebar',
           sidebarId: 'guidesSidebar',
         },
         {
@@ -175,26 +172,30 @@ const config: Config = {
         },
         {
           label: 'Contracts',
-          to: '/contracts/api',
-          activeBaseRegex: `/contracts/`,
+          type: 'docSidebar',
           sidebarId: 'contractsSidebar',
         },
         {
           label: 'SDK',
-          to: '/sdk/',
-          activeBaseRegex: `/SDK/`,
+          type: 'docSidebar',
           sidebarId: 'sdkSidebar',
         },
         {
           type: 'html',
           position: 'right',
           value: `
-            <button
+            <a
               class="btn-primary"
-              onclick="window.open('https://app.stakewise.io', '_blank')"
+              href="https://app.stakewise.io"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Open App
-            </button>
+              Launch App
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.0824 5L21 11.9176L14.0824 18.8353" stroke="#1C1C25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 11.9177H3" stroke="#1C1C25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           `,
         },
       ],

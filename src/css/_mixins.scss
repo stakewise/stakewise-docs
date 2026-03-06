@@ -1,0 +1,55 @@
+@use 'variables' as *;
+
+// Theme mixins
+@mixin light-theme {
+  html[data-theme='light'] & {
+    @content;
+  }
+}
+
+@mixin dark-theme {
+  html[data-theme='dark'] & {
+    @content;
+  }
+}
+
+// Page type mixins
+@mixin home-page {
+  html[data-page='home'] & {
+    @content;
+  }
+}
+
+// Responsive
+@mixin tablet {
+  @media (max-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin navbar-mobile {
+  @media (max-width: $breakpoint-navbar-mobile) {
+    @content;
+  }
+}
+
+@mixin crystal-panel {
+  border-radius: 12px;
+  border: 1px solid rgba($color-snow-rgb, .20);
+  box-shadow: 0 7px 12px 0 rgba($color-coal-rgb, .15);
+  backdrop-filter: blur(20px);
+
+  @include light-theme {
+    background-color: rgba($color-snow-rgb, .25);
+  }
+
+  @include dark-theme {
+    background-color: rgba($color-coal-rgb, .25);
+  }
+}

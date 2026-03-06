@@ -123,9 +123,24 @@ Click **Create Vault** to submit your configuration and create the Vault.
 Confirm the transaction in your wallet to deploy your Vault.
 Once the transaction confirms, your Vault is live and visible on the **Operate** page! 🎉
 
-:::custom-info[Next Steps After Creation]
+### Step 7: Set Up Infrastructure
 
-**Set up validators** – Essential for Vault operation. Use the [Setup Checklist →](./getting-your-vault-running) to ensure all requirements are met.
+To start accepting ETH in your Vault, your infrastructure must be properly set up.
+
+**<img src="/img/rocket.png" alt="rocket" style={{width: '24px', height: '24px', verticalAlign: 'middle', display: 'inline'}} /> Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity.
+
+<div style={{ paddingLeft: '1.5rem' }}>
+
+1. **Execution Client** – A fully synced execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/). Supported clients include Nethermind, Besu, Erigon, Geth, and Reth. [Detailed setup instructions →](/operator/prerequisites#execution-client)
+2. **Consensus Client** – A fully synced consensus client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/). Supported clients include Lighthouse, Nimbus, Prysm, Teku, and Lodestar. [Detailed setup instructions →](/operator/prerequisites#consensus-client)
+3. **MEV-Boost** – Set up [MEV-Boost ↗](https://boost.flashbots.net/) to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays. [Learn about MEV strategy options →](/docs/vaults/customization#mev-strategy) and [Smoothing Pool relays →](/operator/smoothing-pool-relays)
+4. **Operator Service** – Specialized software that automates essential validator management tasks for your Vault, such as validator registrations, withdrawals, state updates, and fee claims. The Operator Service runs seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology. [Complete setup guide →](/operator/intro)
+5. **Running Validators** – Upload the allocated validator keys to the validator client and start it. The validators will be registered automatically via the Operator Service.
+
+</div>
+
+:::custom-info[Next Steps]
+**Manage Vault settings** – Update branding, adjust fees, and assign roles in [Vault Administration →](./vault-administration)
 
 **Reach out** to the [StakeWise team](mailto:info@stakewise.io) for Vault verification (better visibility and trust with potential stakers)
 :::

@@ -102,11 +102,25 @@ Click **Create Vault** to submit your configuration and create the Vault.
 Confirm the transaction in your wallet to deploy your Vault.
 Once the transaction confirms, your Vault is live and visible on the **Operate** page! 🎉
 
-:::custom-info[Next Steps After Creation]
+### Step 6: Add Sub-vaults
 
-**Add sub-vaults** – Connect your Meta Vault to the Vaults that will handle staking. Go to your Meta Vault page and click **Sub-vaults** to add them.
+To start accepting deposits, connect at least one sub-vault via the StakeWise UI:
 
-**Run the operator** – Set up the `process-meta-vaults` command to handle deposits and exits. See [Process Meta Vaults →](/operator/additional-actions/process-metavaults) for details.
+<div style={{ paddingLeft: '1.5rem' }}>
+
+1. Go to the **Operate** page and open your Meta Vault
+2. Click **Sub-vaults**
+3. Paste the regular Vault's address or select it from the dropdown
+4. Confirm the transaction in your wallet
+
+</div>
+
+A sub-vault must have at least one active validator before it can be added. If your sub-vault is **private**, you must first whitelist your Meta Vault's contract address in the sub-vault's **Settings → Vault access**.
+
+To update states and process deposits and exits, set up the `process-meta-vaults` Operator Service command. See [Process Meta Vaults →](/operator/additional-actions/process-metavaults) for details.
+
+:::custom-info[Next Steps]
+**Manage Vault settings** – Update branding, adjust fees, and assign roles in [Vault Administration →](./vault-administration)
 
 **Reach out** to the [StakeWise team](mailto:info@stakewise.io) for Vault verification (better visibility and trust with potential stakers)
 :::

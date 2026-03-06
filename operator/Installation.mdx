@@ -14,7 +14,7 @@ The Operator Service can be installed in several ways: as a binary, via Docker, 
 Choose your preferred method and follow the instructions below.
 
 :::custom-warning[Vault Version Requirements]
-This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [Prerequisites →](./Prerequisites#deployed-vault) section for details on checking your Vault version and instructions for older versions.
+This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [Prerequisites →](./prerequisites#deployed-vault) section for details on checking your Vault version and instructions for older versions.
 :::
 
 <Tabs groupId="installation-methods">
@@ -65,7 +65,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ### Pull Official Image
 
     ```bash
-    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.8
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10
     ```
 
     ### Build From Source
@@ -75,7 +75,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     ```bash
     git clone https://github.com/stakewise/v3-operator.git
     cd v3-operator
-    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.8 .
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 .
     ```
 
     ### Run Commands
@@ -84,7 +84,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     docker run --rm -ti \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.8 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 \
     src/main.py COMMAND \
     --flagA=123 \
     --flagB=xyz

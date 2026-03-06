@@ -1,28 +1,28 @@
 ---
-title: Getting Your Vault Running
-sidebar_position: 3
+title: Setup Vault Infrastructure
+sidebar_position: 2
 ---
 
 import Admonition from '@theme/Admonition';
 
-# Getting Your Vault Running
+# Setup Vault Infrastructure
 
 To start accepting ETH in your Vault, your infrastructure must be properly set up.
 Follow the steps below to get everything running.
 
-**🚀 Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity.
+**<img src="/img/rocket.png" alt="rocket" style={{width: '24px', height: '24px', verticalAlign: 'middle', display: 'inline'}} /> Setup difficulty:** Moderate – requires running Ethereum nodes and basic command-line familiarity.
 
-## Setup Checklist ✅
+## Setup Checklist <span style={{display: 'inline'}}><img src="/img/tick.png" alt="tick" style={{width: '36px', height: '36px', verticalAlign: 'middle', display: 'inline'}} /></span>
 
 **1. Execution Client** – A fully synced execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/).
 Supported clients include Nethermind, Besu, Erigon, Geth, and Reth.
-[Detailed setup instructions →](/operator/Prerequisites#execution-client).
+[Detailed setup instructions →](/operator/prerequisites#execution-client).
 
 **2. Consensus Client** – A fully synced consensus client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/).
 Supported clients include Lighthouse, Nimbus, Prysm, Teku, and Lodestar.
-[Detailed setup instructions →](/operator/Prerequisites#consensus-client)
+[Detailed setup instructions →](/operator/prerequisites#consensus-client)
 
-**3. MEV-Boost** – Set up MEV-Boost to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays.
+**3. MEV-Boost** – Set up [MEV-Boost ↗](https://boost.flashbots.net/) to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays.
 [Learn about MEV strategy options →](/docs/vaults/customization#mev-strategy) and [Smoothing Pool relays →](/operator/smoothing-pool-relays).
 
 **4. Operator Service** – Specialized software that automates essential validator management tasks for your Vault, such as validator registrations, withdrawals, state updates, and fee claims.

@@ -12,6 +12,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 After completing [Validators Manager →](validators-manager) setup, you're ready to start the Operator Service to begin automated validator registrations.
 
+![start-operator](./img/start-operator.png)
+
 ## Start Operator Service
 
 You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
@@ -66,7 +68,7 @@ Depending on your installation method, use the appropriate command format:
     docker run --restart on-failure:10 \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.8 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 \
     src/main.py start-local \
     --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --data-dir=/data \

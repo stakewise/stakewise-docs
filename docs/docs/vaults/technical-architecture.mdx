@@ -6,10 +6,12 @@ description: "Learn about Vault deployment, modular design, and upgrade flexibil
 
 # Technical Architecture
 
+![technical_architecture](./img/technical_architecture.png)
+
 ## Vault Deployment
 
 Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state — including user balances — and stores Vault-specific configuration set during initialization, which defines its core operational characteristics.
-Vaults are created through factory contracts such as [VaultFactory ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) by:
+Vaults are created through factory contracts such as [EthVaultFactory ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) by:
 
 1. Deploying a proxy that reserves storage for all Vault data and sets its initial configuration during the initializer call.
 2. Pointing the proxy to a shared implementation contract that contains the Vault's logic and module integration.
@@ -24,6 +26,8 @@ All Vault factory addresses can be found in [Networks →](../../contracts/netwo
 :::
 
 ## Modular Design
+
+![modular_architecture](./img/modular_architecture.png)
 
 The constructor parameters set during deployment link the Vault to essential StakeWise infrastructure
 and the Ethereum Beacon Chain. Each Vault is built from specialized modules that split responsibilities into distinct areas, including:

@@ -4,14 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fragment+Mono:ital,wght@0,400;1,400&display=swap');
 
-:root {
-  --ifm-color-info-dark: #5c0189;
-  --code: #f6f7f8;
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 0, 0.2);
-  --grey: #666666;
-  --ifm-font-family-monospace: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-}
-
 // Typography
 html {
   scroll-behavior: smooth;
@@ -123,38 +115,6 @@ body::before {
   }
 }
 
-// Alerts
-.alert--success {
-  @include dark-theme {
-    --ifm-tabs-color-active-border: #7fbc7f;
-    --ifm-alert-background-color: #65cd6533;
-  }
-}
-
-.alert--danger {
-  @include dark-theme {
-    --ifm-alert-background-color: #94595b6b;
-  }
-}
-
-.alert--warning {
-  @include dark-theme {
-    --ifm-alert-background-color: #9490596b;
-  }
-}
-
-.alert a {
-  text-decoration-color: var(--color-lavender) !important;
-}
-
-// Breadcrumbs
-.breadcrumbs,
-.breadcrumbs__item {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-}
-
 // Code blocks
 code[class*="language-bash"],
 pre[class*="language-bash"],
@@ -163,7 +123,7 @@ pre[class*="language-bash"],
   font-family: Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace !important;
 }
 
-// Crystal backgrounds (home page blocks)
+// Crystal
 .crystal-button-block {
   @include light-theme {
     box-shadow: 0 7px 12px 0 rgba($color-coal-rgb, .15);
@@ -209,28 +169,4 @@ pre[class*="language-bash"],
 // Footer
 .footer {
   display: none;
-  padding: 2px;
-
-  @include light-theme {
-    background: rgba(26, 29, 28, .05);
-  }
-
-  @include dark-theme {
-    background: rgba(26, 29, 28, .3);
-  }
-}
-
-// Sidebar
-.menu {
-  @include light-theme {
-    background: rgba(26, 29, 28, .05);
-  }
-
-  @include dark-theme {
-    background: rgba(26, 29, 28, .2);
-  }
-}
-
-.theme-doc-sidebar-menu {
-  padding-bottom: 50px;
 }

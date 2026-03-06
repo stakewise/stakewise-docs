@@ -144,15 +144,12 @@ const config: Config = {
       items: [
         {
           label: 'Concepts',
-          to: 'docs/overview',
-          type: "docSidebar",
-          activeBaseRegex: `/docs/`,
+          type: 'docSidebar',
           sidebarId: 'docsSidebar',
         },
         {
           label: 'Guides',
-          to: 'docs/guides/intro',
-          activeBaseRegex: `/docs/guides/`,
+          type: 'docSidebar',
           sidebarId: 'guidesSidebar',
         },
         {
@@ -175,14 +172,12 @@ const config: Config = {
         },
         {
           label: 'Contracts',
-          to: '/contracts/api',
-          activeBaseRegex: `/contracts/`,
+          type: 'docSidebar',
           sidebarId: 'contractsSidebar',
         },
         {
           label: 'SDK',
-          to: '/sdk/',
-          activeBaseRegex: `/SDK/`,
+          type: 'docSidebar',
           sidebarId: 'sdkSidebar',
         },
         {

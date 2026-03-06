@@ -15,14 +15,14 @@ const Footer: React.FC = () => {
   const year = new Date().getFullYear()
 
   return (
-    <div className={s.container}>
+    <footer className={s.container}>
       <div className={s.divider} />
       <div className={s.inner}>
         <img src="/img/stakewise/logo.png" alt="StakeWise" className={s.logo} />
         <span className={s.copyright}>
           Copyright &copy; {year} StakeWise
         </span>
-        <div className={s.socials}>
+        <nav className={s.socials}>
           {
             socials.map(({ Icon, href, title }) => (
               <a
@@ -37,9 +37,9 @@ const Footer: React.FC = () => {
               </a>
             ))
           }
-        </div>
+        </nav>
       </div>
-    </div>
+    </footer>
   )
 }
 

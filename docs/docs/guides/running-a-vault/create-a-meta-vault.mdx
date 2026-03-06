@@ -1,0 +1,126 @@
+---
+title: Create a Meta Vault
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from '@theme/Admonition';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
+
+# Create a Meta Vault
+
+A Meta Vault does not run validators. Instead, it delegates assets to other Vaults (sub-vaults) that handle staking. [Learn more about Meta Vaults →](/docs/vaults/meta-vaults)
+
+### Step 1: Select Vault Type
+
+<ThemedImage
+  alt="step1-meta"
+  sources={{
+    light: require('./img/step1-meta-light.png').default,
+    dark: require('./img/step1-meta-dark.png').default,
+  }}
+  style={{maxWidth: '600px', width: '100%'}}
+/>
+
+Select **Meta Vault**. You can optionally enable the following:
+
+- **<img src="/img/lock.png" alt="lock" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Private** — restrict deposits to approved wallets only
+- **<img src="/img/rewards.png" alt="rewards" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> ERC-20 Token** — stakers receive a token they can hold in their wallet and transfer to others
+
+:::custom-warning[Required Acknowledgment]
+You must check **"I understand that the selected vault type cannot be changed later"** before proceeding.
+:::
+
+### Step 2: Configure Vault Parameters
+
+<ThemedImage
+  alt="step2-meta"
+  sources={{
+    light: require('./img/step2-meta-light.png').default,
+    dark: require('./img/step2-meta-dark.png').default,
+  }}
+  style={{maxWidth: '600px', width: '100%'}}
+/>
+
+Configure your Vault parameters:
+
+- **Vault Capacity** – Set maximum ETH capacity (default: unlimited ∞). [Learn more →](/docs/vaults/customization#capacity)
+- **Vault Fee** – The fee percent your Vault will charge from users' staking rewards.
+
+:::custom-info[Vault Fee]
+The Vault Fee can be updated after creation. [Learn more about fee →](/docs/fees/intro#vault-fees)
+:::
+
+If you enabled the ERC-20 Token in [Step 1 →](#step-1-select-vault-type), you will also need to set:
+- **Token Name** – Your Vault ERC-20 token name (e.g. Vitalik Staked ETH)
+- **Token Symbol** – Your Vault ERC-20 token symbol (e.g. vstETH)
+
+:::custom-warning[Permanent Settings]
+All parameters above, except the fee, **cannot be changed later**. Choose carefully before proceeding.
+:::
+
+### Step 3: Add Branding
+
+<ThemedImage
+  alt="step3-meta"
+  sources={{
+    light: require('./img/step3-meta-light.png').default,
+    dark: require('./img/step3-meta-dark.png').default,
+  }}
+  style={{maxWidth: '600px', width: '100%'}}
+/>
+
+Customize your Vault's appearance with name, description, and logo.
+
+:::custom-notes[Branding Can Be Changed Later]
+Unlike Vault parameters, you can update branding anytime via your Vault interface: press **Settings → Branding → Edit → Save**.
+:::
+
+### Step 4: Summary
+
+<ThemedImage
+  alt="step4-meta"
+  sources={{
+    light: require('./img/step4-meta-light.png').default,
+    dark: require('./img/step4-meta-dark.png').default,
+  }}
+  style={{maxWidth: '600px', width: '100%'}}
+/>
+
+Review all your settings before final submission. This is your last chance to verify everything is correct, such as name, capacity, fees, and type.
+
+:::custom-warning[Risk Acknowledgment]
+You must check **"I understand the risks of operating the Vault and confirm my configuration choices"** before proceeding.
+:::
+
+Click **Create Vault** to submit your configuration and create the Vault.
+
+### Step 5: Transaction Confirmation
+
+Confirm the transaction in your wallet to deploy your Vault.
+Once the transaction confirms, your Vault is live and visible on the **Operate** page! 🎉
+
+### Step 6: Add Sub-vaults
+
+To start accepting deposits, connect at least one sub-vault via the StakeWise UI:
+
+<div style={{ paddingLeft: '1.5rem' }}>
+
+1. Go to the **Operate** page and open your Meta Vault
+2. Click **Sub-vaults**
+3. Paste the regular Vault's address or select it from the dropdown
+4. Confirm the transaction in your wallet
+
+</div>
+
+A sub-vault must have at least one active validator before it can be added. If your sub-vault is **private**, you must first whitelist your Meta Vault's contract address in the sub-vault's **Settings → Vault access**.
+
+To update states and process deposits and exits, set up the `process-meta-vaults` Operator Service command. See [Process Meta Vaults →](/operator/additional-actions/process-metavaults) for details.
+
+:::custom-info[Next Steps]
+**Manage Vault settings** – Update branding, adjust fees, and assign roles in [Vault Administration →](./vault-administration)
+
+**Reach out** to the [StakeWise team](mailto:info@stakewise.io) for Vault verification (better visibility and trust with potential stakers)
+:::

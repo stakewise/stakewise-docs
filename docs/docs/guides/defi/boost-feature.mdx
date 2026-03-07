@@ -10,7 +10,7 @@ import Image from '@theme/IdealImage'
 
 ## How Boost Works
 
-StakeWise Boost enhances staking rewards by using osTokens as collateral to borrow additional assets on [Aave ↗](https://aave.com/). This borrowed capital is then staked again, creating a "looped" process that amplifies your staking position:
+StakeWise Boost enhances staking rewards by using osETH as collateral to borrow additional assets on [Aave ↗](https://aave.com/). This borrowed capital is then staked again, creating a "looped" process that amplifies your staking position:
 
 - **6x looping** in Vaults with 90% LTV
 - **14x looping** in Vaults with 100% LTV
@@ -24,8 +24,10 @@ The strategy extracts the difference between additional staking rewards and Aave
 
 ### Safety Mechanisms
 
+![danger_zone](./img/danger_zone.png)
+
 :::custom-info[Liquidation Protection]
-**Max LTV**: 93% – the maximum you can borrow against your osToken collateral
+**Max LTV**: 93% – the maximum you can borrow against your osETH collateral
 
 **Liquidation Threshold**: 95% – when positions become subject to liquidation
 
@@ -34,7 +36,7 @@ The strategy extracts the difference between additional staking rewards and Aave
 
 #### Price Stability Protection
 
-Boost eliminates depeg-related liquidation risks through Aave's use of StakeWise's native price feed for osTokens instead of volatile secondary market prices. This means osToken price fluctuations on DEXs cannot trigger liquidations, as your collateral value always equals the osToken redemption value rather than market price. This design ensures that temporary market volatility doesn't endanger your boosted position.
+Boost eliminates depeg-related liquidation risks through Aave's use of StakeWise's native price feed for osETH instead of volatile secondary market prices. This means osETH price fluctuations on DEXs cannot trigger liquidations, as your collateral value always equals the osETH redemption value rather than market price. This design ensures that temporary market volatility doesn't endanger your boosted position.
 
 #### Automatic Unboost
 
@@ -43,7 +45,7 @@ As an additional safety layer, Boost includes an automatic unboost mechanism tha
 ### How to Use Boost
 
 :::custom-info[Prerequisites]
-To use Boost, you need osTokens in your wallet. If you don't have any, see the [staking guide →](/docs/guides/staking/intro) for instructions on minting osTokens from your stake.
+To use Boost, you need osETH in your wallet. If you don't have any, see the [staking guide →](/docs/guides/staking/intro) for instructions on minting osETH from your stake.
 :::
 
 #### Boosting Process
@@ -52,7 +54,7 @@ To use Boost, you need osTokens in your wallet. If you don't have any, see the [
 
 1. **Go to your Vault page** and find the **"Boost"** section
 2. **Click plus (+) button** to start the boost process
-3. **Enter the amount** of osTokens to boost in the input field
+3. **Enter the amount** of osETH to boost in the input field
 4. **Review boost details** and confirm the transaction in your wallet
 5. **View your position** – Check your boosted osETH balance and enhanced APY in Position changes
 
@@ -64,7 +66,7 @@ To use Boost, you need osTokens in your wallet. If you don't have any, see the [
 
 1. **Go to your Vault page** and find the **"Boost"** section
 2. **Click minus (–) button** to start the unboost process
-3. **Enter the amount** of osTokens to unboost in the input field
+3. **Enter the amount** of osETH to unboost in the input field
 4. **Confirm the transaction** – Your request enters the unboost queue
 5. **Monitor processing time** and claim assets when available
 
@@ -104,6 +106,6 @@ You can monitor the current supply usage in the **Supply Info** section of the [
 :::
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>1.</span> The 2% safety buffer provides substantial protection because, based on historical analysis of 420 days: LTV increases only ~10.7% of the time (39 days per year), with the longest negative streak being just 7 days during Genesis Vault validator rotation. Even in extreme scenarios where borrow APYs consistently exceed osToken APY by 2%, liquidation would take over a year. For every 1 day of LTV increase, users benefit from 8 days of LTV decline, making positions progressively safer over time.
+  <span>1.</span> The 2% safety buffer provides substantial protection because, based on historical analysis of 420 days: LTV increases only ~10.7% of the time (39 days per year), with the longest negative streak being just 7 days during Genesis Vault validator rotation. Even in extreme scenarios where borrow APYs consistently exceed osETH APY by 2%, liquidation would take over a year. For every 1 day of LTV increase, users benefit from 8 days of LTV decline, making positions progressively safer over time.
   <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

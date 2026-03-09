@@ -1,6 +1,7 @@
 import React from 'react'
 import cx from 'classnames'
 import Link from '@docusaurus/Link'
+import Image, { type Props as ImageProps } from '@theme/IdealImage'
 
 import s from './Post.module.scss'
 
@@ -10,7 +11,7 @@ export type PostProps = {
   title: string
   text: string
   href: string
-  image: string
+  image: ImageProps['img']
 }
 
 const Post: React.FC<PostProps> = (props) => {
@@ -22,9 +23,9 @@ const Post: React.FC<PostProps> = (props) => {
       to={href}
     >
       <div className={cx(s.imageWrapper, 'relative overflow-hidden rounded-8')}>
-        <img
+        <Image
           className="w-full h-full object-cover pointer-events-none"
-          src={image}
+          img={image}
           alt={title}
         />
       </div>

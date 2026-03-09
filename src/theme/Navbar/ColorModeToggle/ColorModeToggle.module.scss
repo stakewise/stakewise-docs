@@ -1,0 +1,17 @@
+@use 'mixins' as *;
+
+.lightIcon {
+  display: none;
+
+  @include dark-theme {
+    display: block;
+  }
+}
+
+.darkIcon {
+  display: block;
+
+  @include dark-theme {
+    display: none;
+  }
+}

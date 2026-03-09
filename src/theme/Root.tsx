@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { useLocation } from '@docusaurus/router'
 
 
@@ -14,7 +14,8 @@ const Root: React.FC<RootProps> = (props) => {
 
   const isHomePage = pathname === '/'
 
-  useEffect(() => {
+  // This only handles client-side SPA navigation (see headTags in docusaurus.config.ts)
+  useLayoutEffect(() => {
     document.documentElement.setAttribute('data-page', isHomePage ? 'home' : 'inner')
   }, [isHomePage])
 

@@ -20,6 +20,14 @@ const config: Config = {
   onDuplicateRoutes: 'throw',
   onBrokenMarkdownLinks: 'throw',
 
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `(function(){document.documentElement.setAttribute('data-page',window.location.pathname==='/'?'home':'inner')})()`,
+    },
+  ],
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],

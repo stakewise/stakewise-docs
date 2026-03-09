@@ -66,6 +66,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
     width: 44px;
     height: 44px;
     padding: 0;
@@ -83,6 +84,12 @@
   .DocSearch-Search-Icon {
     width: 16px;
     height: 16px;
+    color: rgba(var(--moon-rgb), 0.7);
+
+    circle,
+    path {
+      stroke-width: 2.5;
+    }
   }
 }
 

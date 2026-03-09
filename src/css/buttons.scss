@@ -13,9 +13,8 @@
   > svg {
     width: 20px;
     height: 20px;
-    opacity: 0.7;
-    fill: var(--moon);
-    color: var(--moon);
+    fill: rgba(var(--moon-rgb), 0.7);
+    color: rgba(var(--moon-rgb), 0.7);
   }
 
   &:hover {
@@ -27,15 +26,24 @@
 
 .btn-primary {
   background: var(--snow);
+  color: var(--coal);
   padding: 0 16px;
   gap: 12px;
   text-decoration: none;
+
+  &:hover {
+    color: var(--coal);
+  }
 
   svg {
     display: inline-block;
     flex-shrink: 0;
     opacity: 1;
     fill: none;
+
+    path {
+      stroke: var(--coal);
+    }
   }
 }
 

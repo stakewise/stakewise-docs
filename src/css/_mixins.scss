@@ -33,12 +33,6 @@
   }
 }
 
-@mixin navbar-mobile {
-  @media (max-width: $breakpoint-navbar-mobile) {
-    @content;
-  }
-}
-
 @mixin crystal-panel {
   border-radius: 12px;
   border: 1px solid rgba($color-snow-rgb, .20);

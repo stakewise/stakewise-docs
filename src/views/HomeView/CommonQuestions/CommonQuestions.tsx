@@ -1,26 +1,24 @@
 import React, { useState } from 'react'
 import cx from 'classnames'
 
+import { Question } from '@site/src/components'
+
 import data from './questions'
-import Question from './Question/Question'
-
-import s from './FAQ.module.css'
-import Tooltip from '../Tooltip/Tooltip'
 
 
-type FAQProps = {
+type CommonQuestionsProps = {
   className?: string
 }
 
-const FAQ: React.FC<FAQProps> = (props) => {
+const CommonQuestions: React.FC<CommonQuestionsProps> = (props) => {
   const { className } = props
 
   const [ openIndex, setOpenIndex ] = useState<number | null>(null)
 
   return (
-    <div className={cx(className, s.container, 'mt-40 p-16 overflow-hidden mx-auto')}>
-      <h2 className='text-t18m text-center'>FAQ</h2>
-      <div className="overflow-y-auto flex flex-col">
+    <div className={cx(className, 'flex flex-col gap-32 mt-[100px]')}>
+      <h2>Common questions</h2>
+      <div className="crystal-bg rounded-[12px] px-24">
         {
           data.map((question, index) => (
             <Question
@@ -28,6 +26,7 @@ const FAQ: React.FC<FAQProps> = (props) => {
               text={question.answer}
               title={question.question}
               isOpen={openIndex === index}
+              isLast={index === data.length - 1}
               onToggle={() => setOpenIndex(openIndex === index ? null : index)}
             />
           ))
@@ -38,4 +37,4 @@ const FAQ: React.FC<FAQProps> = (props) => {
 }
 
 
-export default React.memo(FAQ)
+export default React.memo(CommonQuestions)

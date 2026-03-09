@@ -1,7 +1,4 @@
 import React from 'react'
-import cx from 'classnames'
-
-import s from './Item.module.css'
 
 
 type ItemProps = {
@@ -16,11 +13,11 @@ const Item: React.FC<ItemProps> = (props) => {
 
   return (
     <a
-      className={cx(s.container, 'flex items-center justify-between crystal-button-block rounded-8 m-12 px-12 py-16')}
+      className="flex-auto flex items-center justify-between crystal-bg-hovered rounded-8 p-16"
       target="_blank"
       href={href}
     >
-      <div className="mr-16 text-t14m hover:text--no-decoration">
+      <div className="mr-16 text-t16m hover:text--no-decoration">
         {title}
       </div>
       <LinkIcon className="w-16 h-16 opacity-50" />

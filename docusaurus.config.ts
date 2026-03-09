@@ -3,6 +3,7 @@ import type * as Preset from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import path from 'path'
 
 
 const config: Config = {
@@ -65,7 +66,14 @@ const config: Config = {
   ],
 
   plugins: [
-    'docusaurus-plugin-sass',
+    [
+      'docusaurus-plugin-sass',
+      {
+        sassOptions: {
+          loadPaths: [path.resolve(__dirname, 'src/css')],
+        },
+      },
+    ],
     './src/plugins/tailwind-config.js',
     [
       '@docusaurus/plugin-content-docs',

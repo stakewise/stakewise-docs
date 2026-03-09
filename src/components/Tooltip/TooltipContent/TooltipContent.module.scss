@@ -1,0 +1,37 @@
+@use 'mixins' as *;
+
+.tooltip {
+  max-width: 330px;
+  overflow: visible;
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 15px;
+
+  @include light-theme {
+    background-color: #e9ecef;
+    color: #212529;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  @include dark-theme {
+    background-color: rgba(26, 29, 28, 1);
+    color: #f7fafc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+
+  @include light-theme {
+    background: #e9ecef;
+  }
+
+  @include dark-theme {
+    background: rgba(26, 29, 28, 1);
+  }
+}

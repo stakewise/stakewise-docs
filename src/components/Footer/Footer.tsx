@@ -15,14 +15,18 @@ const Footer: React.FC = () => {
   const year = new Date().getFullYear()
 
   return (
-    <footer className={s.container}>
-      <div className={s.divider} />
-      <div className={s.inner}>
-        <img src="/img/stakewise/logo.png" alt="StakeWise" className={s.logo} />
-        <span className={s.copyright}>
+    <footer className="mt-40 pb-24">
+      <div className="h-px bg-moon opacity-15" />
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center pt-24">
+        <img
+          className="w-32 h-32"
+          alt="StakeWise"
+          src="/img/stakewise/logo.png"
+        />
+        <span className="text-t14m opacity-50">
           Copyright &copy; {year} StakeWise
         </span>
-        <nav className={s.socials}>
+        <nav className="flex items-center justify-end gap-16">
           {
             socials.map(({ Icon, href, title }) => (
               <a

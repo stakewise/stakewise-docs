@@ -3,7 +3,7 @@ import cx from 'classnames'
 
 import Item from './Item/Item'
 
-import s from './GitHub.module.css'
+import s from './DeveloperLinks.module.scss'
 
 
 const items = [
@@ -29,10 +29,10 @@ const items = [
   },
 ] as const
 
-const GitHub: React.FC = () => (
-  <div className={cx(s.box, 'mt-40 mx-auto max-w-[966px] flex items-center justify-center rounded-12 max-[960px]:flex-wrap')}>
-    <div className="text-center text-t18b w-[220px] max-[960px]:flex-1 max-[960px]:pt-24">Developer Links</div>
-    <div className="py-12 flex items-center justify-between flex-wrap min-[961px]:flex-1">
+const DeveloperLinks: React.FC = () => (
+  <div className="flex flex-col gap-32 mt-[100px]">
+    <h2>Developer Links</h2>
+    <div className={cx(s.items, 'flex items-center justify-between flex-wrap gap-20')}>
       {
         items.map((item) => (
           <Item key={item.title} {...item} />
@@ -43,4 +43,4 @@ const GitHub: React.FC = () => (
 )
 
 
-export default React.memo(GitHub)
+export default React.memo(DeveloperLinks)

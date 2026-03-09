@@ -9,6 +9,7 @@
   background: var(--navbar-bg);
 
   @include home-page {
+    padding: 0;
     background: transparent;
     box-shadow: none;
   }
@@ -130,12 +131,28 @@
   }
 }
 
-@include navbar-mobile {
-  .navbar__toggle {
-    margin-left: 16px;
-  }
+@include tablet {
   .navbar__brand {
     margin-left: 16px;
+  }
+
+  .navbar__items--right {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+
+    > div[class*="navbarSearchContainer"] {
+      position: static;
+      order: 2;
+    }
+
+    > #color-mode-toggle {
+      order: 1;
+    }
+  }
+
+  #custom-navbar .navbar-sidebar #color-mode-toggle {
+    display: none;
   }
 
   .navbar-sidebar {
@@ -152,7 +169,9 @@
     }
 
     &__items ul.menu__list {
-      padding-left: 24px;
+      .menu__list-item:last-child {
+        margin-top: 16px;
+      }
     }
   }
 }

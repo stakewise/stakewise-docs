@@ -1,7 +1,7 @@
 import React from 'react'
 
 import type { TooltipData } from '../Tooltip'
-import s from './TooltipTrigger.module.css'
+import s from './TooltipTrigger.module.scss'
 
 
 type TooltipTriggerProps = {

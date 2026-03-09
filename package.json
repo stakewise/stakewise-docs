@@ -15,9 +15,10 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "3.7.0",
-    "@docusaurus/preset-classic": "3.7.0",
-    "@docusaurus/theme-search-algolia": "3.8.1",
+    "@docusaurus/core": "3.9.2",
+    "@docusaurus/plugin-ideal-image": "3.9.2",
+    "@docusaurus/preset-classic": "3.9.2",
+    "@docusaurus/theme-search-algolia": "3.9.2",
     "@floating-ui/react": "0.27.13",
     "@headlessui/react": "2.2.2",
     "@mdx-js/react": "3.0.0",
@@ -32,9 +33,9 @@
     "sass": "1.97.3"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.7.0",
-    "@docusaurus/tsconfig": "3.7.0",
-    "@docusaurus/types": "3.7.0",
+    "@docusaurus/module-type-aliases": "3.9.2",
+    "@docusaurus/tsconfig": "3.9.2",
+    "@docusaurus/types": "3.9.2",
     "@tailwindcss/postcss": "4.1.4",
     "postcss": "8.5.3",
     "tailwindcss": "4.1.4",

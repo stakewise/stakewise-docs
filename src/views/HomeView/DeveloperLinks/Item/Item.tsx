@@ -17,7 +17,7 @@ const Item: React.FC<ItemProps> = (props) => {
       target="_blank"
       href={href}
     >
-      <div className="mr-16 text-t16m hover:text--no-decoration">
+      <div className="mr-16 text-t16m hover:no-underline">
         {title}
       </div>
       <LinkIcon className="w-16 h-16 opacity-50" />

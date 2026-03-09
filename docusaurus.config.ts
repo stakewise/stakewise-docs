@@ -76,6 +76,16 @@ const config: Config = {
     ],
     './src/plugins/tailwind-config.js',
     [
+      '@docusaurus/plugin-ideal-image',
+      {
+        quality: 70,
+        max: 1030,
+        min: 640,
+        steps: 2,
+        disableInDev: false,
+      },
+    ],
+    [
       '@docusaurus/plugin-content-docs',
       {
         id: 'operator',

@@ -4,9 +4,11 @@ sidebar_position: 4
 description: "Learn about Vault deployment, modular design, and upgrade flexibility"
 ---
 
+import Image from '@theme/IdealImage'
+
 # Technical Architecture
 
-![technical_architecture](./img/technical_architecture.png)
+<Image img={require('./img/technical_architecture.png')} alt="technical_architecture" />
 
 ## Vault Deployment
 
@@ -27,7 +29,7 @@ All Vault factory addresses can be found in [Networks →](../../contracts/netwo
 
 ## Modular Design
 
-![modular_architecture](./img/modular_architecture.png)
+<Image img={require('./img/modular_architecture.png')} alt="modular_architecture" />
 
 The constructor parameters set during deployment link the Vault to essential StakeWise infrastructure
 and the Ethereum Beacon Chain. Each Vault is built from specialized modules that split responsibilities into distinct areas, including:

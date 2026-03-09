@@ -20,6 +20,16 @@ p {
   font-weight: 400;
 }
 
+.markdown .ideal-image-wrapper {
+  margin-bottom: 16px;
+
+  img,
+  svg {
+    display: block;
+    margin-bottom: 0 !important;
+  }
+}
+
 h1, h3, h4, h5 {
   font-weight: 500;
   margin-bottom: 0;

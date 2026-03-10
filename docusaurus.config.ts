@@ -10,7 +10,7 @@ const config: Config = {
   title: 'StakeWise Docs',
   tagline: 'Documentation and Guides',
   url: 'https://docs.stakewise.io',
-  favicon: 'icon/favicon.ico',
+  favicon: 'icons/favicon.ico',
   baseUrl: '/',
   projectName: 'docs', // Usually your repo name.
   organizationName: 'stakewise', // Usually your GitHub org/user name.
@@ -163,7 +163,7 @@ const config: Config = {
       hideOnScroll: true,
       logo: {
         alt: 'StakeWise Logo',
-        src: 'img/stakewise/logo.png',
+        src: 'icons/stakewise/logo.png',
         height: 32,
         width: 32,
       },

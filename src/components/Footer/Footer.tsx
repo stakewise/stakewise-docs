@@ -5,11 +5,11 @@ import s from './Footer.module.scss'
 
 
 const socials = [
-  { Icon: require('@site/static/icon/socials/discord.svg').default, href: 'https://discord.com/invite/2BSdr2g', title: 'Discord' },
-  { Icon: require('@site/static/icon/socials/telegram.svg').default, href: 'https://t.me/stakewise_io', title: 'Telegram' },
-  { Icon: require('@site/static/icon/socials/twitter.svg').default, href: 'https://x.com/stakewise_io', title: 'Twitter' },
-  { Icon: require('@site/static/icon/forum.svg').default, href: 'https://forum.stakewise.io/', title: 'Forum' },
-  { Icon: require('@site/static/icon/vote.svg').default, href: 'https://vote.stakewise.io/', title: 'Vote' },
+  { Icon: require('@site/static/icons/socials/discord.svg').default, href: 'https://discord.com/invite/2BSdr2g', title: 'Discord' },
+  { Icon: require('@site/static/icons/socials/telegram.svg').default, href: 'https://t.me/stakewise_io', title: 'Telegram' },
+  { Icon: require('@site/static/icons/socials/twitter.svg').default, href: 'https://x.com/stakewise_io', title: 'Twitter' },
+  { Icon: require('@site/static/icons/forum.svg').default, href: 'https://forum.stakewise.io/', title: 'Forum' },
+  { Icon: require('@site/static/icons/vote.svg').default, href: 'https://vote.stakewise.io/', title: 'Vote' },
 ]
 
 const Footer: React.FC = () => {
@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
         <img
           className="w-32 h-32"
           alt="StakeWise"
-          src="/img/stakewise/logo.png"
+          src="/icons/stakewise/logo.png"
         />
         <span className="text-t14m opacity-50">
           Copyright &copy; {year} StakeWise

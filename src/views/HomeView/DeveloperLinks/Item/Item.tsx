@@ -6,7 +6,7 @@ type ItemProps = {
   href: string
 }
 
-const LinkIcon = require("@site/static/icon/link.svg").default
+const LinkIcon = require("@site/static/icons/link.svg").default
 
 const Item: React.FC<ItemProps> = (props) => {
   const { title, href } = props

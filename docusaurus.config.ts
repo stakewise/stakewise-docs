@@ -160,7 +160,7 @@ const config: Config = {
     },
 
     navbar: {
-      hideOnScroll: true,
+      hideOnScroll: false,
       logo: {
         alt: 'StakeWise Logo',
         src: 'icons/stakewise/logo.png',

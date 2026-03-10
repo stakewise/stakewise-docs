@@ -7,58 +7,15 @@
 
 .navbar {
   background: var(--navbar-bg);
+  transition: background 0.5s ease, box-shadow 0.5s ease;
 
   @include home-page {
     padding: 0;
     background: transparent;
     box-shadow: none;
   }
-}
 
-.navbar__inner {
-  @include home-page {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: 0 60px;
-
-    @include tablet {
-      padding: 0 32px;
-    }
-
-    @include mobile {
-      padding: 0 24px;
-    }
-  }
-}
-
-// Hide external link SVG icons
-.footer__link-item svg,
-.navbar__link svg {
-  display: none;
-}
-
-.navbar__items--right {
-  gap: 20px;
-
-  // Search
-  > div[class*="navbarSearchContainer"] {
-    order: 1;
-  }
-
-  // Color mode toggle
-  > #color-mode-toggle,
-  > div:has(#color-mode-toggle) {
-    order: 2;
-  }
-
-  // Launch App
-  > .navbar__item:has(.btn-primary) {
-    order: 3;
-    padding-right: 0;
-  }
-}
-
-#custom-navbar {
+  // Search & color mode toggle buttons
   .DocSearch-Button,
   #color-mode-toggle {
     @include crystal-panel;
@@ -90,6 +47,59 @@
     path {
       stroke-width: 2.5;
     }
+  }
+}
+
+html[data-page='home'][data-scrolled] .navbar {
+  background: var(--navbar-bg);
+  box-shadow: var(--ifm-navbar-shadow);
+  backdrop-filter: blur(30px);
+
+  @include dark-theme {
+    background: rgba(var(--ash-rgb), .7);
+  }
+}
+
+.navbar__inner {
+  @include home-page {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 60px;
+
+    @include tablet {
+      padding: 0 32px;
+    }
+
+    @include mobile {
+      padding: 0 24px;
+    }
+  }
+}
+
+// Hide external link SVG icons
+.footer__link-item svg,
+.navbar__link svg {
+  display: none;
+}
+
+.navbar__items--right {
+  gap: 16px;
+
+  // Search
+  > div[class*="navbarSearchContainer"] {
+    order: 1;
+  }
+
+  // Color mode toggle
+  > #color-mode-toggle,
+  > div:has(#color-mode-toggle) {
+    order: 2;
+  }
+
+  // Launch App
+  > .navbar__item:has(.btn-primary) {
+    order: 3;
+    padding: 0;
   }
 }
 
@@ -159,7 +169,7 @@
     }
   }
 
-  #custom-navbar .navbar-sidebar #color-mode-toggle {
+  .navbar .navbar-sidebar #color-mode-toggle {
     display: none;
   }
 

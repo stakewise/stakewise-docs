@@ -8,24 +8,29 @@ import s from './DeveloperLinks.module.scss'
 
 const items = [
   {
-    title: 'Vault interface',
+    title: 'Vault Interface',
     href: 'https://github.com/stakewise/vault-interface',
+    icon: '/icons/stakewise/vault.png',
   },
   {
     title: 'Subgraph',
     href: 'https://github.com/stakewise/v3-subgraph',
+    icon: '/icons/stakewise/panels.png',
   },
   {
     title: 'Operator',
     href: 'https://github.com/stakewise/v3-operator',
+    icon: '/icons/stakewise/cursor.png',
   },
   {
     title: 'Core',
     href: 'https://github.com/stakewise/v3-core',
+    icon: '/icons/stakewise/laptop.png',
   },
   {
     title: 'SDK',
     href: 'https://github.com/stakewise/v3-sdk',
+    icon: '/icons/stakewise/gear.png',
   },
 ] as const
 

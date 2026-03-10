@@ -3,10 +3,7 @@ title: 1. Overview
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import Image from '@theme/IdealImage'
 
 # Overview
 
@@ -16,7 +13,7 @@ At the core of StakeWise are individual staking pools called [Vaults →](/docs/
 
 **Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
 
-![architecture_overview](./img/architecture_overview.png)
+<Image img={require('./img/architecture_overview.png')} alt="architecture_overview" />
 
 ## Core Functions
 

@@ -1,0 +1,7 @@
+@use 'mixins' as *;
+
+.items {
+  @include tablet {
+    flex: 1;
+  }
+}

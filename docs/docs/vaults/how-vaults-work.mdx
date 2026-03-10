@@ -4,9 +4,8 @@ sidebar_position: 1
 description: "Learn how Vaults register validators, distribute rewards, and process withdrawals"
 ---
 
-```mdx-code-block
 import Tooltip from '@site/src/components/Tooltip/Tooltip';
-```
+import Image from '@theme/IdealImage'
 
 # How Vaults Work
 
@@ -19,7 +18,7 @@ When a Vault accumulates enough assets — 32 ETH on Ethereum or 1 GNO on Gnosis
 runs specialized software (the [operator ↗](https://github.com/stakewise/v3-operator) service) alongside their Ethereum [consensus →](../../operator/prerequisites#consensus-client) and [execution →](../../operator/prerequisites#execution-client) clients
 that monitor deposit levels and handle the technical validator setup process.
 
-![validator_registration](./img/validator_registration.png)
+<Image img={require('./img/validator_registration.png')} alt="validator_registration" />
 
 When sufficient funds are available, this service submits validator registration requests to the StakeWise [Oracle network →](../oracles/intro).
 The Operator Service must receive 8 out of 11 approvals from Oracles to register a validator for the Vault.
@@ -50,7 +49,7 @@ For more details on how Oracles handle the validator registration approval proce
 
 ## Reward Distribution
 
-![rewards_distribution](./img/rewards_distribution.png)
+<Image img={require('./img/rewards_distribution.png')} alt="rewards_distribution" />
 
 Once validators are registered and active, they earn:
 - **Consensus layer rewards**: Block proposals, attestations, and sync committee participation
@@ -78,7 +77,7 @@ For detailed information about the reward distribution process, see [*Oracles*: 
 
 ## Withdrawals
 
-![withdrawal_process](./img/withdrawal_process.png)
+<Image img={require('./img/withdrawal_process.png')} alt="withdrawal_process" />
 
 Users can mint osTokens for instant liquidity or withdraw. When users choose to unstake, they enter the Vault's **exit queue** and receive an **exit queue ticket** that tracks their place in line.
 As ETH becomes available to the Vault, users can claim what is available.
@@ -98,7 +97,7 @@ By default, the Operator Service checks every **12 hours** (configurable via `WI
 If partial withdrawals are not possible, the Operator Service initiates **full exits**.
 If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
 
-![exit_process](./img/exit_process.png)
+<Image img={require('./img/exit_process.png')} alt="exit_process" />
 
 The process is as follows:
 

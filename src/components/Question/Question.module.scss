@@ -1,0 +1,14 @@
+@use 'mixins' as *;
+
+.bordered {
+  border-bottom: 1px solid rgba(var(--moon-rgb), 0.15);
+}
+
+.answer {
+  max-width: 90%;
+
+  @include mobile {
+    max-width: 100%;
+    padding-right: 30px;
+  }
+}

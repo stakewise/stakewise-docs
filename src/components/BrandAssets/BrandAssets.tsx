@@ -2,7 +2,7 @@ import React from 'react'
 
 
 const BrandAssets: React.FC = () => (
-  <div className="mt-40 text-center">
+  <div className="mt-[100px] text-center">
     <a
       href="/stakewise-brand-assets.zip"
       download

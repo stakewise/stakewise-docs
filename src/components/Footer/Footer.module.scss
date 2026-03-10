@@ -1,0 +1,39 @@
+@use 'mixins' as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 16px;
+  }
+}
+
+.socials {
+  justify-content: flex-end;
+
+  @include mobile {
+    justify-content: center;
+  }
+}
+
+.socialLink {
+  display: flex;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+
+    path {
+      fill: var(--moon);
+    }
+  }
+}

@@ -25,11 +25,11 @@ function CustomAdmonition({ iconSrc, ...props }) {
 
 const AdmonitionTypes = {
   ...DefaultAdmonitionTypes,
-  'custom-info': (props) => <CustomAdmonition iconSrc="/img/Info.png" {...props} />,
-  'custom-notes': (props) => <CustomAdmonition iconSrc="/img/notes.png" {...props} />,
-  'custom-tips': (props) => <CustomAdmonition iconSrc="/img/tips.png" {...props} />,
-  'custom-warning': (props) => <CustomAdmonition iconSrc="/img/warning.png" {...props} />,
-  'custom-stakewise': (props) => <CustomAdmonition iconSrc="/img/logo.png" {...props} />,
+  'custom-info': (props) => <CustomAdmonition iconSrc="/icons/stakewise/info.png" {...props} />,
+  'custom-notes': (props) => <CustomAdmonition iconSrc="/icons/stakewise/notes.png" {...props} />,
+  'custom-tips': (props) => <CustomAdmonition iconSrc="/icons/stakewise/tips.png" {...props} />,
+  'custom-warning': (props) => <CustomAdmonition iconSrc="/icons/stakewise/warning.png" {...props} />,
+  'custom-stakewise': (props) => <CustomAdmonition iconSrc="/icons/stakewise/logo.png" {...props} />,
 };
 
 export default AdmonitionTypes;

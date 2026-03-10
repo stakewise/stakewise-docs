@@ -11,9 +11,9 @@
     text-decoration: none;
 
     &:hover {
-      color: black;
+      color: var(--coal);
       text-decoration: underline;
-      text-decoration-color: black !important;
+      text-decoration-color: var(--coal);
     }
   }
 }
@@ -97,9 +97,9 @@ details.custom-details {
     text-decoration: none;
 
     &:hover {
-      color: black;
+      color: var(--coal);
       text-decoration: underline;
-      text-decoration-color: black !important;
+      text-decoration-color: var(--coal);
     }
   }
 }
@@ -111,8 +111,8 @@ details.custom-details {
   text-decoration-color: var(--lavender);
 
   &:hover {
-    color: black;
+    color: var(--coal);
     text-decoration: underline;
-    text-decoration-color: black !important;
+    text-decoration-color: var(--coal);
   }
 }

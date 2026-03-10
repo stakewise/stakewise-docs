@@ -1,4 +1,5 @@
 import React from 'react'
+import cx from 'classnames'
 
 import s from './Footer.module.scss'
 
@@ -17,7 +18,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="mt-40 pb-24">
       <div className="h-px bg-moon opacity-15" />
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center pt-24">
+      <div className={cx(s.grid, 'items-center pt-24')}>
         <img
           className="w-32 h-32"
           alt="StakeWise"
@@ -26,7 +27,7 @@ const Footer: React.FC = () => {
         <span className="text-t14m opacity-50">
           Copyright &copy; {year} StakeWise
         </span>
-        <nav className="flex items-center justify-end gap-16">
+        <nav className={cx(s.socials, 'flex items-center gap-16')}>
           {
             socials.map(({ Icon, href, title }) => (
               <a

@@ -9,10 +9,14 @@
   background: var(--navbar-bg);
   transition: background 0.5s ease, box-shadow 0.5s ease;
 
+  @include dark-theme {
+    backdrop-filter: blur(30px);
+  }
+
   @include home-page {
     padding: 0;
-    background: transparent;
     box-shadow: none;
+    background: transparent;
   }
 
   // Search & color mode toggle buttons

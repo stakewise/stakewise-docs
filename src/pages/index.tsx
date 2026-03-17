@@ -7,7 +7,10 @@ import '@site/src/css/tailwind/config.css'
 
 
 const Home: React.FC = () => (
-  <Layout>
+  <Layout
+    title="StakeWise Docs — Liquid Staking on Ethereum & Gnosis Chain"
+    description="Official StakeWise documentation. Learn how to stake ETH, run Vaults, use osToken, and integrate with the StakeWise SDK and smart contracts."
+  >
     <HomeView />
   </Layout>
 )

@@ -42,6 +42,7 @@ const Root: React.FC<RootProps> = (props) => {
       '@context': 'https://schema.org',
       '@type': isGuidePage ? 'TechArticle' : 'Article',
       url: `${siteUrl}${pathname}`,
+      image: `${siteUrl}/icons/stakewise/logo.png`,
       publisher: {
         '@type': 'Organization',
         name: 'StakeWise',
@@ -53,6 +54,7 @@ const Root: React.FC<RootProps> = (props) => {
       author: {
         '@type': 'Organization',
         name: 'StakeWise',
+        url: 'https://stakewise.io',
       },
     }
 

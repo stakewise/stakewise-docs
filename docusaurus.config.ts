@@ -180,21 +180,9 @@ const config: Config = {
         },
         {
           label: 'Operator',
-          type: 'dropdown',
-          items: [
-            {
-              label: 'v4 (Current)',
-              type: 'docSidebar',
-              sidebarId: 'operatorSidebar',
-              docsPluginId: 'operator',
-            },
-            {
-              label: 'v3',
-              type: 'docSidebar',
-              sidebarId: 'operatorV3Sidebar',
-              docsPluginId: 'operator-v3',
-            },
-          ],
+          type: 'docSidebar',
+          sidebarId: 'operatorSidebar',
+          docsPluginId: 'operator',
         },
         {
           label: 'Contracts',

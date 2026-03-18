@@ -21,9 +21,9 @@ const posts = [
   },
   {
     title: 'Operator',
-    text: 'Documentation for running and managing the StakeWise Operator Service',
+    text: 'Documentation for the full Vault operator journey',
     image: require('@site/static/img/operator.png'),
-    href: '/operator/intro',
+    href: '/operator/becoming-a-vault-operator',
   },
 ]
 

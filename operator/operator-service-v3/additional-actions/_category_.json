@@ -1,0 +1,8 @@
+{
+  "label": "Additional Actions",
+  "position": 6,
+  "link": {
+    "type": "doc",
+    "id": "operator-service-v3/additional-actions/index"
+  }
+}

@@ -14,7 +14,7 @@ import Image from '@theme/IdealImage'
 Vaults collect user deposits and manage the validator lifecycle through smart contracts.
 When a Vault accumulates enough assets — 32 ETH on Ethereum or 1 GNO on Gnosis — the system initiates validator registration.
 
-<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" className="tooltip-link" target="_blank" rel="noopener noreferrer">operator service software ↗</a> that automates essential Vault management tasks — such as validator registration, consolidations, and withdrawals.</>}>The Vault operator</Tooltip>
+<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">operator service software ↗</a> that automates essential Vault management tasks — such as validator registration, consolidations, and withdrawals.</>}>The Vault operator</Tooltip>
 runs specialized software (the [operator ↗](https://github.com/stakewise/v3-operator) service) alongside their Ethereum [consensus →](../../operator/prerequisites#consensus-client) and [execution →](../../operator/prerequisites#execution-client) clients
 that monitor deposit levels and handle the technical validator setup process.
 
@@ -41,7 +41,7 @@ The Operator Service performs the following steps:
 5. Submit a transaction to the Vault contract to register the validator.
 :::
 
-Vaults can have several node operators running validators and support <Tooltip content={<><strong>Distributed Validator Technology</strong> <br /> A solution designed to overcome a single-operator trust problem by splitting a validator's private key among multiple independent operators. <br /> More on DVT - <a href="https://ethereum.org/en/staking/dvt/" className="tooltip-link" target="_blank" rel="noopener noreferrer">ethereum.org ↗</a></>}>Distributed Validator Technology</Tooltip> (DVT) to increase redundancy.
+Vaults can have several node operators running validators and support <Tooltip content={<><strong>Distributed Validator Technology</strong> <br /> A solution designed to overcome a single-operator trust problem by splitting a validator's private key among multiple independent operators. <br /> More on DVT - <a href="https://ethereum.org/en/staking/dvt/" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">ethereum.org ↗</a></>}>Distributed Validator Technology</Tooltip> (DVT) to increase redundancy.
 
 :::custom-notes[Deep Dive]
 For more details on how Oracles handle the validator registration approval process, see [Validator Registration Approval →](../oracles/oracle-duties#validator-registration-approval).
@@ -140,7 +140,7 @@ For more details on how osToken works, see [osToken →](../ostoken/intro).
 
 <div id="fn-3" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>3.</span>
-  BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer">Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer">here</a>.
+  BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">here</a>.
   <a href="#fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 

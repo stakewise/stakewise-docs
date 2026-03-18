@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
                 href={href}
                 title={title}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
               >
                 <Icon />
               </a>

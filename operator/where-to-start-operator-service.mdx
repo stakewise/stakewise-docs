@@ -1,0 +1,76 @@
+---
+title: "Where to Start: Operator Service"
+description: "Start here: the Operator Service is required software for running a Vault. Understand what the Operator Service does and how to set it up for your Vault."
+sidebar_position: 3
+---
+
+import Image from '@theme/IdealImage'
+
+# Where to Start: Operator Service
+
+The [Operator Service ↗](https://github.com/stakewise/v3-operator) is open-source software developed by StakeWise that runs alongside your node infrastructure and automates the day-to-day operations of your Vault.
+It comes with all batteries included — CLI commands cover the most essential operations from key generation and wallet setup to node installation and monitoring, while optional flags add extra capabilities and let you fine-tune the service to your needs.
+
+<Image img={require('./img/architecture-overview-2.png')} alt="architecture_overview" />
+
+## Core Functions
+
+The Operator Service integrates seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology.
+
+### Validator Registration
+
+The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validators (32 ETH for Ethereum, 1 GNO for Gnosis) and sends a registration transaction to the Vault.
+
+:::custom-notes[Deep Dive]
+For detailed information about the validator registration process, see [Validator Registration →](/docs/vaults/how-vaults-work#validator-registration)
+:::
+
+### Validator Funding
+
+Vaults support two types of validators: `0x01` or `0x02`<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
+The default type is `0x02`. When registering validators, the Operator Service prioritizes funding existing `0x02` validators by selecting those with the highest current balance and topping them up to 2048 ETH before creating new validators.
+
+### Withdrawals
+
+When a user requests to exit their stake, the Operator Service identifies the validators from which to withdraw the assets.
+It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
+If partial withdrawals are insufficient, it proceeds with full withdrawals.
+
+## Additional Actions
+
+Beyond automatic handling of core validator operations, the Operator Service offers additional actions you can use:
+
+### Vault State Update
+
+Keeps your Vault synced by calling the `updateState` function of the Vault contract. This can be configured to run automatically every 12 hours, simplifying contract interactions and reducing gas costs for your users. By default, the Vault state sync is included in the transaction whenever the user interacts with the Vault (deposits, withdrawals, etc.).
+
+:::custom-warning[Operator Service Version]
+The Operator Service has two versions. Which one you need depends on your Vault contract version, visible in the **Details** section of your Vault page or on the contract page in a block explorer.
+The latest Operator Service (V4) unlocks the full spectrum of features — compound validators, execution-layer triggered exits, MetaVaults, and automatic deposit data generation.
+See [Vaults v4.0: Optional Upgrade Now Available ↗](https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available) for full details.
+It requires Vault contract version 5+ on Ethereum or 3+ on Gnosis.
+Older Vaults can upgrade easily or continue using Operator Service V3.
+:::
+
+
+
+- **[Operator Service V4](./operator-service/overview)** (recommended) — for Vault version 5+ on Ethereum or 3+ on Gnosis. V4 brings Pectra compatibility (compound `0x02` validators up to 2048 ETH, execution-layer triggered exits), MetaVaults, automated fee distribution, and simplified validator management. See [Vaults v4.0: Optional Upgrade Now Available ↗](https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available) for full details.
+
+- **[Operator Service V3](./operator-service-v3/intro)** — required if your Vault version is below 5 on Ethereum or below 3 on Gnosis.
+
+:::custom-notes[Upgrading?]
+If you're upgrading an existing Vault to V4, follow the [V4 upgrade guide →](./operator-service/overview) to update your Operator Service accordingly.
+:::
+
+## Next Steps
+
+Ready to set it up? Head to the [Operator Service V4 setup guide →](./operator-service/overview) to get started.
+
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities:
+  `0x01` validators (Type 1) use the current 32 ETH limit with automatic sweeps of excess balance, while
+  `0x02` validators (Type 2) support higher effective balances up to 2048 ETH with compounding rewards and partial withdrawals.
+  Converting from `0x01` to `0x02` is irreversible.
+  By default, the `0x02` validators are registered. To register `0x01` validators, add the flag `--validators-type=0x01`.
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

@@ -4,6 +4,7 @@ const sidebars: SidebarsConfig = {
   operatorSidebar: [
     'becoming-a-vault-operator',
     'stakewise-vs-native-staking',
+    'where-to-start-operator-service',
     {
       type: 'category',
       label: 'Getting Started',

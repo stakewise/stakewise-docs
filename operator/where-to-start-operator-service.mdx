@@ -8,6 +8,8 @@ import Image from '@theme/IdealImage'
 
 # Where to Start: Operator Service
 
+Now that you know what operating a Vault involves, let's look at the software that makes it all work.
+
 The [Operator Service ↗](https://github.com/stakewise/v3-operator) is open-source software developed by StakeWise that runs alongside the node infrastructure and automates the day-to-day operations of your Vault.
 It comes with all batteries included — CLI commands cover the most essential operations from key generation and wallet setup to node installation and monitoring, while optional flags add extra capabilities and let you fine-tune the service to your needs to achieve the most performant setup for your Vault.
 
@@ -18,22 +20,24 @@ The Operator Service connects to your Execution and Consensus nodes to read on-c
 
 The Operator Service automates the staking workflow end-to-end, but doesn't lock you into any particular setup — generate keys through it or use external tools, store keystores locally or use a remote signer, and disable any automatic operation with a single flag.
 
+:::custom-warning[Operator Service Version]
+The Operator Service has two versions: the latest V4 and V3.
+The V4 version supports more features (see [Vaults v4.0: Optional Upgrade Now Available ↗](https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available) for full details) and is for Vault version 5+ on Ethereum or 3+ on Gnosis.
+The V3 version is for older Vaults.
+:::
+
 ## Core Functions
 
-The Operator Service integrates seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology.
+The Operator Service handles the following operations automatically once started:
 
 ### Validator Registration
 
 The Operator Service continuously monitors whether the Vault has accumulated enough ETH for registering new validators (32 ETH minimum). When sufficient balance is available, it prepares the deposit data, obtains approval from the StakeWise oracle network, and submits the registration transaction to the Vault contract.
 
-:::custom-notes[Deep Dive]
-For detailed information about the validator registration process, see [Validator Registration →](/docs/vaults/how-vaults-work#validator-registration)
-:::
-
 ### Validator Funding
 
 Vaults support two types of validators: `0x01` or `0x02`<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
-The default type is `0x02`. When registering validators, the Operator Service prioritizes funding existing `0x02` validators by selecting those with the highest current balance and topping them up to 2048 ETH before creating new validators.
+The default type is `0x02`. These compound validators can hold an effective balance up to 2048 ETH. When the Vault has available ETH, the Operator Service first tops up existing `0x02` validators — starting with the highest balance — before registering new ones.
 
 ### Withdrawals
 
@@ -41,21 +45,14 @@ When a user requests to exit their stake, the Operator Service identifies the va
 It first triggers partial withdrawals for the `0x02` validators, starting with the one holding the largest balance.
 If partial withdrawals are insufficient, it proceeds with full withdrawals.
 
-:::custom-notes[Deep Dive]
-For detailed information about the withdrawal process, see [Withdrawals →](/docs/vaults/how-vaults-work#withdrawals)
-:::
-
 ## Additional Actions
 
 Beyond core staking operations, the Operator Service provides CLI commands for setting up and managing your Vault, and optional flags on the `start` command that enable additional automation.
+Each command and flag is covered in detail in the dedicated setup and configuration sections of this documentation.
 
 ### CLI Commands
 
 The Operator Service provides CLI commands for the initial setup of your Vault — generating validator keys, creating an operator wallet, and configuring a remote signer — as well as ongoing validator management like voluntary exits, performance analytics, and validator consolidations.
-
-:::custom-notes[Deep Dive]
-Each command is covered in detail in the relevant sections that follow.
-:::
 
 ### Optional flags
 
@@ -68,41 +65,15 @@ Keeps your Vault synced by calling the `updateState` function of the Vault contr
 By default, the fees earned by the Vault's fee recipient remain locked in the validators. You can enable periodic fee claims through the Operator Service with `--claim-fee-splitter` flag. In this case, the earned fees will be claimed from the Vault and sent directly to the fee recipients.
 
 :::custom-notes[Deep Dive]
-Each flag is covered in detail in the relevant sections that follow.
+For a deeper understanding of how Vaults work under the hood — validator registration, withdrawals, rewards, MEV, and more — see the [Concepts →](/docs/overview) section.
 :::
 
-## What You Need
+## Next Steps
 
-  To operate a Vault, you need:
+1. **[Create your Vault →](./create-your-vault)** — done via the StakeWise UI in minutes. You'll need the Vault address for the next step.
 
-  1. **An Execution node** (e.g., Geth, Nethermind) **and a Consensus node** (e.g., Lighthouse, Prysm) — the Operator Service connects to both via their APIs to read on-chain state and submit
-  transactions.
-  2. **A funded operator wallet** — a hot wallet that pays gas for on-chain transactions such as validator registration and withdrawals.
-  3. **Validator keystores** — for signing deposit data and exit messages. The Operator Service supports local keystores, a remote signer for DVT setups, and HashiCorp Vault for enterprise secret
-  management.
-  4. **The Operator Service itself** — run as a binary, Docker container, or Kubernetes deployment.
+2. **[Launch the Operator Service →](./launch-operator-service/overview)** — install, configure, and start the service for your Vault.
 
-The service is configured via CLI flags, environment variables, or both, and stores per-Vault state in a local database and config files under `~/.stakewise/`.
-
-:::custom-warning[Operator Service Version]
-The Operator Service has two versions: the latest V4 and V3.
-
-
-
-The V4 version supports compound validators, execution-layer triggered exits, MetaVaults, and automatic deposit data generation.
-See [Vaults v4.0: Optional Upgrade Now Available ↗](https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available) for full details.
-
-:::
-
-
-
-- **[Operator Service V4](./operator-service/overview)** (recommended) — for Vault version 5+ on Ethereum or 3+ on Gnosis. V4 brings Pectra compatibility (compound `0x02` validators up to 2048 ETH, execution-layer triggered exits), MetaVaults, automated fee distribution, and simplified validator management. See [Vaults v4.0: Optional Upgrade Now Available ↗](https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available) for full details.
-
-- **[Operator Service V3](./operator-service-v3/intro)** — required if your Vault version is below 5 on Ethereum or below 3 on Gnosis.
-
-:::custom-notes[Upgrading?]
-If you're upgrading an existing Vault to V4, follow the [V4 upgrade guide →](./operator-service/overview) to update your Operator Service accordingly.
-:::
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities:

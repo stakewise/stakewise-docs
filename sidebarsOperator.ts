@@ -5,6 +5,7 @@ const sidebars: SidebarsConfig = {
     'becoming-a-vault-operator',
     'stakewise-vs-native-staking',
     'where-to-start-operator-service',
+    'create-your-vault',
     {
       type: 'category',
       label: 'Getting Started',
@@ -19,19 +20,19 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Operator Service V4',
+      label: 'Launch Operator Service V4',
       link: {
         type: 'doc',
-        id: 'operator-service/overview',
+        id: 'launch-operator-service/overview',
       },
       items: [
-        'operator-service/prerequisites',
-        'operator-service/installation',
-        'operator-service/validator-keys',
-        'operator-service/validators-manager',
-        'operator-service/start-operator',
-        'operator-service/smoothing-pool-relays',
-        'operator-service/node-setup',
+        'launch-operator-service/prerequisites',
+        'launch-operator-service/installation',
+        'launch-operator-service/validator-keys',
+        'launch-operator-service/validators-manager',
+        'launch-operator-service/start-operator',
+        'launch-operator-service/smoothing-pool-relays',
+        'launch-operator-service/node-setup',
       ],
     },
     {

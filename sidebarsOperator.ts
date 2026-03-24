@@ -8,18 +8,6 @@ const sidebars: SidebarsConfig = {
     'create-your-vault',
     {
       type: 'category',
-      label: 'Getting Started',
-      link: {
-        type: 'doc',
-        id: 'getting-started/create-a-vault',
-      },
-      items: [
-        'getting-started/how-to-create-a-vault',
-        'getting-started/setup-vault-infrastructure',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Launch Operator Service V4',
       link: {
         type: 'doc',

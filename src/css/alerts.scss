@@ -1,0 +1,24 @@
+@use 'mixins' as *;
+
+.alert--success {
+  @include dark-theme {
+    --ifm-tabs-color-active-border: #7fbc7f;
+    --ifm-alert-background-color: #65cd6533;
+  }
+}
+
+.alert--danger {
+  @include dark-theme {
+    --ifm-alert-background-color: #94595b6b;
+  }
+}
+
+.alert--warning {
+  @include dark-theme {
+    --ifm-alert-background-color: #9490596b;
+  }
+}
+
+.alert a {
+  text-decoration-color: var(--color-lavender) !important;
+}

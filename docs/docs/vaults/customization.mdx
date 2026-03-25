@@ -4,6 +4,8 @@ sidebar_position: 2
 description: "Learn how to customize Vault settings, types, fees, and management roles"
 ---
 
+import Image from '@theme/IdealImage'
+
 # Customization
 
 Each Vault is highly customizable.
@@ -58,7 +60,7 @@ deposit transaction, reverting with a `CapacityExceeded` error if exceeded. Capa
 MEV (Maximum Extractable Value) represents additional profits that validators can earn when proposing blocks.
 Vaults can use either a Smoothing Pool or Own Escrow for collecting the block rewards.
 
-![mev_strategy](./img/mev_strategy.png)
+<Image img={require('./img/mev_strategy.png')} alt="Vault MEV strategy options - Smoothing Pool vs Own Escrow" />
 
 ### Smoothing Pool — Pooled Rewards
 

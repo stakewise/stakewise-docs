@@ -4,7 +4,7 @@ sidebar_position: 1
 description: "Learn about osToken minting, burning, exchange rate, and peg maintenance"
 ---
 
-import Admonition from '@theme/Admonition';
+import Image from '@theme/IdealImage'
 
 # How osToken Works
 
@@ -76,7 +76,7 @@ Find step-by-step instructions for each staking option in the [Staking Guide →
 
 Position health is continuously tracked through LTV thresholds:
 
-![grade](./img/grade.png)
+<Image img={require('./img/grade.png')} alt="osToken position health grades - Healthy, Moderate, Risky, Unhealthy" />
 
 Positions that exceed **91.5% LTV** become eligible for [redemption](#redemption-mechanism), and those above **92% LTV** are subject to [liquidation](#liquidation-mechanism).
 

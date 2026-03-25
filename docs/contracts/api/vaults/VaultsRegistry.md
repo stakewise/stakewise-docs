@@ -1,3 +1,8 @@
+---
+title: VaultsRegistry
+description: VaultsRegistry contract API reference for tracking StakeWise vaults, factories, and vault upgrades on Ethereum.
+---
+
 # VaultsRegistry
 [Git Source](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/VaultsRegistry.sol)
 

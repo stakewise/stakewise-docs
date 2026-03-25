@@ -3,6 +3,8 @@ import { useColorMode } from '@docusaurus/theme-common'
 import IconLightMode from '@theme/Icon/LightMode'
 import IconDarkMode from '@theme/Icon/DarkMode'
 
+import s from './ColorModeToggle.module.scss'
+
 const ColorModeToggle: React.FC = () => {
   const { colorMode, setColorMode } = useColorMode()
   const isDark = colorMode === 'dark'
@@ -15,7 +17,8 @@ const ColorModeToggle: React.FC = () => {
       title='Toggle color mode'
       onClick={() => setColorMode(isDark ? 'light' : 'dark')}
     >
-      { isDark ? <IconLightMode /> : <IconDarkMode /> }
+      <IconLightMode className={s.lightIcon} />
+      <IconDarkMode className={s.darkIcon} />
     </button>
   )
 }

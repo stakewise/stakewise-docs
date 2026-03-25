@@ -3,7 +3,7 @@ import { FloatingPortal } from '@floating-ui/react'
 
 import type { TooltipData } from '../Tooltip'
 
-import s from './TooltipContent.module.css'
+import s from './TooltipContent.module.scss'
 
 
 type TooltipContentProps = {
@@ -14,7 +14,9 @@ type TooltipContentProps = {
 const TooltipContent: React.FC<TooltipContentProps> = (props) => {
   const { children, data } = props
 
-  if (!data.open) return null
+  if (!data.open) {
+    return null
+  }
 
   const tooltipsContainer = document.getElementById('tooltips') as HTMLElement
 

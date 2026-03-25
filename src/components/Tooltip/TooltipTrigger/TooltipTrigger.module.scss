@@ -1,0 +1,10 @@
+.trigger {
+  display: inline-flex;
+  cursor: help;
+  text-decoration: underline dotted var(--lavender);
+  text-decoration-thickness: 2px;
+
+  &:hover {
+    color: var(--lavender);
+  }
+}

@@ -3,13 +3,14 @@ import type * as Preset from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import path from 'path'
 
 
 const config: Config = {
   title: 'StakeWise Docs',
   tagline: 'Documentation and Guides',
   url: 'https://docs.stakewise.io',
-  favicon: 'img/favicon.ico',
+  favicon: 'icons/favicon.ico',
   baseUrl: '/',
   projectName: 'docs', // Usually your repo name.
   organizationName: 'stakewise', // Usually your GitHub org/user name.
@@ -18,6 +19,46 @@ const config: Config = {
   onBrokenAnchors: 'throw',
   onDuplicateRoutes: 'throw',
   onBrokenMarkdownLinks: 'throw',
+
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `(function(){document.documentElement.setAttribute('data-page',window.location.pathname==='/'?'home':'inner')})()`,
+    },
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'StakeWise',
+        url: 'https://stakewise.io',
+        logo: 'https://stakewise.io/logo512.png',
+        description: 'Liquid staking protocol for Ethereum and Gnosis Chain that enables permissionless and non-custodial liquid staking',
+        sameAs: [
+          'https://x.com/stakewise_io',
+          'https://github.com/stakewise',
+          'https://discord.gg/stakewise',
+          'https://t.me/stakewise',
+        ],
+      }),
+    },
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'StakeWise Docs',
+        url: 'https://docs.stakewise.io',
+        publisher: {
+          '@type': 'Organization',
+          name: 'StakeWise',
+        },
+      }),
+    },
+  ],
 
   i18n: {
     defaultLocale: 'en',
@@ -28,6 +69,12 @@ const config: Config = {
     [
       '@docusaurus/preset-classic',
       {
+        sitemap: {
+          lastmod: 'date',
+          changefreq: 'weekly',
+          priority: 0.5,
+          filename: 'sitemap.xml',
+        },
         docs: {
           path: 'docs',
           remarkPlugins: [ remarkMath ],
@@ -48,7 +95,7 @@ const config: Config = {
           },
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.scss'),
         },
       }
     ],
@@ -65,7 +112,25 @@ const config: Config = {
   ],
 
   plugins: [
+    [
+      'docusaurus-plugin-sass',
+      {
+        sassOptions: {
+          loadPaths: [path.resolve(__dirname, 'src/css')],
+        },
+      },
+    ],
     './src/plugins/tailwind-config.js',
+    [
+      '@docusaurus/plugin-ideal-image',
+      {
+        quality: 70,
+        max: 1030,
+        min: 640,
+        steps: 2,
+        disableInDev: false,
+      },
+    ],
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -117,6 +182,12 @@ const config: Config = {
   themeConfig: {
     respectPrefersColorScheme: true,
     image: 'img/opengraph.png',
+    metadata: [
+      { name: 'twitter:site', content: '@stakewise_io' },
+      { name: 'twitter:creator', content: '@stakewise_io' },
+      { property: 'og:site_name', content: 'StakeWise Docs' },
+      { property: 'og:type', content: 'website' },
+    ],
 
     algolia: {
       appId: '413SNHUF5R',
@@ -133,26 +204,22 @@ const config: Config = {
     },
 
     navbar: {
-      title: 'StakeWise Docs',
-      hideOnScroll: true,
+      hideOnScroll: false,
       logo: {
         alt: 'StakeWise Logo',
-        src: 'img/logo.png',
+        src: 'icons/stakewise/logo.png',
         height: 32,
         width: 32,
       },
       items: [
         {
           label: 'Concepts',
-          to: 'docs/overview',
-          type: "docSidebar",
-          activeBaseRegex: `/docs/`,
+          type: 'docSidebar',
           sidebarId: 'docsSidebar',
         },
         {
           label: 'Guides',
-          to: 'docs/guides/intro',
-          activeBaseRegex: `/docs/guides/`,
+          type: 'docSidebar',
           sidebarId: 'guidesSidebar',
         },
         {
@@ -175,26 +242,30 @@ const config: Config = {
         },
         {
           label: 'Contracts',
-          to: '/contracts/api',
-          activeBaseRegex: `/contracts/`,
+          type: 'docSidebar',
           sidebarId: 'contractsSidebar',
         },
         {
           label: 'SDK',
-          to: '/sdk/',
-          activeBaseRegex: `/SDK/`,
+          type: 'docSidebar',
           sidebarId: 'sdkSidebar',
         },
         {
           type: 'html',
           position: 'right',
           value: `
-            <button
+            <a
               class="btn-primary"
-              onclick="window.open('https://app.stakewise.io', '_blank')"
+              href="https://app.stakewise.io"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Open App
-            </button>
+              Launch App
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.0824 5L21 11.9176L14.0824 18.8353" stroke="#1C1C25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 11.9177H3" stroke="#1C1C25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           `,
         },
       ],

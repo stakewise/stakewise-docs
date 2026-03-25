@@ -1,5 +1,6 @@
 ---
 title: Relayer (API Mode)
+description: Run the StakeWise Operator in Relayer API mode for external key management. Full API specification for registration, funding, withdrawals, and consolidation.
 sidebar_position: 3
 ---
 
@@ -103,12 +104,33 @@ Response:
       "public_key":  "0xPubKey1",
       "deposit_signature": "0xDepositSig1",
       "amount": 32000000000,
-      "exit_signature": "0xExitSig1"
+      "exit_signature": "0xExitSig1",
+      "oracles_exit_signature_shares": {
+        "public_keys": ["0xPubKeyShare1", "..."],
+        "encrypted_exit_signatures": ["0xExitSigShare1", "..."]
+      }
     }
   ],
   "validators_manager_signature": "0xManagerSig"
 }
 ```
+
+**Response fields:**
+
+- `public_key` - Validator public key.
+- `deposit_signature` - Deposit signature for the validator.
+- `amount` - Deposit amount in Gwei.
+- `exit_signature` - Exit signature for the validator.
+- `oracles_exit_signature_shares` - Exit signature shares for oracle processing.
+  - `public_keys` - Validator public key shares.
+  - `encrypted_exit_signatures` - Exit signature shares, encrypted with oracle keys.
+- `validators_manager_signature` - [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
+
+:::custom-info[DVT Relayer]
+A regular relayer returns `exit_signature`, and the Operator Service splits it into shares and encrypts them with oracle keys. A DVT relayer handles this itself and returns ready-made `oracles_exit_signature_shares` instead.
+
+Since DVT relayers collect signatures from multiple sidecars, `exit_signature`, `deposit_signature`, and `validators_manager_signature` may initially be returned empty. The Operator Service will automatically retry on the next block until all signatures are ready.
+:::
 
 ### Validator Funding
 

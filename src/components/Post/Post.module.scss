@@ -1,0 +1,32 @@
+@use 'mixins' as *;
+
+.card {
+  flex: 1;
+  min-width: 0;
+
+  @include tablet {
+    width: 100%;
+  }
+}
+
+.imageWrapper {
+  height: 200px;
+
+  @include mobile {
+    height: 150px;
+  }
+
+  :global {
+    .ideal-image-wrapper,
+    .ideal-image-wrapper > div,
+    .ideal-image-wrapper > div > img,
+    .ideal-image-wrapper > div > svg {
+      width: 100%;
+      height: 100% !important;
+    }
+
+    .ideal-image-wrapper > div > img {
+      object-fit: cover;
+    }
+  }
+}

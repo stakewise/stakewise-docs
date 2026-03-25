@@ -31,19 +31,19 @@ Registers validators in vault contract. Operator does not have access to validat
 
 Used to collect deposit signatures and exit signatures of the validators for passing them to oracles.
 
-### DVT sidecars
+### DVT Sidecars
 
-Sidecars provide deposit signature and exit signature shares to DVT Relayer. Each distributed validator node should run DVT sidecar instance. Each sidecar should have access to validator key shares on related DVT node.
+Sidecars provide deposit and exit signature shares to the DVT Relayer. Each distributed validator node should run a DVT Sidecar instance. Each Sidecar should have access to the validator key shares on the related DVT node.
 
 ## Validator registration procedure
 
-0. Operator determines start validator index and calculates list of amounts to deposit.
-1. Operator sends start validator index and list of amounts to the Relayer, then polls the Relayer for the list of validators.
-2. Relayer creates pending validators and exposes them by API to Sidecars.
-3. DVT sidecars poll pending validators they can sign from the Relayer, create deposit signatures and exit signatures for them and push back to the Relayer.
-4. Relayer processes deposit signatures and exit signatures:
+1. Operator determines start validator index and calculates list of amounts to deposit.
+2. Operator sends start validator index and list of amounts to the Relayer, then polls the Relayer for the list of validators.
+3. Relayer creates pending validators and exposes them via the API to Sidecars.
+4. DVT Sidecars poll pending validators they can sign from the Relayer, create deposit signatures and exit signatures for them and push back to the Relayer.
+5. Relayer processes deposit signatures and exit signatures:
 
-    - Receives signature shares from the sidecars.
-    - Restores full signatures from sidecar shares and verifies the restored signatures.
-    - Creates shares for oracles, encrypts them with oracle public keys, fills signatures in pending validators. The encrypted shares for oracles are available through the Relayer API.
-5. Operator fetches validators from Relayer and registers the validator.
+    - Receives signature shares from the Sidecars.
+    - Restores full signatures from Sidecar shares and verifies the restored signatures.
+    - Creates shares for oracles and encrypts them with oracle public keys. It then fills signatures in pending validators. The encrypted shares for oracles are available through the Relayer API.
+6. Operator fetches validators from Relayer and registers the validators.

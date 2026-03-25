@@ -25,11 +25,11 @@ Performs validator duties such as attestation, block proposal, and consensus par
 
 ### StakeWise Operator
 
-Registers validators in vault contract. Operator does not have access to validator keystores.
+Registers validators in the vault contract. Operator does not have access to validator keystores.
 
 ### DVT Relayer
 
-Used to collect deposit signatures and exit signatures of the validators for passing them to oracles.
+Collects deposit and exit signatures from validators (via Sidecars) and forwards them to oracles.
 
 ### DVT Sidecars
 
@@ -45,5 +45,5 @@ Sidecars provide deposit and exit signature shares to the DVT Relayer. Each dist
 
     - Receives signature shares from the Sidecars.
     - Restores full signatures from Sidecar shares and verifies the restored signatures.
-    - Creates shares for oracles and encrypts them with oracle public keys. It then fills signatures in pending validators. The encrypted shares for oracles are available through the Relayer API.
+    - Creates shares for oracles and encrypts them with oracles' public keys. It then fills signatures in pending validators. The encrypted shares for oracles are available through the Relayer API.
 6. Operator fetches validators from Relayer and registers the validators.

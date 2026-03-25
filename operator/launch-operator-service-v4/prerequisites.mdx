@@ -1,49 +1,19 @@
 ---
 title: 1. Prerequisites
-sidebar_position: 2
+description: "Required infrastructure for running the Operator Service: a deployed Vault, synced execution and consensus clients, and MEV-Boost."
+sidebar_position: 1
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Prerequisites
 
+Before installing the Operator Service, ensure you meet the following prerequisites.
+
 ## Deployed Vault
 
-### Creating a New Vault
-
-If you don’t have a Vault yet, follow these steps:
-
-:::custom-notes[Vault Deployment Process]
-1. Visit the [StakeWise Operate page ↗](https://app.stakewise.io/operate) and connect your wallet
-2. Click **Create Vault** to begin configuration
-3. Follow the prompts to complete the setup
-4. Once the Vault is deployed, navigate to its page
-:::
-
-You must have an active StakeWise Vault deployed and ready for operation.
-
-:::custom-warning[Vault Version Requirements]
-The Operator Service requires:
-
-- **Ethereum**: Vault version 5
-- **Gnosis**: Vault version 3
-
-**How to check your Vault version:**
-You can find your Vault version in the **Details** section of your Vault page.
-
-**How to upgrade:**
-If your Vault is below the required version, log in as a Vault Admin and click "Upgrade" at the top of the Vault page.
-
-**Using older Vault versions:**
-If you have an older Vault and cannot upgrade, follow the documentation [here ↗](/operator/v3/intro).
-:::
-
-### Finding Your Vault Address
-
-You will need the Vault contract address for Operator Service configuration:
+You will need your Vault contract address for Operator Service configuration.
 
 :::custom-info[Where to Find Your Vault Address]
 <Tabs groupId="vault-address-methods">
@@ -57,8 +27,8 @@ You will need the Vault contract address for Operator Service configuration:
   </TabItem>
   <TabItem value="details" label="From Details Section">
     1. Go to your Vault page
-    2. Scroll to the bottom to find the **"Details"** section
-    3. Look for the **"Contract address"** field
+    2. Scroll to the bottom to find the **Details** section
+    3. Look for the **Contract address** field
     4. Copy the displayed address
   </TabItem>
 </Tabs>
@@ -123,7 +93,7 @@ Some clients require specific configuration to sync event logs and prevent event
 
 ### Consensus Client
 
-Your consensus node must also be fully synced and running. Any client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
+Your consensus node must be fully synced and running. Any client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
 
 - **[Lighthouse ↗](https://launchpad.ethereum.org/en/lighthouse)** — (Ethereum, Gnosis)
 - **[Nimbus ↗](https://launchpad.ethereum.org/en/nimbus)** — (Ethereum, Gnosis)
@@ -131,12 +101,20 @@ Your consensus node must also be fully synced and running. Any client that suppo
 - **[Teku ↗](https://launchpad.ethereum.org/en/teku)** — (Ethereum, Gnosis)
 - **[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** — (Ethereum, Gnosis)
 
-:::custom-info[Validator Configuration]
-Configure your validator clients with the correct **fee recipient address**. You can find this address (Block reward recipient) along with other essential Vault information in the **Details** section at the bottom of your Vault page in the StakeWise interface.
-:::
+### Validator Client
 
+Configure the `suggested-fee-recipient` of your validator client with the correct fee recipient address.
+This is the **Block reward recipient** shown in the **Details** section at the bottom of your Vault page.
+An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
 
+## MEV-Boost
+
+Set up [MEV-Boost ↗](https://github.com/flashbots/mev-boost) to capture execution layer rewards.
+MEV-Boost is open source middleware that connects your validator to a network of block builders competing to produce the most profitable block, maximizing your Vault's execution-layer revenue.
+
+If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays (see [Smoothing Pool Relays →](smoothing-pool-relays)).
+Learn more about [MEV Strategy →](/docs/vaults/customization#mev-strategy).
 
 ## Next Steps
 
-Once you have your execution and consensus clients fully synced and your Vault deployed, continue to [Operator Service Installation →](installation)
+Once you have your execution and consensus clients fully synced, continue to [Installation →](installation)

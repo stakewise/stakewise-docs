@@ -4,23 +4,22 @@ const sidebars: SidebarsConfig = {
   operatorSidebar: [
     'becoming-a-vault-operator',
     'stakewise-vs-native-staking',
-    'where-to-start-operator-service',
-    'create-your-vault',
+    'where-to-start-create-your-vault',
     {
       type: 'category',
       label: 'Launch Operator Service V4',
       link: {
         type: 'doc',
-        id: 'launch-operator-service/overview',
+        id: 'launch-operator-service-v4/overview',
       },
       items: [
-        'launch-operator-service/prerequisites',
-        'launch-operator-service/installation',
-        'launch-operator-service/validator-keys',
-        'launch-operator-service/validators-manager',
-        'launch-operator-service/start-operator',
-        'launch-operator-service/smoothing-pool-relays',
-        'launch-operator-service/node-setup',
+        'launch-operator-service-v4/prerequisites',
+        'launch-operator-service-v4/installation',
+        'launch-operator-service-v4/validator-keys',
+        'launch-operator-service-v4/validators-manager',
+        'launch-operator-service-v4/start-operator',
+        'launch-operator-service-v4/smoothing-pool-relays',
+        'launch-operator-service-v4/node-setup',
       ],
     },
     {
@@ -48,25 +47,25 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Key Management',
+      label: 'Alternative Key Management',
       link: {
         type: 'doc',
-        id: 'key-management/index',
+        id: 'alternative-key-management/index',
       },
       items: [
-        'key-management/remote-signer',
-        'key-management/hashicorp-vault',
-        'key-management/api-mode',
+        'alternative-key-management/remote-signer',
+        'alternative-key-management/hashicorp-vault',
+        'alternative-key-management/api-mode',
         {
           type: 'category',
           label: 'DVT',
           link: {
             type: 'doc',
-            id: 'key-management/dvt/index',
+            id: 'alternative-key-management/dvt/index',
           },
           items: [
-            'key-management/dvt/ssv-setup',
-            'key-management/dvt/obol-setup',
+            'alternative-key-management/dvt/ssv-setup',
+            'alternative-key-management/dvt/obol-setup',
           ],
         },
       ],

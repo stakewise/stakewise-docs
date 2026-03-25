@@ -1,23 +1,17 @@
 ---
 title: Relayer (API Mode)
+description: "Run the Operator Service with external key management by delegating signing and keystore operations to a Relayer via API."
 sidebar_position: 3
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
-
 # Relayer (API Mode)
 
-The Relayer is a service that implements the logic for managing validator keystores, as well as signing validator operations with the Validators Manager wallet.
+In the standard setup, the Operator Service holds the validator keystores and the Validators Manager wallet locally. In API mode, both are managed externally — the Operator Service delegates all signing and key operations to a Relayer service via API calls. This is useful when:
+- The Validators Manager wallet is managed outside the Operator Service (e.g., multi-signature setup or hardware security module)
+- Validator keystores are managed by an external system or DVT infrastructure
+- You want to fully isolate key management from the Operator Service
 
-When the Operator Service is started in relayer mode, it will send requests to the relayer service via API calls for all operations that require interaction with the validator keystores or signing by the Validator Manager wallet:
-validator registrations, funding compound validators, consolidations, and withdrawals.
-The Relayer returns the necessary data signed by the Validators Manager.
-
-This proves particularly useful when the Validators Manager wallet and validator keystores are managed externally from the Operator Service.
-In essence, the Operator communicates with the Vault contract using data and signatures provided by the Relayer.
+The Operator communicates with the Vault contract using data and signatures provided by the Relayer.
 
 ## Prerequisites
 
@@ -57,6 +51,12 @@ For additional parameter information, use the `--help` flag:
 For Docker-specific setup instructions, see *Installation*: [Docker Setup →](../installation#configuration)
 :::
 
+:::custom-info[Technical Implementation]
+All operations require an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
+See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33) of signing.
+The Relayer must sign using the same wallet address configured as Validators Manager in your Vault settings.
+:::
+
 ## How API Mode Works
 
 The Operator never handles validator keys directly. Instead, it sends requests to your Relayer service, which:
@@ -66,12 +66,6 @@ The Operator never handles validator keys directly. Instead, it sends requests t
 3. **Returns signed data** for the Operator to submit to the Vault contract
 
 This architecture completely isolates key management from the Operator Service while maintaining full functionality.
-
-:::custom-info[Technical Implementation]
-All operations require an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
-See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33) of signing.
-The Relayer must sign using the same wallet address configured as Validators Manager in your Vault settings.
-:::
 
 The Relayer must implement the following endpoints to handle different validator operations:
 

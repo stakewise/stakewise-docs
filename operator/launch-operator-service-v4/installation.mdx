@@ -1,6 +1,7 @@
 ---
 title: 2. Installation
-sidebar_position: 3
+description: "Install the Operator Service via binary, Docker, or from source."
+sidebar_position: 2
 ---
 
 import Tabs from '@theme/Tabs';
@@ -10,31 +11,21 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Installation
 
+:::custom-warning[Vault Version Requirements]
+This guide requires Vault version 5 (Ethereum) or version 3 (Gnosis).
+You can find your Vault version in the **Details** section of your Vault page.
+If your Vault is below the required version, log in as a Vault Admin and click **Upgrade** at the top of the Vault page.
+:::
+
 The Operator Service can be installed in several ways: as a binary, via Docker, or built from source.
 Choose your preferred method and follow the instructions below.
-
-:::custom-warning[Vault Version Requirements]
-This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [Prerequisites →](./prerequisites#deployed-vault) section for details on checking your Vault version and instructions for older versions.
-:::
 
 <Tabs groupId="installation-methods">
   <TabItem value="binary" label="Binary" default>
 
-    ### Download
-
     1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version
     2. Select the binary file for your node's hardware
     3. Download and decompress the file
-    4. Run commands from inside the `v3-operator` folder:
-
-    ```bash
-    ./operator COMMAND --flagA=123 --flagB=xyz
-    ```
-    :::custom-notes[Note]
-      The use of flags is optional.
-    :::
-
-    ### Install Script (Linux and macOS)
 
     To install the latest release, run:
 
@@ -54,21 +45,19 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
     ```
 
-    Run commands with:
+    Run commands from inside the `v3-operator` folder using this format:
 
     ```bash
-    operator COMMAND --flagA=123 --flagB=xyz
+    ./operator COMMAND --flagA=123 --flagB=xyz
     ```
   </TabItem>
   <TabItem value="docker" label="Docker Image">
 
-    ### Pull Official Image
+    Pull Official Image
 
     ```bash
     docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10
     ```
-
-    ### Build From Source
 
     Alternatively, build the Docker image locally:
 
@@ -78,7 +67,7 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 .
     ```
 
-    ### Run Commands
+    Run commands using this format:
 
     ```bash
     docker run --rm -ti \
@@ -90,28 +79,21 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     --flagB=xyz
     ```
 
-    :::custom-notes[Note]
-      The use of flags is optional.
+    :::custom-warning[Docker Data Directories]
+    You must set `--data-dir=/data` and map it to a host directory. The `--database-dir` should also be mapped to a host directory or Docker volume with write permissions enabled. Permissions setup is not required when using Docker volumes.
     :::
-
-    ### Configuration
-
-    When operating within Docker, it's necessary to specify the `--data-dir` variable, such as `--data-dir=/data`. Ensure the `data-dir` is mapped to a directory on the host.
-
-    The `database-dir` should also be mapped to a host directory or Docker volume, with write permissions enabled for the directory linked to `database-dir`. Setting up permissions is not required if using volumes.
-
   </TabItem>
   <TabItem value="source" label="Source Files">
 
-    ### Requirements
+    Requirements:
 
-    - [Python 3.10+ ↗](https://www.python.org/downloads/)
+    - [Python 3.12+ ↗](https://www.python.org/downloads/)
     - [Poetry ↗](https://python-poetry.org/docs/)
     - [Git ↗](https://git-scm.com/)
     - [Cargo ↗](https://doc.rust-lang.org/cargo/getting-started/installation.html) (for sw-milagro-bls-binding dependency)
     - [libpq-dev ↗](https://www.postgresql.org/docs/current/libpq.html) (for psycopg2 dependency)
 
-    ### Setup
+    Run the setup command:
 
     ```bash
     git clone https://github.com/stakewise/v3-operator.git
@@ -119,16 +101,11 @@ This guide is for Vault version 5 (Ethereum) or version 3 (Gnosis). Check the [P
     poetry install --only main
     ```
 
-    ### Run Commands
-
-    Run commands from within the `v3-operator` folder using the below format:
+    Run commands from inside the `v3-operator` folder using this format:
 
     ```bash
     PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
     ```
-    :::custom-notes[Note]
-        The use of flags is optional.
-    :::
   </TabItem>
 </Tabs>
 

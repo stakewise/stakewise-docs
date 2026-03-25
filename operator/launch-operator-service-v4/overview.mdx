@@ -1,14 +1,14 @@
 ---
-title: "Where to Start: Operator Service"
+title: Overview
 description: "Start here: the Operator Service is required software for running a Vault. Understand what the Operator Service does and how to set it up for your Vault."
-sidebar_position: 3
+sidebar_position: 1
 ---
 
 import Image from '@theme/IdealImage'
 
-# Where to Start: Operator Service
+# Launch Operator Service V4
 
-Now that you know what operating a Vault involves, let's look at the software that makes it all work.
+Now that you have your Vault, let's look at the software that makes it all work.
 
 The [Operator Service ↗](https://github.com/stakewise/v3-operator) is open-source software developed by StakeWise that runs alongside the node infrastructure and automates the day-to-day operations of your Vault.
 It comes with all batteries included — CLI commands cover the most essential operations from key generation and wallet setup to node installation and monitoring, while optional flags add extra capabilities and let you fine-tune the service to your needs to achieve the most performant setup for your Vault.
@@ -67,13 +67,6 @@ By default, the fees earned by the Vault's fee recipient remain locked in the va
 :::custom-notes[Deep Dive]
 For a deeper understanding of how Vaults work under the hood — validator registration, withdrawals, rewards, MEV, and more — see the [Concepts →](/docs/overview) section.
 :::
-
-## Next Steps
-
-1. **[Create your Vault →](./create-your-vault)** — done via the StakeWise UI in minutes. You'll need the Vault address for the next step.
-
-2. **[Launch the Operator Service →](./launch-operator-service/overview)** — install, configure, and start the service for your Vault.
-
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities:

@@ -1,0 +1,72 @@
+---
+title: 4. Validators Manager
+description: "Set up the Validators Manager wallet to authorize validator registrations and operations for your Vault."
+sidebar_position: 4
+---
+
+import Image from '@theme/IdealImage'
+
+# Validators Manager
+
+After generating your validator keys, you need to set up a wallet that will authorize validator operations (registrations, funding, consolidations, withdrawals) on behalf of your Vault. This wallet is assigned the **Validators Manager** role.
+
+The Operator Service can generate this wallet, or you can use an existing one.
+
+If your Validators Manager wallet is managed externally, see [Relayer (API Mode) →](../alternative-key-management/api-mode).
+
+<Image img={require('./img/validator-manager-setup.png')} alt="validator-manager-setup" />
+
+## Step 1: Create Operator Wallet
+
+The first step is creating a dedicated wallet that will be assigned the Validators Manager role and handle validator operations.
+
+You can create a new wallet using the command below (recommended for dedicated operator setups), or use an existing wallet — in that case, skip to [Step 2 →](#step-2-assign-validators-manager-role) to assign it the Validators Manager role.
+
+Create a wallet for validator registrations and gas payments:
+
+```bash
+./operator create-wallet
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Enter the vault address: 0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c
+Enter the mnemonic for generating the wallet: fish monster write banner tired laptop slender ...
+Done. The wallet and password saved to ~/.stakewise/0xF82f6E46d0d0a9536b9CA4bc480372EeaFcd9E6c/wallet directory. The wallet address is: 0x59d58...B48C4
+```
+</details>
+
+You may reuse the same mnemonic as your validator keys or generate a separate one for added security.
+
+:::custom-warning[Wallet Balance Warning]
+  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
+
+    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
+    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
+    - Monitor balance regularly to prevent registration failures
+:::
+
+:::custom-info[Using a Private Key Directly]
+If you have the private key exported in plain format, you can specify it using the environment variable:
+
+```bash
+export WALLET_PRIVATE_KEY="0xyour_private_key_here"
+```
+
+If both `WALLET_PRIVATE_KEY` and wallet keystore files are configured, the private key takes precedence over the wallet files.
+:::
+
+## Step 2: Assign Validators Manager Role
+
+You must assign the Validators Manager role to the wallet address created in the previous step. This setup can be completed via the StakeWise UI and must be performed by the Vault Admin.
+
+1. Connect using a Vault Admin wallet and navigate to the [Operate page ↗](https://app.stakewise.io/operate)
+2. Select the Vault for which you want to change the Validators Manager role
+3. In the upper right corner, click on **Settings** and open the **Roles** tab (only visible to the Vault Admin or current Validators Manager)
+4. Enter the wallet address in the **Validators manager** field
+5. Click **Save** to create a transaction that you will need to sign with your wallet
+
+## Next Steps
+
+Your Validators Manager is set up. Continue to [Start Operator →](start-operator) to launch the Operator Service.

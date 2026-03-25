@@ -1,15 +1,30 @@
 ---
 title: 5. Start Operator
-sidebar_position: 6
+description: Start the Operator Service to begin automated validator registrations, withdrawals, and Vault management.
+sidebar_position: 5
 ---
 
 import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem'
-import Image from '@theme/IdealImage'
+import TabItem from '@theme/TabItem';
+import Image from '@theme/IdealImage';
+import { CheckItem } from '@site/src/components';
 
 # Start Operator
 
-After completing [Validators Manager →](validators-manager) setup, you're ready to start the Operator Service to begin automated validator registrations.
+## Setup Checklist <img src="/icons/stakewise/tick.png" alt="tick" style={{width: '36px', height: '36px', verticalAlign: 'middle', display: 'inline'}} />
+
+Before starting the Operator Service, confirm that everything is in place:
+
+<CheckItem id="checklist-vault" label="I've deployed my Vault and copied the address" />
+<CheckItem id="checklist-execution" label="I've fully synced my execution client" />
+<CheckItem id="checklist-consensus" label="I've fully synced my consensus client" />
+<CheckItem id="checklist-mev" label="I've configured MEV-Boost" />
+<CheckItem id="checklist-installed" label="I've installed the Operator Service" />
+<CheckItem id="checklist-keys" label="I've generated validator keys and uploaded them into my validator client" />
+<CheckItem id="checklist-validator-client" label="I've set the fee recipient address in my validator client" />
+<CheckItem id="checklist-manager" label="I've set up the Validators Manager" />
+
+Once all items are checked, proceed with the configuration below.
 
 <Image img={require('./img/start-operator.png')} alt="start-operator" />
 

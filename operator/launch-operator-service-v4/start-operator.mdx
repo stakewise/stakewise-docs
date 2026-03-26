@@ -87,8 +87,8 @@ Only needed if you didn't use the Operator Service to generate keys and wallet.
 | Flag | Description |
 |------|-------------|
 | <nobr>`--harvest-vault`</nobr> | Syncs Vault state every 12 hours via `updateState`, reducing gas costs for users |
-| <nobr>`--claim-fee-splitter`</nobr> | Periodically claims fees to shareholder addresses. See [Fee Claiming →](../manage-your-vault/fee-claiming) |
-| <nobr>`--run-nodes`</nobr> | Starts and manages local Reth and Lighthouse nodes. Requires `node-install` first. See [Automated Node Setup →](node-setup) |
+| <nobr>`--claim-fee-splitter`</nobr> | Periodically claims fees to shareholder addresses. See [Fee Claiming →](../manage-vault/fee-claiming) |
+| <nobr>`--run-nodes`</nobr> | Starts and manages local Reth and Lighthouse nodes. Requires `node-install` first. See [Automated Node Setup →](/operator/manage-validators/automated-node-setup) |
 
 ### Tuning & Limits
 
@@ -119,11 +119,3 @@ Only needed if you didn't use the Operator Service to generate keys and wallet.
 | <nobr>`--log-level`</nobr> | Set logging level: ERROR, WARNING, INFO, DEBUG |
 
 Monitor the logs to confirm the Operator Service is running and validators are being registered successfully.
-
-## Next Steps
-
-From here, you can [manage your Vault settings](../manage-your-vault/vault-administration) — adjust roles, fees, and permissions directly through the StakeWise UI. If your Vault has multiple fee shareholders, set up a [Fee Splitter](../manage-your-vault/fee-splitter) to distribute earnings automatically.
-
-To keep things running smoothly, we recommend setting up [monitoring](../maintenance/monitoring) with Prometheus and Grafana to track validator health and catch issues early. You can also [self-report to Rated Network](../maintenance/rated-network) for public performance analytics.
-
-As your Vault grows, the Operator Service provides tools for [consolidating validators](../maintenance/consolidate-validators) to reduce infrastructure overhead, [manual exits](../maintenance/manual-exit) when needed, and [keystore recovery](../maintenance/recover-validators) from your mnemonic.

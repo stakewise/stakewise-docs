@@ -1,11 +1,16 @@
 ---
 title: Alternative Key Management
-sidebar_position: 0
+sidebar_position: 1
+description: "Manage validator keys externally using Remote Signer, HashiCorp Vault, or API mode in Operator Service V3."
 ---
 
 # Alternative Key Management
 
-Validator keystores don’t need to be stored locally—you may prefer to manage them externally for better security or flexibility.
+:::custom-warning[Operator V3 Documentation]
+This page covers Operator Service V3. If your Vault version is 5+ on Ethereum or 3+ on Gnosis, refer to the [V4 Alternative Key Management →](/operator/alternative-key-management).
+:::
+
+Validator keystores don't need to be stored locally—you may prefer to manage them externally for better security or flexibility.
 
 This section covers three alternatives:
 
@@ -13,6 +18,4 @@ This section covers three alternatives:
 
 [HashiCorp Vault →](./hashicorp-vault) – Store validator signing keys in HashiCorp Vault instead of local files.
 
-[Relayer (API Mode) →](./api-mode) – External service manages validator keystores and signs operations with the Validators Manager wallet via API calls.
-
-Dive into each section to learn how these options work and how to implement them in your setup.
+[API Mode →](./api-mode) – External service manages validator keystores and signs operations with the hot wallet via API calls.

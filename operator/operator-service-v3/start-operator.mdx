@@ -1,43 +1,22 @@
 ---
-title: 5. Start Operator
+title: 4. Start Operator
+description: "Start the Operator Service V3 to begin automated validator registrations and Vault management."
 sidebar_position: 5
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Start Operator
 
-You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
+Run the Operator Service using the `start` command with your Vault address and node endpoints.
 
-## Prerequisites
+If you **did not** use Operator Service to generate keys or the hot wallet, you will need to provide the relevant paths via flags — see [Keystore & Wallet](#keystore--wallet) below.
 
-If you **did not** use Operator Service to generate validator keys, you will need to add the following flag:
-
-- `--keystores-dir` - The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. The folder must contain either a single `password.txt` password file  for all keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt` (e.g., `keystore1.json`, `keystore1.txt`)
-
-If you **did not** use Operator Service to generate the hot wallet, you will need to add the following flags:
-
-- `--hot-wallet-file` - Path to the password-protected `.txt` file containing your hot wallet private key
-- `--hot-wallet-password-file` - Path to a `.txt` file containing the password to open the protected hot wallet private key file
-
-If you **did not** use Operator Service to generate deposit data file, or you use combined deposit data file from multiple operators, you will need to add the following flag:
-
-- `--deposit-data-file` - Path to the deposit data file (Vault directory is default)
-
-
-There are several ways to run the Operator Service, depending on how you store private keys.
-
-## Running Options
-
-Depending on your installation method, use the appropriate command format:
+Choose the format matching your installation method:
 
 <Tabs groupId="installation-types">
   <TabItem value="binary" label="Binary" default>
-    #### Using Binary
-
     ```bash
     ./operator start \
       --vault=0xf27...10ad9 \
@@ -47,10 +26,7 @@ Depending on your installation method, use the appropriate command format:
   </TabItem>
 
   <TabItem value="docker" label="Docker">
-    #### Using Docker
-
-    For Docker, you first need to mount the folder containing validator keystores and include the `--data-dir` flag alongside the `start` command:
-
+    For Docker, mount the folder containing validator keystores and include the `--data-dir` flag:
     ```bash
     docker run --restart on-failure:10 \
     -u $(id -u):$(id -g) \
@@ -65,8 +41,6 @@ Depending on your installation method, use the appropriate command format:
   </TabItem>
 
   <TabItem value="source" label="Source Files">
-    #### Using Source Files
-
     ```bash
     PYTHONPATH=. poetry run python src/main.py start-local \
     --vault=0xf27...10ad9 \
@@ -77,50 +51,57 @@ Depending on your installation method, use the appropriate command format:
 </Tabs>
 
 :::custom-notes[Setup Complete]
-Congratulations 🎉! Your Operator Service is now running and ready to trigger validator registrations within your Vault. Monitor the logs to ensure validators are being registered successfully.
+Congratulations! Your Operator Service is now running and ready to trigger validator registrations within your Vault. Monitor the logs to ensure validators are being registered successfully.
 :::
 
 ## Optional Flags
 
+### Keystore & Wallet
+
+Only needed if you didn't use the Operator Service to generate keys and hot wallet.
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--keystores-dir`</nobr> | Directory with validator keys in [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) format. Must contain a single `password.txt` or per-keystore password files (e.g., `keystore1.json`, `keystore1.txt`) |
+| <nobr>`--keystores-password-file`</nobr> | Path to the password file for decrypting keystores |
+| <nobr>`--hot-wallet-file`</nobr> | Path to the password-protected hot wallet private key file |
+| <nobr>`--hot-wallet-password-file`</nobr> | Path to the hot wallet password file |
+| <nobr>`--deposit-data-file`</nobr> | Path to `deposit_data.json`. Default: file generated with `create-keys` command |
+
+### Additional Capabilities
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--harvest-vault`</nobr> | Syncs Vault state every 12 hours via `updateState`, reducing gas costs for users |
+| <nobr>`--remote-signer-url`</nobr> | The base URL of the remote signer (e.g., `http://signer:9000`) |
+| <nobr>`--hashi-vault-url`</nobr> | The base URL of the HashiCorp Vault service (e.g., `http://vault:8200`) |
+| <nobr>`--hashi-vault-token`</nobr> | Authentication token for accessing HashiCorp Vault |
+| <nobr>`--hashi-vault-key-path`</nobr> | Key path(s) in the K/V secret engine where validator signing keys are stored |
+| <nobr>`--hashi-vault-key-prefix`</nobr> | Key prefix(es) in the K/V secret engine under which validator signing keys are stored |
+| <nobr>`--hashi-vault-parallelism`</nobr> | How many requests to K/V secrets engine to do in parallel |
+
+### Tuning & Limits
+
 | Flag | Description |
 |------|-------------|
 | <nobr>`--min-validators-registration`</nobr> | Minimum number of validators required to start registration |
-| <nobr>`--pool-size`</nobr> | Number of processes in a pool |
-| <nobr>`--log-level`</nobr> | The log level. Options: `fatal`, `error`, `warning`, `info`, `debug` |
-| <nobr>`--log-format`</nobr> | The log record format. Options: `plain` or `json` |
-| <nobr>`--hashi-vault-parallelism`</nobr> | How many requests to K/V secrets engine to do in parallel |
-| <nobr>`--hashi-vault-key-prefix`</nobr> | Key prefix(es) in the K/V secret engine under which validator signing keys are stored |
-| <nobr>`--hashi-vault-key-path`</nobr> | Key path(s) in the K/V secret engine where validator signing keys are stored |
-| <nobr>`--hashi-vault-token`</nobr> | Authentication token for accessing HashiCorp Vault |
-| <nobr>`--hashi-vault-url`</nobr> | The base URL of the vault service (e.g., `http://vault:8200`) |
-| <nobr>`--remote-signer-url`</nobr> | The base URL of the remote signer (e.g., `http://signer:9000`) |
-| <nobr>`--vault`</nobr> | Address of the Vault to register validators for |
-| <nobr>`--consensus-endpoints`</nobr> | Comma separated list of API endpoints for consensus nodes |
-| <nobr>`--execution-jwt-secret`</nobr> | JWT secret key used for signing and verifying JSON Web Tokens when connecting to execution nodes |
-| <nobr>`--execution-endpoints`</nobr> | Comma separated list of API endpoints for execution nodes |
-| <nobr>`--harvest-vault`</nobr> | Whether to submit vault harvest transactions. Default: `false` |
-| <nobr>`-v, --verbose`</nobr> | Enable debug mode. Default: `false` |
-| <nobr>`--metrics-port`</nobr> | The Prometheus metrics port. Default: `9100` |
-| <nobr>`--metrics-prefix`</nobr> | The Prometheus metrics prefix. Default: `sw_operator` |
-| <nobr>`--metrics-host`</nobr> | The Prometheus metrics host. Default: `127.0.0.1` |
-| <nobr>`--enable-metrics`</nobr> | Whether to enable metrics server. Default: disabled |
-| <nobr>`--network`</nobr> | The network of the Vault. Options: `mainnet`, `hoodi`, `gnosis`. Default: network specified at `init` command |
-| <nobr>`--deposit-data-file`</nobr> | Path to the `deposit_data.json` file. Default: file generated with `create-keys` command |
-| <nobr>`--keystores-dir`</nobr> | Absolute path to the directory with all the encrypted keystores. Default: directory generated with `create-keys` command |
-| <nobr>`--keystores-password-file`</nobr> | Absolute path to the password file for decrypting keystores. Default: file generated with `create-keys` command |
-| <nobr>`--hot-wallet-file`</nobr> | Absolute path to the hot wallet. Default: file generated with `create-wallet` command |
-| <nobr>`--hot-wallet-password-file`</nobr> | Absolute path to the hot wallet password file. Default: file generated with `create-wallet` command |
-| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum fee per gas for transactions. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
-| <nobr>`--database-dir`</nobr> | The directory where the database will be created or read from. Default: `~/.stakewise/<vault>` |
-| <nobr>`--data-dir`</nobr> | Path where the vault data will be placed. Default: `~/.stakewise` |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum gas fee per transaction. Default: 10 Gwei (Ethereum), 2 Gwei (Gnosis) |
+| <nobr>`--pool-size`</nobr> | Number of CPU cores used to load and create keystores. Default: all cores. Set to half your CPU cores to prevent overloading |
 
-:::custom-tips[Reduce CPU Load]
-The `--pool-size` flag can be passed with both `start` and `create-keys` commands. This flag defines the number of CPU cores used to load and create keystores. By default, Operator Service will use 100% of the CPU cores.
-Setting `--pool-size` to `(number of CPU cores) / 2` is a safe way to ensure that Operator Service does not take up too much CPU load and impact node performance during the creation and loading of keystores.
-:::
+### Logging
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--verbose`</nobr> | Enable debug mode |
+| <nobr>`--log-level`</nobr> | Set logging level: `fatal`, `error`, `warning`, `info`, `debug` |
+| <nobr>`--log-format`</nobr> | Log record format: `plain` or `json` |
+| <nobr>`--enable-metrics`</nobr> | Enable Prometheus metrics server |
+| <nobr>`--metrics-host`</nobr> | Prometheus metrics host. Default: `127.0.0.1` |
+| <nobr>`--metrics-port`</nobr> | Prometheus metrics port. Default: `9100` |
+| <nobr>`--metrics-prefix`</nobr> | Prometheus metrics prefix. Default: `sw_operator` |
 
 :::custom-info[Environment Variables]
-Operator Service can be configured via environment variables instead of CLI flags. Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/master/.env.example) and save it as `.env`. Adjust as necessary based on your node configuration.
+Operator Service can be configured via environment variables instead of CLI flags. Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/v3.1.10/.env.example) and save it as `.env`. Adjust as necessary based on your node configuration.
 
 Load environment variables before running Operator Service:
 ```bash
@@ -128,8 +109,6 @@ export $(grep -v '^#' .env | xargs)
 ```
 :::
 
-You can check the environment variables are set and loaded correctly by running `env`.
-
 ## Next Steps
 
-Continue to [Additional Actions →](./additional-actions/) to explore optional configurations and integrations to enhance your Operator Service setup, including validator performance tracking with Rated Network.
+For monitoring, validator recovery, and other operational tasks shared across versions, see the main [Operator documentation →](/operator/manage-vault/vault-administration).

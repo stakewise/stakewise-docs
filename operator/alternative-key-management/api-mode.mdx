@@ -1,7 +1,7 @@
 ---
 title: Relayer (API Mode)
 description: Run the Operator Service with external key management by delegating signing and keystore operations to a Relayer via API.
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Relayer (API Mode)
@@ -17,12 +17,12 @@ The Operator communicates with the Vault contract using data and signatures prov
 
 Complete the following steps before proceeding:
 
-:::custom-notes[Required Setup Steps]
-  1. [Installation →](../installation) completed
-  2. [Validators Manager →](../validators-manager), which is set to the wallet address of the Relayer.
-:::
+
+1. [Installation →](/operator/launch-operator-service-v4/installation) completed
+2. [Validators Manager →](/operator/launch-operator-service-v4/validators-manager), which is set to the wallet address of the Relayer.
 
 ## Start Operator Service
+
 To run the Operator API, use the command below:
 
 ```bash
@@ -48,7 +48,7 @@ For additional parameter information, use the `--help` flag:
 ```
 
 :::custom-info[Docker Configuration]
-For Docker-specific setup instructions, see *Installation*: [Docker Setup →](../installation#configuration)
+For Docker-specific setup instructions, see [Installation →](../launch-operator-service-v4/installation#configuration)
 :::
 
 :::custom-info[Technical Implementation]
@@ -57,15 +57,7 @@ See [implementation example ↗](https://github.com/stakewise/relayer-example/bl
 The Relayer must sign using the same wallet address configured as Validators Manager in your Vault settings.
 :::
 
-## How API Mode Works
-
-The Operator never handles validator keys directly. Instead, it sends requests to your Relayer service, which:
-
-1. **Manages validator keystores** internally or via external systems
-2. **Signs operations** with the Validators Manager wallet
-3. **Returns signed data** for the Operator to submit to the Vault contract
-
-This architecture completely isolates key management from the Operator Service while maintaining full functionality.
+## API Endpoints
 
 The Relayer must implement the following endpoints to handle different validator operations:
 
@@ -115,8 +107,8 @@ Response:
 - `amount` - Deposit amount in Gwei.
 - `exit_signature` - Exit signature for the validator.
 - `oracles_exit_signature_shares` - Exit signature shares for oracle processing.
-  - `public_keys` - Validator public key shares.
-  - `encrypted_exit_signatures` - Exit signature shares, encrypted with oracle keys.
+- `public_keys` - Validator public key shares.
+- `encrypted_exit_signatures` - Exit signature shares, encrypted with oracle keys.
 - `validators_manager_signature` - [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
 
 :::custom-info[DVT Relayer]

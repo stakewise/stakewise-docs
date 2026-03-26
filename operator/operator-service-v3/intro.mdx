@@ -1,50 +1,52 @@
 ---
-title: 1. Overview
+title: Operator Service V3
 sidebar_position: 1
+description: "Operator Service V3 documentation for Vaults below version 5 on Ethereum or below version 3 on Gnosis."
 ---
 
-import Image from '@theme/IdealImage'
-
-# Overview
+# Operator Service V3
 
 :::custom-warning[Operator V3 Documentation]
-You must run Operator Service v3.1.10 and follow this documentation page if your Vault version is below 5 on Ethereum or below 3 on Gnosis.
-You can check your Vault contract version in the Details section of the Vault page or on the contract page in the block explorer. If your Vault version is higher, please refer to the [latest documentation →](/operator/intro).
+You must run Operator Service v3.1.10 and follow this documentation page if your **Vault version is below 5** on Ethereum or **below 3** on Gnosis. You can check your Vault contract version in the **Details** section of the Vault page or on the contract page in the block explorer. If your Vault version is higher, please refer to the [latest documentation →](/operator/launch-operator-service-v4/overview).
 :::
 
-**StakeWise** is a decentralized liquid staking protocol that allows anyone to participate in Ethereum staking without the traditional barriers of technical complexity or capital requirements. The protocol enables users to stake their ETH while maintaining liquidity through [osToken →](/docs/ostoken/intro), StakeWise's liquid staking token.
+We recommend upgrading to enjoy the full set of features. See the [V4 Upgrade Guide →](./v4-upgrade-guide).
 
-At the core of StakeWise are individual staking pools called [Vaults →](/docs/vaults/intro). Anyone – from solo stakers to professional operators – can create and operate their own Vault, offering flexible staking solutions that serve diverse needs: solo stakers can access liquid staking for their own ETH, while individuals and organizations can stake on their terms and offer liquid staking services to others.
+### Key differences from V4
 
-**Deploying a Vault requires running the StakeWise [Operator Service ↗](https://github.com/stakewise/v3-operator)** – specialized software that manages validator operations and ensures your Vault functions properly. Each Vault must have at least one node operator running this service to handle validator registrations, exits, and other critical operations that keep the Vault operational.
+- **Deposit data files** — V3 requires generating and uploading a `deposit_data.json` file before validators can be registered. V4 handles this automatically.
+- **No compound validators** — V3 only supports `0x01` validators (32 ETH limit). V4 supports `0x02` validators with balances up to 2048 ETH, reducing the number of validators needed and infrastructure overhead via [consolidation](/operator/manage-validators/consolidate-validators).
+- **No automated withdrawals** — V4 supports partial withdrawals and execution-layer triggered exits (Pectra), enabling faster withdrawal processing without full validator exits.
+- **No fee automation** — V4 can automatically [split](/docs/guides/fee-splitter) and [claim](/operator/manage-vault/fee-claiming) Vault fees to multiple shareholders on a schedule.
+- **No Meta Vaults** — V4 can [process Meta Vaults](/operator/manage-vault/process-metavaults), which delegate assets across multiple sub-vaults for diversified staking.
+- **No automated node setup** — V4 can automatically [install and manage](/operator/manage-validators/automated-node-setup) Reth and Lighthouse clients.
 
-<Image img={require('./img/architecture_overview.png')} alt="architecture_overview" />
+## Setup Guide
 
-## Core Functions
+1. [Prerequisites →](./prerequisites) — Node infrastructure and Vault requirements
+2. [Installation →](./installation) — Install the Operator Service
+3. [Prepare Operator →](./prepare-operator) — Generate keys, create hot wallet, upload deposit data
+4. [Start Operator →](./start-operator) — Launch the Operator Service with your configuration
 
-The Operator Service integrates seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology.
-The Operator Service is indispensable in order to successfully register validators on the platform
-and manage your Vault's validator lifecycle — from automated registration through exit signature maintenance and state synchronization.
+## Alternative Key Management
 
-### Validator Registration
+V3 supports external key management with different commands than V4:
 
-The Operator Service periodically checks whether the Vault has accumulated enough assets for registering new validators (32 ETH for Ethereum, 1 GNO for Gnosis) and sends a registration transaction to the Vault.
-Validator registration requires pre-generated deposit data files that must be uploaded to your Vault.
+- [Remote Signer →](./alternative-key-management/remote-signer) — Isolate validator signing keys using an external signer like Web3Signer
+- [HashiCorp Vault →](./alternative-key-management/hashicorp-vault) — Store and load validator keys from a remote HashiCorp Vault instance
+- [API Mode →](./alternative-key-management/api-mode) — Delegate signing and key operations to an external service via API
 
-:::custom-notes[Deep Dive]
-For detailed information about the validator registration process, see [Validator Registration →](/docs/vaults/how-vaults-work#validator-registration)
-:::
+## Additional Actions
 
-### Exit Signatures Rotation
+The following vault and validator management tasks are shared across V3 and V4:
 
-Exit signatures can become invalid if the oracle set changes. The Operator Service periodically checks active validators and updates outdated exit signatures by submitting rotation transactions to the Vault.
+**Manage Vault**
+- [Vault Administration →](/operator/manage-vault/vault-administration) — Branding, fees, roles
+- [Add Extra Rewards →](/operator/manage-vault/add-extra-rewards) — Distribute incentives to your Vault
+- [Vault Performance →](/operator/manage-vault/vault-performance) — Performance grades and scoring
 
-### Vault State Update (Optional)
-
-Keeps your Vault synced by calling the `updateState` function every 12 hours.
-Enable this by passing the `--harvest-vault` flag to the start command. This simplifies contract interactions and reduces gas costs for your depositors.
-By default, Vault state updates occur automatically whenever users interact with the Vault through deposits or withdrawals (with a 12-hour cooldown between updates).
-
-## Next Steps
-
-Before running the Operator Service, ensure your infrastructure meets the necessary [Prerequisites →](./prerequisites) outlined in the next section.
+**Manage Validators**
+- [Monitoring →](/operator/manage-validators/monitoring) — Prometheus metrics and Grafana dashboards
+- [Rated Network →](/operator/manage-validators/rated-network) — Self-reporting to Rated Network
+- [Manual Exit →](/operator/manage-validators/manual-exit) — Emergency validator exits (uses `validators-exit` in V3)
+- [Recover Validators →](/operator/manage-validators/recover-validators) — Recover active validator keystores

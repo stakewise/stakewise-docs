@@ -14,16 +14,16 @@ Follow the steps below to get everything running.
 
 **1. Execution Client** – A fully synced execution client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/).
 Supported clients include Nethermind, Besu, Erigon, Geth, and Reth.
-[Detailed setup instructions →](/operator/prerequisites#execution-client).
+[Detailed setup instructions →](/operator/launch-operator-service-v4/prerequisites#execution-client).
 
 **2. Consensus Client** – A fully synced consensus client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/).
 Supported clients include Lighthouse, Nimbus, Prysm, Teku, and Lodestar.
-[Detailed setup instructions →](/operator/prerequisites#consensus-client)
+[Detailed setup instructions →](/operator/launch-operator-service-v4/prerequisites#consensus-client)
 
 **3. MEV-Boost** – Set up [MEV-Boost ↗](https://boost.flashbots.net/) to capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays.
 [Learn about MEV strategy options →](/docs/vaults/customization#mev-strategy) and [Smoothing Pool relays →](/operator/smoothing-pool-relays).
 
 **4. Operator Service** – Specialized software that automates essential validator management tasks for your Vault, such as validator registrations, withdrawals, state updates, and fee claims.
-The Operator Service runs seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology. [Complete setup guide →](/operator/intro)
+The Operator Service runs seamlessly with any node setup, supporting your preferred execution and consensus clients, MEV relay, and distributed validator technology. [Complete setup guide →](/operator/launch-operator-service-v4/overview)
 
 **5. Running Validators** – You must upload the allocated validator keys to the validator client and start it. Instructions can be found on your consensus client's page. The validators will be registered automatically via the Operator Service.

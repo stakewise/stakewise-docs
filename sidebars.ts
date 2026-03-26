@@ -87,6 +87,7 @@ const sidebars: SidebarsConfig = {
         'docs/guides/staking/unstaking',
       ],
     },
+    'docs/guides/fee-splitter',
     {
       type: 'category',
       label: 'DeFi',

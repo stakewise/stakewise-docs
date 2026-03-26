@@ -116,29 +116,6 @@ const config: Config = {
         },
       },
     ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'operator-v3',
-        path: 'operator-v3',
-        routeBasePath: 'operator/v3',
-        sidebarPath: './sidebarsOperatorV3.ts',
-        remarkPlugins: [ remarkMath ],
-        rehypePlugins: [ rehypeKatex ],
-        showLastUpdateTime: true,
-        breadcrumbs: true,
-        admonitions: {
-          keywords: [
-            'custom-info',
-            'custom-tips',
-            'custom-notes',
-            'custom-warning',
-            'custom-stakewise'
-          ],
-          extendDefaults: true,
-        },
-      },
-    ],
   ],
 
   themeConfig: {

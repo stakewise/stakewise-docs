@@ -1,26 +1,20 @@
 ---
 title: Remote Signer
-sidebar_position: 1
+sidebar_position: 2
+description: Use a remote signer like Web3Signer to isolate validator signing keys from the Operator Service.
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Remote Signer
 
-The Remote Signer allows you to isolate signing operations from your Operator Service. Validator keystores do not need to be present directly in the Operator.
-The Operator can query a remote signer like [Web3Signer ↗](https://docs.web3signer.consensys.io/) to get signatures for validator deposit and exit messages.
+The Remote Signer mode lets you isolate validator signing keys from the Operator Service. Instead of storing keystores locally, the Operator queries a remote signer like [Web3Signer ↗](https://docs.web3signer.consensys.io/)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup> for deposit and exit message signatures.
+
 ## Prerequisites
 
 Complete the following steps before proceeding:
 
-:::custom-notes[Required Setup Steps]
-  1. [Installation →](../installation) completed
-  2. [Validators Manager →](../validators-manager) set
-  3. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>
-:::
+1. [Installation →](../launch-operator-service-v4/installation) completed
+2. [Validators Manager →](../launch-operator-service-v4/validators-manager) set
+3. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL
 
 ## Setup Remote Signer
 
@@ -45,14 +39,17 @@ Done. Successfully configured operator to use remote signer for 10 public key(s)
 ```
 </details>
 
-### `setup-remote-signer` Options
+### `setup-remote-signer` flags
 
-- `--remote-signer-url` – The URL of the remote signer.
-- `--dappnode` – Use this flag when running with Dappnode Staking Brain. Must be provided together with the `--execution-endpoints` flag.
-- `--vault` – The Vault address.
-- `--execution-endpoints` – A comma-separated list of API endpoints for execution nodes. Used to retrieve the Vault validator fee recipient. Required only if the `--dappnode` flag is set.
-- `--data-dir` – The path where Vault data is stored. Default: `~/.stakewise`.
-- `--keystores-dir` – The directory containing validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard.
+| Flag | Description |
+|------|-------------|
+| `--remote-signer-url` | URL of the remote signer |
+| `--vault` | Vault address |
+| `--dappnode` | Use with Dappnode Staking Brain. Requires `--execution-endpoints` |
+| <nobr>`--execution-endpoints`</nobr> | Comma-separated execution node API endpoints. Used to retrieve the Vault validator fee recipient. Required with `--dappnode`|
+| `--data-dir` | Path where Vault data is stored. Default: `~/.stakewise` |
+| `--keystores-dir` | Directory with validator keys in [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) format |
+
 
 ## Start Operator Service
 
@@ -72,13 +69,7 @@ You should see a message similar to this one after starting the operator:
 Using remote signer at http://remote-signer:9000 for 20 public keys
 ```
 
-:::custom-info[Additional Configuration]
-This setup supports various optional flags to provide more flexibility and customization. See all available options in the [Start Operator →](../start-operator#optional-flags) setup.
-:::
-
-:::custom-tips[Successful Configuration]
-  When properly configured, the Operator Service will connect to your remote signer and manage validator operations without requiring local access to private keys.
-:::
+This setup supports various optional flags to provide more flexibility and customization. See all available options in the [Start Operator →](../launch-operator-service-v4/start-operator#optional-flags) setup.
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span>

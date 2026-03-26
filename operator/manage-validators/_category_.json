@@ -1,0 +1,8 @@
+{
+  "label": "Manage Validators",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Monitoring, validator consolidation, manual exits, and recovery."
+  }
+}

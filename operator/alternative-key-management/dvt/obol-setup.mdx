@@ -1,12 +1,8 @@
 ---
 title: Obol Setup
 sidebar_position: 3
+description: Learn what Obol is and how you can use it with your Vault.
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Obol Setup
 
@@ -25,7 +21,7 @@ docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 3. [Create Vault →](/docs/guides/running-a-vault/how-to-create-a-vault)
-4. [Setup Operator Service →](/operator/installation)
+4. [Setup Operator Service →](/operator/launch-operator-service-v4/installation)
 
 :::custom-warning[Important - Keystore Password Configuration]
 When using the `create-keys` command, add the `--per-keystore-password` flag to generate a keystore with a separate password file for each keystore. This is necessary for the normal operation of the Charon CLI, especially when splitting keys.

@@ -1,72 +1,47 @@
 ---
-title: Relayer (API Mode)
-sidebar_position: 3
+title: API Mode
+description: "Run the Operator Service V3 with external key management by delegating signing and keystore operations via API."
+sidebar_position: 4
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+# API Mode
 
-# Relayer (API Mode)
+:::custom-warning[Operator V3 Documentation]
+This page covers Operator Service V3. If your Vault version is 5+ on Ethereum or 3+ on Gnosis, refer to the [V4 Relayer (API Mode) →](/operator/alternative-key-management/api-mode).
+:::
 
-The Operator API enables validator registrations through API calls, useful when validator keys are managed externally. In this mode, keystores and exit signatures are both generated and stored outside the Operator Service.
-The Operator acts as a relay, communicating with the Vault contract on behalf of your external key management system.
+In the standard setup, the Operator Service holds the validator keystores and the hot wallet locally. In API mode, both are managed externally — the Operator Service delegates all signing and key operations via API calls. This is useful when:
+- The hot wallet is managed outside the Operator Service (e.g., multi-signature setup or hardware security module)
+- Validator keystores are managed by an external system
+- You want to fully isolate key management from the Operator Service
 
 ## Prerequisites
 
 Complete the following steps before proceeding:
 
-:::custom-notes[Required Setup Steps]
-  1. [Installation →](../installation) completed
-  2. [Operator Service →](../prepare-operator) prepared (hot wallet created)
-:::
+1. [Installation →](../installation) completed
+2. Hot wallet address set in the Vault settings
 
-## What is Relayer
+## Start Operator Service
 
-Relayer is a service that provides validator registration data to the Operator.
-
-Multiple relayers are possible for various use-cases. Feel free to implement your own relayer using the API specification below.
-
-## Understanding Validators Manager
-
-Validators Manager is a role that authorizes validator registrations in the Vault.
-
-### Default Setup
-
-For most Vaults, the Validators Manager address equals the Deposit Data Registry address. In this setup:
-  - You must upload deposit data to your Vault
-  - Vault contract requires Merkle proof for validators on each registration call
-
-### Custom Setup (Required for API Mode)
-
-For more advanced cases, you can customize the Validators Manager in Vault UI:
-
-1. Navigate to **Settings → Roles → Validators Manager**
-2. Assign a custom wallet address
-
-In this setup:
-  - You don't have to upload deposit data
-  - Vault contract requires Validators Manager signature on each registration call instead of Merkle proof
-  - The Relayer must sign using this wallet address
-
-## Start Operator API
-To run the Operator API, use the command below:
+In V3, use the `start-api` command:
 
 ```bash
-./operator start-api
+./operator start-api \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
+  --consensus-endpoints=https://consensus-node \
+  --execution-endpoints=https://execution-node
 ```
 
-This command allows for direct parameter input (e.g., `--data-dir`) or through environment variables. A basic example of setting environment variables is as follows:
+This command allows for direct parameter input or through environment variables. A basic example of setting environment variables:
 
 ```bash title=".env"
 CONSENSUS_ENDPOINTS=https://lighthouse
 DATA_DIR=/data
 DATABASE_DIR=/database
 EXECUTION_ENDPOINTS=https://nethermind
-NETWORK=hoodi
+NETWORK=mainnet
 VAULT=0x3cc...
-RELAYER_ENDPOINT=https://relayer
 ```
 
 For additional parameter information, use the `--help` flag:
@@ -76,83 +51,65 @@ For additional parameter information, use the `--help` flag:
 ```
 
 :::custom-info[Docker Configuration]
-For Docker-specific setup instructions, see *Installation*: [Docker Setup →](../installation#configuration)
+For Docker-specific setup instructions, see [Installation →](../installation)
 :::
 
-### How Operator-Relayer Flow Works
+## API Endpoints
 
-The Operator and Relayer communicate to register validators automatically:
+The external service must implement the following endpoint to handle validator registration:
 
-1. Operator monitors Vault balance changes
-2. When 32 ETH is available, Operator predicts next validator index and requests validator registration data from Relayer
-3. Relayer provides validator registration data including:
-  - Validator public key, deposit signature, deposit amount
-  - Validator exit signature
-  - Validators Manager signature
-4. Operator requests Oracles approvals
-5. Operator submits registration to Vault contract
+### Validator Registration
 
-:::custom-warning[Exit Signature Index]
-To produce exit signatures, the Relayer must use the validator index passed in the request. Operator passes the start validator index. You should increment this index for each validator except the
-first one.
-:::
+**POST** `/register`
 
-:::custom-info[EIP-712 Signature]
-Validators Manager signature is an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature. See EIP-712 message structure in the [Vault contract ↗](https://github.com/stakewise/v3-core). Signer address must be the Validators
-Manager configured in Vault settings.
-:::
-
-The Relayer must implement the following endpoints to handle different validator operations:
-
-### API specification
-
-**Request format**:
-
+Request Body:
 ```json
-POST /validators
-
 {
   "vault": "0x1234...",
-  "validators_start_index": int,
-  "validators_batch_size": int,
-  "validators_total": int
+  "validators_start_index": 20551,
+  "amounts": [32000000000]
 }
 ```
 
 **Parameters:**
-- `validators_start_index` - validator index for the first validator in the batch.
-- `validators_batch_size` - number of validators in current batch. Maximum batch size is determined by protocol config, currently 10.
-- `validators_total` - hint for Relayer. Does not affect Relayer response. Relayer may use this value to allocate larger portions of validators in background. `validators_total` should be more than or equal to `validators_batch_size`.
+- `vault` - Address of the vault contract to which the validators will be registered.
+- `validators_start_index` - Validator index for the first validator in the batch.
+- `amounts` - List of deposit amounts for each validator (32 ETH). Value provided in Gwei.
 
-**Response format**:
-
+Response:
 ```json
 {
   "validators": [
     {
-      "public_key":  "string",
-      "deposit_signature": "string",
-      "amount_gwei": int,
-      "exit_signature": "string"
+      "public_key":  "0xPubKey1",
+      "deposit_signature": "0xDepositSig1",
+      "amount": 32000000000,
+      "exit_signature": "0xExitSig1"
     }
   ],
-  "validators_manager_signature": "string"
+  "validators_manager_signature": "0xManagerSig"
 }
 ```
 
-:::custom-tips[Relayer Example]
-See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example/tree/f6abdb3b8a307c8456bf37a00ea7691dc5155d79) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
+**Response fields:**
+
+- `public_key` - Validator public key.
+- `deposit_signature` - Deposit signature for the validator.
+- `amount` - Deposit amount in Gwei (always 32 ETH for V3).
+- `exit_signature` - Exit signature for the validator.
+- `validators_manager_signature` - [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the hot wallet.
+
+:::custom-notes[V3 Limitations]
+V3 API mode only supports validator registration. Features like validator funding, partial withdrawals, and consolidation are available in [V4 Relayer (API Mode) →](/operator/alternative-key-management/api-mode).
 :::
 
-### DVT Relayer
+### Info
 
-When using a DVT setup, a specialized DVT relayer is required. Unlike a regular relayer, 
-you do not need to set up a dedicated relayer instance. Instead, you can use the public DVT relayer 
-available at: [https://mainnet-dvt-relayer.stakewise.io/](https://mainnet-dvt-relayer.stakewise.io/).
+**GET** `/info`
 
-The Operator environment configuration is similar to that of a regular relayer. However, you must specify the relayer type as follows:
-
-```bash title=".env"
-RELAYER_TYPE=DVT
-# RELAYER_ENDPOINT environment variable is not required
+Response:
+```json
+{
+  "network": "mainnet"
+}
 ```

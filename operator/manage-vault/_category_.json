@@ -1,0 +1,8 @@
+{
+  "label": "Manage Vault",
+  "position": 6,
+  "link": {
+    "type": "generated-index",
+    "description": "Vault management tasks: administration, fees, incentives, and more."
+  }
+}

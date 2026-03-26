@@ -16,7 +16,7 @@ const Item: React.FC<ItemProps> = (props) => {
     <a
       className="flex-auto flex items-center gap-8 crystal-bg-hovered rounded-8 p-16"
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener noreferrer nofollow"
       href={href}
     >
       <img src={icon} alt="" className="w-20 h-20" />

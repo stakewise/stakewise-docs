@@ -1,6 +1,7 @@
 ---
 title: Contracts API Documentation
 sidebar_position: 0
+description: Complete API documentation for StakeWise V3 smart contracts including vaults, tokens, validators, keepers, and curators.
 ---
 
 # Contracts API Documentation

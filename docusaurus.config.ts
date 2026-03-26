@@ -26,6 +26,38 @@ const config: Config = {
       attributes: {},
       innerHTML: `(function(){document.documentElement.setAttribute('data-page',window.location.pathname==='/'?'home':'inner')})()`,
     },
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'StakeWise',
+        url: 'https://stakewise.io',
+        logo: 'https://stakewise.io/logo512.png',
+        description: 'Liquid staking protocol for Ethereum and Gnosis Chain that enables permissionless and non-custodial liquid staking',
+        sameAs: [
+          'https://x.com/stakewise_io',
+          'https://github.com/stakewise',
+          'https://discord.gg/stakewise',
+          'https://t.me/stakewise',
+        ],
+      }),
+    },
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'StakeWise Docs',
+        url: 'https://docs.stakewise.io',
+        publisher: {
+          '@type': 'Organization',
+          name: 'StakeWise',
+        },
+      }),
+    },
   ],
 
   i18n: {
@@ -37,6 +69,12 @@ const config: Config = {
     [
       '@docusaurus/preset-classic',
       {
+        sitemap: {
+          lastmod: 'date',
+          changefreq: 'weekly',
+          priority: 0.5,
+          filename: 'sitemap.xml',
+        },
         docs: {
           path: 'docs',
           remarkPlugins: [ remarkMath ],
@@ -121,6 +159,12 @@ const config: Config = {
   themeConfig: {
     respectPrefersColorScheme: true,
     image: 'img/opengraph.png',
+    metadata: [
+      { name: 'twitter:site', content: '@stakewise_io' },
+      { name: 'twitter:creator', content: '@stakewise_io' },
+      { property: 'og:site_name', content: 'StakeWise Docs' },
+      { property: 'og:type', content: 'website' },
+    ],
 
     algolia: {
       appId: '413SNHUF5R',

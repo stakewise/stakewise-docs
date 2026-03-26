@@ -14,7 +14,7 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-<Image img={require('./img/validator_registration_approval.png')} alt="validator_registration_approval" />
+<Image img={require('./img/validator_registration_approval.png')} alt="Oracle validator registration approval process" />
 
 The [Operator Service →](../../operator/launch-operator-service-v4/overview) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
 When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
@@ -37,7 +37,7 @@ For details on how the Operator Service initiates and prepares validator registr
 
 ## Reward Distribution
 
-<Image img={require('./img/reward_distribution.png')} alt="reward_distribution" />
+<Image img={require('./img/reward_distribution.png')} alt="Oracle reward distribution process for Vaults" />
 
 Oracles periodically vote on the consensus rewards/penalties accumulated by the Vaults in the Beacon Chain and execution rewards (MEV & priority fees) for the Vaults connected to the Smoothing Pool.
 

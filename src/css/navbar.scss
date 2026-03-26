@@ -9,10 +9,6 @@
   background: var(--navbar-bg);
   transition: background 0.5s ease, box-shadow 0.5s ease;
 
-  @include dark-theme {
-    backdrop-filter: blur(30px);
-  }
-
   @include home-page {
     padding: 0;
     box-shadow: none;
@@ -57,11 +53,6 @@
 html[data-page='home'][data-scrolled] .navbar {
   background: var(--navbar-bg);
   box-shadow: var(--ifm-navbar-shadow);
-  backdrop-filter: blur(30px);
-
-  @include dark-theme {
-    background: rgba(var(--ash-rgb), .7);
-  }
 }
 
 .navbar__inner {

@@ -10,15 +10,17 @@ interface ThemedProps extends Props {
   }
 }
 
-const IdealImage = ({ sources, ...props }: ThemedProps): ReactNode => {
+const IdealImage = (props: ThemedProps): ReactNode => {
+  const { sources, img } = props
+
   const { colorMode } = useColorMode()
-  const img = sources
+  const themeImg = sources
     ? (colorMode === 'dark' ? sources.dark : sources.light)
-    : props.img
+    : img
 
   return (
     <div className="ideal-image-wrapper">
-      <OriginalIdealImage key={sources ? colorMode : undefined} {...props} img={img} />
+      <OriginalIdealImage key={sources ? colorMode : undefined} {...props} img={themeImg} />
     </div>
   )
 }

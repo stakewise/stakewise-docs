@@ -2,13 +2,7 @@
 @use 'mixins' as *;
 
 .menu {
-  @include light-theme {
-    background: rgba(26, 29, 28, .05);
-  }
-
-  @include dark-theme {
-    background: rgba(26, 29, 28, .2);
-  }
+  background: transparent;
 }
 
 .menu__link--sublist-caret::after,

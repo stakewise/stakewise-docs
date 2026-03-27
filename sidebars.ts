@@ -29,8 +29,9 @@ const sidebars: SidebarsConfig = {
         'docs/vaults/customization',
         'docs/vaults/staking-into-a-vault',
         'docs/vaults/vault-performance',
+        'docs/vaults/boost',
         'docs/vaults/technical-architecture',
-        'docs/vaults/meta-vaults',
+        'docs/vaults/meta-vaults'
       ],
     },
     {
@@ -96,7 +97,7 @@ const sidebars: SidebarsConfig = {
         id: 'docs/guides/defi/intro',
       },
       items: [
-        'docs/guides/defi/boost-feature',
+        'docs/guides/defi/how-to-use-boost',
       ],
     },
     {

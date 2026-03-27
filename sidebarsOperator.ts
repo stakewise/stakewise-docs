@@ -2,24 +2,14 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 
 const sidebars: SidebarsConfig = {
   operatorSidebar: [
-    'becoming-a-vault-operator',
-    'stakewise-vs-native-staking',
-    'where-to-start-create-your-vault',
-    {
-      type: 'category',
-      label: 'Launch Operator Service V4',
-      link: {
-        type: 'doc',
-        id: 'launch-operator-service-v4/overview',
-      },
-      items: [
-        'launch-operator-service-v4/prerequisites',
-        'launch-operator-service-v4/installation',
-        'launch-operator-service-v4/validator-keys',
-        'launch-operator-service-v4/validators-manager',
-        'launch-operator-service-v4/start-operator',
-      ],
-    },
+    'introduction',
+    'create-your-vault',
+    'staking-nodes',
+    'launch-operator-service-v4',
+    'installation',
+    'validator-keys',
+    'validators-manager',
+    'start-operator',
     {
       type: 'category',
       label: 'Alternative Key Management',
@@ -53,7 +43,6 @@ const sidebars: SidebarsConfig = {
         'manage-vault/fee-claiming',
         'manage-vault/add-extra-rewards',
         'manage-vault/process-metavaults',
-        'manage-vault/vault-performance',
       ],
     },
     {

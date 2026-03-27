@@ -1,14 +1,14 @@
 ---
-title: "Where to Start: Create Your Vault"
+title: 2. Create Your Vault
 description: Step-by-step guide to creating and configuring your Vault through the StakeWise UI.
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 import Image from '@theme/IdealImage'
 
-# Where to Start: Create Your Vault
+# Create Your Vault
 
-Now that you know what operating a Vault involves — and the opportunities it opens beyond native staking — let's create one.
+Now that you know what operating a Vault involves, let's create one.
 
 Creating a Vault is done via the StakeWise UI and takes just a few minutes. If you're not sure about the exact parameters for your Vault, reach out to the [StakeWise team](mailto:info@stakewise.io) for personalized guidance. Once your Vault is created, you can set up the validator infrastructure and launch the Operator Service to begin your operator journey.
 
@@ -27,12 +27,14 @@ Configure your Vault parameters:
 
 - **Vault Capacity** – Set maximum ETH capacity (default: unlimited ∞). [Learn more →](/docs/vaults/customization#capacity)
 - **Vault Fee** – Set the fee percent your Vault will charge from users staking rewards
+:::custom-info[Vault Fees Can Be Updated]
+Set [Vault fees →](/docs/fees/intro#vault-fees) during creation and update later: **Settings → Vault fee → Edit → Save**.
+:::
 - **Vault Token** – Enable tradeable ERC-20 token (requires name & symbol)
 - **Private Vault** – Restrict to approved wallets only
 - **Block List** – Prevent specific addresses from depositing
-
-:::custom-info[Vault Fees Updates]
-[Vault fees →](/docs/fees/intro#vault-fees) can be set during creation and updated later.
+:::custom-notes[Authorized Addresses Can Be Updated]
+Add or remove addresses: **Vault access → Add/remove → Save**.
 :::
 
 ## Step 2: Block Rewards Destination
@@ -45,8 +47,8 @@ Most operators choose Smoothing Pool for stable returns, while Vault Escrow give
 
 Customize your Vault's appearance with name, description, and logo.
 
-:::custom-notes[Branding Can Be Changed Later]
-Unlike Vault parameters, you can update branding anytime via your Vault interface: press **Settings → Branding → Edit → Save**.
+:::custom-notes[Branding Can Be Updated]
+Update branding anytime via your Vault interface: **Settings → Branding → Edit → Save**.
 :::
 
 ## Step 4: Summary
@@ -59,11 +61,3 @@ Click **Create Vault** to submit your configuration and create the Vault.
 
 Confirm the transaction in your wallet to deploy your Vault.
 Once the transaction confirms, your Vault is live and visible on the **Operate** page! 🎉
-
-## Next Steps
-
-You can update branding, adjust fees, and assign roles on your Vault page in **Settings** and for private Vault, you can add/remove addresses authorized to deposit in **Vault access**.
-To get your Vault verified for better visibility, reach out to us.
-
-Your Vault is created but not yet operational — it needs node clients and the Operator Service to start accepting deposits and registering validators.
-Follow the [Launch Operator Service V4 →](./launch-operator-service-v4/overview) guide to set everything up.

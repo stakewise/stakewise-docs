@@ -21,7 +21,7 @@ StakeWise Vaults support both [Obol ↗](https://obol.org) and [SSV ↗](https:/
 ## DVT setup components
 
 - **DVT cluster of distributed validators** — Performs validator duties such as attestation, block proposal, and consensus participation.
-- **[StakeWise Operator →](/operator/launch-operator-service-v4/overview)** — Registers validators in the Vault contract. The Operator does not have access to validator keystores.
+- **[StakeWise Operator →](/operator/launch-operator-service-v4)** — Registers validators in the Vault contract. The Operator does not have access to validator keystores.
 - **[DVT Relayer →](/operator/alternative-key-management/api-mode)** — Collects deposit and exit signatures from validators (via Sidecars) and forwards them to oracles.
 - **DVT Sidecars** — Provide deposit and exit signature shares to the DVT Relayer. Each distributed validator node should run a DVT Sidecar instance with access to the validator key shares on the related DVT node.
 

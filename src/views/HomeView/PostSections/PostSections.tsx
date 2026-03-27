@@ -23,7 +23,7 @@ const posts = [
     title: 'Operator',
     text: 'Documentation for the full Vault operator journey',
     image: require('@site/static/img/operator.png'),
-    href: '/operator/becoming-a-vault-operator',
+    href: '/operator/introduction',
   },
 ]
 

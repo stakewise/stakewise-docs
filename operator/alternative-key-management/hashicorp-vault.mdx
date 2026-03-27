@@ -12,8 +12,8 @@ The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](h
 
 Complete the following steps before proceeding:
 
-1. [Installation →](/operator/launch-operator-service-v4/installation) completed
-2. [Validators Manager →](/operator/launch-operator-service-v4/validators-manager) set
+1. [Installation →](/operator/installation) completed
+2. [Validators Manager →](/operator/validators-manager) set
 3. Validator keys stored in your [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance
 
 ## Key Storage Format
@@ -59,4 +59,4 @@ Passing following options to `start-hashi-vault` command will enable loading val
 | <nobr>`--hashi-vault-key-prefix`</nobr> | Key prefix(es) in the K/V secret engine. Can be repeated for multiple prefixes |
 | <nobr>`--hashi-vault-parallelism`</nobr> | Number of parallel requests to K/V secrets engine |
 
-This setup supports various optional flags to provide more flexibility and customization. See all available options in the [Start Operator →](../launch-operator-service-v4/start-operator#optional-flags) setup.
+This setup supports various optional flags to provide more flexibility and customization. See all available options in the [Start Operator →](../start-operator#optional-flags) setup.

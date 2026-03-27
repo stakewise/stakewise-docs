@@ -1,38 +1,15 @@
 ---
-title: 1. Prerequisites
+title: 3. Staking Nodes
 description: "Required infrastructure for running the Operator Service: a deployed Vault, synced execution and consensus clients, and MEV-Boost."
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Prerequisites
+# Staking Nodes
 
-Before installing the Operator Service, ensure you meet the following prerequisites.
-
-## Deployed Vault
-
-You will need your Vault contract address for Operator Service configuration.
-
-:::custom-info[Where to Find Your Vault Address]
-<Tabs groupId="vault-address-methods">
-  <TabItem value="url" label="From URL" default>
-    Navigate to your Vault page — the address is included in the URL:
-    ```
-    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
-                                       ^^^^^^^^^^^^^^^^^^^
-                                        Your Vault Address
-    ```
-  </TabItem>
-  <TabItem value="details" label="From Details Section">
-    1. Go to your Vault page
-    2. Scroll to the bottom to find the **Details** section
-    3. Look for the **Contract address** field
-    4. Copy the displayed address
-  </TabItem>
-</Tabs>
-:::
+Your Vault is created but not yet operational. Your infrastructure must be ready.
 
 ## Staking Nodes
 
@@ -114,7 +91,3 @@ MEV-Boost is open source middleware that connects your validator to a network of
 
 If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays (see [Smoothing Pool Relays →](/operator/smoothing-pool-relays)).
 Learn more about [MEV Strategy →](/docs/vaults/customization#mev-strategy).
-
-## Next Steps
-
-Once you have your execution and consensus clients fully synced, continue to [Installation →](installation)

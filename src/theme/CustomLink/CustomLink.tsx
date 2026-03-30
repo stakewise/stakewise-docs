@@ -3,7 +3,7 @@ import React from 'react'
 
 const isExternalLink = (href: string) => href ? href.startsWith('http') : false
 
-const isExternalStakeWiseLink = (href: string) => isExternalLink(href) && !href.includes('stakewise.io')
+const isExternalStakeWiseLink = (href: string) => isExternalLink(href) && href.includes('stakewise.io')
 
 const CustomLink = (props) => {
   const { href, children, ...rest } = props
@@ -13,7 +13,7 @@ const CustomLink = (props) => {
       <a 
         href={href} 
         target="_blank" 
-        rel="noopener noreferrer nofollow" 
+        rel="noopener"
         {...rest}
       >
         {children}
@@ -27,7 +27,7 @@ const CustomLink = (props) => {
         href={href}
         {...rest}
         target="_blank" 
-        rel="noopener" 
+        rel="noopener noreferrer nofollow" 
       >
         {children}
       </a>

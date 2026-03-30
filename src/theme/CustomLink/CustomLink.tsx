@@ -1,18 +1,14 @@
 import React from 'react'
 
 
-const isExternalLink = (href) => {
-  if (!href) {
-    return false
-  }
+const isExternalLink = (href: string) => href ? href.startsWith('http') : false
 
-  return href.startsWith('http') && !href.includes('stakewise.io')
-}
+const isExternalStakeWiseLink = (href: string) => isExternalLink(href) && !href.includes('stakewise.io')
 
 const CustomLink = (props) => {
   const { href, children, ...rest } = props
   
-  if (isExternalLink(href)) {
+  if (isExternalStakeWiseLink(href)) {
     return (
       <a 
         href={href} 
@@ -24,13 +20,24 @@ const CustomLink = (props) => {
       </a>
     )
   }
+
+  if (isExternalLink(href)) {
+    return (
+      <a
+        href={href}
+        {...rest}
+        target="_blank" 
+        rel="noopener" 
+      >
+        {children}
+      </a>
+    )
+  }
   
   return (
     <a
       href={href}
       {...rest}
-      target="_blank" 
-      rel="noopener" 
     >
       {children}
     </a>

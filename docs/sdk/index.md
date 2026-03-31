@@ -92,7 +92,7 @@ If the request has already finished, calling `abort()` has **no effect**.
 
 ### Example
 
-```ts
+```typescript
 const promise = sdk.vault.getUserApy({
   userAddress,
   vaultAddress,

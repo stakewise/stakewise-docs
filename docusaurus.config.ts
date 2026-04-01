@@ -18,7 +18,12 @@ const config: Config = {
   onBrokenLinks: 'warn',
   onBrokenAnchors: 'throw',
   onDuplicateRoutes: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
 
   headTags: [
     {

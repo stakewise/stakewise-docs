@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from '@docusaurus/Link'
 
 
 const isExternalLink = (href: string) => href ? href.startsWith('http') : false
@@ -7,12 +8,12 @@ const isExternalStakeWiseLink = (href: string) => isExternalLink(href) && href.i
 
 const CustomLink = (props) => {
   const { href, children, ...rest } = props
-  
+
   if (isExternalStakeWiseLink(href)) {
     return (
-      <a 
-        href={href} 
-        target="_blank" 
+      <a
+        href={href}
+        target="_blank"
         rel="noopener"
         {...rest}
       >
@@ -26,21 +27,21 @@ const CustomLink = (props) => {
       <a
         href={href}
         {...rest}
-        target="_blank" 
-        rel="noopener noreferrer nofollow" 
+        target="_blank"
+        rel="noopener noreferrer nofollow"
       >
         {children}
       </a>
     )
   }
-  
+
   return (
-    <a
+    <Link
       href={href}
       {...rest}
     >
       {children}
-    </a>
+    </Link>
   )
 }
 

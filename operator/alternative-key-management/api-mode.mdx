@@ -1,7 +1,6 @@
 ---
 title: Relayer (API Mode)
 description: Run the StakeWise Operator in Relayer API mode for external key management. Full API specification for registration, funding, withdrawals, and consolidation.
-sidebar_position: 4
 ---
 
 # Relayer (API Mode)
@@ -18,8 +17,8 @@ The Operator communicates with the Vault contract using data and signatures prov
 Complete the following steps before proceeding:
 
 
-1. [Installation →](/operator/installation) completed
-2. [Validators Manager →](/operator/validators-manager), which is set to the wallet address of the Relayer.
+1. [Installation →](/operator/launch-operator-service#installation) completed
+2. [Validators Manager →](/operator/validators-manager) set to the wallet address of the Relayer.
 
 ## Start Operator Service
 
@@ -48,7 +47,7 @@ For additional parameter information, use the `--help` flag:
 ```
 
 :::custom-info[Docker Configuration]
-For Docker-specific setup instructions, see [Installation →](../installation#configuration)
+For Docker-specific setup instructions, see the Docker Image tab in [Installation →](../launch-operator-service#installation)
 :::
 
 :::custom-info[Technical Implementation]
@@ -156,7 +155,7 @@ Request Body:
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be withdrawn.
+- `vault` - Address of the vault contract from which the validators will be withdrawn.
 - `public_keys` - List of public keys of validators to withdraw from.
 - `amounts` - List of amounts to withdraw from each validator. Value provided in Gwei.
 
@@ -181,7 +180,7 @@ Request Body:
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be consolidated.
+- `vault` - Address of the vault contract in which the validators will be consolidated.
 - `source_public_keys` - List of public keys of validators to consolidate from.
 - `target_public_keys` - List of public keys of validators to consolidate to.
 
@@ -208,5 +207,5 @@ Multiple relayers are possible for various use-cases. You can implement your own
 :::
 
 :::custom-tips[Relayer Example]
-See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
+See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) — a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
 :::

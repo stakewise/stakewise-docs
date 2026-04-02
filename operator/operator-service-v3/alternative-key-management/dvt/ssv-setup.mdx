@@ -5,14 +5,15 @@ description: Run validators using SSV Network's distributed validator technology
 
 # SSV Setup
 
+<p style={{fontSize: '1.2em', color: 'rgba(var(--moon-rgb), .5)', marginTop: '-10px', marginBottom: '20px'}}>A complete guide to running validators using SSV Network's distributed validator technology.</p>
+
 [SSV Network ↗](https://ssv.network) is a permissionless DVT network that provides a simple infrastructure for splitting and distributing a validator key into multiple key shares to run a validator across multiple non-trusting nodes.
 
-In this guide, you will:
-
-1. Generate encrypted operator keys
-2. Run your own SSV node
-3. Register as an SSV operator
-4. Distribute your validator keys to cluster operators
+**In this guide, you will:**
+1. <img src="/icons/stakewise/key.png" alt="key" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Generate encrypted operator keys
+2. <img src="/icons/stakewise/laptop.png" alt="laptop" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Run your own SSV node
+3. <img src="/icons/stakewise/tick.png" alt="tick" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Register as an SSV operator
+4. <img src="/icons/stakewise/defi.png" alt="defi" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Distribute your validator keys to cluster operators
 
 ## Prerequisites
 
@@ -25,7 +26,7 @@ docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 3. [Create Vault →](/operator/create-your-vault)
-4. Operator Service [installed →](/operator/launch-operator-service#installation)
+4. [Setup Operator Service →](/operator/operator-service-v3/run-operator-service-v3/installation)
 
 :::custom-notes[Hardware Requirements]
 SSV node requires (in addition to your beacon/execution nodes): **2 cores**, **2GB RAM**, **20GB storage**, **>8K IOPS**. See [full requirements ↗](https://docs.ssv.network/operators/operator-node/node-setup/hardware-requirements).
@@ -38,7 +39,6 @@ To join the SSV network as an operator, you must run an SSV node—the software 
 Becoming an SSV Operator involves generating keys, running the node software, and then registering as an operator through the [SSV webapp ↗](https://app.ssv.network/connect) to start earning rewards.
 
 While there are different [setup options ↗](https://docs.ssv.network/operators/operator-node/node-setup/#other-setup-options) with the [SSV Stack ↗](https://docs.ssv.network/operators/operator-node/node-setup/) being the most straightforward option, this guide covers **Manual Setup** offering full customization and control. Let's get started <img src="/icons/stakewise/rocket.png" alt="rocket" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />.
-
 ### Step 1: Generate Operator Keys (Encrypted)
 
 The most secure way to run your Operator node is to generate an encrypted key pair. This way, your **Public Key** and **Secret Key** will be encrypted with a password of your choosing.

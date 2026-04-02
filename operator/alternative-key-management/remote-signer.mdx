@@ -1,6 +1,5 @@
 ---
 title: Remote Signer
-sidebar_position: 2
 description: Configure the StakeWise Operator Service with Web3Signer for remote key signing. Isolate validator keys from the Operator for improved security.
 ---
 
@@ -12,15 +11,13 @@ The Remote Signer mode lets you isolate validator signing keys from the Operator
 
 Complete the following steps before proceeding:
 
-1. [Installation →](../installation) completed
+1. [Installation →](../launch-operator-service#installation) completed
 2. [Validators Manager →](../validators-manager) set
 3. [Web3Signer ↗](https://docs.web3signer.consensys.io/) running and accessible at your specified URL
 
 ## Setup Remote Signer
 
 Upload the keystores to a remote signer. If you already have private keys uploaded to the remote signer, proceed to [Start Operator Service](#start-operator-service) below.
-
-### Example Usage
 
 ```bash
 ./operator setup-remote-signer
@@ -69,7 +66,7 @@ You should see a message similar to this one after starting the operator:
 Using remote signer at http://remote-signer:9000 for 20 public keys
 ```
 
-This setup supports various optional flags to provide more flexibility and customization. See all available options in the [Start Operator →](../start-operator#optional-flags) setup.
+For additional configuration, see the full list of [optional flags](../start-operator#optional-flags).
 
 <div id="user-content-fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span>

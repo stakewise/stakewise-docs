@@ -1,7 +1,6 @@
 ---
-title: 7. Validators Manager
+title: 6. Validators Manager
 description: Set up the Validators Manager role for your StakeWise Vault. Create an operator wallet and assign permissions for validator registration and operations.
-sidebar_position: 7
 ---
 
 import Image from '@theme/IdealImage'
@@ -12,17 +11,15 @@ After generating your validator keys, you need to set up a wallet that will auth
 
 The Operator Service can generate this wallet, or you can use an existing one.
 
-If your Validators Manager wallet is managed externally, see [Relayer (API Mode) →](../alternative-key-management/api-mode).
+If your Validators Manager wallet is managed externally, see [Relayer (API Mode) →](/operator/alternative-key-management/api-mode).
 
 <Image img={require('./img/validator-manager-setup.png')} alt="validator-manager-setup" />
 
-## Step 1: Create Operator Wallet
+## Step 1: Set Up Operator Wallet
 
-The first step is creating a dedicated wallet that will be assigned the Validators Manager role and handle validator operations.
+You need a wallet to authorize validator operations and pay gas fees. You can create a new one via the Operator Service or use an existing wallet.
 
-You can create a new wallet using the command below (recommended for dedicated operator setups), or use an existing wallet — in that case, skip to [Step 2 →](#step-2-assign-validators-manager-role) to assign it the Validators Manager role.
-
-Create a wallet for validator registrations and gas payments:
+#### Option A — Create a new wallet
 
 ```bash
 ./operator create-wallet
@@ -39,27 +36,29 @@ Done. The wallet and password saved to ~/.stakewise/0xF82f6E46d0d0a9536b9CA4bc48
 
 You may reuse the same mnemonic as your validator keys or generate a separate one for added security.
 
-:::custom-warning[Wallet Balance Warning]
-  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
+#### Option B — Use an existing wallet
 
-    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
-    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
-    - Monitor balance regularly to prevent registration failures
-:::
+<img src={require('./manage-vault/img/export-private-key-720.gif').default} alt="export-private-key" style={{maxWidth: '500px', width: '100%', borderRadius: '12px', marginBottom: '1rem'}} />
 
-:::custom-info[Using a Private Key Directly]
-If you have the private key exported in plain format, you can specify it using the environment variable:
+Export a private key from an existing wallet, then set it as an environment variable:
 
 ```bash
 export WALLET_PRIVATE_KEY="0xyour_private_key_here"
 ```
 
 If both `WALLET_PRIVATE_KEY` and wallet keystore files are configured, the private key takes precedence over the wallet files.
+
+:::custom-warning[Wallet Balance Warning]
+  Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
+
+    - Each validator registration costs ~0.01 ETH at a 30 Gwei gas price
+    - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
+    - Monitor balance regularly to prevent registration failures
 :::
 
-## Step 2: Assign Validators Manager Role
+## Step 2: Assign Validators Manager
 
-You must assign the Validators Manager role to the wallet address created in the previous step. This setup can be completed via the StakeWise UI and must be performed by the Vault Admin.
+You must assign the Validators Manager role to the wallet address from the previous step. This setup can be completed via the StakeWise UI and must be performed by the Vault Admin.
 
 1. Connect using a Vault Admin wallet and navigate to the [Operate page ↗](https://app.stakewise.io/operate)
 2. Select the Vault for which you want to change the Validators Manager role

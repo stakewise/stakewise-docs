@@ -1,7 +1,6 @@
 ---
 title: Recover Validators
 description: Recover active validator keystores for your StakeWise Vault using the operator recover command. Includes slashing prevention and security guidance.
-sidebar_position: 5
 ---
 
 # Recover Validator Keystores
@@ -9,18 +8,21 @@ sidebar_position: 5
 You can recover validator keystores that are active.
 
 :::custom-warning[Slashing Prevention]
-Make sure there are no validators running with recovered validator keystores and **2 epochs** have passed, otherwise you can get slashed.
+Before starting validators with recovered keystores, ensure the original validators have been stopped and at least **2 epochs** have passed. Running the same keys on two machines simultaneously will result in slashing.
 :::
 
 :::custom-info[Security Notice]
-For security purposes, make sure to protect your mnemonic as it can be used to generate your validator keys.
+Protect your mnemonic — it can be used to regenerate your validator keys.
 :::
 
 ```bash
 ./operator recover
 ```
 
-```
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```bash
 Enter the mnemonic for generating the validator keys: leaf circle ground star...
 Enter your vault address: 0x001...
 Enter comma separated list of API endpoints for execution nodes: https://execution-node
@@ -33,3 +35,4 @@ Fetched statuses for registered validators
 Vault has 1 registered validator(s), recover active keystores from provided mnemonic? [Y/n]: y
 Successfully recovered 1 keystores for vaults 0x001...
 ```
+</details>

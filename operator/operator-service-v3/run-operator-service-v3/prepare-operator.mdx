@@ -1,7 +1,6 @@
 ---
-title: 3. Prepare Operator
+title: Prepare Operator
 description: Prepare StakeWise Operator v3 by generating validator keystores, creating a hot wallet, and uploading deposit data to your Vault.
-sidebar_position: 4
 ---
 
 import Tabs from '@theme/Tabs';
@@ -19,7 +18,7 @@ Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://git
 
 This section walks you through the validator key generation process using the Operator Service built-in tools.
 
-<Image img={require('./img/prepare_operator.png')} alt="prepare_operator" />
+<Image img={require('../img/prepare_operator.png')} alt="prepare_operator" />
 
 ## Step 1: Initialize Mnemonic
 
@@ -117,9 +116,9 @@ This can be done at any point, but only by the Vault Admin or Keys Manager.
 
 Validator keystores don't need to be stored locally. You can instead use:
 
-- **[Remote Signer →](./alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
-- **[HashiCorp Vault →](./alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
-- **[API Mode →](./alternative-key-management/api-mode)** — Run Operator as API service with external key management
+- **[Remote Signer →](../alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
+- **[HashiCorp Vault →](../alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
+- **[API Mode →](../alternative-key-management/api-mode)** — Run Operator as API service with external key management
 
 ## Step 3: Import Validator Keys
 

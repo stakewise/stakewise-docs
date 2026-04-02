@@ -5,17 +5,18 @@ const sidebars: SidebarsConfig = {
     'introduction',
     'create-your-vault',
     'staking-nodes',
-    'launch-operator-service-v4',
-    'installation',
+    'launch-operator-service',
     'validator-keys',
     'validators-manager',
     'start-operator',
+    'operator-monitoring',
+    'smoothing-pool-relays',
     {
       type: 'category',
       label: 'Alternative Key Management',
       link: {
         type: 'doc',
-        id: 'alternative-key-management/index',
+        id: 'alternative-key-management/overview',
       },
       items: [
         'alternative-key-management/remote-signer',
@@ -26,7 +27,7 @@ const sidebars: SidebarsConfig = {
           label: 'DVT',
           link: {
             type: 'doc',
-            id: 'alternative-key-management/dvt/index',
+            id: 'alternative-key-management/dvt/overview',
           },
           items: [
             'alternative-key-management/dvt/ssv-setup',
@@ -38,6 +39,10 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Manage Vault',
+      link: {
+        type: 'doc',
+        id: 'manage-vault/overview',
+      },
       items: [
         'manage-vault/vault-administration',
         'manage-vault/fee-claiming',
@@ -48,42 +53,67 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Manage Validators',
+      link: {
+        type: 'doc',
+        id: 'manage-validators/overview',
+      },
       items: [
-        'manage-validators/monitoring',
         'manage-validators/rated-network',
         'manage-validators/consolidate-validators',
-        'manage-validators/manual-exit',
+        'manage-validators/manually-exit-validators',
         'manage-validators/recover-validators',
         'manage-validators/automated-node-setup',
       ],
     },
-    'smoothing-pool-relays',
     {
       type: 'category',
       label: 'Operator Service V3',
       link: {
         type: 'doc',
-        id: 'operator-service-v3/intro',
+        id: 'operator-service-v3/overview',
       },
       items: [
-        'operator-service-v3/prerequisites',
-        'operator-service-v3/installation',
-        'operator-service-v3/prepare-operator',
-        'operator-service-v3/start-operator',
+        'operator-service-v3/v4-upgrade-guide',
+        {
+          type: 'category',
+          label: 'Run Operator Service V3',
+          link: {
+            type: 'doc',
+            id: 'operator-service-v3/run-operator-service-v3/overview',
+          },
+          items: [
+            'operator-service-v3/run-operator-service-v3/prerequisites',
+            'operator-service-v3/run-operator-service-v3/installation',
+            'operator-service-v3/run-operator-service-v3/prepare-operator',
+            'operator-service-v3/run-operator-service-v3/start-operator',
+          ],
+        },
         {
           type: 'category',
           label: 'Alternative Key Management',
           link: {
             type: 'doc',
-            id: 'operator-service-v3/alternative-key-management/index',
+            id: 'operator-service-v3/alternative-key-management/overview',
           },
           items: [
             'operator-service-v3/alternative-key-management/remote-signer',
             'operator-service-v3/alternative-key-management/hashicorp-vault',
             'operator-service-v3/alternative-key-management/api-mode',
+            {
+              type: 'category',
+              label: 'DVT',
+              link: {
+                type: 'doc',
+                id: 'operator-service-v3/alternative-key-management/dvt/overview',
+              },
+              items: [
+                'operator-service-v3/alternative-key-management/dvt/ssv-setup',
+                'operator-service-v3/alternative-key-management/dvt/obol-setup',
+              ],
+            },
           ],
         },
-        'operator-service-v3/v4-upgrade-guide',
+        'operator-service-v3/manually-exit-validators',
       ],
     },
   ]

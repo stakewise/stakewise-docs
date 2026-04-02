@@ -1,17 +1,17 @@
 ---
 title: Vault Administration
-sidebar_position: 1
 description: "Manage your StakeWise Vault settings: branding, fees, roles, whitelist/blocklist, and permission delegation."
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import ThemedImage from '@theme/ThemedImage';
+import Image from '@theme/IdealImage';
 
 # Vault Administration
 
-Once your Vault is created, you can manage all settings through the **"Settings"** button in the StakeWise interface.
+Once your Vault is created, you can manage all settings through the **Settings** button in the StakeWise interface.
+
+<Image sources={{light: require('./img/settings.png'), dark: require('./img/settings_dark.png')}} alt="Settings button on your Vault page" />
 
 ## What You Can Control
 
@@ -32,13 +32,12 @@ Once your Vault is created, you can manage all settings through the **"Settings"
   >
     **Manage fees:**
     - Set rates: 0-100% of staking rewards
-    - Update frequency: Once every 3 days, limited to 20% increase per update. If initial fee is 0%, first increase is limited to 1%.
-    - Configure multiple recipients with percentage splits and automatic periodic claims on their behalf
+    - Update frequency: Once every 3 days, limited to 20% increase per update. If the initial fee is 0%, first increase is limited to 1%
+    - Configure multiple recipients with percentage splits and automatic periodic claims on their behalf ([Learn more →](/operator/manage-vault/fee-claiming))
   </TabItem>
   <TabItem
     value="roles"
     label={<span><img src="/icons/stakewise/game.png" alt="game" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Roles</span>}
-    default
   >
     **Delegate permissions:**
     - **Fee Claimer**: Claim fees for shareholders

@@ -1,7 +1,6 @@
 ---
-title: 1. Prerequisites
-description: "Prerequisites for running StakeWise Operator Service, including Vault deployment, execution and consensus client setup, and version requirements."
-sidebar_position: 2
+title: Prerequisites
+description: Prerequisites for running StakeWise Operator Service, including Vault deployment, execution and consensus client setup, and version requirements.
 ---
 
 import Tabs from '@theme/Tabs';
@@ -13,35 +12,11 @@ Before installing the Operator Service, ensure you meet the following prerequisi
 
 ## Deployed Vault
 
-You will need your Vault contract address for Operator Service configuration.
-See [Create Your Vault →](/operator/create-your-vault) on how to create a Vault.
-
-:::custom-info[Where to Find Your Vault Address]
-<Tabs groupId="vault-address-methods">
-  <TabItem value="url" label="From URL" default>
-    Navigate to your Vault page — the address is included in the URL:
-    ```
-    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
-                                       ^^^^^^^^^^^^^^^^^^^
-                                        Your Vault Address
-    ```
-  </TabItem>
-  <TabItem value="details" label="From Details Section">
-    1. Go to your Vault page
-    2. Scroll to the bottom to find the **Details** section
-    3. Look for the **Contract address** field
-    4. Copy the displayed address
-  </TabItem>
-</Tabs>
-:::
+You will need your Vault contract address for Operator Service configuration. If you haven't [created a Vault](/operator/create-your-vault) yet, do that first — otherwise, see [where to find your Vault address](/operator/create-your-vault#where-to-find-your-vault-address).
 
 ## Staking Nodes
 
 Ensure your node infrastructure meets the technical requirements below for reliable operation.
-
-:::custom-tips[Automated Node Setup Available]
-A new experimental feature allows the Operator Service to automatically install and manage execution and consensus clients (Reth and Lighthouse). See [Automated Node Setup →](/operator/manage-validators/automated-node-setup) for details.
-:::
 
 ### Execution Client
 
@@ -80,7 +55,7 @@ Some clients require specific configuration to sync event logs and prevent event
 
     ```bash
     # Ethereum Mainnet
-    --prune.receiptslogfilter=0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5:before:18470089
+    --prune.receiptslogfilter=0x6b5815467da09daa7dc83db21c9239d98bb487b5:before:18470089
 
     # For other networks, adjust the block number to the Keeper contract creation block
     ```
@@ -113,9 +88,4 @@ An incorrect value will result in penalties for your Vault in the Smoothing Pool
 Set up [MEV-Boost ↗](https://github.com/flashbots/mev-boost) to capture execution layer rewards.
 MEV-Boost is open source middleware that connects your validator to a network of block builders competing to produce the most profitable block, maximizing your Vault's execution-layer revenue.
 
-If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays (see [Smoothing Pool Relays →](/operator/smoothing-pool-relays)).
-Learn more about [MEV Strategy →](/docs/vaults/customization#mev-strategy).
-
-## Next Steps
-
-Once you have your execution and consensus clients fully synced, continue to [Installation →](installation)
+If your Vault uses the Smoothing Pool, you must use one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays).

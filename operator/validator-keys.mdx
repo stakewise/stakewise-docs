@@ -1,17 +1,14 @@
 ---
-title: 6. Validator Keys
+title: 5. Validator Keys
 description: Generate and import validator keystores for your StakeWise Vault using the Operator Service. Includes mnemonic setup and key security best practices.
-sidebar_position: 6
 ---
 
 import Image from '@theme/IdealImage'
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # Validator Keys
 
 After installing the Operator Service, you need to generate validator keystores — the cryptographic keys your validators use to sign attestations and propose blocks.
-The Operator Service provides built-in key generation, or you can use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen).
+The Operator Service provides built-in key generation, or you can use external tools such as [Wagyu Key Gen ↗](https://github.com/stake-house/wagyu-key-gen).
 
 <Image img={require('./img/validator_keys.png')} alt="validator_keys" />
 
@@ -27,26 +24,7 @@ For example, if running Operator Service from binary:
 ./operator init
 ```
 
-Follow the command prompts. You will be asked to enter your Vault address during this step.
-
-:::custom-info[Where to Find Your Vault Address]
-<Tabs groupId="vault-address-methods">
-  <TabItem value="url" label="From URL" default>
-    Navigate to your Vault page — the address is included in the URL:
-    ```
-    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
-                                       ^^^^^^^^^^^^^^^^^^^
-                                        Your Vault Address
-    ```
-  </TabItem>
-  <TabItem value="details" label="From Details Section">
-    1. Go to your Vault page
-    2. Scroll to the bottom to find the **Details** section
-    3. Look for the **Contract address** field
-    4. Copy the displayed address
-  </TabItem>
-</Tabs>
-:::
+Follow the command prompts. You will be asked to enter your Vault address during this step (see [Where to Find Your Vault Address →](/operator/create-your-vault#where-to-find-your-vault-address)).
 
 <details className="custom-details">
 <summary>Example Output</summary>
@@ -101,11 +79,7 @@ Keystores saved to ~/.stakewise/0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c/keyst
 ```
 </details>
 
-:::custom-notes[Keystore Locations]
-  - Keystores are saved to `~/.stakewise/[vault address]/keystores`
-  - **Default**: A single `password.txt` file contains the password for all generated keystores
-  - **Per-keystore option**: Use the `--per-keystore-password` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
-:::
+Keystores are saved to `~/.stakewise/[vault address]/keystores`. By default, a single `password.txt` file contains the password for all generated keystores. Use the `--per-keystore-password` flag to generate individual password files instead (e.g., `keystore-001.txt`, `keystore-002.txt`).
 
 :::custom-warning[Important Security Notice]
   Protect your password files as carefully as your keystores — anyone with access to them can decrypt your keys. This applies to both the single `password.txt` file and individual per-keystore password files.
@@ -119,7 +93,7 @@ Upload your keystores into your validator client:
 
 1. Locate your keystores in `~/.stakewise/[vault address]/keystores`
 2. Follow your consensus client's guide for importing keys
-3. Use the password from `password.txt` file
+3. Use the password from the `password.txt` file
 4. Ensure `suggested-fee-recipient` is set to the **Block reward recipient** address from the **Details** section of your Vault page
 5. Start the validator client with attached validator keys
 
@@ -127,6 +101,6 @@ Upload your keystores into your validator client:
 
 Validator keystores don't need to be stored locally. You can instead use:
 
-- [Remote Signer →](../alternative-key-management/remote-signer) — Sign deposit/exit messages via a remote signer
-- [HashiCorp Vault →](../alternative-key-management/hashicorp-vault) — Load keys from a remote Vault instance
-- [API Mode →](../alternative-key-management/api-mode) — Run Operator as API service with external key management
+- [Remote Signer →](/operator/alternative-key-management/remote-signer) — Sign deposit/exit messages via a remote signer
+- [HashiCorp Vault →](/operator/alternative-key-management/hashicorp-vault) — Load keys from a remote Vault instance
+- [API Mode →](/operator/alternative-key-management/api-mode) — Run Operator as API service with external key management

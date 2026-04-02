@@ -1,47 +1,47 @@
 ---
 title: Fee Claiming
-description: Automate periodic fee claiming for StakeWise Vault shareholders using the Fee Splitter system. Configure intervals, thresholds, and gas optimization.
-sidebar_position: 3
+description: Set up fee distribution among shareholders and automate periodic fee claiming for your StakeWise Vault using the Fee Splitter system.
 ---
 
 # Fee Claiming
 
-It is possible to periodically withdraw rewards for the Vault's fee shareholders through the Fee Splitter system.
+Fee claiming requires configuring how fees are split among shareholders, setting the Fee Claimer role, and enabling automated claiming through the Operator Service.
 
-:::custom-info[Prerequisites]
-- **Set Fee Claimer Role**: In your Vault settings, assign the operator's wallet address as the **Fee Claimer** in the Roles tab
-- **Start with Flag**: Add the `--claim-fee-splitter` flag when starting the Operator Service
-:::
+## Step 1: Set Up Fee Splitter
 
-## Configuration
+Fee Splitter distributes Vault staking fees among multiple shareholders according to predefined percentages.
 
-The automated fee claiming process can be configured using environment variables:
+1. Go to your Vault page and click **Settings**
+2. Select **Vault fee** tab
+3. Click **Add shareholder**, enter their address and set percentage allocation
+4. Verify **total equals 100%** before proceeding
+5. Click **Save** and confirm the transaction in your wallet
 
-:::custom-info[Environment Variables]
-**`FEE_SPLITTER_INTERVAL`** - Controls how often fee claiming runs in seconds (default: 86400 seconds = 24 hours)
+You can modify your Fee Splitter anytime — add or remove shareholders, adjust percentage allocations, or split evenly across all recipients. Changes require a new transaction and only affect future fee distributions.
 
-**`FEE_SPLITTER_MIN_ASSETS`** - Minimum amount accumulated in the fee splitter contract (in Wei) before processing withdrawals to avoid unnecessary gas fees (default: 1000000000000000 Wei = 0.001 ETH)
-:::
+## Step 2: Set Fee Claimer Role
 
-## How It Works
+In your Vault settings, go to the **Roles** tab and assign the operator's wallet address, or the address you delegate this responsibility to, as the **Fee Claimer**.
 
-The fee claiming task combines multiple operations into a single multicall transaction:
+## Step 3: Automate Fee Claiming
 
-1. **Harvest vault rewards** from Keeper contract
-2. **Withdraw splitter rewards** on behalf of each shareholder (rewards go to exit queue)
-3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses)
-
-## Usage
+Add the `--claim-fee-splitter` flag when starting the Operator Service:
 
 ```bash
-# Start operator with fee claiming enabled
-./operator start-local \
-  --vault=0x3320a68 \
+./operator start \
+  --vault=0x3320a...10aD9 \
   --consensus-endpoints=http://localhost:5052 \
   --execution-endpoints=http://localhost:8545 \
   --claim-fee-splitter
 ```
 
-:::custom-notes[Gas Optimization]
-To avoid unnecessary gas fees from the operator's wallet, withdrawals are processed only if their total amount exceeds the minimum threshold set by `FEE_SPLITTER_MIN_ASSETS`.
-:::
+On each cycle, the Operator combines multiple operations into a single multicall transaction:
+
+1. **Harvest vault rewards** from Keeper contract
+2. **Withdraw splitter rewards** on behalf of each shareholder (rewards go to exit queue)
+3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses)
+
+The process can be configured using environment variables:
+
+- **`FEE_SPLITTER_INTERVAL`** — How often fee claiming runs in seconds (default: 86400 = 24 hours)
+- **`FEE_SPLITTER_MIN_ASSETS`** — Minimum amount accumulated in the fee splitter contract (in Wei) before processing withdrawals, to avoid unnecessary gas fees (default: 1000000000000000 = 0.001 ETH)

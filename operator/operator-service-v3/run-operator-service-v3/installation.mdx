@@ -1,7 +1,6 @@
 ---
-title: 2. Installation
+title: Installation
 description: Install StakeWise Operator v3 Service via binary, Docker, or source. Step-by-step setup instructions for all supported methods.
-sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
@@ -31,7 +30,7 @@ Choose your preferred method and follow the instructions below.
     export PATH=$PATH:~/bin
     ```
 
-    Run commands from inside the `v3-operator` folder using this format:
+    Run commands using this format:
 
     ```bash
     ./operator COMMAND --flagA=123 --flagB=xyz
@@ -86,14 +85,10 @@ Choose your preferred method and follow the instructions below.
     poetry install --only main
     ```
 
-    Run commands from inside the `v3-operator` folder using this format:
+    Run commands using this format:
 
     ```bash
     PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
     ```
   </TabItem>
 </Tabs>
-
-## Next Steps
-
-Once installed, continue with [Prepare Operator →](prepare-operator).

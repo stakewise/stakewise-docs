@@ -1,0 +1,14 @@
+---
+title: Manage Vault
+description: "Day-to-day Vault management: settings, fees, rewards, and Meta Vaults."
+---
+
+# Manage Vault
+
+Once your Vault is live, [vault administration tasks](./vault-administration) — including branding, fee rates, and delegation roles — are managed through the **Settings** button on your Vault page. Fees can be adjusted within rate limits (20% max increase every 3 days), and responsibilities like fee claiming, validator management, and whitelist control can each be assigned to a different address.
+
+If your Vault has multiple fee shareholders, the [fee claiming](./fee-claiming) system lets you configure percentage-based splits and automate periodic claiming through the Operator Service — harvesting rewards, withdrawing each shareholder's share, and claiming exited assets in a single transaction.
+
+You can also distribute [extra token rewards](./add-extra-rewards) (SWISE, osETH, SSV, Obol, WETH, USDC, LYX) to your stakers beyond standard staking yield — either periodically over a defined time window, as a one-time allocation, or via a custom IPFS-based distribution. Extra rewards are reflected in both the Vault APY and user reward statistics (Ethereum only).
+
+If you operate a Meta Vault, the [`process-meta-vaults`](./process-metavaults) command triggers transactions to update states, process deposits into sub-vaults, and handle exits.

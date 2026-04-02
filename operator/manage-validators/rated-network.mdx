@@ -1,25 +1,14 @@
 ---
 title: Rated Network Integration
 description: Self-report your StakeWise Vault validators to Rated Network for performance tracking and analytics. Configure the submit-rated-network command.
-sidebar_position: 2
 ---
-
-import Admonition from '@theme/Admonition';
 
 # Rated Network Integration
 
-:::custom-info[What is Rated Network?]
 Rated Network provides validator performance tracking and analytics. Self-reporting ensures your validators appear correctly in the Rated Explorer dashboard.
-:::
 
-To use the `submit-rated-network` command, you will need to provide the following parameters:
+Run the `submit-rated-network` command:
 
-- `--vault` - Your Vault address
-- `--token` - OAuth token for authorization
-- `--data-dir` - Path where the Vault data will be placed (default: `~/.stakewise`)
-- `--pool-tag` - The pool name listed on the Explorer
-
-**Usage Example**
 ```bash
 ./operator submit-rated-network \
   --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
@@ -28,6 +17,11 @@ To use the `submit-rated-network` command, you will need to provide the followin
   --data-dir=/data
 ```
 
-:::custom-notes[Integration Complete]
+The following parameters are required:
+
+- `--vault` - Your Vault address
+- `--token` - OAuth token for authorization
+- `--data-dir` - Path where the Vault data will be placed (default: `~/.stakewise`)
+- `--pool-tag` - The pool name listed on the Explorer
+
 Your validator data is now being reported to Rated Network for performance tracking and analytics.
-:::

@@ -1,10 +1,11 @@
 ---
 title: 2. Create Your Vault
 description: Step-by-step guide to creating and configuring your Vault through the StakeWise UI.
-sidebar_position: 2
 ---
 
 import Image from '@theme/IdealImage'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Create Your Vault
 
@@ -19,22 +20,16 @@ Creating a Vault is done via the StakeWise UI and takes just a few minutes. If y
 
 ## Step 1: Configure Vault Parameters
 
-:::custom-warning[Permanent Settings]
-Most of these settings **cannot be changed later**. Choose carefully before proceeding.
-:::
+Configure your Vault with the following settings:
 
-Configure your Vault parameters:
-
-- **Vault Capacity** – Set maximum ETH capacity (default: unlimited ∞). [Learn more →](/docs/vaults/customization#capacity)
-- **Vault Fee** – Set the fee percent your Vault will charge from users staking rewards
-:::custom-info[Vault Fees Can Be Updated]
-Set [Vault fees →](/docs/fees/intro#vault-fees) during creation and update later: **Settings → Vault fee → Edit → Save**.
-:::
-- **Vault Token** – Enable tradeable ERC-20 token (requires name & symbol)
+- **Vault Capacity** – Set [maximum ETH capacity](/docs/vaults/customization#capacity) (default: unlimited ∞).
+- **Vault Fee** – Set the fee percentage your Vault will charge from [staking rewards](/docs/fees/intro#vault-fees).
+- **Vault Token** – Enable a tradeable ERC-20 token (requires name & symbol)
 - **Private Vault** – Restrict to approved wallets only
 - **Block List** – Prevent specific addresses from depositing
-:::custom-notes[Authorized Addresses Can Be Updated]
-Add or remove addresses: **Vault access → Add/remove → Save**.
+
+:::custom-warning[Settings After Creation]
+The **Vault fee** can be updated after creation via **Settings → Vault fee → Edit → Save**. If you've made your Vault private or added a block list, you can add/remove authorized addresses via **Vault access → Edit → Save**.
 :::
 
 ## Step 2: Block Rewards Destination
@@ -48,16 +43,37 @@ Most operators choose Smoothing Pool for stable returns, while Vault Escrow give
 Customize your Vault's appearance with name, description, and logo.
 
 :::custom-notes[Branding Can Be Updated]
-Update branding anytime via your Vault interface: **Settings → Branding → Edit → Save**.
+Update branding anytime via **Settings → Branding → Edit → Save**.
 :::
 
 ## Step 4: Summary
 
-Review all your settings before final submission. This is your last chance to verify everything is correct, such as name, type, MEV strategy, fees, and capacity.
+Review all your settings before final submission. This is your last chance to verify everything is correct, including name, type, MEV strategy, fees, and capacity.
 
 Click **Create Vault** to submit your configuration and create the Vault.
 
 ## Step 5: Transaction Confirmation
 
 Confirm the transaction in your wallet to deploy your Vault.
-Once the transaction confirms, your Vault is live and visible on the **Operate** page! 🎉
+Once the transaction confirms, your Vault is live and visible on the **Operate** page.
+
+## Where to Find Your Vault Address
+
+You'll need your Vault address to configure and run the Operator Service.
+
+<Tabs groupId="vault-address-methods">
+  <TabItem value="url" label="From URL" default>
+    Navigate to your Vault page — the address is included in the URL:
+    ```
+    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
+                                       ^^^^^^^^^^^^^^^^^^^
+                                        Your Vault Address
+    ```
+  </TabItem>
+  <TabItem value="details" label="From Details Section">
+    1. Go to your Vault page
+    2. Scroll to the bottom to find the **Details** section
+    3. Look for the **Contract address** field
+    4. Copy the displayed address
+  </TabItem>
+</Tabs>

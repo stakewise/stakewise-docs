@@ -1,138 +1,46 @@
 ---
 title: V4 Upgrade Guide
-description: Upgrade from StakeWise Operator v3 to v4 with Pectra support, partial withdrawals, simplified commands, and automatic deposit data.
-sidebar_position: 10
+description: Step-by-step guide to upgrade from StakeWise Operator v3 to v4.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
+import Image from '@theme/IdealImage'
 
 # V4 Upgrade Guide
 
-This guide covers the key changes and upgrade steps for StakeWise Operator V4, including support for the Pectra upgrade (activated on 07-May-2025 at epoch 364032).
+Operator Service V4 adds full Pectra support (activated 07-May-2025) along with significant improvements to withdrawal processing, fee automation, and overall operator experience. The upgrade is available for Vaults **version 5+** on Ethereum or **version 3+** on Gnosis.
 
-:::custom-info[Prerequisites]
-Ensure your Vault is updated to **version 5** for Ethereum network or **version 3** for Gnosis network for full Pectra compatibility. See [Prerequisites →](./prerequisites#deployed-vault) for details on checking and upgrading your Vault version.
+## What's new in V4
 
-Additionally, ensure your Operator Service wallet has the [Validators Manager →](/operator/validators-manager#step-2-assign-validators-manager-role) role assigned in your Vault settings for proper operation.
-:::
+- **Compound validators** — V4 supports `0x02` validators with balances up to 2048 ETH, reducing validator count and infrastructure overhead. Legacy `0x01` validators can be migrated via [consolidation](/operator/manage-validators/consolidate-validators).
+- **Automated withdrawals** — V4 supports [partial withdrawals and execution-layer triggered exits](/docs/vaults/how-vaults-work#withdrawals), enabling more efficient withdrawal processing without full validator exits.
+- **No deposit data file** — V4 generates deposit data automatically during registration, eliminating the need for manual `deposit_data.json` uploads.
+- **Fee automation** — V4 can automatically [split and claim](/operator/manage-vault/fee-claiming) Vault fees to multiple shareholders on a schedule. Fee recipients and splits are configured through the Vault settings page, and a dedicated claimer role can trigger withdrawals on behalf of shareholders, sending fees directly to their addresses.
+- **Vault customization** — Vault admins can now [change the admin address and update the fee percentage](/operator/manage-vault/vault-administration) after deployment.
+- **Meta Vaults** — V4 can [process Meta Vaults](/operator/manage-vault/process-metavaults), which delegate assets across multiple sub-vaults for diversified staking.
+- **Automated node setup** — V4 can automatically [install and manage](/operator/manage-validators/automated-node-setup) Reth and Lighthouse clients, simplifying node infrastructure setup.
 
-## Validator Changes
-### Registration
-After the Pectra upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)):
-- **Validator balances are no longer limited** to 32 ETH or 1 GNO (now up to 2048 ETH or 64 GNO)
-- **`0x02` validators are registered by default**
-- To register `0x01` validators, add the flag `--validators-type=0x01`
+For technical implementation details, see the [v4.0.0 release notes ↗](https://github.com/stakewise/v3-operator/releases/tag/v4.0.0).
 
-:::custom-notes[Consolidations]
-To migrate `0x01` validators to `0x02`, use the `consolidate` command. Read more about it [here →](/operator/manage-validators/consolidate-validators).
-:::
+## How to upgrade
 
-When funding validators:
-1. Funds first **top up existing `0x02` validators** up to 2048 ETH or 64 GNO before registering new validators
-2. **New validators are registered** once the Vault accumulates another 32 ETH or 1 GNO
+### Step 1: Upgrade the Vault
 
-:::custom-warning[Note]
-Funding will be disabled when using `0x01` validator type.
-:::
+Navigate to your Vault page on the [StakeWise app ↗](https://app.stakewise.io) and click the **Upgrade** button in the "New Version" banner.
 
-### Withdrawals
+<Image img={require('./img/upgrade_vault.png')} alt="Upgrade Vault to v4" />
 
-The Pectra upgrade introduces significantly improved withdrawal mechanisms:
+On Ethereum, the upgraded Vault is backwards compatible with the V3 operator — core functions like harvesting and validator registration continue to work. However, upgrading the operator is recommended to unlock Pectra features.
 
-#### Partial Withdrawals (New!)
-- Supported for **`0x02` validators only**, enabling withdrawal of excess balance **without exiting the validator**
-- **Automated execution every 12 hours** by default (configurable via `WITHDRAWALS_INTERVAL` environment variable)
-- Triggers partial withdrawals for validators with **balances exceeding 32 ETH or 1 GNO**, prioritizing those with higher balances first
-- Significantly faster than full validator exits, improving withdrawal queue processing times
+### Step 2: Update the Operator Service
 
-#### More Efficient Full Validator Exits
-- **Full validator exits** are now processed via **execution layer triggerable exits** ([EIP-7002 ↗](https://eips.ethereum.org/EIPS/eip-7002)) instead of the traditional oracle-based method
-- **Automatic fallback**: If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute a full withdrawal after 24 hours using the exit signatures they have received during validator registration
+[Install the latest version](/operator/launch-operator-service#installation) of the Operator Service. Your existing configuration files and keystores remain compatible.
 
-:::custom-info[Withdrawal Logic & Prioritization]
-When processing withdrawal requests:
+### Step 3: Set up Validators Manager
 
-1. **First Priority**: Partial withdrawals from `0x02` validators with excess balance (>32 ETH/1 GNO)
-2. **Second Priority**: Full validator exits if partial withdrawal capacity is insufficient
-3. **Fallback**: Oracle-triggered full exits after 24 hours if operator is inactive
-:::
+If you were using deposit data files for validator registration, you need to switch to the **Validators Manager** role, which authorizes validator operations (registrations, funding, consolidations, withdrawals) on behalf of your Vault. If you already have a Validators Manager assigned, skip this step. Follow the [setup guide →](/operator/validators-manager).
 
-:::custom-notes[Configuration Options]
-- **Disable partial withdrawals**: Use `--disable-withdrawals` flag to process all withdrawals via full validator exits using oracles
-- **Adjust frequency**: Set `WITHDRAWALS_INTERVAL` environment variable to change the default 12-hour interval
-- **Minimum thresholds**: Partial withdrawals only occur when validator balance exceeds 32 ETH or 1 GNO
-:::
+### Step 4: Start the Operator Service
 
-:::custom-warning[Important for `0x01` Validators]
-Partial withdrawals are **not supported** for `0x01` validators. These will always require full validator exits for withdrawals.
-:::
+The launch process has been simplified with dedicated commands for each key management mode (local keystores, Remote Signer, HashiCorp Vault, Relayer). See [Start Operator Service →](/operator/start-operator) for the updated commands and full configuration options.
 
-## Simplified Start Commands
-
-The launch process has been simplified by separating setup flows into dedicated commands:
-
-<Tabs>
-<TabItem value="default" label="Default Mode">
-
-```bash
-# No changes needed for default mode
-```
-
-</TabItem>
-<TabItem value="remote" label="Remote Signer">
-
-```bash
-start-remote-signer
-```
-
-</TabItem>
-<TabItem value="hashi" label="Hashi Vault">
-
-```bash
-start-hashi-vault
-```
-
-</TabItem>
-<TabItem value="relayer" label="Relayer">
-
-```bash
-start-relayer
-```
-
-</TabItem>
-</Tabs>
-
-:::custom-notes[Reference]
-For detailed information about start commands, see [Start Operator Service →](./start-operator).
-:::
-
-## No More Deposit Data File
-
-V4 Operator **no longer requires pre-uploaded deposit data** for validator registration — it generates deposit data automatically during registration.
-
-:::custom-info[Important]
-To support this new flow, you must **assign your operator wallet as the Validators Manager** in the Vault settings.
-
-🔗 **Setup Guide**: [How to Set Up Validators Manager →](/operator/validators-manager).
-:::
-
-## Automated Rewards Withdrawals
-
-It is now possible to **periodically withdraw rewards** for the Vault's fee shareholders.
-
-:::custom-notes[Deep Dive]
-For detailed instructions on fee claiming, see [Fee Claiming →](/operator/manage-vault/fee-claiming).
-:::
-
-## Parameter Changes
-
-### Updated Parameters
-| Old Parameter | New Parameter | Notes |
-|---------------|---------------|-------|
-| `HOT_WALLET_FILE` | `WALLET_FILE` | Environment variable renamed |
-| `HOT_WALLET_PASSWORD_FILE` | `WALLET_PASSWORD_FILE` | Environment variable renamed |
-
-### Removed Parameters
-- `--deposit-data-file` – No longer needed (automatic generation)
+For the full V4 documentation, see the [main Operator docs →](/operator/introduction).

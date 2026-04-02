@@ -1,28 +1,23 @@
 ---
 title: HashiCorp Vault
-sidebar_position: 3
-description: "Load validator signing keys from a HashiCorp Vault instance in Operator Service V3."
+description: Load validator signing keys from a HashiCorp Vault instance in Operator Service V3.
 ---
 
 # HashiCorp Vault
 
-:::custom-warning[Operator V3 Documentation]
-This page covers Operator Service V3. If your Vault version is 5+ on Ethereum or 3+ on Gnosis, refer to the [V4 HashiCorp Vault →](/operator/alternative-key-management/hashicorp-vault).
-:::
-
-The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance, avoiding storage of keystores on the filesystem. This approach is best suited for node operators who already have most of StakeWise Operator functionality implemented in their systems, and only need integration for validators registration.
+The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance, avoiding storage of keystores on the filesystem. This approach is best suited for node operators who already have most of StakeWise Operator functionality implemented in their systems, and only need integration for validators registration or pooling support.
 
 ## Prerequisites
 
 Complete the following steps before proceeding:
 
-1. [Installation →](../installation) completed
-2. [Prepare Operator →](../prepare-operator) — keys generated and deposit data uploaded
+1. [Installation →](../run-operator-service-v3/installation) completed
+2. [Prepare Operator →](../run-operator-service-v3/prepare-operator) — keys generated and deposit data uploaded
 3. Validator keys stored in your [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance
 
 ## Key Storage Format
 
-The user must provide HashiCorp Vault instance URL, authentication token, and secret path in K/V engine.
+The user must provide the HashiCorp Vault instance URL, authentication token, and secret path in the K/V engine.
 
 Internal structure of the secret must resemble the following JSON format:
   ```json
@@ -35,24 +30,29 @@ Internal structure of the secret must resemble the following JSON format:
 
 Public and private signing keys must be stored in hex form, with or without `0x` prefix.
 
-After loading keys from HashiCorp Vault, the operator behaves in the same way as if it had loaded them from keystores, no additional operations needed to support the integration.
+After loading keys from HashiCorp Vault, the operator behaves in the same way as if it had loaded them from keystores, No additional operations are needed to support the integration.
 
 ## Start Operator Service
 
-In V3, pass the HashiCorp Vault flags to the `start` command:
+Passing the following options to the `start` command will enable loading validator signing keys from remote [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs).
+
+:::custom-warning[Important]
+Make sure the keystores directory is empty before running this command, otherwise the operator will prefer local keystores.
+:::
 
 ```bash
 ./operator start \
+  --network=mainnet \
   --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
   --consensus-endpoints=https://consensus-node \
   --execution-endpoints=https://execution-node \
-  --hashi-vault-key-path=keystores1 \
-  --hashi-vault-key-path=keystores2 \
+  --hashi-vault-url=https://hashi-vault:8200 \
   --hashi-vault-token=hvs.abcde \
-  --hashi-vault-url=https://hashi-vault:8200
+  --hashi-vault-key-path=keystores1 \
+  --hashi-vault-key-path=keystores2
 ```
 
-### Configuration Options
+### `start` flags
 
 | Flag | Description |
 |------|-------------|
@@ -62,4 +62,4 @@ In V3, pass the HashiCorp Vault flags to the `start` command:
 | <nobr>`--hashi-vault-key-prefix`</nobr> | Key prefix(es) in the K/V secret engine. Can be repeated for multiple prefixes |
 | <nobr>`--hashi-vault-parallelism`</nobr> | Number of parallel requests to K/V secrets engine |
 
-See all available options in the [Start Operator →](../start-operator#optional-flags) reference.
+For additional configuration, see the full list of [optional flags](../run-operator-service-v3/start-operator#optional-flags).

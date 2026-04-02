@@ -1,7 +1,6 @@
 ---
 title: 3. Staking Nodes
 description: "Required infrastructure for running the Operator Service: a deployed Vault, synced execution and consensus clients, and MEV-Boost."
-sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
@@ -9,17 +8,13 @@ import TabItem from '@theme/TabItem';
 
 # Staking Nodes
 
-Your Vault is created but not yet operational. Your infrastructure must be ready.
-
-## Staking Nodes
-
-Ensure your node infrastructure meets the technical requirements below for reliable operation.
+Your Vault is created but not yet operational. You need to set up the following node infrastructure before installing the Operator Service.
 
 :::custom-tips[Automated Node Setup Available]
-A new experimental feature allows the Operator Service to automatically install and manage execution and consensus clients (Reth and Lighthouse). See [Automated Node Setup →](/operator/manage-validators/automated-node-setup) for details.
+A new experimental feature allows the Operator Service to automatically set up execution and consensus clients (Reth and Lighthouse). See [Automated Node Setup →](/operator/manage-validators/automated-node-setup) for details.
 :::
 
-### Execution Client
+## Execution Client
 
 Your execution node must be fully synced and running. Any client that supports the [ETH Execution API specification ↗](https://ethereum.github.io/execution-apis/) can be used:
 
@@ -56,7 +51,7 @@ Some clients require specific configuration to sync event logs and prevent event
 
     ```bash
     # Ethereum Mainnet
-    --prune.receiptslogfilter=0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5:before:18470089
+    --prune.receiptslogfilter=0x6b5815467da09daa7dc83db21c9239d98bb487b5:before:18470089
 
     # For other networks, adjust the block number to the Keeper contract creation block
     ```
@@ -68,7 +63,7 @@ Some clients require specific configuration to sync event logs and prevent event
 
 :::
 
-### Consensus Client
+## Consensus Client
 
 Your consensus node must be fully synced and running. Any client that supports the [ETH Beacon Node API specification ↗](https://ethereum.github.io/beacon-APIs/#/) can be used:
 
@@ -78,9 +73,9 @@ Your consensus node must be fully synced and running. Any client that supports t
 - **[Teku ↗](https://launchpad.ethereum.org/en/teku)** — (Ethereum, Gnosis)
 - **[Lodestar ↗](https://launchpad.ethereum.org/en/lodestar)** — (Ethereum, Gnosis)
 
-### Validator Client
+## Validator Client
 
-Configure the `suggested-fee-recipient` of your validator client with the correct fee recipient address.
+Set the `suggested-fee-recipient` flag in your validator client to the correct fee recipient address.
 This is the **Block reward recipient** shown in the **Details** section at the bottom of your Vault page.
 An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
 
@@ -89,5 +84,4 @@ An incorrect value will result in penalties for your Vault in the Smoothing Pool
 Set up [MEV-Boost ↗](https://github.com/flashbots/mev-boost) to capture execution layer rewards.
 MEV-Boost is open source middleware that connects your validator to a network of block builders competing to produce the most profitable block, maximizing your Vault's execution-layer revenue.
 
-If your Vault uses the Smoothing Pool, you must use one of the StakeWise DAO-approved MEV relays (see [Smoothing Pool Relays →](/operator/smoothing-pool-relays)).
-Learn more about [MEV Strategy →](/docs/vaults/customization#mev-strategy).
+If your Vault uses the Smoothing Pool, you must use one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints).

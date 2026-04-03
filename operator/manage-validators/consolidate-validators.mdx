@@ -39,11 +39,7 @@ Validators has been successfully consolidated
 ```
 </details>
 
-:::custom-notes[File Format]
-List each public key on a separate line. Both 0x-prefixed and non-prefixed forms are accepted.
-:::
-
-You can either specify `--source-public-keys` (`0x01` or `0x02` validators) and `--target-public-key` (`0x02` validators) parameters to consolidate specific validators, or run without these parameters for automatic consolidation:
+The `--source-public-keys` and `--target-public-key` parameters must be used together to consolidate specific validators. Without them, automatic consolidation runs instead:
 
 ```bash
 # Automatic consolidation
@@ -53,7 +49,7 @@ You can either specify `--source-public-keys` (`0x01` or `0x02` validators) and 
 By default, the following logic applies:
 
 1. If there are no `0x02` validators, take the oldest `0x01` validator and convert it to `0x02` with confirmation prompt
-2. If there is a `0x02` validator, take the oldest `0x01` validators and top up the `0x02` validator balance to 2048 ETH / 64 GNO with confirmation prompt
+2. If there is a `0x02` validator, take the oldest `0x01` validators and top up the `0x02` validator balance to the max validator balance with confirmation prompt
 
 ## Consolidate Using File
 
@@ -65,6 +61,10 @@ For managing multiple validators, use a file containing public keys (one per lin
   --source-public-keys-file=public_keys.txt \
   --target-public-key=0x003
 ```
+
+:::custom-notes[File Format]
+List each public key on a separate line. Both 0x-prefixed and non-prefixed forms are accepted.
+:::
 
 ## Convert `0x01` to `0x02` (Same Key)
 

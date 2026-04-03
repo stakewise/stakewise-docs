@@ -14,7 +14,7 @@ After installing the Operator Service, you need to generate **validator keystore
 You will also need to create and upload a **deposit data file** to connect your node to the Vault, and set up a **hot wallet** for the Operator Service to handle validator registrations.
 
 The Operator Service provides built-in functionality to generate all of the above.
-Alternatively, you may use external tools such as [Wagyu Keygen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores, and existing wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline) for the Operator wallet.
+Alternatively, you may use external tools such as [Wagyu Key Gen ↗](https://github.com/stake-house/wagyu-key-gen) to generate keystores, and existing wallets like [MetaMask ↗](https://metamask.io/) or [MyEtherWallet ↗](https://help.myetherwallet.com/en/articles/6512619-using-mew-offline) for the Operator wallet.
 
 This section walks you through the validator key generation process using the Operator Service built-in tools.
 
@@ -92,8 +92,8 @@ This command generates the following files in your Vault directory (`~/.stakewis
 2. `deposit_data.json` - Contains validator registration information including public keys, withdrawal credentials, and cryptographic signatures. This file must be uploaded to your Vault ([Step 5: Upload Deposit Data File →](./prepare-operator#step-5-upload-deposit-data-file-to-vault)) to authorize the Operator Service to register your validators.
 3. `keystores/` directory containing: validator keystores and `password.txt` for all generated keystores.
 
-:::custom-notes[Note]
-  - **Per-keystore option**: Use the `--per-keystore-password` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
+:::custom-notes[Per-Keystore Passwords]
+  Use the `--per-keystore-password` flag to generate individual password files for each keystore (e.g., `keystore-001.txt`, `keystore-002.txt`, etc.)
 :::
 
 :::custom-warning[Important]
@@ -133,8 +133,8 @@ Upload your keystores into your validator client:
 
 Run the `create-wallet` command to create your hot wallet using your mnemonic.
 
-:::custom-notes[Note]
-This mnemonic can be the same as the one used to generate the validator keys, or a new mnemonic if you desire.
+:::custom-notes[Mnemonic]
+This mnemonic can be the same as the one used to generate the validator keys, or a different one.
 :::
 
 ```bash
@@ -153,7 +153,7 @@ Done. The wallet and password saved to /Users/user/.stakewise/0xf27...10ad9/wall
 :::custom-warning[Wallet Balance Warning]
   Fund your wallet with ETH (or xDAI on Gnosis) to cover gas:
 
-    - Each validator registration costs ~0.01 ETH at 30 Gwei gas price
+    - Each validator registration costs ~0.01 ETH at a 30 Gwei gas price
     - Check current gas prices at [Etherscan Gas Tracker ↗](https://etherscan.io/gastracker)
     - Monitor balance regularly to prevent registration failures
 :::
@@ -221,7 +221,3 @@ Steps via Etherscan:
 6. Click **Write** and confirm the transaction
 </TabItem>
 </Tabs>
-
-## Next Steps
-
-🎉 Your Operator Service is now set up! Continue to [Start Operator →](start-operator) to launch your Operator Service.

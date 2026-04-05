@@ -56,7 +56,7 @@ Successfully initialized configuration for StakeWise operator
 
 ## Step 2: Generate Validator Keys
 
-Generate validator keystores from your mnemonic using:
+Generate validator keystores from your mnemonic. By default, a single `password.txt` file contains the password for all generated keystores. Use the `--per-keystore-password` flag to generate individual password files instead (e.g., `keystore-001.txt`, `keystore-002.txt`).
 
 ```bash
 ./operator create-keys
@@ -79,7 +79,7 @@ Keystores saved to ~/.stakewise/0xf82f6e46d0d0a9536b9ca4bc480372eeafcd9e6c/keyst
 ```
 </details>
 
-Keystores are saved to `~/.stakewise/[vault address]/keystores`. By default, a single `password.txt` file contains the password for all generated keystores. Use the `--per-keystore-password` flag to generate individual password files instead (e.g., `keystore-001.txt`, `keystore-002.txt`).
+Keystores are saved to `~/.stakewise/[vault address]/keystores`.
 
 :::custom-warning[Important Security Notice]
   Protect your password files as carefully as your keystores — anyone with access to them can decrypt your keys. This applies to both the single `password.txt` file and individual per-keystore password files.

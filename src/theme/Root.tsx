@@ -14,7 +14,6 @@ const guidePaths = [
   '/docs/guides/',
   '/docs/guides/defi/',
   '/docs/guides/staking/',
-  '/docs/guides/running-a-vault/',
 ]
 
 const siteUrl = 'https://docs.stakewise.io'

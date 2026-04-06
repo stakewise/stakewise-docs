@@ -45,7 +45,7 @@ Running a node is a commitment. Here's what you need to take care of. If you del
 
 - **Install and configure the Operator Service** — required software that automates the validator lifecycle, withdrawals, and state updates.
 - **Set up execution and consensus clients** — Install and configure them following the official documentation of your chosen clients. For a faster start, the Operator Service includes built-in commands to [automatically set up](/operator/manage-validators/automated-node-setup) Reth (execution) and Lighthouse (consensus) clients.
-- **Set up [MEV-Boost ↗](https://boost.flashbots.net/)** — Capture execution layer rewards. If your Vault uses the Smoothing Pool, you must use one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints).
+- **Set up [MEV-Boost ↗](https://boost.flashbots.net/)** — Capture execution layer rewards. MEV-Boost accepts a list of relays. If your Vault uses the Smoothing Pool, every relay must be one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints).
 - **Generate and import validator keys** — Validator keystores can be generated using the Operator Service or tools like [Wagyu Key Gen ↗](https://github.com/stake-house/wagyu-key-gen), and must be imported into the validator client before validators activate. The validators will be registered automatically via the Operator Service.
 - **Fund your operator wallet** — Ensure it has enough ETH for gas.
 - **Keep your nodes and validators running** — To maximize your rewards, you need to keep your validators online and up to date. Uptime directly affects your Vault's [performance score](/docs/vaults/vault-performance).

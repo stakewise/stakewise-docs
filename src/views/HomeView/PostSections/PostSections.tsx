@@ -15,7 +15,7 @@ const posts = [
   },
   {
     title: 'Staker',
-    text: 'Start your staking journey with StakeWise',
+    text: 'Stake any amount of ETH, stay liquid with osETH, and earn rewards.',
     image: require('@site/static/img/guides.png'),
     href: '/staker/introduction',
   },

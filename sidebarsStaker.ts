@@ -4,6 +4,7 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 const sidebars: SidebarsConfig = {
   stakerSidebar: [
     'introduction',
+    'rewards',
     'one-click-staking',
     'staking-with-vaults',
     'solo-staking',

@@ -57,6 +57,7 @@ const sidebars: SidebarsConfig = {
       ],
     },
     'docs/fees/intro',
+    'docs/audits',
     {
       type: 'category',
       label: 'Governance',

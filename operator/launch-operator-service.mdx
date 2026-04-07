@@ -1,0 +1,147 @@
+---
+title: 4. Launch Operator Service
+description: The Operator Service is required software for running a Vault. Understand what it does and how to install it.
+---
+
+import Image from '@theme/IdealImage'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Launch Operator Service
+
+With your Vault created and your execution and consensus clients fully synced, let's look at the software that makes it all work.
+
+The [Operator Service ↗](https://github.com/stakewise/v3-operator) is open-source software developed by StakeWise that runs alongside your node infrastructure and automates the day-to-day operations of your Vault.
+
+<Image img={require('./img/architecture-overview-2.png')} alt="architecture_overview" />
+<p style={{fontSize: '0.85em', color: 'gray', textAlign: 'center', marginTop: '-0.5rem'}}>
+The Operator Service connects to your Execution and Consensus nodes to read on-chain state and submit transactions to your Vault contract.
+</p>
+
+## Core Functions
+
+Once started, the Operator Service automatically handles:
+
+- **Validator Registration** — Monitors Vault balance, prepares deposit data, obtains oracle approval, and submits registration transactions (requires at least 32 ETH in the Vault).
+- **Validator Funding** — Tops up existing `0x02` compound validators<sup><a href="#fn-1" id="fnref-1">1</a></sup> (up to 2048 ETH effective balance) before registering new ones.
+- **Withdrawals** — Processes exit queue requests via partial withdrawals from `0x02` validators first, then full exits if needed.
+
+## Additional Capabilities
+
+The Operator Service also includes commands and flags to automate additional tasks and simplify day-to-day Vault management:
+
+- **CLI Commands** — Key generation, wallet setup, remote signer configuration, manual exits, performance analytics, and validator consolidations.
+- **Vault State Update** — Use `--harvest-vault` to keep your Vault synced by calling `updateState` every 12 hours.
+- **Automated Fee Claims** — Use `--claim-fee-splitter` to claim earned fees and send them to fee recipients.
+
+:::custom-notes[Deep Dive]
+For a deeper understanding of how Vaults work under the hood — validator registration, withdrawals, rewards, MEV, and more — see the [Concepts →](/docs/overview) section.
+:::
+
+## Installation
+
+:::custom-warning[Vault Version Requirements]
+This guide requires Vault version 5 (Ethereum) or version 3 (Gnosis).
+You can find your Vault version in the **Details** section of your Vault page.
+If your Vault is below the required version, log in as a Vault Admin and click **Upgrade** at the top of the Vault page.
+:::
+
+The Operator Service can be installed as a binary, via Docker, or built from source.
+
+<Tabs groupId="installation-methods">
+  <TabItem value="binary" label="Binary" default>
+
+    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version
+    2. Select the binary file for your node's hardware
+    3. Download and decompress the file
+
+    To install the latest release, run:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s
+    ```
+
+    The binary will be placed in `~/bin`. Add it to your PATH:
+
+    ```bash
+    export PATH=$PATH:~/bin
+    ```
+
+    To install a specific version to a custom location:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
+    ```
+
+    Run commands using this format:
+
+    ```bash
+    ./operator COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+  <TabItem value="docker" label="Docker Image">
+
+    Pull Official Image
+
+    ```bash
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10
+    ```
+
+    Alternatively, build the Docker image locally:
+
+    ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 .
+    ```
+
+    Run commands using this format:
+
+    ```bash
+    docker run --rm -ti \
+    -u $(id -u):$(id -g) \
+    -v ~/.stakewise/:/data \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 \
+    src/main.py COMMAND \
+    --flagA=123 \
+    --flagB=xyz
+    ```
+
+    :::custom-warning[Docker Data Directories]
+    You must set `--data-dir=/data` and map it to a host directory. The `--database-dir` should also be mapped to a host directory or Docker volume with write permissions enabled. Permissions setup is not required when using Docker volumes.
+    :::
+  </TabItem>
+  <TabItem value="source" label="Source Files">
+
+    Requirements:
+
+    - [Python 3.12+ ↗](https://www.python.org/downloads/)
+    - [Poetry ↗](https://python-poetry.org/docs/)
+    - [Git ↗](https://git-scm.com/)
+    - [Cargo ↗](https://doc.rust-lang.org/cargo/getting-started/installation.html) (for sw-milagro-bls-binding dependency)
+    - [libpq-dev ↗](https://www.postgresql.org/docs/current/libpq.html) (for psycopg2 dependency)
+
+    Run the setup command:
+
+    ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
+    poetry install --only main
+    ```
+
+    Run commands using this format:
+
+    ```bash
+    PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+</Tabs>
+
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities:
+  `0x01` validators (Type 1) use the current 32 ETH limit with automatic sweeps of excess balance, while
+  `0x02` validators (Type 2) support higher effective balances up to 2048 ETH with compounding rewards and partial withdrawals.
+  Converting from `0x01` to `0x02` is irreversible.
+  By default, the `0x02` validators are registered. To register `0x01` validators, add the flag `--validator-type=0x01`.
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

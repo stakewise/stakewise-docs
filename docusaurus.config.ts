@@ -18,7 +18,12 @@ const config: Config = {
   onBrokenLinks: 'warn',
   onBrokenAnchors: 'throw',
   onDuplicateRoutes: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
 
   headTags: [
     {
@@ -177,29 +182,6 @@ const config: Config = {
         },
       },
     ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'operator-v3',
-        path: 'operator-v3',
-        routeBasePath: 'operator/v3',
-        sidebarPath: './sidebarsOperatorV3.ts',
-        remarkPlugins: [ remarkMath ],
-        rehypePlugins: [ rehypeKatex ],
-        showLastUpdateTime: true,
-        breadcrumbs: true,
-        admonitions: {
-          keywords: [
-            'custom-info',
-            'custom-tips',
-            'custom-notes',
-            'custom-warning',
-            'custom-stakewise'
-          ],
-          extendDefaults: true,
-        },
-      },
-    ],
   ],
 
   themeConfig: {
@@ -248,21 +230,9 @@ const config: Config = {
         },
         {
           label: 'Operator',
-          type: 'dropdown',
-          items: [
-            {
-              label: 'v4 (Current)',
-              type: 'docSidebar',
-              sidebarId: 'operatorSidebar',
-              docsPluginId: 'operator',
-            },
-            {
-              label: 'v3',
-              type: 'docSidebar',
-              sidebarId: 'operatorV3Sidebar',
-              docsPluginId: 'operator-v3',
-            },
-          ],
+          type: 'docSidebar',
+          sidebarId: 'operatorSidebar',
+          docsPluginId: 'operator',
         },
         {
           label: 'Contracts',

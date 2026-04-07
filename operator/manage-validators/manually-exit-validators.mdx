@@ -1,0 +1,38 @@
+---
+title: Manually Exit Validators
+description: Trigger manual validator exits by index or count for emergency, maintenance, or testing scenarios using the exit-validators command.
+---
+
+# Manually Exit Validators
+
+Manual exits should only be used in specific scenarios: emergency, maintenance, or testing.
+
+:::custom-warning[Validators Manager Required]
+The wallet executing this command must be set as the [Validators Manager →](/operator/validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+:::
+
+```bash
+./operator exit-validators
+```
+
+<details className="custom-details">
+<summary>Example Output</summary>
+
+```bash
+Enter the comma separated list of API endpoints for execution nodes: https://execution-node
+Enter the comma separated list of API endpoints for consensus nodes: https://consensus-node
+Enter your vault address: 0x3320ad928c20187602a2b2c04eeaa813fa899468
+Fetching vault validators...
+Are you sure you want to exit 3 validators with indexes: 513571, 513572, 513861? [y/N]: y
+Exits for validators with index(es) 513571, 513572, 513861 are successfully initiated
+```
+</details>
+
+### `exit-validators` flags
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--indexes`</nobr> | Comma-separated list of validator indexes to exit. Cannot be used with `--count` |
+| <nobr>`--count`</nobr> | Number of validators to exit (default: all active). Cannot be used with `--indexes` |
+| <nobr>`--relayer-endpoint`</nobr> | Relayer endpoint URL for API mode operations |
+| <nobr>`--no-confirm`</nobr> | Skips confirmation prompts |

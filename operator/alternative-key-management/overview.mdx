@@ -1,0 +1,12 @@
+---
+title: Alternative Key Management
+description: Manage StakeWise validator keys externally using Remote Signer, HashiCorp Vault, or Relayer API Mode for enhanced security and flexibility.
+---
+
+# Alternative Key Management
+
+Validator keystores don’t need to be stored locally — you may prefer to manage them externally for better security or flexibility.
+
+If you want to keep signing keys off the Operator machine, the [remote signer](./remote-signer) mode delegates all signing to an external service like [Web3Signer ↗](https://docs.web3signer.consensys.io/) while the Operator handles everything else. For teams already using [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs), you can [load signing keys directly](./hashicorp-vault) from a remote K/V secret engine — after loading, the Operator behaves as if the keys were local.
+
+For full separation, [Relayer (API Mode)](./api-mode) moves both keystores and the Validators Manager wallet outside the Operator entirely. An external Relayer service handles all signing and key operations via API calls, which is useful for multi-signature setups, HSM integrations, or DVT infrastructure.

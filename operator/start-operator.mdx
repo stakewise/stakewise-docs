@@ -1,56 +1,37 @@
 ---
-title: 6. Start Operator
+title: 7. Start Operator
 description: Start the StakeWise Operator Service with local keystores or external key management. Includes all configuration flags and running options.
-sidebar_position: 6
 ---
 
 import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem'
-import Image from '@theme/IdealImage'
+import TabItem from '@theme/TabItem';
+import Image from '@theme/IdealImage';
+import { CheckItem } from '@site/src/components';
 
 # Start Operator
 
-After completing [Validators Manager →](validators-manager) setup, you're ready to start the Operator Service to begin automated validator registrations.
+## Setup Checklist <img src="/icons/stakewise/tick.png" alt="tick" style={{width: '36px', height: '36px', verticalAlign: 'middle', display: 'inline'}} />
 
-<Image img={require('./img/start-operator.png')} alt="start-operator" />
+Before starting the Operator Service, confirm that everything is in place:
+
+<CheckItem id="checklist-vault" label="I've created my Vault" />
+<CheckItem id="checklist-execution" label="I've fully synced my execution client" />
+<CheckItem id="checklist-consensus" label="I've fully synced my consensus client" />
+<CheckItem id="checklist-mev" label="I've configured MEV-Boost" />
+<CheckItem id="checklist-installed" label="I've installed the Operator Service" />
+<CheckItem id="checklist-keys" label="I've generated validator keys and uploaded them into my validator client" />
+<CheckItem id="checklist-validator-client" label="I've set the fee recipient address in my validator client" />
+<CheckItem id="checklist-manager" label="I've set up the Validators Manager" />
 
 ## Start Operator Service
 
-You are ready to run the Operator Service using the `start` command, passing your Vault address and consensus and execution endpoints as flags.
+<Image img={require('./img/start-operator.png')} alt="start-operator" />
 
-:::custom-warning[Required Flags]
-- `--vault` - Your Vault address
-- `--consensus-endpoints` - Consensus client API endpoints
-- `--execution-endpoints` - Execution client API endpoints
-:::
-
-There are several ways to run the Operator Service, depending on how you store private keys.
-
-### Local Keystores
-
-By default, the Operator Service runs with locally stored keystores created during key creation.
-
-```bash
-./operator start \
-  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-  --consensus-endpoints=https://consensus-node \
-  --execution-endpoints=https://execution-node
-```
-
-
-
-:::custom-info[External Key Management]
-For alternative key management methods (Remote Signer, HashiCorp Vault, API Mode), see the [Alternative Key Management →](./alternative-key-management) section.
-:::
-
-### Running Options
-
-Depending on your installation method, use the appropriate command format:
+Run the Operator Service using the `start` command with your Vault address and node endpoints.
+Choose the format matching your installation method:
 
 <Tabs groupId="installation-types">
   <TabItem value="binary" label="Binary" default>
-    #### Using Binary
-
     ```bash
     ./operator start \
       --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
@@ -60,16 +41,13 @@ Depending on your installation method, use the appropriate command format:
   </TabItem>
 
   <TabItem value="docker" label="Docker">
-    #### Using Docker
-
     For Docker, you first need to mount the folder containing validator keystores and include the `--data-dir` flag alongside the `start` command:
-
     ```bash
     docker run --restart on-failure:10 \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
     europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.10 \
-    src/main.py start-local \
+    src/main.py start \
     --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --data-dir=/data \
     --consensus-endpoints=http://localhost:5052 \
@@ -78,10 +56,8 @@ Depending on your installation method, use the appropriate command format:
   </TabItem>
 
   <TabItem value="source" label="Source Files">
-    #### Using Source Files
-
     ```bash
-    PYTHONPATH=. poetry run python src/main.py start-local \
+    PYTHONPATH=. poetry run python src/main.py start \
     --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
     --consensus-endpoints=http://localhost:5052 \
     --execution-endpoints=http://localhost:8545
@@ -89,39 +65,27 @@ Depending on your installation method, use the appropriate command format:
   </TabItem>
 </Tabs>
 
-### Optional Flags
+## Optional Flags
 
 | Flag | Description |
 |------|-------------|
-| <nobr>`--run-nodes`</nobr> | Start and manage local Reth (execution), Lighthouse (consensus), and validator nodes alongside the Operator Service. Requires nodes to be installed first via `node-install`. See [Automated Node Setup →](node-setup) |
-| <nobr>`--keystores-dir`</nobr> | The directory with validator keys in the [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) standard. Required if you didn't use Operator Service to generate keys. The folder must contain either a single `password.txt` password file for all keystores or separate password files for each keystore with the same name as keystore, but ending with `.txt` (e.g., `keystore1.json`, `keystore1.txt`) |
-| <nobr>`--keystores-password-file`</nobr> | Absolute path to the password file for decrypting keystores. Required if you didn't use Operator Service to generate keys |
-| <nobr>`--wallet-file`</nobr> | Absolute path to the wallet. Default is the file generated with `create-wallet` command |
-| <nobr>`--wallet-password-file`</nobr> | Absolute path to the wallet password file. Default is the file generated with `create-wallet` command |
-| <nobr>`--verbose`</nobr> | Enable debug mode, prints full output on error |
-| <nobr>`--log-level`</nobr> | Logging detail level, value can be one of: 'ERROR', 'WARNING', 'INFO', 'DEBUG' |
-| <nobr>`--min-deposit-amount-gwei`</nobr> | The minimum amount (in Gwei) that must accumulate in the Vault to trigger validator registration or a top-up. Minimum allowed: 1,000,000,000 Gwei (1 ETH/GNO). Default: 10,000,000,000 Gwei (10 ETH/GNO) |
-| <nobr>`--vault-min-balance-gwei`</nobr> | The amount of assets (ETH/GNO) in Gwei that should be kept in the vault and not sent for staking. Default: 0 |
-| <nobr>`--max-validator-balance-gwei`</nobr> | The maximum balance (in Gwei) a validator can have before it is no longer eligible for top-ups. Default: 1945000000000 Gwei (1945 ETH) for Ethereum, 1800000000000 Gwei (1800 mGNO) for Gnosis |
-| <nobr>`--max-withdrawal-request-fee-gwei`</nobr> | The maximum fee (in Gwei) for submitting a withdrawal request per validator. Default: 1000 Gwei |
-| <nobr>`--min-deposit-delay`</nobr> | The minimum delay that must pass between validator registration or top-up transactions. Adjust this to control the frequency of registration transactions. Default: 3600 seconds (1 hour) |
-| <nobr>`--max-fee-per-gas-gwei`</nobr> | The maximum fee per gas for transactions. Adjust it if you want to limit the maximum gas fee you're willing to pay. Default: 10 Gwei for Ethereum, 2 Gwei for Gnosis |
-| <nobr>`--validator-type`</nobr> | Set to `0x01` if you want to register `0x01` validators. Default: `0x02` validators are registered |
-| <nobr>`--harvest-vault`</nobr> | Keeps your Vault synced by calling the `updateState` function of the Vault contract every 12 hours. This simplifies contract interactions and reduces gas costs for your users. By default, the Vault state is also updated whenever users interact with the Vault (deposits, withdrawals, etc.) |
-| <nobr>`--claim-fee-splitter`</nobr> | Claims fees periodically to the addresses of the shareholders. See [Fee Claiming →](./additional-actions/fee-claiming) for details |
-| <nobr>`--disable-withdrawals`</nobr> | Disables submitting partial and full withdrawals. This reduces gas costs but increases withdrawal times for users. Oracles will instead submit the exit signatures received from the Operator Service during validator registration |
+| <nobr>`--keystores-dir`</nobr> | Directory with validator keys in [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) format. Must contain a single `password.txt` or per-keystore password files (e.g., `keystore1.json`, `keystore1.txt`) |
+| <nobr>`--keystores-password-file`</nobr> | Path to the password file for decrypting keystores |
+| <nobr>`--wallet-file`</nobr> | Path to the wallet file. Default: file generated by `create-wallet` |
+| <nobr>`--wallet-password-file`</nobr> | Path to the wallet password file. Default: file generated by `create-wallet` |
+| <nobr>`--harvest-vault`</nobr> | Keeps your Vault synced by calling `updateState` every 12 hours, reducing gas costs for users. The Vault state is also updated whenever users interact with it (deposits, withdrawals, etc.) |
+| <nobr>`--claim-fee-splitter`</nobr> | Periodically claims fees to shareholder addresses. See [Fee Claiming →](/operator/manage-vault/fee-claiming) |
+| <nobr>`--run-nodes`</nobr> | Starts and manages local Reth (execution), Lighthouse (consensus), and validator nodes alongside the Operator Service. Requires `node-install` first. See [Automated Node Setup →](/operator/manage-validators/automated-node-setup) |
+| <nobr>`--validator-type`</nobr> | Register `0x01` instead of default `0x02` validators |
+| <nobr>`--min-deposit-amount-gwei`</nobr> | Minimum Vault balance to trigger registration or top-up. Minimum allowed: 1 ETH/GNO. Default: 10 ETH/GNO |
+| <nobr>`--vault-min-balance-gwei`</nobr> | ETH to keep in the Vault and not stake. Default: 0 |
+| <nobr>`--max-validator-balance-gwei`</nobr> | Maximum validator balance for top-ups. Default: 1945 ETH (Ethereum), 1800 GNO (Gnosis) |
+| <nobr>`--min-deposit-delay`</nobr> | Minimum delay between registration or top-up transactions. Default: 3600 seconds (1 hour) |
+| <nobr>`--max-withdrawal-request-fee-gwei`</nobr> | Maximum fee per withdrawal request. Default: 1000 Gwei |
+| <nobr>`--disable-withdrawals`</nobr> | Disables submitting partial and full withdrawals. This reduces gas costs but increases withdrawal times for users. Oracles will instead handle exits using signatures from registration |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum gas fee per transaction. Default: 10 Gwei (Ethereum), 2 Gwei (Gnosis) |
+| <nobr>`--concurrency`</nobr> | Number of processes in a pool. For optimal performance, set to half your CPU cores (e.g., `--concurrency=4` for 8-core systems) to prevent overloading during keystore operations |
 | <nobr>`--disable-validators-registration`</nobr> | Disables registering new validators |
 | <nobr>`--disable-validators-funding`</nobr> | Disables topping up existing `0x02` validators |
-| <nobr>`--concurrency`</nobr> | Number of processes in a pool |
-
-:::custom-tips[Performance Optimization]
-For optimal performance, set `--concurrency` to half your CPU cores (e.g., `--concurrency=4` for 8-core systems) to prevent overloading during keystore operations.
-:::
-
-:::custom-notes[Setup Complete]
-Congratulations 🎉! Your Operator Service is now running and ready to trigger validator registrations within your Vault. Monitor the logs to ensure validators are being registered successfully.
-:::
-
-## Next Steps
-
-Continue to [Additional Actions →](./additional-actions/) to explore optional configurations and integrations to enhance your Operator Service setup, including validator performance tracking with Rated Network.
+| <nobr>`--verbose`</nobr> | Enable debug mode, prints full output on error |
+| <nobr>`--log-level`</nobr> | Set logging level: ERROR, WARNING, INFO, DEBUG |

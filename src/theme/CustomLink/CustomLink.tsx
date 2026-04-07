@@ -1,39 +1,47 @@
 import React from 'react'
+import Link from '@docusaurus/Link'
 
 
-const isExternalLink = (href) => {
-  if (!href) {
-    return false
-  }
+const isExternalLink = (href: string) => href ? href.startsWith('http') : false
 
-  return href.startsWith('http') && !href.includes('stakewise.io')
-}
+const isExternalStakeWiseLink = (href: string) => isExternalLink(href) && href.includes('stakewise.io')
 
 const CustomLink = (props) => {
   const { href, children, ...rest } = props
-  
-  if (isExternalLink(href)) {
+
+  if (isExternalStakeWiseLink(href)) {
     return (
-      <a 
-        href={href} 
-        target="_blank" 
-        rel="noopener noreferrer nofollow" 
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener"
         {...rest}
       >
         {children}
       </a>
     )
   }
-  
+
+  if (isExternalLink(href)) {
+    return (
+      <a
+        href={href}
+        {...rest}
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+      >
+        {children}
+      </a>
+    )
+  }
+
   return (
-    <a
+    <Link
       href={href}
       {...rest}
-      target="_blank" 
-      rel="noopener" 
     >
       {children}
-    </a>
+    </Link>
   )
 }
 

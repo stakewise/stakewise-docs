@@ -1,0 +1,46 @@
+---
+title: V4 Upgrade Guide
+description: Step-by-step guide to upgrade from StakeWise Operator v3 to v4.
+---
+
+import Image from '@theme/IdealImage'
+
+# V4 Upgrade Guide
+
+Operator Service V4 adds full Pectra support (activated 07-May-2025) along with significant improvements to withdrawal processing, fee automation, and overall operator experience. The upgrade is available for Vaults **version 5+** on Ethereum or **version 3+** on Gnosis.
+
+## What's new in V4
+
+- **Compound validators** — V4 supports `0x02` validators with balances up to 2048 ETH, reducing validator count and infrastructure overhead. Legacy `0x01` validators can be migrated via [consolidation](/operator/manage-validators/consolidate-validators).
+- **Automated withdrawals** — V4 supports [partial withdrawals and execution-layer triggered exits](/docs/vaults/how-vaults-work#withdrawals), enabling more efficient withdrawal processing without full validator exits.
+- **No deposit data file** — V4 generates deposit data automatically during registration, eliminating the need for manual `deposit_data.json` uploads.
+- **Fee automation** — V4 can automatically [split and claim](/operator/manage-vault/fee-claiming) Vault fees to multiple shareholders on a schedule. Fee recipients and splits are configured through the Vault settings page, and a dedicated claimer role can trigger withdrawals on behalf of shareholders, sending fees directly to their addresses.
+- **Vault customization** — Vault admins can now [change the admin address and update the fee percentage](/operator/manage-vault/vault-administration) after deployment.
+- **Meta Vaults** — V4 can [process Meta Vaults](/operator/manage-vault/process-metavaults), which delegate assets across multiple sub-vaults for diversified staking.
+- **Automated node setup** — V4 can automatically [install and manage](/operator/manage-validators/automated-node-setup) Reth and Lighthouse clients, simplifying node infrastructure setup.
+
+For technical implementation details, see the [v4.0.0 release notes ↗](https://github.com/stakewise/v3-operator/releases/tag/v4.0.0).
+
+## How to upgrade
+
+### Step 1: Upgrade the Vault
+
+Navigate to your Vault page on the [StakeWise app ↗](https://app.stakewise.io) and click the **Upgrade** button in the "New Version" banner.
+
+<Image img={require('./img/upgrade_vault.png')} alt="Upgrade Vault to v4" />
+
+On Ethereum, the upgraded Vault is backwards compatible with the V3 operator — core functions like harvesting and validator registration continue to work. However, upgrading the operator is recommended to unlock Pectra features.
+
+### Step 2: Update the Operator Service
+
+[Install the latest version](/operator/launch-operator-service#installation) of the Operator Service. Your existing configuration files and keystores remain compatible.
+
+### Step 3: Set up Validators Manager
+
+If you were using deposit data files for validator registration, you need to switch to the **Validators Manager** role, which authorizes validator operations (registrations, funding, consolidations, withdrawals) on behalf of your Vault. If you already have a Validators Manager assigned, skip this step. Follow the [setup guide →](/operator/validators-manager).
+
+### Step 4: Start the Operator Service
+
+The launch process has been simplified with dedicated commands for each key management mode (local keystores, Remote Signer, HashiCorp Vault, Relayer). See [Start Operator Service →](/operator/start-operator) for the updated commands and full configuration options.
+
+For the full V4 documentation, see the [main Operator docs →](/operator/introduction).

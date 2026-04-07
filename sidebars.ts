@@ -90,20 +90,6 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Running a Vault',
-      link: {
-        type: 'doc',
-        id: 'docs/guides/running-a-vault/intro',
-      },
-      items: [
-        'docs/guides/running-a-vault/how-to-create-a-vault',
-        'docs/guides/running-a-vault/setup-vault-infrastructure',
-        'docs/guides/running-a-vault/vault-administration',
-      ],
-    },
-    'docs/guides/fee-splitter',
-    {
-      type: 'category',
       label: 'DeFi',
       link: {
         type: 'doc',

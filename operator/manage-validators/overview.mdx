@@ -1,0 +1,14 @@
+---
+title: Manage Validators
+description: "Validator management: performance tracking, consolidation, exits, recovery, and automated node setup."
+---
+
+# Manage Validators
+
+You can self-report your validators to [Rated Network](./rated-network) for performance tracking and analytics, ensuring they appear correctly in the Rated Explorer dashboard.
+
+If you have legacy `0x01` validators, the [`consolidate`](./consolidate-validators) command lets you merge them into `0x02` compound validators with balances up to 2048 ETH, reducing validator count and infrastructure overhead. You can target specific keys or let the Operator Service consolidate automatically.
+
+For emergency, maintenance, or testing scenarios, the [`exit-validators`](./manually-exit-validators) command triggers manual validator exits — by specific indexes or by count. If you ever need to restore operations after key loss or infrastructure failure, the [`recover`](./recover-validators) command regenerates active validator keystores from your mnemonic.
+
+The Operator Service also includes built-in commands to [automatically install and manage](./automated-node-setup) Reth (execution) and Lighthouse (consensus) clients — covering binary installation, syncing, and status monitoring.

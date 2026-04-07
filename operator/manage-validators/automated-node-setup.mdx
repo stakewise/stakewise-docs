@@ -1,0 +1,88 @@
+---
+title: Automated Node Setup
+description: Automatically install and manage Reth and Lighthouse clients with the StakeWise Operator Service. Simplify node setup, syncing, and status monitoring.
+---
+
+# Automated Node Setup
+
+:::custom-warning[Experimental Feature]
+The automated node setup is an experimental feature that simplifies Reth and Lighthouse installation. It is functional and actively maintained, but still being refined.
+:::
+
+:::custom-info[Prerequisites]
+You must have [deployed a Vault](/operator/create-your-vault) and [installed the Operator Service](/operator/launch-operator-service#installation) before using automated node setup.
+:::
+
+The Operator Service includes built-in commands to automatically install and manage [Reth ↗](https://github.com/paradigmxyz/reth) (execution) and [Lighthouse ↗](https://github.com/sigp/lighthouse) (consensus) clients: `node-install` to download the binaries, `node-start` to begin syncing, and `node-status` to monitor progress.
+
+## `node-install`
+
+Installs Reth and Lighthouse binaries to the data directory.
+
+```bash
+./operator node-install --network=mainnet
+```
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--network`</nobr> | Network for your vault: `mainnet`, `hoodi`, or `gnosis` (required) |
+| <nobr>`--data-dir`</nobr> | Path where node data will be placed. Default: `~/.stakewise` |
+| <nobr>`--lighthouse-version`</nobr> | Lighthouse version to install. Default: `v8.0.0` |
+| <nobr>`--reth-version`</nobr> | Reth version to install. Default: `v1.8.2` |
+
+## `node-start`
+
+To start the node services and begin syncing:
+```bash
+./operator node-start \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf
+```
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--vault`</nobr> | Your Vault contract address (required) |
+| <nobr>`--data-dir`</nobr> | Path where node data will be placed. Default: `~/.stakewise` |
+| <nobr>`--print-execution-logs`</nobr> | Print execution node logs |
+| <nobr>`--print-consensus-logs`</nobr> | Print consensus node logs |
+| <nobr>`--print-validator-logs`</nobr> | Print validator node logs |
+| <nobr>`--no-confirm`</nobr> | Skip confirmation messages |
+
+:::custom-info[Tip]
+Instead of running `node-start` separately, you can add the `--run-nodes` flag to the `start` command to start nodes automatically alongside the Operator Service.
+:::
+
+## `node-status`
+
+Displays sync status of execution and consensus clients, plus validator information.
+
+```bash
+./operator node-status \
+  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf
+```
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--vault`</nobr> | Your Vault contract address (required) |
+| <nobr>`--data-dir`</nobr> | Path where node data is located. Default: `~/.stakewise` |
+| <nobr>`--output-format`</nobr> | Output format: `text` or `json`. Default: `text` |
+| <nobr>`-v, --verbose`</nobr> | Enable debug mode |
+| <nobr>`--enable-file-logging`</nobr> | Log output to file in nodes directory |
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```
+Consensus node status:
+  Is syncing: True
+  Head slot: 1914271
+  Sync distance: 15562
+  Estimated time to sync: 1h 26m 12s
+Execution node status:
+  Is syncing: True
+  Block number: 1769633
+  Sync distance: 27305
+  Estimated time to sync: 9h 20m 38s
+Validator activity:
+  Active validators: 0
+  Total validators: 10
+```
+</details>

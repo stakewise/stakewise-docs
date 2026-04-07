@@ -14,8 +14,8 @@ import Image from '@theme/IdealImage'
 Vaults collect user deposits and manage the validator lifecycle through smart contracts.
 When a Vault accumulates enough assets — 32 ETH on Ethereum or 1 GNO on Gnosis — the system initiates validator registration.
 
-<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">operator service software ↗</a> that automates essential Vault management tasks — such as validator registration, consolidations, and withdrawals.</>}>The Vault operator</Tooltip>
-runs specialized software (the [operator ↗](https://github.com/stakewise/v3-operator) service) alongside their Ethereum [consensus →](../../operator/prerequisites#consensus-client) and [execution →](../../operator/prerequisites#execution-client) clients
+<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" className="tooltip-link">operator service software ↗</a> that automates essential Vault management tasks — such as validator registration, consolidations, and withdrawals.</>}>The Vault operator</Tooltip>
+runs specialized software (the [Operator Service ↗](https://github.com/stakewise/v3-operator)) alongside their Ethereum [consensus →](../../operator/staking-nodes#consensus-client) and [execution →](../../operator/staking-nodes#execution-client) clients
 that monitor deposit levels and handle the technical validator setup process.
 
 <Image img={require('./img/validator_registration.png')} alt="Vault validator registration process diagram" />
@@ -25,9 +25,11 @@ The Operator Service must receive 8 out of 11 approvals from Oracles to register
 The service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files. Once approved, validators enter the Beacon Chain's activation queue. [Network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
 
 Vaults support two types of validators: `0x01` or `0x02`<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
-The default type is `0x02`. When registering validators, the Operator Service prioritizes funding existing `0x02` validators by selecting those with the highest current balance and topping them up to 2048 ETH before creating new validators.
+The default type is `0x02`. To register `0x01` validators instead, add the `--validators-type=0x01` flag when starting the Operator Service. Note that automatic funding (topping up existing validators) is disabled when using `0x01` validators.
+Existing `0x01` validators can be migrated to `0x02` via [consolidation](../../operator/manage-validators/consolidate-validators).
+When registering validators, the Operator Service prioritizes funding existing `0x02` validators by selecting those with the highest current balance and topping them up to 2048 ETH before creating new validators.
 
-The technical process for registering validators involves coordination between the [Operator Service →](../../operator/intro) and the [Oracle network →](../oracles/intro):
+The technical process for registering validators involves coordination between the Operator Service and the Oracle network:
 
 :::custom-notes[Validator Registration Process]
 The Operator Service performs the following steps:
@@ -84,13 +86,13 @@ As ETH becomes available to the Vault, users can claim what is available.
 If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
 
 Partial withdrawals for `0x02` compound validators are now supported and can now be triggered from the execution layer via [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002)<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
-The withdrawal fulfillment process is automated by the [Operator Service →](../../operator/intro), which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
+The withdrawal fulfillment process is automated by the Operator Service, which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
 
 :::custom-info[Processing Time]
 On mainnet, partial withdrawals typically complete faster (≈27–28 hours), while full exits can take **up to one month** to finalize.
 :::
 
-### Validator Exits
+## Validator Exits
 
 The Operator Service automatically triggers validator exits when required.
 By default, the Operator Service checks every **12 hours** (configurable via `WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
@@ -146,7 +148,7 @@ For more details on how osToken works, see [osToken →](../ostoken/intro).
 
 
 <div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> You can disable partial withdrawals if you prefer to rely solely on full exits. Use the `--disable-withdrawals` flag when starting the Operator Service:<br/>`./operator start --vault=0x3320a68 --disable-withdrawals` <br/> In this case, funds will be withdrawn via full exits using Oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+  <span>4.</span> You can disable partial withdrawals by adding the `--disable-withdrawals` flag to the Operator Service start command. In this case, all withdrawals will be processed via full validator exits using Oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
 <div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>

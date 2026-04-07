@@ -1,0 +1,79 @@
+---
+title: Start Operator
+description: Start the Operator Service V3 to begin automated validator registrations and Vault management.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Start Operator
+
+Run the Operator Service using the `start` command with your Vault address and node endpoints. If you **did not** use Operator Service to generate keys or the hot wallet, you will need to provide the relevant paths via `--keystores-dir`, `--hot-wallet-file`, and `--deposit-data-file` flags. Choose the format matching your installation method:
+
+<Tabs groupId="installation-types">
+  <TabItem value="binary" label="Binary" default>
+    ```bash
+    ./operator start \
+      --vault=0xf27...10ad9 \
+      --consensus-endpoints=https://consensus-node \
+      --execution-endpoints=https://execution-node
+    ```
+  </TabItem>
+
+  <TabItem value="docker" label="Docker">
+    For Docker, mount the folder containing validator keystores and include the `--data-dir` flag:
+    ```bash
+    docker run --restart on-failure:10 \
+    -u $(id -u):$(id -g) \
+    -v ~/.stakewise/:/data \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \
+    src/main.py start-local \
+    --vault=0xf27...10ad9 \
+    --data-dir=/data \
+    --consensus-endpoints=http://localhost:5052 \
+    --execution-endpoints=http://localhost:8545
+    ```
+  </TabItem>
+
+  <TabItem value="source" label="Source Files">
+    ```bash
+    PYTHONPATH=. poetry run python src/main.py start-local \
+    --vault=0xf27...10ad9 \
+    --consensus-endpoints=http://localhost:5052 \
+    --execution-endpoints=http://localhost:8545
+    ```
+  </TabItem>
+</Tabs>
+
+:::custom-info[Configure via Environment Variables]
+Instead of CLI flags, you can configure the Operator Service using environment variables. Copy [this example file ↗](https://github.com/stakewise/v3-operator/blob/v3.1.10/.env.example) and save it as `.env`. Load them before running:
+```bash
+export $(grep -v '^#' .env | xargs)
+```
+:::
+
+## Optional Flags
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--network`</nobr> | Network of the Vault: `mainnet`, `hoodi`, or `gnosis`. Default: network specified at `init` command |
+| <nobr>`--data-dir`</nobr> | Path where the Vault data will be placed. Default: `~/.stakewise` |
+| <nobr>`--database-dir`</nobr> | Directory where the database will be created or read from. Default: `~/.stakewise/<vault>` |
+| <nobr>`--execution-jwt-secret`</nobr> | JWT secret key used for signing and verifying JSON Web Tokens when connecting to execution nodes |
+| <nobr>`--keystores-dir`</nobr> | Directory with validator keys in [EIP-2335 ↗](https://eips.ethereum.org/EIPS/eip-2335) format. Must contain a single `password.txt` or per-keystore password files (e.g., `keystore1.json`, `keystore1.txt`) |
+| <nobr>`--keystores-password-file`</nobr> | Path to the password file for decrypting keystores |
+| <nobr>`--hot-wallet-file`</nobr> | Path to the password-protected hot wallet private key file |
+| <nobr>`--hot-wallet-password-file`</nobr> | Path to the hot wallet password file |
+| <nobr>`--deposit-data-file`</nobr> | Path to `deposit_data.json`. Default: file generated with `create-keys` command |
+| <nobr>`--harvest-vault`</nobr> | Keeps your Vault synced by calling `updateState` every 12 hours, reducing gas costs for users. The Vault state is also updated whenever users interact with it (deposits, withdrawals, etc.) |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum gas fee per transaction. Default: 10 Gwei (Ethereum), 2 Gwei (Gnosis) |
+| <nobr>`--min-validators-registration`</nobr> | Minimum number of validators required to start registration |
+| <nobr>`--pool-size`</nobr> | Number of CPU cores used to load and create keystores. Default: all cores. For optimal performance, set to half your CPU cores to prevent overloading |
+| <nobr>`--verbose`</nobr> | Enable debug mode, prints full output on error |
+| <nobr>`--log-level`</nobr> | Set logging level: `fatal`, `error`, `warning`, `info`, `debug` |
+| <nobr>`--log-format`</nobr> | Log record format: `plain` or `json` |
+| <nobr>`--enable-metrics`</nobr> | Enable Prometheus metrics server |
+| <nobr>`--metrics-host`</nobr> | Prometheus metrics host. Default: `127.0.0.1` |
+| <nobr>`--metrics-port`</nobr> | Prometheus metrics port. Default: `9100` |
+| <nobr>`--metrics-prefix`</nobr> | Prometheus metrics prefix. Default: `sw_operator` |
+

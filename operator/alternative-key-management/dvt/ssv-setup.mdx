@@ -1,19 +1,18 @@
 ---
 title: SSV Setup
-description: Run StakeWise validators using SSV Network DVT. Generate operator keys, run an SSV node, register as an operator, and distribute validator key shares.
+description: Run validators using SSV Network's distributed validator technology with StakeWise Vaults.
 ---
 
 # SSV Setup
 
-<p style={{fontSize: '1.2em', color: 'rgba(var(--moon-rgb), .5)', marginTop: '-10px', marginBottom: '20px'}}>A complete guide to running StakeWise validators using SSV Network's distributed validator technology.</p>
-
 [SSV Network ↗](https://ssv.network) is a permissionless DVT network that provides a simple infrastructure for splitting and distributing a validator key into multiple key shares to run a validator across multiple non-trusting nodes.
 
-**In this guide, you will:**
-1. <img src="/icons/stakewise/key.png" alt="key" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Generate encrypted operator keys
-2. <img src="/icons/stakewise/laptop.png" alt="laptop" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Run your own SSV node
-3. <img src="/icons/stakewise/tick.png" alt="tick" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Register as an SSV operator
-4. <img src="/icons/stakewise/defi.png" alt="defi" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} />Distribute your validator keys to cluster operators
+In this guide, you will:
+
+1. Generate encrypted operator keys
+2. Run your own SSV node
+3. Register as an SSV operator
+4. Distribute your validator keys to cluster operators
 
 ## Prerequisites
 
@@ -25,8 +24,8 @@ Before proceeding, ensure you have the following:
 docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
-3. [Create Vault →](/docs/guides/running-a-vault/how-to-create-a-vault)
-4. [Setup Operator Service →](/operator/installation)
+3. [Create Vault →](/operator/create-your-vault)
+4. Operator Service [installed →](/operator/launch-operator-service#installation)
 
 :::custom-notes[Hardware Requirements]
 SSV node requires (in addition to your beacon/execution nodes): **2 cores**, **2GB RAM**, **20GB storage**, **>8K IOPS**. See [full requirements ↗](https://docs.ssv.network/operators/operator-node/node-setup/hardware-requirements).

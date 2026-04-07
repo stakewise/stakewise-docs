@@ -1,0 +1,48 @@
+---
+title: Vault Administration
+description: "Manage your StakeWise Vault settings: branding, fees, roles, whitelist/blocklist, and permission delegation."
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Image from '@theme/IdealImage';
+
+# Vault Administration
+
+Once your Vault is created, you can manage all settings through the **Settings** button in the StakeWise interface.
+
+<Image sources={{light: require('./img/settings.png'), dark: require('./img/settings_dark.png')}} alt="Settings button on your Vault page" />
+
+## What You Can Control
+
+<Tabs groupId="vault-settings">
+  <TabItem
+    value="branding"
+    label={<span><img src="/icons/stakewise/color.png" alt="color" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Branding</span>}
+    default
+  >
+    **Update anytime:**
+    - Vault name
+    - Description
+    - Logo
+  </TabItem>
+  <TabItem
+    value="fees"
+    label={<span><img src="/icons/stakewise/wallet.png" alt="wallet" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Fees</span>}
+  >
+    **Manage fees:**
+    - Set rates: 0-100% of staking rewards
+    - Update frequency: Once every 3 days, limited to 20% increase per update. If the initial fee is 0%, first increase is limited to 1%
+    - Configure multiple recipients with percentage splits and automatic periodic claims on their behalf ([Learn more →](/operator/manage-vault/fee-claiming))
+  </TabItem>
+  <TabItem
+    value="roles"
+    label={<span><img src="/icons/stakewise/game.png" alt="game" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Roles</span>}
+  >
+    **Delegate permissions:**
+    - **Fee Claimer**: Claim fees for shareholders
+    - **Admin**: Full Vault control
+    - **Validators Manager**: Authorize validator registrations, funding, and withdrawals ([Learn more →](/operator/validators-manager))
+    - **Whitelist/Blocklist Manager**: Update accounts that can deposit (whitelist) or cannot deposit (blocklist). Only appears for Private Vaults or Vaults with blocklist functionality enabled
+  </TabItem>
+</Tabs>

@@ -1,35 +1,27 @@
 ---
 title: Relayer (API Mode)
 description: Run the StakeWise Operator in Relayer API mode for external key management. Full API specification for registration, funding, withdrawals, and consolidation.
-sidebar_position: 3
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Relayer (API Mode)
 
-The Relayer is a service that implements the logic for managing validator keystores, as well as signing validator operations with the Validators Manager wallet.
+In the standard setup, the Operator Service holds the validator keystores and the Validators Manager wallet locally. In API mode, both are managed externally — the Operator Service delegates all signing and key operations to a Relayer service via API calls. This is useful when:
+- The Validators Manager wallet is managed outside the Operator Service (e.g., multi-signature setup or hardware security module)
+- Validator keystores are managed by an external system or DVT infrastructure
+- You want to fully isolate key management from the Operator Service
 
-When the Operator Service is started in relayer mode, it will send requests to the relayer service via API calls for all operations that require interaction with the validator keystores or signing by the Validator Manager wallet:
-validator registrations, funding compound validators, consolidations, and withdrawals.
-The Relayer returns the necessary data signed by the Validators Manager.
-
-This proves particularly useful when the Validators Manager wallet and validator keystores are managed externally from the Operator Service.
-In essence, the Operator communicates with the Vault contract using data and signatures provided by the Relayer.
+The Operator communicates with the Vault contract using data and signatures provided by the Relayer.
 
 ## Prerequisites
 
 Complete the following steps before proceeding:
 
-:::custom-notes[Required Setup Steps]
-  1. [Installation →](../installation) completed
-  2. [Validators Manager →](../validators-manager), which is set to the wallet address of the Relayer.
-:::
+
+1. [Installation →](/operator/launch-operator-service#installation) completed
+2. [Validators Manager →](/operator/validators-manager) set to the wallet address of the Relayer.
 
 ## Start Operator Service
+
 To run the Operator API, use the command below:
 
 ```bash
@@ -55,24 +47,16 @@ For additional parameter information, use the `--help` flag:
 ```
 
 :::custom-info[Docker Configuration]
-For Docker-specific setup instructions, see *Installation*: [Docker Setup →](../installation#configuration)
+For Docker-specific setup instructions, see the Docker Image tab in [Installation →](../launch-operator-service#installation)
 :::
-
-## How API Mode Works
-
-The Operator never handles validator keys directly. Instead, it sends requests to your Relayer service, which:
-
-1. **Manages validator keystores** internally or via external systems
-2. **Signs operations** with the Validators Manager wallet
-3. **Returns signed data** for the Operator to submit to the Vault contract
-
-This architecture completely isolates key management from the Operator Service while maintaining full functionality.
 
 :::custom-info[Technical Implementation]
 All operations require an [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
 See [implementation example ↗](https://github.com/stakewise/relayer-example/blob/main/src/validators/validators_manager.py#L33) of signing.
 The Relayer must sign using the same wallet address configured as Validators Manager in your Vault settings.
 :::
+
+## API Endpoints
 
 The Relayer must implement the following endpoints to handle different validator operations:
 
@@ -122,8 +106,8 @@ Response:
 - `amount` - Deposit amount in Gwei.
 - `exit_signature` - Exit signature for the validator.
 - `oracles_exit_signature_shares` - Exit signature shares for oracle processing.
-  - `public_keys` - Validator public key shares.
-  - `encrypted_exit_signatures` - Exit signature shares, encrypted with oracle keys.
+- `public_keys` - Validator public key shares.
+- `encrypted_exit_signatures` - Exit signature shares, encrypted with oracle keys.
 - `validators_manager_signature` - [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) signature from the Validators Manager wallet.
 
 :::custom-info[DVT Relayer]
@@ -171,7 +155,7 @@ Request Body:
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be withdrawn.
+- `vault` - Address of the vault contract from which the validators will be withdrawn.
 - `public_keys` - List of public keys of validators to withdraw from.
 - `amounts` - List of amounts to withdraw from each validator. Value provided in Gwei.
 
@@ -196,7 +180,7 @@ Request Body:
 ```
 
 **Parameters:**
-- `vault` - Address of the vault contract to which the validators will be consolidated.
+- `vault` - Address of the vault contract in which the validators will be consolidated.
 - `source_public_keys` - List of public keys of validators to consolidate from.
 - `target_public_keys` - List of public keys of validators to consolidate to.
 
@@ -223,5 +207,5 @@ Multiple relayers are possible for various use-cases. You can implement your own
 :::
 
 :::custom-tips[Relayer Example]
-See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) - a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
+See demo project [relayer-example ↗](https://github.com/stakewise/relayer-example) — a Python-based FastAPI application that demonstrates how to implement a relayer service for Ethereum staking operations.
 :::

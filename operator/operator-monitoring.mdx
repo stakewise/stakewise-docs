@@ -1,0 +1,89 @@
+---
+title: Operator Monitoring
+description: Monitor your StakeWise Operator Service with Prometheus. Set up metrics endpoints and configure scraping for validator operations.
+---
+
+# Operator Monitoring
+
+The Operator Service supports monitoring using Prometheus by providing a `/metrics` endpoint that Prometheus can scrape to gather various metrics about your validator operations.
+
+:::custom-info[Prerequisites]
+- Operator application running and accessible
+- Prometheus server installed and running
+- Basic knowledge of how to configure Prometheus targets
+:::
+
+## Setup Operator for Monitoring
+
+The Operator provides flexibility to define the host and port for the metrics endpoint via environment variables:
+
+:::custom-notes[Environment Variables]
+**`ENABLE_METRICS`** — Whether the metrics endpoint is enabled (default: `false`)
+
+**`METRICS_HOST`** — Hostname or IP for the metrics endpoint (default: `127.0.0.1`)
+
+**`METRICS_PORT`** — Port for the metrics endpoint (default: `9100`)
+
+**`METRICS_PREFIX`** — Namespace prefix for all metric names (default: `sw_operator`)
+:::
+
+Ensure that these environment variables are set as per your requirements.
+
+:::custom-notes[Environment Variables Example]
+```bash
+export ENABLE_METRICS=true
+export METRICS_HOST=0.0.0.0
+export METRICS_PORT=9100
+```
+:::
+
+:::custom-info[Command-Line Flags]
+You can also specify them by providing `--enable-metrics`, `--metrics-host`, `--metrics-port`, and `--metrics-prefix` flags to the start command.
+:::
+
+The Operator Service's metrics will be available at `http://[METRICS_HOST]:[METRICS_PORT]/metrics`.
+
+## Configure Prometheus
+
+To monitor the Operator, configure Prometheus to scrape metrics from the exposed `/metrics` endpoint.
+
+Add the following job configuration to your Prometheus configuration file (`prometheus.yml`):
+
+```yaml
+scrape_configs:
+  - job_name: 'operator'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['<METRICS_HOST>:<METRICS_PORT>']
+```
+
+Replace `<METRICS_HOST>` and `<METRICS_PORT>` with the values you've configured in the Operator.
+
+This configuration tells Prometheus to scrape metrics from the Operator every 30 seconds.
+
+## Available Metrics
+
+The Operator Service exposes the following Prometheus metrics:
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `app_version` | Info | Operator Service version |
+| `service_started` | Gauge | Whether the service is ready to register validators |
+| `block_number` | Gauge | Current block number |
+| `slot_number` | Gauge | Current slot number |
+| `wallet_balance` | Gauge | Current wallet balance |
+| `stakeable_assets` | Gauge | Vault's available assets for staking |
+| `queued_assets` | Gauge | Exit queue missing assets |
+| `unused_validator_keys` | Gauge | Number of unused validator keys in keystore |
+| `outdated_signatures` | Gauge | Number of outdated signatures |
+| `last_registration_block` | Gauge | Block number of the last validator registration |
+| `last_funding_block` | Gauge | Block number of the last validator funding |
+| `last_withdrawal_block` | Gauge | Block number of the last validator withdrawal |
+| `exception_count` | Counter | Number of exceptions occurred |
+
+All metrics are prefixed with the configured namespace (default `sw_operator_`) and include a `network` label. For example:
+
+```
+# TYPE sw_operator_slot_number gauge
+sw_operator_slot_number{network="hoodi"} 2.74352e+06
+```

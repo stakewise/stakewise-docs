@@ -1,0 +1,94 @@
+---
+title: Installation
+description: Install StakeWise Operator v3 Service via binary, Docker, or source. Step-by-step setup instructions for all supported methods.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Installation
+
+The Operator Service can be installed in several ways: as a binary, via Docker, or built from source.
+Choose your preferred method and follow the instructions below.
+
+<Tabs groupId="installation-methods">
+  <TabItem value="binary" label="Binary" default>
+
+    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases/tag/v3.1.10) and find version **v3.1.10**
+    2. Select the binary file for your node's hardware
+    3. Download and decompress the file
+
+    To install, run:
+
+    ```bash
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/v3.1.10/scripts/install.sh | sh -s
+    ```
+
+    The binary will be placed in `~/bin`. Add it to your PATH:
+
+    ```bash
+    export PATH=$PATH:~/bin
+    ```
+
+    Run commands using this format:
+
+    ```bash
+    ./operator COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+  <TabItem value="docker" label="Docker Image">
+
+    Pull Official Image
+
+    ```bash
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10
+    ```
+
+    Alternatively, build the Docker image locally:
+
+    ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
+    git checkout v3.1.10
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 .
+    ```
+
+    Run commands using this format:
+
+    ```bash
+    docker run --rm -ti \
+    -u $(id -u):$(id -g) \
+    -v ~/.stakewise/:/data \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \
+    src/main.py COMMAND \
+    --flagA=123 \
+    --flagB=xyz
+    ```
+
+    :::custom-warning[Docker Data Directories]
+    You must set `--data-dir=/data` and map it to a host directory. The `--database-dir` should also be mapped to a host directory or Docker volume with write permissions enabled. Permissions setup is not required when using Docker volumes.
+    :::
+  </TabItem>
+  <TabItem value="source" label="Source Files">
+
+    Requirements:
+
+    - [Python 3.10+ ↗](https://www.python.org/downloads/)
+    - [Poetry ↗](https://python-poetry.org/docs/)
+
+    Run the setup command:
+
+    ```bash
+    git clone https://github.com/stakewise/v3-operator.git
+    cd v3-operator
+    git checkout v3.1.10
+    poetry install --only main
+    ```
+
+    Run commands using this format:
+
+    ```bash
+    PYTHONPATH=. poetry run python src/main.py COMMAND --flagA=123 --flagB=xyz
+    ```
+  </TabItem>
+</Tabs>

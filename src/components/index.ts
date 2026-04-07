@@ -1,4 +1,5 @@
 export { default as BrandAssets } from './BrandAssets/BrandAssets'
+export { default as CheckItem } from './Checklist/Checklist'
 export { default as Question } from './Question/Question'
 export { default as Tooltip } from './Tooltip/Tooltip'
 export { default as Footer } from './Footer/Footer'

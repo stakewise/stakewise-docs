@@ -1,13 +1,7 @@
 ---
 title: Obol Setup
 description: Set up a distributed validator cluster with Obol Charon and StakeWise Vaults. Split validator keys, configure Docker, and run Charon nodes.
-sidebar_position: 3
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import Admonition from '@theme/Admonition';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Obol Setup
 
@@ -25,8 +19,8 @@ Before proceeding, ensure you have the following:
 docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
-3. [Create Vault →](/docs/guides/running-a-vault/how-to-create-a-vault)
-4. [Setup Operator Service →](/operator/installation)
+3. [Create Vault →](/operator/create-your-vault)
+4. [Launch Operator Service →](/operator/launch-operator-service#installation)
 
 :::custom-warning[Important - Keystore Password Configuration]
 When using the `create-keys` command, add the `--per-keystore-password` flag to generate a keystore with a separate password file for each keystore. This is necessary for the normal operation of the Charon CLI, especially when splitting keys.

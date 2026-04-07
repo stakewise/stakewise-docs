@@ -1,9 +1,11 @@
 import { themes as prismThemes } from 'prism-react-renderer'
 import type * as Preset from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
-import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
 import path from 'path'
+
+import redirects from './redirects'
 
 
 const config: Config = {
@@ -135,6 +137,10 @@ const config: Config = {
         steps: 2,
         disableInDev: false,
       },
+    ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      { redirects },
     ],
     [
       '@docusaurus/plugin-content-docs',

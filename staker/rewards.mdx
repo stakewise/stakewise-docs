@@ -1,19 +1,27 @@
 ---
 title: Rewards
-description: Learn where staking rewards come from, what you can expect to earn with StakeWise, and how fees work.
+description: Learn where staking rewards come from and what you can expect to earn with StakeWise.
 ---
 
 # Rewards
 
 Staking rewards are earned on Ethereum for proposing and verifying blocks. When you stake with StakeWise, your ETH is deposited to activate validators that perform essential network duties and earn rewards in return.
 
-Validators on Ethereum earn three types of rewards:
+## How Rewards Work
+
+Validators on Ethereum earn:
 
 - **Consensus rewards** — earned for reaching consensus on the state of Ethereum and keeping the network running.
 
-- **Execution rewards** — priority fees paid by users to incentivize validators to prioritize their transactions.
+- **Execution rewards** — priority fees paid by users to incentivize validators to prioritize their transactions, plus MEV rewards<sup><a href="#fn-1" id="fnref-1">1</a></sup> — additional value captured by reordering, including, or excluding transactions within a block.
 
-- **MEV rewards** — additional value captured by reordering, including, or excluding transactions within a block.
+Both streams are [reported periodically by StakeWise oracles](/docs/oracles/oracle-duties#reward-distribution) and applied to your Vault, increasing its total ETH and the value of each share. There is nothing you need to do — rewards accumulate automatically. When you unstake, you receive more ETH than you deposited; if you've minted osETH, you see the gain reflected in its rising value over time.
 
-All flow into the Vault where your ETH is staked, increasing the Vault's APY — the projected yearly return on your staked ETH after fees.
-Your APY depends on the Vault, including the validators' performance, MEV strategy, and the Vault's fees.
+If a Vault's validators are penalized or slashed, the loss works the same way in reverse — the Vault's total ETH decreases, reducing the value of each share proportionally across all stakers in that Vault. Penalties in one Vault do not affect stakers in other Vaults, so your risk depends on the Vault you choose and the quality of its operators.
+
+Your APY — the projected yearly return on your staked ETH after fees — varies by Vault and depends on validator performance and MEV strategy. Some Vaults also distribute extra rewards in additional tokens (e.g. SWISE, OBOL) from external incentive programs.
+
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> MEV rewards are highly volatile. To smooth this out, StakeWise offers a [Smoothing Pool](/docs/vaults/customization#smoothing-pool--pooled-rewards) — a shared escrow where MEV rewards from all participating Vaults are pooled and redistributed proportionally to each Vault's stake, resulting in a steadier yield. Each Vault's MEV strategy is shown on its page.
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

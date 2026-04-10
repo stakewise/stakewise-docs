@@ -5,21 +5,10 @@ const sidebars: SidebarsConfig = {
   stakerSidebar: [
     'introduction',
     'rewards',
-    'one-click-staking',
-    'staking-with-vaults',
-    'solo-staking',
-    'unstaking',
-    {
-      type: 'category',
-      label: 'DeFi',
-      link: {
-        type: 'doc',
-        id: 'defi/intro',
-      },
-      items: [
-        'defi/how-to-use-boost',
-      ],
-    },
+    'stake-with-one-click',
+    'stake-with-a-vault',
+    'boost',
+    'safety',
     {
       type: 'category',
       label: 'StakeWise V2',

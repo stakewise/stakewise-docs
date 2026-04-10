@@ -1,0 +1,32 @@
+---
+title: Safety
+description: Understand the risks of staking and how StakeWise mitigates them.
+---
+
+# Safety
+
+Staking is not risk-free. Understanding what can go wrong — and what the protocol does about it — helps you make an informed decision.
+
+## Slashing
+
+Validators can be penalized for misbehavior such as double signing. In StakeWise, each Vault is fully isolated — a slashing event in one Vault has no effect on stakers in other Vaults. If you hold osETH, the protocol enforces a gap between the maximum minting ratio and the liquidation threshold, so minor penalties reduce your collateral margin without triggering liquidation. You can always restore your position by burning osETH or adding more stake.
+
+## Operator underperformance
+
+Every Vault's performance is publicly visible in the app, so you can evaluate operators before staking. A Vault operator could underperform or fail to exit validators when needed. If an operator fails to act, StakeWise oracles step in and [force-exit validators](/docs/vaults/how-vaults-work#validator-exits) on your behalf.
+
+## Smart contract risk
+
+All DeFi protocols carry smart contract risk. StakeWise runs on battle-tested, [regularly audited](/contracts/audits) contracts that secure over $1B in staked assets. The protocol has been live since 2021 with no security incidents.
+
+## osETH peg risk
+
+osETH could temporarily trade below its fair value on secondary markets. The protocol's [redemption and liquidation mechanisms](/docs/ostoken/how-ostoken-works#peg-maintenance) create arbitrage incentives that keep the market price aligned with the underlying value.
+
+## Boost risks
+
+[Boost](/docs/vaults/boost) introduces additional risk on top of regular staking. If the Aave WETH borrow APY exceeds your Vault's staking APY for an extended period, your Boost position earns a negative return and its LTV gradually increases. If LTV reaches the liquidation threshold (95%), the position may be liquidated. StakeWise [mitigates](/docs/vaults/boost#safety-mechanisms) this with a 2% safety buffer between the max borrow LTV and the liquidation threshold, and an [automatic unboost](/docs/vaults/boost#automatic-unboost) mechanism that triggers before liquidation. Stay informed about market conditions via the [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g).
+
+## Unstaking delay
+
+When you unstake, your position enters the Vault's exit queue. If the Vault already holds enough liquid ETH, your request can be fulfilled immediately. Otherwise, the Vault will attempt [partial withdrawals](/docs/vaults/how-vaults-work#withdrawals) from its compounding validators, which typically take around 27–28 hours. In rare cases where validators must [fully exit](/docs/vaults/how-vaults-work#validator-exits), the process can take up to several weeks depending on [Ethereum network conditions ↗](https://www.validatorqueue.com/). The estimated wait time is always shown in the **Exit duration** field before you confirm, and your assets continue earning rewards until the exit is complete.

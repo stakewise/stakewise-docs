@@ -1,0 +1,52 @@
+---
+title: Stake with One Click
+description: Stake ETH and receive osETH automatically with one-click staking.
+---
+
+import Image from '@theme/IdealImage'
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
+
+# Stake with One Click
+
+One-click staking routes your assets through a [Meta Vault](/docs/vaults/meta-vaults) that distributes them across the best-performing sub-Vaults — currently just the [Genesis Vault](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885), with more to come.
+When staking, you'll automatically receive [osETH](/docs/ostoken/intro), which represents your staked assets plus accumulated rewards. osETH can be used across DeFi to boost your yield — check out the [StakeWise blog guides](https://blog.stakewise.io/guide) for examples, including strategies on Morpho, Fluid, Balancer, Gearbox, and more.
+
+<Image img={require('./img/one_click_staking.png')} alt="StakeWise one-click staking explanation diagram" />
+
+## How to Stake?
+
+One-click staking makes it easy to stake your ETH and start earning rewards immediately.
+
+1. Open [app.stakewise.io](https://app.stakewise.io) and connect your wallet.<sup><a href="#fn-1" id="fnref-1">1</a></sup>
+2. Select the **Stake** tab and enter the amount of ETH you want to stake.
+3. Review the details.
+4. Click **Stake** and confirm the transaction in your wallet.
+5. Once confirmed, osETH will appear in your wallet and immediately start earning rewards.
+
+You can also use the **Boost** tab to amplify your staking position — [Boost](/docs/vaults/boost) uses your osETH as collateral on Aave to borrow and restake additional ETH automatically.
+
+:::custom-tips[Track Your Position Anytime]
+In the **Balance** tab you can view your <Tooltip content="The percentage you earn on your staked ETH after fees.">APY</Tooltip>, <Tooltip content="The total amount of ETH that is earning rewards.">total staked</Tooltip>, and <Tooltip content="The total amount of ETH and osETH locked in the boost.">total boosted</Tooltip> amounts.
+:::
+
+## How to Unstake?
+
+Unstaking is just as simple — convert your osETH back to ETH directly in the StakeWise app whenever you want. If you have an active Boost position, switch to the **Unboost** tab to exit it before unstaking.
+
+1. Open [app.stakewise.io](https://app.stakewise.io) and connect your wallet.
+2. Click the **swap arrows** icon (top-left) to switch from staking to unstaking mode.
+3. Select the **Unstake** tab and enter the amount of osETH you want to convert back to ETH.
+4. Review the details.
+5. Click **Unstake** and confirm the transaction in your wallet.
+6. Once confirmed, your ETH (original stake plus accumulated rewards) will be returned to your wallet.
+
+:::custom-info[Unstaking Times]
+- If you unstake an amount equal to or less than what you staked, your request enters the exit queue — the wait time is shown in the **Exit duration** field.
+- If you unstake more than you staked (e.g. you also hold osETH in your wallet), the staked portion enters the exit queue while the rest is swapped instantly via <Tooltip content="CoW Swap is a DEX aggregation protocol that finds the best price across decentralized exchanges.">CoW</Tooltip>.
+- If you never staked and only hold osETH, the swap happens instantly via CoW.
+:::
+
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> StakeWise supports MetaMask, WalletConnect, Ledger, Binance, and Coinbase. You can also use the "Check wallet" option to view any address or ENS name.
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

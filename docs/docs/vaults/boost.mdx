@@ -4,19 +4,15 @@ sidebar_position: 5
 description: Amplify staking rewards up to 3x with StakeWise Boost. Learn how osToken looping on Aave works, safety mechanisms, and how to boost/unboost.
 ---
 
+import Image from '@theme/IdealImage'
+
 # Boost
 
-## What Is Boost?
-
-StakeWise Boost is a yield amplification strategy that profits from the difference between the extra staking rewards and the cost of sourcing additional ETH.
-
-Boost uses osETH as collateral to borrow additional ETH on Aave and stake it again, creating a "looped" process that amplifies your staking position:
+StakeWise Boost is a yield amplification strategy that profits from the difference between the extra staking rewards and the cost of sourcing additional ETH. Boost uses osETH as collateral to borrow additional ETH on Aave and stake it again, creating a "looped" process that amplifies your staking position:
 
 - **6x looping** in Vaults with 90% LTV
 - **14x looping** in Vaults with 100% LTV
 - **Up to 3x boost** in staking rewards compared to normal staking
-
-![boost_flow](./img/boost_flow.png)
 
 Over the mid term (6+ months holding period), Boost historically generates ~1–3 percentage points above the base staking rate, depending on the spread between staking rewards and Aave borrow rates, for a total APY of approximately **4–6%**.
 
@@ -28,7 +24,7 @@ Boost then uses your osETH as collateral on Aave to borrow additional ETH.
 The borrowed ETH is staked in the Vault on your behalf.
 This process repeats automatically.
 
-![stakewise_boost_money_flow](./img/stakewise_boost_money_flow.png)
+<Image img={require('./img/stakewise_boost_money_flow.png')} alt="Boost flow explanation" />
 
 Staking rewards are earned on the entire amount — so even after deducting Aave interest and operator fees, your net rewards are far greater than staking your original deposit alone — and StakeWise charges no additional fee for using Boost. Boost does not rely on the secondary market for repaying debt, so your strategy profit is not affected by slippage during exits.
 
@@ -92,7 +88,7 @@ Existing boosted positions are not affected, but new boosts cannot be initiated 
 You can monitor the current supply usage in the **Supply Info** section of the [osETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xf1c9acdc66974dfb6decb12aa385b9cd01190e38&marketName=proto_mainnet_v3).
 
 :::custom-notes[Guide]
-To start using Boost, see [How to Use Boost →](/staker/defi/how-to-use-boost)
+To start using Boost, see [How to Use Boost →](/staker/boost)
 :::
 
 :::custom-notes[Further Reading]

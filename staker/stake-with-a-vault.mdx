@@ -16,12 +16,14 @@ Vault staking gives you control over exactly how your assets are staked. Unlike 
 
 Pick a Vault that matches your preferences and start staking in just a few steps.
 
-1. Open [app.stakewise.io](https://app.stakewise.io) and connect your wallet.<sup><a href="#fn-1" id="fnref-1">1</a></sup>
+<Image img={require('./img/staking_flow_with_a_vault.png')} alt="Staking flow with a Vault explanation diagram" />
+
+1. Open [app.stakewise.io](https://app.stakewise.io) and connect your wallet.
 2. Navigate to **Vaults** and browse the available options.
 3. Select a Vault and review its details, including MEV strategy, TVL, APY, performance, and staking fee.
-4. Click the **+** button next to **Staked ETH**, enter the amount of ETH you want to stake, and confirm the transaction in your wallet.
+4. Click the **(+)** button next to **Staked ETH**, enter the amount of ETH you want to stake, and confirm the transaction in your wallet.
 5. Your stake starts earning rewards as soon as the Vault's validators are active.
-6. (Optional) Click the **+** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
+6. (Optional) Click the **(+)** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
 
 If you have osETH, you [can use Boost](/staker/boost) to amplify your staking position — Boost uses your osETH as collateral on Aave to borrow and restake additional ETH automatically.
 
@@ -33,12 +35,9 @@ If you mint osETH, your position gets a [health score](/docs/ostoken/how-ostoken
 
 Unstaking from a Vault follows the same simple flow — just burn any minted osETH first, then withdraw your stake.
 
-1. If you've minted osETH, click the **–** button next to **Minted osETH**, enter the amount to burn (or click **Max**), and confirm the transaction.
-2. Click the **–** button next to **Staked ETH**, enter the amount you want to withdraw, and click **Unstake**.
+<Image img={require('./img/unstaking_flow_with_a_vault.png')} alt="Unstaking flow with a Vault explanation diagram" />
+
+1. If you've minted osETH, click the **(–)** button next to **Minted osETH**, enter the amount to burn (or click **Max**), and confirm the transaction.
+2. Click the **(–)** button next to **Staked ETH**, enter the amount you want to withdraw, and click **Unstake**.
 3. Your request enters the exit queue — processing time depends on the network exit queue length.
 4. Once your assets have exited, click **Claim** to receive your ETH.
-
-<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>1.</span> StakeWise supports MetaMask, WalletConnect, Ledger, Binance, and Coinbase. You can also use the "Check wallet" option to view any address or ENS name.
-  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>

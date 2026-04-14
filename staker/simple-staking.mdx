@@ -1,0 +1,53 @@
+---
+title: Simple Staking
+description: Stake ETH in one click through the StakeWise App and automatically receive osETH. The fastest way to start earning staking rewards.
+---
+
+import Image from '@theme/IdealImage'
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
+
+# Simple Staking
+
+The simplest way to stake with StakeWise is through the [StakeWise App ↗](https://app.stakewise.io) — deposit any amount of ETH and stake it in a single click. Your assets are routed through a [Meta Vault](/docs/vaults/meta-vaults) that distributes them across the best-performing sub-Vaults — currently just the [Genesis Vault](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885), with more to come.
+When staking, you'll automatically receive [osETH](/docs/ostoken/intro), which represents your staked assets plus accumulated rewards. osETH can be used [across DeFi to boost your yield](https://app.stakewise.io/ecosystem).
+
+<Image img={require('./img/simple_staking.png')} alt="StakeWise simple staking explanation diagram" />
+
+## How to Stake
+
+Stake your ETH and start earning rewards immediately.
+
+<Image img={require('./img/staking_flow.png')} alt="Staking flow explanation diagram" />
+
+1. Open [app.stakewise.io](https://app.stakewise.io) and connect your wallet.
+2. Select the **Stake** tab and enter the amount of ETH you want to stake.
+3. Review the details.
+4. Click **Stake** and confirm the transaction in your wallet.
+5. Once confirmed, osETH will appear in your wallet and immediately start earning rewards.
+
+:::custom-tips[Track Your Position Anytime]
+In the **Balance** tab you can view your <Tooltip content="The percentage you earn on your staked ETH after fees.">APY</Tooltip>, <Tooltip content="The total amount of ETH that is earning rewards.">total staked</Tooltip>, and <Tooltip content="The total amount of ETH and osETH locked in the boost.">total boosted</Tooltip> amounts.
+:::
+
+## Boost
+
+Once you have osETH in your wallet, you can optionally [Boost](/staker/boost) your position to amplify your staking yield. Boost uses your osETH as collateral on Aave to borrow ETH, which is then restaked automatically.
+
+## How to Unstake
+
+Unstaking is just as simple — convert your osETH back to ETH directly in the StakeWise app whenever you want. If you have an active Boost position, switch to the **Unboost** tab to exit it before unstaking.
+
+<Image img={require('./img/unstaking_flow.png')} alt="Unstaking flow explanation diagram" />
+
+1. Open [app.stakewise.io](https://app.stakewise.io) and connect your wallet.
+2. Click the **swap arrows** icon (top-left) to switch from staking to unstaking mode.
+3. Select the **Unstake** tab and enter the amount of osETH you want to convert back to ETH.
+4. Review the details.
+5. Click **Unstake** and confirm the transaction in your wallet.
+6. Once confirmed, your ETH (original stake plus accumulated rewards) will be returned to your wallet.
+
+:::custom-info[Unstaking Times]
+- If you unstake an amount equal to or less than what you staked, your request enters the exit queue — the wait time is shown in the **Exit duration** field.
+- If you unstake more than you staked (e.g. you also bought osETH on the market), the staked portion enters the exit queue while the rest is swapped instantly via an exchange.
+- If you never staked and only bought osETH on the market, the swap happens instantly via an exchange.
+:::

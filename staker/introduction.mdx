@@ -1,63 +1,33 @@
 ---
 title: Introduction
-description: Start your staking journey with StakeWise. Earn yield on idle ETH, stay liquid, and keep full control of your assets.
+description: Stake ETH with StakeWise — earn rewards, mint osETH for DeFi, and withdraw anytime. An overview of how staking works for new users.
 ---
-
-import Image from '@theme/IdealImage'
 
 # Introduction
 
 [Staking](/docs/stakewise-protocol/understanding-liquid-staking) puts your ETH to work securing Ethereum, and you earn rewards for it. StakeWise makes it simple, flexible, and secure.
 
-## Why Stake with StakeWise?
+## What StakeWise Offers
 
-Stake any amount of ETH, earn [rewards](/staker/rewards) automatically, mint [osETH](/docs/ostoken/intro) to stay liquid while your ETH keeps earning, and [withdraw whenever you want](/docs/vaults/how-vaults-work#withdrawals).
-Every Vault comes with [Boost](/docs/vaults/boost) built in — activate it with a single click to use your osETH as collateral on Aave, borrowing and restaking more ETH for historically 4–6% APY.
+1. **Stake** any amount of ETH and start earning rewards — no 32 ETH minimum, no hardware to run, no technical knowledge required. [Rewards](/staker/rewards) accrue automatically.
+2. **Mint** [osETH](/docs/ostoken/intro) — a liquid token representing your stake plus accumulated rewards — for use across DeFi protocols such as Aave, Balancer, Fluid, Uniswap, [and more ↗](https://app.stakewise.io/ecosystem).
+3. **Boost** your position with a [single click](/docs/vaults/boost) — use osETH as collateral on Aave to borrow and restake more ETH for a historically 4–6% APY.
+4. **Withdraw** [at any time](/docs/vaults/how-vaults-work#withdrawals) — your ETH stays yours, with no lock-ups or penalties.
 
-You stay in full control — your funds never leave the smart contracts, while professional operators handle all the validator infrastructure for you.
-Your only [costs](/docs/fees/intro) are Ethereum gas for transactions and a small fee on rewards — set by the Vault operator<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
-If you mint osETH, the StakeWise DAO takes an additional 5% of its accrued rewards.
+You stay in full control — your funds never leave the smart contracts, while professional operators handle all the validator infrastructure for you. Your only [costs](/docs/fees/intro) are Ethereum gas for transactions and a fee on rewards — set by the Vault operator (typically 3–5%, though it varies by Vault). If you mint osETH, the StakeWise DAO takes an additional 5% of the rewards accrued on your osETH.
 
-Risk is contained by design: each Vault is isolated<sup><a href="#fn-2" id="fnref-2">2</a></sup>, and osETH is overcollateralized<sup><a href="#fn-3" id="fnref-3">3</a></sup>.
-Everything runs on battle-tested, [regularly audited](/contracts/audits) smart contracts that secure over $1B in staked assets.
-As Ethereum evolves, so does StakeWise — delivering the latest features that make staking more powerful with every upgrade.<sup><a href="#fn-4" id="fnref-4">4</a></sup>
-
-<Image img={require('./img/key_strengths.png')} alt="StakeWise's key strengths" />
-
-## How It Works
-
-When you stake, you receive Vault shares representing your proportional ownership of the pool's assets. Share value increases automatically as staking rewards accumulate, so your position grows without any action on your part. No token swaps or conversions happen — you simply hold shares that are worth more over time. Vault shares are non-transferable by default and won't appear in your wallet as a token, unless the Vault is an [ERC-20 Vault](/docs/vaults/customization#erc-20-vaults--for-custom-utility--liquidity-ecosystem).
+Everything runs on [regularly audited](/contracts/audits) smart contracts that secure over $1B in staked assets — and as Ethereum evolves, so does StakeWise, delivering the latest features that make staking [more powerful with every upgrade ↗](https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available).
 
 ## How to Start
 
 There are three ways to stake, from simplest to most hands-on:
 
-- [Stake with One Click](/staker/stake-with-one-click) — stake ETH and receive osETH automatically.
-- [Stake with a Vault](/staker/stake-with-a-vault) — choose a specific Vault that fits your preferences and mint osETH on demand.
-- [Solo staking](/operator/introduction) — run your own validator infrastructure with StakeWise tooling.
+- [Simple Staking](/staker/simple-staking) — stake ETH simply via the [StakeWise App ↗](https://app.stakewise.io) in a few clicks and receive osETH automatically
+- [Vault Staking](/staker/vault-staking) — choose a specific Vault that fits your preferences and mint osETH on demand
+- [Solo Staking](/operator/introduction) — run your own validator infrastructure with StakeWise tooling
 
 :::custom-notes[Try It on a Testnet First]
-To explore the staking flow without using real ETH, open **Settings** (gear icon) in the [StakeWise App ↗](https://app.stakewise.io) and enable **Show Testnets**. Then switch to the Hoodi network. You'll need some Hoodi ETH for gas fees — get it from a faucet:
+To explore the staking flow without using real ETH, open **Settings** (gear icon) in the [StakeWise App ↗](https://app.stakewise.io) and enable **Show Testnets**. Then switch to Hoodi — Ethereum's current public testnet. You'll need some Hoodi ETH for gas fees — get it from a faucet:
 - [hoodi-faucet.pk910.de ↗](https://hoodi-faucet.pk910.de/)
 - [Google Cloud Hoodi Faucet ↗](https://cloud.google.com/application/web3/faucet/ethereum/hoodi)
 :::
-
-<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>1.</span> Vault operator fees typically range from 3% to 5%, though they vary by Vault.
-  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>
-
-<div id="fn-2" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '0.5rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>2.</span> Each Vault is its own staking pool: deposits can only fund validators belonging to that Vault, and any rewards or penalties stay within it. A slashing or underperformance in one Vault has no effect on stakers in other Vaults.
-  <a href="#fnref-2" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>
-
-<div id="fn-3" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '0.5rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>3.</span> Overcollateralization means the value of staked assets exceeds the value of osETH issued, acting as a safety buffer that protects holders and the protocol from validator penalties or operator underperformance.
-  <a href="#fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>
-
-<div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '0.5rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> For example, <a href="https://blog.stakewise.io/productUpdate/vaults-v4-0-optional-upgrade-now-available" style={{color: 'var(--ifm-color-content-secondary)'}}>Vaults v4.0 ↗</a> already support Pectra features like high-balance validators (EIP-7251) and execution-layer triggered exits (EIP-7002).
-  <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>

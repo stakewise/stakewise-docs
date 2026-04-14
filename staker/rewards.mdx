@@ -1,13 +1,11 @@
 ---
 title: Rewards
-description: Learn where staking rewards come from and what you can expect to earn with StakeWise.
+description: Where StakeWise staking rewards come from — consensus, execution, MEV — and what to expect to earn per Vault.
 ---
 
 # Rewards
 
-Staking rewards are earned on Ethereum for proposing and verifying blocks. When you stake with StakeWise, your ETH is deposited to activate validators that perform essential network duties and earn rewards in return.
-
-## How Rewards Work
+Staking rewards are earned on Ethereum for proposing and verifying blocks. When you stake with StakeWise, your ETH is deposited to activate validators that perform essential network duties and earn rewards in return. Your rewards vary by Vault and depend on validator performance.
 
 Validators on Ethereum earn:
 
@@ -15,11 +13,11 @@ Validators on Ethereum earn:
 
 - **Execution rewards** — priority fees paid by users to incentivize validators to prioritize their transactions, plus MEV rewards<sup><a href="#fn-1" id="fnref-1">1</a></sup> — additional value captured by reordering, including, or excluding transactions within a block.
 
-Both streams are [reported periodically by StakeWise oracles](/docs/oracles/oracle-duties#reward-distribution) and applied to your Vault, increasing its total ETH and the value of each share. There is nothing you need to do — rewards accumulate automatically. When you unstake, you receive more ETH than you deposited; if you've minted osETH, you see the gain reflected in its rising value over time.
+Both streams are [reported periodically by StakeWise oracles](/docs/oracles/oracle-duties#reward-distribution) and applied to your Vault, increasing its total ETH and the value of each share. There is nothing you need to do — rewards accumulate automatically. When you unstake, you receive more ETH than you deposited. If you've minted osETH, the gains are reflected in osETH's conversion rate to ETH as rewards accrue.
+
+On top of these rewards, [Boost](boost) further amplifies your APY by using osETH as collateral to borrow additional ETH on Aave and stake it again, generating around 1–3 percentage points above the base rewards (6+ months holding period). Some Vaults also distribute extra rewards in additional tokens (e.g. SWISE, OBOL) from external incentive programs.
 
 If a Vault's validators are penalized or slashed, the loss works the same way in reverse — the Vault's total ETH decreases, reducing the value of each share proportionally across all stakers in that Vault. Penalties in one Vault do not affect stakers in other Vaults, so your risk depends on the Vault you choose and the quality of its operators.
-
-Your APY — the projected yearly return on your staked ETH after fees — varies by Vault and depends on validator performance and MEV strategy. Some Vaults also distribute extra rewards in additional tokens (e.g. SWISE, OBOL) from external incentive programs.
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> MEV rewards are highly volatile. To smooth this out, StakeWise offers a [Smoothing Pool](/docs/vaults/customization#smoothing-pool--pooled-rewards) — a shared escrow where MEV rewards from all participating Vaults are pooled and redistributed proportionally to each Vault's stake, resulting in a steadier yield. Each Vault's MEV strategy is shown on its page.

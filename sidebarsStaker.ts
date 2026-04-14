@@ -5,8 +5,8 @@ const sidebars: SidebarsConfig = {
   stakerSidebar: [
     'introduction',
     'rewards',
-    'stake-with-one-click',
-    'stake-with-a-vault',
+    'simple-staking',
+    'vault-staking',
     'boost',
     'safety',
     {

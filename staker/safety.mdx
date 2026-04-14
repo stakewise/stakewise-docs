@@ -1,6 +1,6 @@
 ---
 title: Safety
-description: Understand the risks of staking and how StakeWise mitigates them.
+description: Risks of liquid staking with StakeWise — Vault performance, smart contracts, osETH depeg, Boost, and unstaking — and how each is mitigated.
 ---
 
 # Safety
@@ -22,10 +22,10 @@ All DeFi protocols carry smart contract risk. StakeWise runs on battle-tested, [
 
 osETH could temporarily trade below its fair value on secondary markets. The protocol's [redemption and liquidation mechanisms](/docs/ostoken/how-ostoken-works#peg-maintenance) create arbitrage incentives that keep the market price aligned with the underlying value.
 
-## Boost risks
+## Boost Risks
 
 [Boost](/docs/vaults/boost) amplifies your rewards by borrowing ETH on Aave, which introduces exposure to Aave's variable borrow rate. If the borrow rate exceeds the staking rate for an extended period, your Boost APY turns negative. StakeWise protects against this with a [2% safety buffer](/docs/vaults/boost#safety-mechanisms) between the max borrow LTV and the liquidation threshold, and an [automatic unboost](/docs/vaults/boost#automatic-unboost) mechanism that exits your position before liquidation can occur. You can monitor your Boost APY on the Vault page and exit at any time. Stay informed about market conditions via the [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g).
 
-## Unstaking delay
+## Unstaking Delay
 
-When you unstake, your position enters the Vault's exit queue. If the Vault already holds enough liquid ETH, your request can be fulfilled immediately. Otherwise, the Vault will attempt [partial withdrawals](/docs/vaults/how-vaults-work#withdrawals) from its compounding validators, which typically take around 27–28 hours. In rare cases where validators must [fully exit](/docs/vaults/how-vaults-work#validator-exits), the process can take up to several weeks depending on [Ethereum network conditions ↗](https://www.validatorqueue.com/). The estimated wait time is always shown in the **Exit duration** field before you confirm, and your assets continue earning rewards until the exit is complete.
+When you unstake, your position enters the Vault's exit queue. If the Vault already holds enough liquid ETH, your request can be fulfilled immediately. Otherwise, the Vault will attempt [partial withdrawals](/docs/vaults/how-vaults-work#withdrawals) from its compounding validators or [full exits](/docs/vaults/how-vaults-work#validator-exits) if needed. Expect at least 28 hours, though actual waiting times depend on [Ethereum network conditions ↗](https://www.validatorqueue.com/). The estimated wait time is always shown in the **Exit duration** field before you confirm, and your assets continue earning rewards until the exit is complete.

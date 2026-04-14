@@ -1,18 +1,18 @@
 ---
-title: Stake with a Vault
-description: How to stake ETH in StakeWise Vaults. Choose node operators, MEV strategies, and fees. Optionally mint osETH for DeFi liquidity.
+title: Vault Staking
+description: Stake in a specific StakeWise Vault to control how your stake is managed. Mint osETH on demand.
 ---
 
 import Image from '@theme/IdealImage'
 import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
-# Stake with a Vault
+# Vault Staking
 
-Vault staking gives you control over exactly how your assets are staked. Unlike [one-click staking](./stake-with-one-click.mdx), you can choose a specific Vault based on its node operators, MEV strategy, and fees. There are no minimum deposit requirements and no maximum limits except the Vault's capacity limit. Each Vault is fully isolated: your rewards come solely from your chosen Vault's performance, and you're protected from slashing penalties incurred by validators in other Vaults. Each Vault page shows a detailed rewards chart you can review before you stake. You can stake and withdraw as easily as with one-click staking.
+Vault staking gives you control over exactly how your assets are staked. Unlike [simple staking](./simple-staking.mdx), you can choose a specific Vault based on its node operators, MEV strategy, and fees. There are no minimum deposit requirements and no maximum limits except the Vault's capacity limit. Each Vault is fully isolated: your rewards come solely from your chosen Vault's performance, and you're protected from slashing penalties incurred by validators in other Vaults. Each Vault page shows a detailed rewards chart you can review before you stake. You can stake and withdraw as easily as with simple staking.
 
 <Image img={require('./img/stake_with_a_vault.png')} alt="Staking with a Vault explanation diagram" />
 
-## How to Stake?
+## How to Stake
 
 Pick a Vault that matches your preferences and start staking in just a few steps.
 
@@ -25,13 +25,17 @@ Pick a Vault that matches your preferences and start staking in just a few steps
 5. Your stake starts earning rewards as soon as the Vault's validators are active.
 6. (Optional) Click the **(+)** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
 
-If you have osETH, you [can use Boost](/staker/boost) to amplify your staking position — Boost uses your osETH as collateral on Aave to borrow and restake additional ETH automatically.
-
 :::custom-info[Position Health]
 If you mint osETH, your position gets a [health score](/docs/ostoken/how-ostoken-works#position-health) based on how much osETH you've minted relative to your staked ETH (the <Tooltip content="The ratio of minted osETH value to your staked ETH. The higher the LTV, the closer your position is to redemption or liquidation.">Loan-to-Value ratio</Tooltip>). There are four health levels — healthy, moderate, risky, and unhealthy. If your position becomes unhealthy, it may be subject to [redemption or liquidation](/docs/ostoken/how-ostoken-works#peg-maintenance). You can improve it anytime by burning osETH or adding more stake.
+
+Position health also depends on the APY of osETH relative to the Vault APY. The larger the gap (Vault APY < osETH APY), the worse the position health.
 :::
 
-## How to Unstake?
+## Boost
+
+Once you've minted osETH, you can optionally [Boost](/staker/boost) your position to amplify your staking yield. Boost uses your osETH as collateral on Aave to borrow ETH, which is then restaked automatically.
+
+## How to Unstake
 
 Unstaking from a Vault follows the same simple flow — just burn any minted osETH first, then withdraw your stake.
 

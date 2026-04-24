@@ -5,23 +5,33 @@ description: Set up fee distribution among shareholders and automate periodic fe
 
 # Fee Claiming
 
-Fee claiming requires configuring how fees are split among shareholders, setting the Fee Claimer role, and enabling automated claiming through the Operator Service.
+StakeWise Vaults can charge a fee on the rewards they earn, set by the Vault admin as a percentage at creation time. That fee is directed to a single address called the fee recipient.
 
-## Step 1: Set Up Fee Splitter
+A **Fee Splitter** is a smart contract that can take the place of that fee recipient. Instead of fees flowing to one address, the Vault routes them into the Splitter, which divides them among a predefined list of **shareholders** — each holding a predefined share assigned by the admin.
+
+**Fee claiming** turns those accrued shares into assets in each shareholder's wallet: harvesting the Vault's rewards, entering the exit queue on behalf of each shareholder, and claiming the exited assets once the delay has passed. The Operator Service can automate this on a schedule, batching all steps into a single transaction per cycle.
+
+## Step 1: Add Shareholders
 
 Fee Splitter distributes Vault staking fees among multiple shareholders according to predefined percentages.
 
 1. Go to your Vault page and click **Settings**
-2. Select **Vault fee** tab
+2. Select the **Vault fee** tab
 3. Click **Add shareholder**, enter their address and set percentage allocation
 4. Verify **total equals 100%** before proceeding
-5. Click **Save** and confirm the transaction in your wallet
+5. Click **Save**
 
-You can modify your Fee Splitter anytime — add or remove shareholders, adjust percentage allocations, or split evenly across all recipients. Changes require a new transaction and only affect future fee distributions.
+## Step 2: Set the Fee Claimer
 
-## Step 2: Set Fee Claimer Role
+In your Vault settings, open the **Roles** tab and click **Setup the fee splitter** on the **Vault fee claimer** card. This runs three on-chain actions, each requiring a separate wallet confirmation:
 
-In your Vault settings, go to the **Roles** tab and assign the operator's wallet address, or the address you delegate this responsibility to, as the **Fee Claimer**.
+1. **Create new fee splitter** — deploys a dedicated Fee Splitter contract for your Vault.
+2. **Migrate shareholders** — registers each shareholder's share on the newly deployed contract (one transaction per shareholder).
+3. **Update vault fee recipient** — points the Vault's fee recipient at the Fee Splitter contract so future fees flow into it instead of a single address.
+
+Once these complete, the **Vault fee claimer** input becomes available on the **Roles** tab. Enter the operator's wallet address, or the address you delegate this responsibility to, and click **Save**.
+
+You can modify your Fee Splitter anytime — add or remove shareholders, adjust percentage allocations, or split evenly across all recipients. Each adjustment is a separate transaction (per shareholder for share changes) and only affects future fee distributions.
 
 ## Step 3: Automate Fee Claiming
 
@@ -37,11 +47,11 @@ Add the `--claim-fee-splitter` flag when starting the Operator Service:
 
 On each cycle, the Operator combines multiple operations into a single multicall transaction:
 
-1. **Harvest vault rewards** from Keeper contract
-2. **Withdraw splitter rewards** on behalf of each shareholder (rewards go to exit queue)
-3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses)
+1. **Update the Vault's state** using the latest Keeper-attested harvest params, so shareholders' accrued balances are up to date.
+2. **Enter the exit queue on behalf of each shareholder** — their share is queued for withdrawal.
+3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses) for any exit requests whose delay has elapsed.
 
 The process can be configured using environment variables:
 
 - **`FEE_SPLITTER_INTERVAL`** — How often fee claiming runs in seconds (default: 86400 = 24 hours)
-- **`FEE_SPLITTER_MIN_ASSETS`** — Minimum amount accumulated in the fee splitter contract (in Wei) before processing withdrawals, to avoid unnecessary gas fees (default: 1000000000000000 = 0.001 ETH)
+- **`FEE_SPLITTER_MIN_ASSETS`** — Minimum amount accumulated in the Fee Splitter contract (in Wei) before the state update and exit-queue steps run, to avoid unnecessary gas fees (default: 1000000000000000 = 0.001 ETH). Claiming already-exited assets runs independently of this threshold whenever there are claimable exit requests.

@@ -3,7 +3,7 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs'
 const sidebars: SidebarsConfig = {
   operatorSidebar: [
     'introduction',
-    'create-your-vault',
+    'create-regular-vault',
     'staking-nodes',
     'launch-operator-service',
     'validator-keys',
@@ -11,6 +11,17 @@ const sidebars: SidebarsConfig = {
     'start-operator',
     'operator-monitoring',
     'smoothing-pool-relays',
+    {
+      type: 'category',
+      label: 'Create Meta Vault',
+      link: {
+        type: 'doc',
+        id: 'create-meta-vault/index',
+      },
+      items: [
+        'create-meta-vault/operate-meta-vault',
+      ],
+    },
     {
       type: 'category',
       label: 'Alternative Key Management',
@@ -47,7 +58,6 @@ const sidebars: SidebarsConfig = {
         'manage-vault/vault-administration',
         'manage-vault/fee-claiming',
         'manage-vault/add-extra-rewards',
-        'manage-vault/process-metavaults',
       ],
     },
     {

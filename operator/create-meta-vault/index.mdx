@@ -1,0 +1,103 @@
+---
+title: Create Meta Vault
+description: Step-by-step guide to creating a Meta Vault through the StakeWise UI — delegate staked assets across sub-vaults without running validators yourself.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Create Meta Vault
+
+A [Meta Vault](/docs/vaults/meta-vaults) doesn't run validators. Instead, it delegates deposited assets to sub-vaults that run validators. Because there's no validator infrastructure to configure, the creation flow is shorter than for a Regular Vault.
+
+Creating a Meta Vault is done via the StakeWise UI and takes just a few minutes. Once your Meta Vault is created, run the Operator Service with the [`process-meta-vaults`](./operate-meta-vault#3-run-process-meta-vaults) command to keep it in sync with its sub-vaults.
+
+:::custom-notes[Test on Hoodi First]
+To try the full Vault setup on a testnet, open **Settings** (gear icon) in the StakeWise App and enable **Show Testnets**. Then switch to the Hoodi network to create and test your Vault before going to mainnet.
+
+You'll need some Hoodi ETH to cover gas fees. Get testnet ETH from a faucet:
+- [hoodi-faucet.pk910.de ↗](https://hoodi-faucet.pk910.de/)
+- [Google Cloud Hoodi Faucet ↗](https://cloud.google.com/application/web3/faucet/ethereum/hoodi)
+:::
+
+## Getting Started
+
+1. Navigate to the [StakeWise App ↗](https://app.stakewise.io) and go to the **Operate** page
+2. Click the **Create Vault** button to begin the setup process
+
+## Step 1: Select Vault Type
+
+Vault type is set once at creation — select **Meta Vault**. You can optionally enable:
+
+- **Private** — Restrict deposits to approved wallets only.
+- **ERC-20 Token** — Stakers receive a token they can hold in their wallet and transfer to others.
+
+## Step 2: Configure Vault Parameters
+
+Configure your Vault parameters.
+Most of these parameters are permanent — only the [Vault fee](/docs/fees/intro#vault-fee) can be changed after creation:
+
+- **Vault capacity** – Set maximum [ETH capacity](/docs/vaults/customization#capacity) (default: unlimited ∞).
+- **Vault fee** – The fee percent your Vault will charge from users' staking rewards.
+
+If you enabled the **ERC-20 Token**, you will also need to set:
+
+- **Token name** – Your Vault ERC-20 token name.
+- **Token symbol** – Your Vault ERC-20 token symbol.
+
+:::custom-info[Vault Fee]
+The Vault Fee can be updated after creation via **Settings → Vault fee → Edit → Save**. If you've made your Vault private, you can add/remove authorized addresses via **Vault access → Edit → Save**.
+:::
+
+## Step 3: Add Branding
+
+Customize your Vault's appearance with name, description, and logo.
+
+:::custom-info[Branding]
+Unlike Vault parameters, you can update branding anytime via **Settings → Branding → Edit → Save**.
+:::
+
+## Step 4: Summary
+
+Review all your settings before final submission. This is your last chance to verify everything is correct.
+
+Click **Create Vault** to submit your configuration and create the Vault.
+
+## Step 5: Transaction Confirmation
+
+Confirm the transaction in your wallet to deploy your Meta Vault. Once the transaction confirms, your Meta Vault is live and visible on the **Operate** page.
+
+## Where to Find Your Vault Address
+
+You'll need your Vault address to configure and run the Operator Service.
+
+<Tabs groupId="vault-address-methods">
+  <TabItem value="url" label="From URL" default>
+    Navigate to your Vault page — the address is included in the URL:
+    ```
+    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
+                                       ^^^^^^^^^^^^^^^^^^^
+                                        Your Vault Address
+    ```
+  </TabItem>
+  <TabItem value="details" label="From Details Section">
+    1. Go to your Vault page
+    2. Scroll to the bottom to find the **Details** section
+    3. Look for the **Contract address** field
+    4. Copy the displayed address
+  </TabItem>
+</Tabs>
+
+## What's Next
+
+Once deployed, your Meta Vault isn't functional until you link at least one sub-vault to delegate staked assets to.
+
+On your Meta Vault page, open the **Sub-vaults** tab and use the **Sub-vaults list** panel to paste a Vault address or select one from the dropdown. Only the Meta Vault admin can add sub-vaults.
+
+**Regular Vaults** link directly. Any Regular Vault registered on StakeWise can be added — but note that adding a private Regular Vault only succeeds at the link step; deposits will fail until that Vault's operator whitelists your Meta Vault. If you have an agreement with a private Vault operator, coordinate with them to whitelist your Meta Vault first.
+
+Spreading deposits across several sub-vaults gives you diversified staking across multiple operators.
+
+**Meta Vaults as sub-vaults** are also supported, which lets you layer strategies — for example, a top-level Meta Vault routing deposits across several themed Meta Vaults underneath. Unlike Regular Vaults, linking a Meta Vault as a sub-vault is a two-step process: you propose it, and then StakeWise must approve the link before it takes effect.
+
+You can also [create your own Regular Vault](../create-regular-vault) and link it to your Meta Vault — this setup opens the door to modular strategies: one shared Regular Vault running all validators, a private Meta Vault per client with its own fee, or one public Meta Vault serving retail stakers.

@@ -1,0 +1,91 @@
+---
+title: Operate Meta Vault
+description: Install the Operator Service and run the process-meta-vaults command to keep your Meta Vault in sync with its sub-vaults.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Operate Meta Vault
+
+A Meta Vault doesn't operate autonomously. It sits on top of a tree of sub-vaults whose state must be kept current on-chain: rewards need to be harvested, completed exit requests claimed, and newly deposited assets forwarded to the sub-vaults.
+
+The [Operator Service ↗](https://github.com/stakewise/v3-operator) performs these actions on behalf of the Meta Vault. Once configured, it runs continuously. On every new block, it traverses the Meta Vault tree and submits one multicall transaction per Meta Vault to:
+
+- Harvest each harvestable sub-vault.
+- Claim any sub-vault exit requests whose delay has elapsed.
+- Update the Meta Vault's own state.
+
+It then checks each Meta Vault's withdrawable balance and, once enough user deposits have accumulated in the Meta Vault (above the configured threshold), the Operator Service submits a separate transaction to forward the assets into the sub-vaults.
+
+## 1. Install the Operator Service
+
+Install the Operator Service by following the Operator Service [installation guide](/operator/launch-operator-service#installation), then return here to configure it for your Meta Vault.
+
+## 2. Set Up a Wallet
+
+The Operator Service requires a funded wallet to sign the transactions that keep the Meta Vault operational.
+
+### Option A — Create a new wallet
+
+Initialize a mnemonic with:
+```bash
+./operator init
+```
+Then create a wallet with:
+```bash
+./operator create-wallet
+```
+
+### Option B — Use an existing wallet
+
+<img src={require('./img/export-private-key-720.gif').default} alt="export-private-key" style={{maxWidth: '500px', width: '100%', borderRadius: '12px', marginBottom: '1rem'}} />
+
+Export a private key from an existing wallet, then set it as an environment variable:
+
+```bash
+export WALLET_PRIVATE_KEY="0xyour_private_key_here"
+```
+
+## 3. Run `process-meta-vaults`
+
+The `process-meta-vaults` command triggers transactions to update states and process deposits and exits for one or more Meta Vaults.
+
+```bash
+./operator process-meta-vaults \
+ --vaults=0x15639E82d2072Fa510E5d2b5F0db361c823bCad3 \
+ --wallet-file=/home/user/.stakewise/0x15639e82d2072fa510e5d2b5f0db361c823bcad3/wallet/wallet.json \
+ --wallet-password-file=/home/user/.stakewise/0x15639e82d2072fa510e5d2b5f0db361c823bcad3/wallet/password.txt \
+ --execution-endpoints=https://execution-node \
+ --network=mainnet
+```
+
+The following parameters are required:
+- `--vaults` — Comma separated addresses of Meta Vaults to process
+- `--execution-endpoints` — Comma separated API endpoints for execution nodes. You can find public RPC endpoints on [Chainlist ↗](https://chainlist.org/chain/1)
+- `--network` — The network: `mainnet`, `hoodi`, or `gnosis`. Can also be set via the `NETWORK` environment variable; if neither is provided, the command will prompt interactively.
+- If using [Option A](#option-a--create-a-new-wallet): `--wallet-file` and `--wallet-password-file` flags
+- If using [Option B](#option-b--use-an-existing-wallet): the `WALLET_PRIVATE_KEY` environment variable is picked up automatically
+
+### Optional Flags
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--graph-endpoint`</nobr> | API endpoint for graph node |
+| <nobr>`--min-deposit-amount-gwei`</nobr> | Minimum amount in gwei that must accumulate in the Vault to trigger deposits to the sub-vaults. Default: 10,000,000,000 Gwei (10 ETH/GNO) |
+| <nobr>`--max-fee-per-gas-gwei`</nobr> | Maximum fee per gas for transactions. Default: 10 Gwei for Ethereum and Hoodi, 2 Gwei for Gnosis |
+| <nobr>`-v, --verbose`</nobr> | Enable debug mode. Default: false |
+
+<details className="custom-details">
+<summary>Example Output</summary>
+```bash
+Starting operator service, version v4.1.7
+Started meta vault processing
+Fetching meta vaults
+Processing meta vault: 0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
+Getting state update calls for meta vault 0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
+Sub vault 0xba447498DC4c169f2b4f427B2c4D532320457E89 is not harvestable, skipping
+No sub vault exit requests to claim for meta vault 0x15639E82d2072Fa510E5d2b5F0db361c823bCad3
+Meta vault 0x15639E82d2072Fa510E5d2b5F0db361c823bCad3 state is up-to-date, no updates needed
+```
+</details>

@@ -1,7 +1,7 @@
-import React, { type ReactNode } from 'react'
-import ReactIdealImage from '@theme/IdealImageLegacy'
+import React, { type ComponentType, type ReactNode } from 'react'
+import OriginalIdealImage from '@theme-original/IdealImage'
 import { useColorMode } from '@docusaurus/theme-common'
-import type { Props, SrcImage } from '@theme/IdealImage'
+import type { Props } from '@theme/IdealImage'
 
 
 type ThemedProps = Props & {
@@ -11,36 +11,25 @@ type ThemedProps = Props & {
   }
 }
 
-type PluginImage = {
-  src: SrcImage & {
-    width: number
-    height: number
-  }
-  preSrc: string
+type ExtendedProps = Props & {
+  shouldAutoDownload?: () => boolean
 }
 
+const ExtendedIdealImage = OriginalIdealImage as ComponentType<ExtendedProps>
+
 const IdealImage = (props: ThemedProps): ReactNode => {
-  const { sources, img, alt } = props
+  const { sources, img } = props
   const { colorMode } = useColorMode()
   const themeImg = sources
     ? colorMode === 'dark' ? sources.dark : sources.light
     : img
 
-  const pluginImg = themeImg as PluginImage
-
   return (
     <div className="ideal-image-wrapper">
-      <ReactIdealImage
+      <ExtendedIdealImage
         key={sources ? colorMode : undefined}
-        alt={alt}
-        src={pluginImg.src.src}
-        width={pluginImg.src.width}
-        height={pluginImg.src.height}
-        placeholder={{ lqip: pluginImg.preSrc }}
-        srcSet={pluginImg.src.images.map((image) => ({
-          ...image,
-          src: image.path || '',
-        }))}
+        {...props}
+        img={themeImg}
         shouldAutoDownload={() => true}
       />
     </div>

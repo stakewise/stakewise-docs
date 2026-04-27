@@ -8,9 +8,9 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 # Vault Staking
 
-Vault staking gives you control over exactly how your assets are staked. Unlike [simple staking](./simple-staking.mdx), you can choose a specific Vault based on its node operators, MEV strategy, and fees. There are no minimum deposit requirements and no maximum limits except the Vault's capacity limit.
+Vault staking gives you control over exactly how your assets are staked. Unlike [simple staking](/staker/simple-staking), you can choose a specific Vault based on its node operators, MEV strategy, and fees. There are no minimum deposit requirements and no maximum limits except the Vault's capacity limit.
 
-Each Vault is fully isolated: your rewards come solely from your chosen Vault's performance, and you're protected from slashing penalties incurred by validators in other Vaults. Each Vault page shows a detailed rewards chart you can review before you stake. You can stake and withdraw as easily as with simple staking.
+Each Vault is fully isolated: your rewards come solely from your chosen Vault's performance, and you're protected from slashing penalties incurred by validators in other Vaults. Each Vault page shows a detailed rewards chart you can review before you stake. You can stake and withdraw as easily as in simple staking.
 
 <Image img={require('./img/stake_with_a_vault.png')} alt="Staking with a Vault explanation diagram" />
 
@@ -24,13 +24,14 @@ Pick a Vault that matches your preferences and start staking in just a few steps
 2. Navigate to **Vaults** and browse the available options.
 3. Select a Vault and review its details, including MEV strategy, TVL, APY, performance, and staking fee.
 4. Click the **(+)** button next to **Staked ETH**, enter the amount of ETH you want to stake, and confirm the transaction in your wallet.
-5. Your stake starts earning rewards as soon as the Vault's validators are active.
-6. (Optional) Click the **(+)** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
+5. (Optional) Click the **(+)** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
+
+Your stake starts earning rewards as soon as the Vault's validators are active.
 
 :::custom-info[Position Health]
 If you mint osETH, your position gets a [health score](/docs/ostoken/how-ostoken-works#position-health) based on how much osETH you've minted relative to your staked ETH (the <Tooltip content="The ratio of minted osETH value to your staked ETH. The higher the LTV, the closer your position is to redemption or liquidation.">Loan-to-Value ratio</Tooltip>). There are four health levels — healthy, moderate, risky, and unhealthy. If your position becomes unhealthy, it may be subject to [redemption or liquidation](/docs/ostoken/how-ostoken-works#peg-maintenance). You can improve it anytime by burning osETH or adding more stake.
 
-Position health also depends on the APY of osETH relative to the Vault APY. The larger the gap (Vault APY < osETH APY), the worse the position health.
+Position health depends on the APY of osETH relative to the Vault APY. The larger the gap (Vault APY < osETH APY), the worse the position health can get. If the Vault is running normally with close to its average APY, it's very unlikely that the position will drop below healthy.
 :::
 
 ## Boost
@@ -41,9 +42,15 @@ Once you've minted osETH, you can optionally [Boost](/staker/boost) your positio
 
 Unstaking from a Vault follows the same simple flow — just burn any minted osETH first, then withdraw your stake.
 
+Before unstaking, make sure the amount of osETH you want to burn is in your wallet. If you have an active Boost position, switch to the **Unboost** tab and exit it first.
+
 <Image img={require('./img/unstaking_flow_with_a_vault.png')} alt="Unstaking flow with a Vault explanation diagram" />
 
 1. If you've minted osETH, click the **(–)** button next to **Minted osETH**, enter the amount to burn (or click **Max**), and confirm the transaction.
 2. Click the **(–)** button next to **Staked ETH**, enter the amount you want to withdraw, and click **Unstake**.
-3. Your request enters the exit queue — processing time depends on [current network conditions ↗](https://www.validatorqueue.com/).
+3. Your request enters the Vault's [exit queue](/docs/vaults/how-vaults-work#withdrawals). Waiting time is at least 24 hours and depends on [current network conditions ↗](https://www.validatorqueue.com/). Your assets keep earning rewards until the exit completes.
 4. Once your assets have exited, click **Claim** to receive your ETH.
+
+:::custom-tips[Get a Claim Alert]
+You can add your email address to receive a notification as soon as your unstaked assets are ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**.
+:::

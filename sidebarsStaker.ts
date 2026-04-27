@@ -8,7 +8,7 @@ const sidebars: SidebarsConfig = {
     'simple-staking',
     'vault-staking',
     'boost',
-    'safety',
+    'risks',
     {
       type: 'category',
       label: 'StakeWise V2',

@@ -22,7 +22,7 @@ A **Fee Splitter** is a smart contract that can take the place of that fee recip
 :::custom-notes[Under the Hood]
 Saving runs three on-chain actions, each requiring a separate wallet confirmation:
 
-1. **Create reward splitter** — deploys the Fee Splitter contract for your Vault.
+1. **Create reward splitter** — deploys the [Fee Splitter ↗](https://etherscan.io/address/0xDA7F4d74649d042b871e479835C8D262C7a1515f) contract for your Vault.
 2. **Apply new settings** — points the Vault's fee recipient at the Splitter so future fees flow into it.
 3. **Update fee splitter** — registers shareholders and their shares on the Splitter.
 :::
@@ -32,14 +32,14 @@ If you have only one shareholder, clicking **Save** does nothing. To still enabl
 You can modify your Fee Splitter anytime — add or remove shareholders, adjust percentage allocations, or split evenly across all recipients. Modifications are batched into a single transaction and only affect future fee distributions.
 
 :::custom-notes[Upgrading the Fee Splitter]
-When StakeWise releases a new Fee Splitter contract version, an **Upgrade** banner appears at the top of the **Vault fee** tab. Clicking it deploys a new Splitter, migrates your existing shareholders to it, and re-points the Vault's fee recipient at the new contract.
+When StakeWise releases a new Fee Splitter contract version, an **Upgrade** banner appears at the top of the **Vault fee** tab. The banner is only visible to the Vault admin, and only the Vault admin can execute the upgrade. Clicking it deploys a new Splitter, migrates your existing shareholders to it, and re-points the Vault's fee recipient at the new contract.
 :::
 
 ## Step 2: Set the Vault Fee Claimer
 
-Only the Vault admin can set this role. Open the **Roles** tab and enter the wallet address attached to the Operator Service in the **Vault fee claimer** field. The address must match the Operator Service's wallet exactly — otherwise the Operator finds no splitter to claim for and silently does nothing on each cycle. Click **Save** and **Confirm** the transaction in your wallet.
+Only the Vault admin can set this role. Open the **Roles** tab and enter the wallet address attached to the Operator Service in the **Vault fee claimer** field. The address must match the Operator Service's wallet exactly — otherwise the claim will fail, as the Operator won't have permission on the Splitter to execute the claim on behalf of shareholders. Click **Save** and **Confirm** the transaction in your wallet.
 
-Assigning this role is what authorizes the Operator to call `enterExitQueueOnBehalf` (queueing each shareholder's share for withdrawal) and `claimExitedAssetsOnBehalf` (sending exited assets to each shareholder) on the Splitter.
+Assigning this role is what authorizes the Operator to call `enterExitQueueOnBehalf` (queueing each shareholder's share for withdrawal) and `claimExitedAssetsOnBehalf` (sending exited assets to each shareholder) on the Splitter. The Operator Service is not able to route the rewards to any other address; the rewards are always distributed to the shareholder addresses.
 
 ## Step 3: Automate Fee Claiming
 

@@ -1,7 +1,6 @@
 ---
 title: Vaults
-sidebar_position: 0
-description: "Learn what Vaults are and what you can do with them"
+description: Learn what Vaults are and what you can do with them
 ---
 
 Vaults are isolated staking pools that process ETH and GNO deposits for staking, distribute rewards, and handle withdrawals in a trustless and non-custodial manner.
@@ -12,3 +11,9 @@ This isolates each Vault, allowing depositors to customize their staking experie
 Individuals, professional node operators, DAOs, communities, and institutions can deploy a Vault to enable ETH and GNO staking on specific terms, like a bespoke staking fee, unique mix of operators, custom MEV strategy, capacity, branding, and optional ERC-20 Vault Token issuance.
 
 All deposits, reward distribution, and withdrawals are handled by smart contracts, making staking in Vaults fully non-custodial.
+
+When staking into a Vault, users deposit ETH or GNO and receive Vault shares representing their proportional ownership of the pool's assets. Vaults use a shares-based accounting system where:
+- Shares are non-transferable (unless the Vault is an ERC-20 Vault)
+- Shares may not appear in portfolio tracking applications
+- Share value increases automatically as staking rewards accumulate
+- No token swaps or conversions occur during staking

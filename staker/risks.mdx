@@ -1,0 +1,26 @@
+---
+title: Risks
+description: Risks of liquid staking with StakeWise — Vault performance, smart contracts, osETH depeg, Boost, and unstaking — and how each is mitigated.
+---
+
+# Risks
+
+Liquid staking carries inherent risks. This page covers them and how StakeWise addresses each.
+
+## Vault Performance
+
+Your staking rewards depend on how well your Vault performs. Ethereum rewards validators for performing their duties correctly and [penalizes them ↗](https://ethereum.org/developers/docs/consensus-mechanisms/pos/rewards-and-penalties#penalties) for going offline, missing attestations, or acting maliciously. These penalties reduce the staked ETH in your Vault.
+
+Each Vault is fully isolated — poor performance in one Vault has no effect on stakers in other Vaults. You can review every Vault's performance in the app before staking. If a Vault's performance starts declining, consider unstaking and moving to a better-performing Vault.
+
+## Smart Contract
+
+All DeFi protocols carry smart contract risk. StakeWise runs on battle-tested, [regularly audited](/contracts/audits) contracts that secure over $1B in staked assets. The protocol has been live since 2021 with no security incidents.
+
+## osETH Depeg
+
+osETH could temporarily trade below its fair value on secondary markets. The protocol's [redemption and liquidation mechanisms](/docs/ostoken/how-ostoken-works#peg-maintenance) create arbitrage incentives that keep the market price aligned with the underlying value.
+
+## Boost
+
+As with any leveraged strategy, [Boost](/docs/vaults/boost) carries liquidation and penalty risks. If Aave's borrow rate exceeds the staking rate for too long, your Boost APY turns negative and your position loses value every day it stays open, while your LTV drifts toward Aave's liquidation threshold. A [2% safety buffer](/docs/vaults/boost#safety-mechanisms) between max borrow LTV and the liquidation threshold gives your position room to absorb this drift, and StakeWise automatically unboosts as you approach the threshold. Stay updated via [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g).

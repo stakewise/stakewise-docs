@@ -11,9 +11,7 @@ const scrollThreshold = 50
 
 const guidePaths = [
   '/operator/',
-  '/docs/guides/',
-  '/docs/guides/defi/',
-  '/docs/guides/staking/',
+  '/staker/',
 ]
 
 const siteUrl = 'https://docs.stakewise.io'
@@ -24,7 +22,7 @@ const Root: React.FC<RootProps> = (props) => {
   const { pathname } = useLocation()
 
   const isHomePage = pathname === '/'
-  const isGuidePage = guidePaths.some((path) => pathname.startsWith(path)) && pathname !== '/docs/guides/intro'
+  const isGuidePage = guidePaths.some((path) => pathname.startsWith(path)) && pathname !== '/staker/introduction'
 
   const [ pageTitle, setPageTitle ] = useState('')
   const [ pageDescription, setPageDescription ] = useState('')

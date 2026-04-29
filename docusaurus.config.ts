@@ -165,6 +165,29 @@ const config: Config = {
         },
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'staker',
+        path: 'staker',
+        routeBasePath: 'staker',
+        sidebarPath: './sidebarsStaker.ts',
+        remarkPlugins: [ remarkMath ],
+        rehypePlugins: [ rehypeKatex ],
+        showLastUpdateTime: true,
+        breadcrumbs: true,
+        admonitions: {
+          keywords: [
+            'custom-info',
+            'custom-tips',
+            'custom-notes',
+            'custom-warning',
+            'custom-stakewise'
+          ],
+          extendDefaults: true,
+        },
+      },
+    ],
   ],
 
   themeConfig: {
@@ -206,9 +229,10 @@ const config: Config = {
           sidebarId: 'docsSidebar',
         },
         {
-          label: 'Guides',
+          label: 'Staker',
           type: 'docSidebar',
-          sidebarId: 'guidesSidebar',
+          sidebarId: 'stakerSidebar',
+          docsPluginId: 'staker',
         },
         {
           label: 'Operator',

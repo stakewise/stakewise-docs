@@ -14,10 +14,10 @@ const posts = [
     href: '/docs/overview',
   },
   {
-    title: 'Guides',
-    text: 'Step-by-step tutorials for staking, running a Vault, and DeFi strategies',
-    image: require('@site/static/img/guides.png'),
-    href: '/docs/guides/intro',
+    title: 'Staker',
+    text: 'Stake any amount of ETH, stay liquid with osETH, and earn rewards.',
+    image: require('@site/static/img/staker.png'),
+    href: '/staker/introduction',
   },
   {
     title: 'Operator',

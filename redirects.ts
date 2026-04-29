@@ -21,10 +21,10 @@ export default [
   },
   {
     from: '/operator/additional-actions/process-metavaults',
-    to: '/operator/create-meta-vault/operate-meta-vault#run-process-meta-vaults',
+    to: '/operator/meta-vault/operate-meta-vault#run-process-meta-vaults',
   },
   {
     from: '/operator/manage-vault/process-metavaults',
-    to: '/operator/create-meta-vault/operate-meta-vault#run-process-meta-vaults',
+    to: '/operator/meta-vault/operate-meta-vault#run-process-meta-vaults',
   },
 ]

@@ -16,7 +16,7 @@ const posts = [
   {
     title: 'Staker',
     text: 'Stake any amount of ETH, stay liquid with osETH, and earn rewards.',
-    image: require('@site/static/img/guides.png'),
+    image: require('@site/static/img/staker.png'),
     href: '/staker/introduction',
   },
   {

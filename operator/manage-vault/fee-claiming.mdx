@@ -5,23 +5,41 @@ description: Set up fee distribution among shareholders and automate periodic fe
 
 # Fee Claiming
 
-Fee claiming requires configuring how fees are split among shareholders, setting the Fee Claimer role, and enabling automated claiming through the Operator Service.
+StakeWise Vaults can charge a fee on the rewards they earn, set by the Vault admin as a percentage at creation time. That fee is directed to a single address called the fee recipient.
 
-## Step 1: Set Up Fee Splitter
+A **Fee Splitter** is a smart contract that can take the place of that fee recipient. Instead of fees flowing to one address, the Vault routes them into the Splitter, which divides them among a predefined list of **shareholders** — each holding a predefined share assigned by the admin.
 
-Fee Splitter distributes Vault staking fees among multiple shareholders according to predefined percentages.
+**Fee claiming** distributes those accrued shares to each shareholder's wallet. Shareholders can claim manually, or the Vault admin can assign the **Vault fee claimer** role to the wallet attached to the Operator Service, which then automates claiming on a schedule.
+
+## Step 1: Add Shareholders
 
 1. Go to your Vault page and click **Settings**
-2. Select **Vault fee** tab
+2. Select the **Vault fee** tab
 3. Click **Add shareholder**, enter their address and set percentage allocation
 4. Verify **total equals 100%** before proceeding
-5. Click **Save** and confirm the transaction in your wallet
+5. Click **Save**
 
-You can modify your Fee Splitter anytime — add or remove shareholders, adjust percentage allocations, or split evenly across all recipients. Changes require a new transaction and only affect future fee distributions.
+:::custom-notes[Under the Hood]
+Saving runs three on-chain actions, each requiring a separate wallet confirmation:
 
-## Step 2: Set Fee Claimer Role
+1. **Create reward splitter** — deploys the [Fee Splitter ↗](https://etherscan.io/address/0xDA7F4d74649d042b871e479835C8D262C7a1515f) contract for your Vault.
+2. **Apply new settings** — points the Vault's fee recipient at the Splitter so future fees flow into it.
+3. **Update fee splitter** — registers shareholders and their shares on the Splitter.
+:::
 
-In your Vault settings, go to the **Roles** tab and assign the operator's wallet address, or the address you delegate this responsibility to, as the **Fee Claimer**.
+If you have only one shareholder, clicking **Save** does nothing. To still enable automated claiming, open the **Roles** tab, click the **Vault fee claimer** card, and then click **Setup the fee splitter** — it deploys the Splitter, registers the shareholder, and updates the Vault's fee recipient. Then continue with the remaining steps below to finish enabling automated claiming.
+
+You can modify your Fee Splitter anytime — add or remove shareholders, adjust percentage allocations, or split evenly across all recipients. Modifications are batched into a single transaction and only affect future fee distributions.
+
+:::custom-notes[Upgrading the Fee Splitter]
+When StakeWise releases a new Fee Splitter contract version, an **Upgrade** banner appears at the top of the **Vault fee** tab. The banner is only visible to the Vault admin, and only the Vault admin can execute the upgrade. Clicking it deploys a new Splitter, migrates your existing shareholders to it, and re-points the Vault's fee recipient at the new contract.
+:::
+
+## Step 2: Set the Vault Fee Claimer
+
+Only the Vault admin can set this role. Open the **Roles** tab and enter the wallet address attached to the Operator Service in the **Vault fee claimer** field. The address must match the Operator Service's wallet exactly — otherwise the claim will fail, as the Operator won't have permission on the Splitter to execute the claim on behalf of shareholders. Click **Save** and **Confirm** the transaction in your wallet.
+
+Assigning this role is what authorizes the Operator to call `enterExitQueueOnBehalf` (queueing each shareholder's share for withdrawal) and `claimExitedAssetsOnBehalf` (sending exited assets to each shareholder) on the Splitter. The Operator Service is not able to route the rewards to any other address; the rewards are always distributed to the shareholder addresses.
 
 ## Step 3: Automate Fee Claiming
 
@@ -37,11 +55,11 @@ Add the `--claim-fee-splitter` flag when starting the Operator Service:
 
 On each cycle, the Operator combines multiple operations into a single multicall transaction:
 
-1. **Harvest vault rewards** from Keeper contract
-2. **Withdraw splitter rewards** on behalf of each shareholder (rewards go to exit queue)
-3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses)
+1. **Update the Vault's state** using the latest Keeper-attested harvest params, so shareholders' accrued balances are up to date.
+2. **Enter the exit queue on behalf of each shareholder** — their share is queued for withdrawal.
+3. **Claim exited assets** on behalf of each shareholder (assets go directly to shareholder addresses) for any exit requests whose delay has elapsed.
 
 The process can be configured using environment variables:
 
 - **`FEE_SPLITTER_INTERVAL`** — How often fee claiming runs in seconds (default: 86400 = 24 hours)
-- **`FEE_SPLITTER_MIN_ASSETS`** — Minimum amount accumulated in the fee splitter contract (in Wei) before processing withdrawals, to avoid unnecessary gas fees (default: 1000000000000000 = 0.001 ETH)
+- **`FEE_SPLITTER_MIN_ASSETS`** — Minimum amount of unclaimed rewards accrued across all shareholders (in Wei) before the state update and exit-queue steps run, to avoid unnecessary gas fees (default: 1000000000000000 = 0.001 ETH). Claiming already-exited assets runs independently of this threshold whenever there are claimable exit requests.

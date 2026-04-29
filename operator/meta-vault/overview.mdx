@@ -3,8 +3,12 @@ title: Meta Vault
 description: Create a Meta Vault and run the Operator Service to keep it in sync with its sub-vaults.
 ---
 
+import Image from '@theme/IdealImage'
+
 # Meta Vault
 
 A [Meta Vault](/docs/vaults/meta-vaults) doesn't run validators — it delegates deposited assets to sub-vaults that run validators on its behalf. Because there's no validator infrastructure to configure, the creation flow is shorter than for a Regular Vault.
 
 Once the Meta Vault is created, start the Operator Service to keep it in sync with its sub-vaults — harvesting rewards, claiming completed exit requests, and forwarding new deposits down to the sub-vaults.
+
+<Image img={require('./img/meta_vaults_architecture.png')} alt="Meta Vaults architecture diagram" />

@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 Creating a Meta Vault is done via the StakeWise UI and takes just a few minutes. Once your Meta Vault is created, run the Operator Service with the [`process-meta-vaults`](./operate-meta-vault#3-run-process-meta-vaults) command to keep it in sync with its sub-vaults.
 
 :::custom-notes[Test on Hoodi First]
-To try the full Vault setup on a testnet, open **Settings** (gear icon) in the StakeWise App and enable **Show Testnets**. Then switch to the Hoodi network to create and test your Vault before going to mainnet.
+To try the full Vault setup on a testnet, open **Settings** <img src="/icons/stakewise/gear_icon.png" alt="gear button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> in the StakeWise App and enable **Show Testnets**. Then switch to the Hoodi network to create and test your Vault before going to mainnet.
 
 You'll need some Hoodi ETH to cover gas fees. Get testnet ETH from a faucet:
 - [hoodi-faucet.pk910.de ↗](https://hoodi-faucet.pk910.de/)
@@ -85,17 +85,3 @@ You'll need your Vault address to configure and run the Operator Service.
     4. Copy the displayed address
   </TabItem>
 </Tabs>
-
-## Configure Sub-Vaults
-
-Once deployed, your Meta Vault isn't functional until you link at least one sub-vault to delegate staked assets to.
-
-On your Meta Vault page, open the **Sub-vaults** tab and use the **Sub-vaults list** panel to paste a Vault address or select one from the dropdown. Only the Meta Vault admin can add sub-vaults.
-
-**Regular Vaults** link directly. Any Regular Vault registered on StakeWise can be added — but linking a private Regular Vault will fail until that Vault's operator whitelists your Meta Vault. If you have an agreement with a private Vault operator, coordinate with them to whitelist your Meta Vault first.
-
-Spreading deposits across several sub-vaults gives you diversified staking across multiple operators.
-
-**Meta Vaults as sub-vaults** are also supported, which lets you layer strategies — for example, a top-level Meta Vault routing deposits across several themed Meta Vaults underneath. Unlike Regular Vaults, linking a Meta Vault as a sub-vault is a two-step process: you propose it via a post on the [StakeWise forum](https://forum.stakewise.io/), and then the StakeWise DAO must approve the link before it takes effect.
-
-You can also [create your own Regular Vault](../create-regular-vault) and link it to your Meta Vault — this setup opens the door to modular strategies: one shared Regular Vault running all validators, a private Meta Vault per client with its own fee, or one public Meta Vault serving retail stakers.

@@ -20,6 +20,7 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'meta-vault/create-meta-vault',
+        'meta-vault/configure-meta-vault',
         'meta-vault/operate-meta-vault',
       ],
     },

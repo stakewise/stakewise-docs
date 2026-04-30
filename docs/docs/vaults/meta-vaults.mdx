@@ -7,20 +7,16 @@ import Image from '@theme/IdealImage'
 
 # Meta Vaults
 
-Meta Vaults don't run validators directly, instead, they delegate assets to other Vaults (called sub-vaults within the Meta Vault system) that handle the actual validator operations. Sub-vaults can themselves also be Meta Vaults.
+A Meta Vault is a specialized Vault that doesn't run validators itself. Instead, it accepts deposits and routes them across a set of underlying Vaults — called *sub-vaults* — which handle validator operations. Just like with a regular Vault, stakers can mint osToken against their position and redeem it for the underlying stake at any time. Meta Vaults are also available in **ERC-20** and **Private** variants: the ERC-20 variant issues a transferable token as the share representation, while the Private variant adds a whitelist gate on deposits.
 
-## How Meta Vaults Work
+Any third party can deploy a Meta Vault permissionlessly via the [`EthMetaVaultFactory` ↗](https://etherscan.io/address/0x6107dB0bdd84023228E0aB11099190E88B073c1D#code) contract, which opens up modular, layered strategies. An operator can run a Meta Vault to diversify its stake across multiple sub-vaults for simplified management and reduced single-operator risk.
+Meta Vaults support a common institutional pattern: a top-level Meta Vault routing deposits to themed Meta Vaults with per-client customization (fees, branding, etc.) while sharing a single validator fleet underneath.
 
 <Image img={require('./img/MetaVaults_Architecture_Diagram.png')} alt="Meta Vaults Architecture Diagram" />
 
-Meta Vaults receive user deposits and distribute them across sub-vaults according to the curator strategy.
 
-The **Curator** is a new contract that manages how ETH is allocated to and withdrawn from sub-vaults. To be used, a curator contract must be approved by the DAO and added to the `CuratorsRegistry` contract.
+## How Meta Vaults Work
 
-Currently, there is one curator contract available — the `BalancedCurator` — which distributes and withdraws assets evenly across all sub-vaults.
+Allocation is handled by a **Curator** — a contract that decides how ETH is distributed to and withdrawn from sub-vaults. Curator contracts must be approved by the DAO and registered in the [`CuratorsRegistry` ↗](https://etherscan.io/address/0xa23F7c8d25f4503cA4cEd84d9CC2428e8745933C#code). Currently, one curator is available: the [`BalancedCurator` ↗](https://etherscan.io/address/0xe01351f866C118FbD04d222f9262A470F1d44d90#code), which spreads deposits and withdrawals evenly across sub-vaults.
 
-## Benefits of Meta Vaults
-
-**Customizable asset placement:** Multiple layers of Vaults can sit on top of each other to enable sophisticated setups that utilize a mix of underlying validators to maximize redundancy, liquidity, and rewards. For example, a separate Meta Vault can be deployed per each institutional customer, tapping into a single underlying sub-Vault that runs all validators, to allow asset segregation among users while maximizing validator fleet efficiency.
-
-**Flexible fee structures:** Different Meta Vaults can charge different fees for different clients — especially helpful for establishing flexible fee structures for institutional clients.
+Before routing, the `BalancedCurator` checks each sub-vault's remaining capacity and distributes within those limits, saturating or skipping sub-vaults that are full. This means deposits continue to succeed even when one sub-vault in the set has reached its cap, instead of the entire deposit reverting. A Meta Vault can route to up to 50 sub-vaults.

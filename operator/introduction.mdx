@@ -5,53 +5,42 @@ description: Learn what operating a Vault means, why you should try, what you ca
 
 # Introduction
 
-A StakeWise [Vault →](/docs/vaults/intro) is a highly customizable, non-custodial staking pool — a smart contract that pools ETH from depositors and stakes it through validators to secure the Ethereum network and earn rewards. Vaults come in several variants: standard, private, blocklist, ERC20, and Meta Vaults. Together, they form an ecosystem of isolated self-contained pools, each with its own validators, fees, node operators, and depositors.
+A StakeWise [Vault](/docs/vaults/intro) is a highly customizable, non-custodial staking pool that accepts ETH from depositors, processes staking rewards, and lets users withdraw anytime.
+There are two types of Vault: a [Regular Vault](./create-regular-vault), which runs validators to secure the Ethereum network and earn rewards, and a [Meta Vault](./meta-vault/overview), which doesn't run validators itself and instead allocates stake across multiple sub-vaults.
 
-Operating a Vault is straightforward. [A Vault is created via the StakeWise UI](./create-your-vault), and all staking logic is enforced by immutable smart contracts on-chain. The [Operator Service ↗](https://github.com/stakewise/v3-operator) — open-source software developed by StakeWise — runs alongside the operator's node infrastructure as an automation layer, handling the validator lifecycle, withdrawals, and state updates, while the Vault contract verifies and approves every transaction.
-
-[A Vault's responsibilities can be split across roles](/operator/manage-vault/vault-administration) — from admin control and fee claiming to validator management. Each role can be assigned to a different address, and node operations can be handled by a separate entity entirely.
+Anyone — from solo stakers to professional node operators and institutions managing thousands of ETH — can create a Vault via [app.stakewise.io ↗](https://app.stakewise.io). It is fully permissionless and trustless. All staking logic is enforced by immutable smart contracts on-chain. [StakeWise infrastructure ↗](https://stakewise.io/institution) already powers staking solutions deployed by [MetaMask ↗](https://blog.stakewise.io/caseStudy/how-metamask-launched-pooled-staking-with-stakewise) and [Chorus One ↗](https://blog.stakewise.io/caseStudy/how-chorus-one-launched-retail-staking-with-stakewise).
 
 ## Why Operate a Vault?
 
-Vaults enable different staking use cases:
+Vaults support a wide range of staking use cases. A few common examples:
 
-- **Stake for yourself** — Run your own validators, keep 100% of rewards, and stay liquid by minting [osETH →](/docs/ostoken/intro).
-- **Offer staking to others** — Accept deposits and earn fees, or launch a white-label staking product powered by [StakeWise infrastructure ↗](https://stakewise.io/institution).
-- **Institutional or DAO treasury staking** — Configure compliance controls, restrict access with whitelists or blocklists, and enable or disable tokenization as needed.
-- **Scale with [Meta Vaults →](/docs/vaults/meta-vaults)** — Delegate assets across multiple sub-vaults without running validators directly, unlocking advanced staking strategies.
+- **Stake for yourself** — Run your own validators, keep 100% of rewards, and stay liquid by minting [osETH](/docs/ostoken/intro) — an overcollateralized liquid staking token you can [use across DeFi ↗](https://app.stakewise.io/ecosystem) to earn additional rewards.
+- **Offer staking to others** — Accept deposits and earn fees, or launch a white-label staking product powered by StakeWise smart contracts.
+- **Institutional or DAO treasury staking** — Configure compliance controls, gate access with a Private or Block list, and optionally issue an ERC-20 Vault token.
+- **Scale with Meta Vaults** — Delegate deposits across multiple sub-vaults without running validators yourself, unlocking modular staking strategies.
 
 ## What Can I Earn?
 
-- [Vault fees →](/docs/fees/intro#vault-fees) — a configurable percentage of staking rewards, paid automatically in Vault shares when the Vault state is updated. Operators set their fee freely at Vault creation (up to 100%). After launch, fee increases are rate-limited to 20% of the current fee every 3 days, protecting depositors from sudden hikes. Earned fees can be [claimed and distributed](/operator/manage-vault/fee-claiming) to shareholders without manual intervention.
+What you can earn depends on your strategy but your earnings mainly consist of:
+
+- [Vault fee](/docs/fees/intro#vault-fee) — a configurable percentage of staking rewards, paid automatically in Vault shares when the Vault state is updated. Operators choose their fee at Vault creation (up to 100%). After launch, fee increases are rate-limited to 20% of the current fee every 3 days, protecting depositors from sudden hikes. Earned fees can be [claimed and distributed](/operator/manage-vault/fee-claiming) to shareholders without manual intervention.
 
 :::custom-info[Example]
 A Vault with 1,000 ETH staked at ~3.5% APY and a 5% fee earns approximately 1.75 ETH/year in operator fees. At 10,000 ETH, that becomes 17.5 ETH/year.
 :::
 
-- **MEV rewards** — Choose between the Smoothing Pool (rewards shared across participating Vaults proportional to their size, more consistent) or Own MEV Escrow (your Vault keeps all its MEV, higher upside but more variable). See [MEV Strategy →](/docs/vaults/customization#mev-strategy).
+- [MEV rewards](/docs/vaults/customization#mev-strategy) — Choose between the Smoothing Pool (rewards are shared across participating Vaults proportional to their size, more consistent) or Own MEV Escrow (your Vault keeps all its MEV, higher upside but more variable).
 
 ## What Are the Costs?
 
-Your costs depend on whether you run your own node or delegate operations to a third party. If you run the node yourself:
+Costs depend on your Vault type (Regular or Meta) and whether you run the node yourself or delegate to a third party. Since Meta Vaults don't run validators, they skip the infrastructure cost, but they still need a funded operator wallet to cover gas for their operations.
 
-- **Infrastructure** — Hardware requirements are an ever-evolving target. As of March 2026, running a node requires a dedicated machine with at least 64 GB of RAM, a 4TB SSD, and a stable internet connection. You can use pre-built staking hardware e.g. [Home x StakeWise Pro ↗](https://dappnode.com/collections/staking-collection/products/dappnode-home-x-stakewise-pro) or a cloud server if you don't want to deal with building and maintaining your own physical computer.
-- **Gas** — The Operator Service submits on-chain transactions (validator registrations, funding, consolidations, exits, withdrawals, state updates) funded from your operator wallet. Gas costs are minimal during normal network conditions and fluctuate with congestion. Check the [Ethereum Gas Tracker ↗](https://etherscan.io/gastracker) for current rates.
-
-If you delegate node operations to a third party, your costs will change based on your arrangement with the service provider.
+- **Infrastructure** — As of March 2026, running a node requires a dedicated machine with at least 64 GB of RAM, a 4TB SSD, and a stable internet connection. You can use pre-built staking hardware like [Home x StakeWise Pro ↗](https://dappnode.com/collections/staking-collection/products/dappnode-home-x-stakewise-pro), rent a cloud server, or delegate node operations to a third party — in which case your costs depend on your arrangement with the provider.
+- **Gas** — The Operator Service submits on-chain transactions funded from your operator wallet. Gas costs are minimal during normal network conditions and fluctuate with congestion. Check the [Ethereum Gas Tracker ↗](https://etherscan.io/gastracker) for current rates.
 
 ## What Are the Responsibilities?
 
-Running a node is a commitment. Here's what you need to take care of. If you delegate node operations to a third party, you remain responsible for your Vault's performance — how that responsibility is shared depends on your arrangement with the provider.
-
-- **Install and configure the Operator Service** — required software that automates the validator lifecycle, withdrawals, and state updates.
-- **Set up execution and consensus clients** — Install and configure them following the official documentation of your chosen clients. For a faster start, the Operator Service includes built-in commands to [automatically set up](/operator/manage-validators/automated-node-setup) Reth (execution) and Lighthouse (consensus) clients.
-- **Set up [MEV-Boost ↗](https://boost.flashbots.net/)** — Capture execution layer rewards. MEV-Boost accepts a list of relays. If your Vault uses the Smoothing Pool, every relay must be one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints).
-- **Generate and import validator keys** — Validator keystores can be generated using the Operator Service or tools like [Wagyu Key Gen ↗](https://github.com/stake-house/wagyu-key-gen), and must be imported into the validator client before validators activate. The validators will be registered automatically via the Operator Service.
-- **Fund your operator wallet** — Ensure it has enough ETH for gas.
-- **Keep your nodes and validators running** — To maximize your rewards, you need to keep your validators online and up to date. Uptime directly affects your Vault's [performance score](/docs/vaults/vault-performance).
-- **Secure your infrastructure** — Restrict access to your node endpoints (e.g., firewall) and protect your keys and mnemonic.
-- **Monitor performance** — Track attestation and proposal metrics. [Prometheus](/operator/operator-monitoring) helps you track important real-time metrics about your validator.
-
-## Who Operates Vaults Today?
-
-Vault operators range from solo stakers running a single private Vault to professional node operators and institutions managing thousands of ETH. StakeWise infrastructure powers staking products for partners like [MetaMask ↗](https://blog.stakewise.io/caseStudy/how-metamask-launched-pooled-staking-with-stakewise) and [Chorus One ↗](https://blog.stakewise.io/caseStudy/how-chorus-one-launched-retail-staking-with-stakewise).
+Operating a Vault is a commitment. Your [Vault's performance](/docs/vaults/vault-performance) is ultimately your responsibility.
+If you run a Regular Vault, you (or the node operator you delegate to) are responsible for the full validator stack.
+If you run a Meta Vault, you don't manage validators — the sub-vaults do.
+Both Regular and Meta Vaults rely on the [Operator Service](./launch-operator-service) to automate day-to-day Vault operations.

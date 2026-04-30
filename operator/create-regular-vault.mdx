@@ -1,22 +1,16 @@
 ---
-title: 2. Create Your Vault
-description: Step-by-step guide to creating and configuring your Vault through the StakeWise UI.
+title: 2. Create Regular Vault
+description: Step-by-step guide to creating and configuring a Regular Vault through the StakeWise UI.
 ---
 
-import Image from '@theme/IdealImage'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Create Your Vault
+# Create Regular Vault
 
 Now that you know what operating a Vault involves, let's create one.
 
 Creating a Vault is done via the StakeWise UI and takes just a few minutes. If you're not sure about the exact parameters for your Vault, reach out to the [StakeWise team](mailto:info@stakewise.io) for personalized guidance. Once your Vault is created, you can set up the validator infrastructure and launch the Operator Service to begin your operator journey.
-
-## Getting Started
-
-1. Navigate to the [StakeWise App ↗](https://app.stakewise.io) and go to the **Operate** page
-2. Click the **Create Vault** button to begin the setup process
 
 :::custom-notes[Test on Hoodi First]
 To try the full Vault setup on a testnet, open **Settings** <img src="/icons/stakewise/gear_icon.png" alt="gear button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> in the StakeWise App and enable **Show Testnets**. Then switch to the Hoodi network to create and test your Vault before going to mainnet.
@@ -26,41 +20,56 @@ You'll need some Hoodi ETH to cover gas fees. Get testnet ETH from a faucet:
 - [Google Cloud Hoodi Faucet ↗](https://cloud.google.com/application/web3/faucet/ethereum/hoodi)
 :::
 
-## Step 1: Configure Vault Parameters
+## Getting Started
 
-Configure your Vault with the following settings:
+1. Navigate to the [StakeWise App ↗](https://app.stakewise.io) and go to the **Operate** page
+2. Click the **Create Vault** button to begin the setup process
 
-- **Vault Capacity** – Set [maximum ETH capacity](/docs/vaults/customization#capacity) (default: unlimited ∞).
-- **Vault Fee** – Set the fee percentage your Vault will charge from [staking rewards](/docs/fees/intro#vault-fees).
-- **Vault Token** – Enable a tradeable ERC-20 token (requires name & symbol)
-- **Private Vault** – Restrict to approved wallets only
-- **Block List** – Prevent specific addresses from depositing
+## Step 1: Select Vault Type
 
-:::custom-warning[Settings After Creation]
-The **Vault fee** can be updated after creation via **Settings → Vault fee → Edit → Save**. If you've made your Vault private or added a block list, you can add/remove authorized addresses via **Vault access → Edit → Save**.
+Vault type is set once at creation — select **Regular Vault**. You can optionally enable:
+
+- **Private** — Restrict deposits to approved wallets only.
+- **Block list** — Prevent specific addresses from depositing.
+- **ERC-20 Token** — Stakers receive a token they can hold in their wallet and transfer to others.
+
+## Step 2: Configure Vault Parameters
+
+Configure your Vault parameters.
+Most of these parameters are permanent — only the [Vault fee](/docs/fees/intro#vault-fee) can be changed after creation:
+
+- **Vault capacity** – Set maximum [ETH capacity](/docs/vaults/customization#capacity) (default: unlimited ∞).
+- **Vault fee** – Vault fee percentage applied to users' staking rewards, in addition to sub-vault fees.
+
+If you enabled the **ERC-20 Token**, you will also need to set:
+- **Token name** – Your Vault ERC-20 token name.
+- **Token symbol** – Your Vault ERC-20 token symbol.
+
+:::custom-info[Vault Fee]
+The Vault Fee can be updated after creation via **Settings → Vault fee → Edit → Save**. If you've made your Vault private or added a block list, you can add/remove authorized addresses via **Vault access → Edit → Save**.
 :::
 
-## Step 2: Block Rewards Destination
+## Step 3: Block Rewards Destination
 
-Choose how block rewards are distributed. This is a **permanent decision**.
+Choose [how block rewards are distributed](/docs/vaults/customization#mev-strategy). This is a **permanent decision**.
 
-Most operators choose Smoothing Pool for stable returns, while Vault Escrow gives you full control but with volatile rewards. See [MEV Strategy →](/docs/vaults/customization#mev-strategy) for details.
+Most operators choose Smoothing Pool for stable returns, while Vault Escrow gives you full control but with volatile rewards.
 
-## Step 3: Add Branding
+## Step 4: Add Branding
 
 Customize your Vault's appearance with name, description, and logo.
 
-:::custom-notes[Branding Can Be Updated]
-Update branding anytime via **Settings → Branding → Edit → Save**.
+:::custom-info[Branding]
+Unlike Vault parameters, you can update branding anytime via **Settings → Branding → Edit → Save**.
 :::
 
-## Step 4: Summary
+## Step 5: Summary
 
-Review all your settings before final submission. This is your last chance to verify everything is correct, including name, type, MEV strategy, fees, and capacity.
+Review all your settings before final submission. This is your last chance to verify everything is correct.
 
 Click **Create Vault** to submit your configuration and create the Vault.
 
-## Step 5: Transaction Confirmation
+## Step 6: Transaction Confirmation
 
 Confirm the transaction in your wallet to deploy your Vault.
 Once the transaction confirms, your Vault is live and visible on the **Operate** page.

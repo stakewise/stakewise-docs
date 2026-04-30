@@ -11,7 +11,8 @@ import TabItem from '@theme/TabItem';
 
 With your Vault created and your execution and consensus clients fully synced, let's look at the software that makes it all work.
 
-The [Operator Service ↗](https://github.com/stakewise/v3-operator) is open-source software developed by StakeWise that runs alongside your node infrastructure and automates the day-to-day operations of your Vault.
+The [Operator Service ↗](https://github.com/stakewise/v3-operator) is open-source software developed and maintained by the core StakeWise team.
+It runs alongside your node infrastructure and automates the day-to-day operations of your Vault.
 
 <Image img={require('./img/architecture-overview-2.png')} alt="architecture_overview" />
 <p style={{fontSize: '0.85em', color: 'gray', textAlign: 'center', marginTop: '-0.5rem'}}>
@@ -41,9 +42,18 @@ For a deeper understanding of how Vaults work under the hood — validator regis
 ## Installation
 
 :::custom-warning[Vault Version Requirements]
-This guide requires Vault version 5 (Ethereum) or version 3 (Gnosis).
-You can find your Vault version in the **Details** section of your Vault page.
-If your Vault is below the required version, log in as a Vault Admin and click **Upgrade** at the top of the Vault page.
+This guide requires Vault version 5 (Ethereum) or version 3 (Gnosis). You can find your Vault version in the **Details** section of your Vault page. If your Vault is below the required version, log in as a Vault Admin and click **Upgrade** at the top of the Vault page.
+:::
+
+:::custom-warning[macOS Installation Warning]
+On macOS, when you install the Operator Service, you may see a warning prompting you to move the software to the Bin.
+
+This happens because the binary is not *notarized* (scanned for malware by Apple).  Apple's built-in security system blocks apps downloaded outside the App Store by default.
+
+To allow it to run:
+1. Click **Done** on the warning window.
+2. Go to **System Settings → Privacy & Security**.
+3. Scroll down to the **Security** section and click **Open Anyway** next to the blocked `operator` entry.
 :::
 
 The Operator Service can be installed as a binary, via Docker, or built from source.
@@ -51,17 +61,17 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
 <Tabs groupId="installation-methods">
   <TabItem value="binary" label="Binary" default>
 
-    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version
-    2. Select the binary file for your node's hardware
-    3. Download and decompress the file
+    Install the binary using one of the following methods.
 
-    To install the latest release, run:
+    **Option A — Install script**
+
+    Install the latest release to `~/bin`:
 
     ```bash
     curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s
     ```
 
-    The binary will be placed in `~/bin`. Add it to your PATH:
+    Add it to your PATH:
 
     ```bash
     export PATH=$PATH:~/bin
@@ -70,14 +80,21 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
     To install a specific version to a custom location:
 
     ```bash
-    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <custom_location> vX.X.X
+    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <path> <version>
     ```
 
-    Run commands using this format:
+    **Option B — Manual download**
+
+    1. Go to the [releases page ↗](https://github.com/stakewise/v3-operator/releases) and find the latest version.
+    2. Select the binary file for your node's hardware.
+    3. Download and decompress the file.
+
+    Once installed, run commands using this format:
 
     ```bash
     ./operator COMMAND --flagA=123 --flagB=xyz
     ```
+
   </TabItem>
   <TabItem value="docker" label="Docker Image">
 

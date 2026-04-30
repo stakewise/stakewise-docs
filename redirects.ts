@@ -13,10 +13,18 @@ export default [
   },
   {
     from: '/docs/guides/running-a-vault/how-to-create-a-vault',
-    to: '/operator/create-your-vault',
+    to: '/operator/create-regular-vault',
+  },
+  {
+    from: '/operator/create-your-vault',
+    to: '/operator/create-regular-vault',
   },
   {
     from: '/operator/additional-actions/process-metavaults',
-    to: '/operator/manage-vault/process-metavaults',
+    to: '/operator/meta-vault/operate-meta-vault#run-process-meta-vaults',
+  },
+  {
+    from: '/operator/manage-vault/process-metavaults',
+    to: '/operator/meta-vault/operate-meta-vault#run-process-meta-vaults',
   },
 ]

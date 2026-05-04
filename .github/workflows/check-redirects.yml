@@ -1,0 +1,26 @@
+name: Check redirects
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'operator/**'
+      - 'staker/**'
+      - 'redirects.ts'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: yarn install --frozen-lockfile
+      - name: Check redirects for renamed/deleted content
+        run: |
+          git diff --name-status -M50 \
+            "origin/${{ github.base_ref }}...HEAD" \
+            | yarn -s checkRedirects --stdin

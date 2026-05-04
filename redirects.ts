@@ -21,10 +21,18 @@ export default [
   },
   {
     from: '/operator/additional-actions/process-metavaults',
-    to: '/operator/meta-vault/operate-meta-vault#run-process-meta-vaults',
+    to: '/operator/meta-vault/operate-meta-vault#3-run-process-meta-vaults',
   },
   {
     from: '/operator/manage-vault/process-metavaults',
-    to: '/operator/meta-vault/operate-meta-vault#run-process-meta-vaults',
+    to: '/operator/meta-vault/operate-meta-vault#3-run-process-meta-vaults',
+  },
+  {
+    from: '/operator/additional-actions/rated-network',
+    to: '/operator/manage-validators/rated-network',
+  },
+  {
+    from: '/operator/additional-actions/add-extra-rewards',
+    to: '/operator/manage-vault/add-extra-rewards',
   },
 ]

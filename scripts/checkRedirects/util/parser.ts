@@ -3,6 +3,9 @@ import { execSync } from 'child_process'
 import { errorLabel, bold, cyan } from './colors'
 
 
+const normalizeFrom = (value: string): string =>
+  value.replace(/#.*$/, '').replace(/\/$/, '').toLowerCase()
+
 export const readRedirectsSource = (): string => {
   try {
     return execSync('git show :redirects.ts', { encoding: 'utf8' })
@@ -27,12 +30,7 @@ export const parseRedirectFroms = (source: string): string[] => {
   let match
 
   while ((match = regex.exec(source)) !== null) {
-    const normalized = match[1]
-      .replace(/#.*$/, '')
-      .replace(/\/$/, '')
-      .toLowerCase()
-
-    froms.push(normalized)
+    froms.push(normalizeFrom(match[1]))
   }
 
   return froms
@@ -45,7 +43,7 @@ export const checkDuplicates = (source: string): void => {
   let match
 
   while ((match = regex.exec(source)) !== null) {
-    const key = match[1].toLowerCase().replace(/\/$/, '')
+    const key = normalizeFrom(match[1])
     counts[key] = (counts[key] ?? 0) + 1
   }
 

@@ -1,4 +1,4 @@
-import { errorLabel, bold, cyan, dim, red } from './colors'
+import { errorLabel, bold, dim, red } from './colors'
 
 
 export type BrokenAnchor = {
@@ -28,7 +28,7 @@ export const printBrokenAnchors = (broken: BrokenAnchor[]): void => {
     const { target, anchor, filePath, fromList, available } = entry
 
     console.error('')
-    console.error(`    ${cyan(target)}`)
+    console.error(`    ${bold(target)}`)
     console.error('')
 
     if (filePath) {
@@ -53,7 +53,7 @@ export const printBrokenAnchors = (broken: BrokenAnchor[]): void => {
     if (available && available.length) {
       console.error('')
       console.error(`    ${dim('available anchors:')}`)
-      available.forEach((slug) => console.error(`      ${cyan('#' + slug)}`))
+      available.forEach((slug) => console.error(`      #${slug}`))
     }
 
     if (index < broken.length - 1) {
@@ -81,11 +81,11 @@ export const printMissingRedirects = (missing: Missing[]): void => {
       ? `from ${oldPath} → ${newPath}`
       : `from ${oldPath} (deleted)`
 
-    console.error(`      ${dim('// ' + note)}`)
-    console.error(`      { from: '${cyan(expectedUrl)}', to: '${cyan(toUrl)}' },`)
+    console.error(`      // ${note}`)
+    console.error(`      { from: '${expectedUrl}', to: '${toUrl}' },`)
     console.error('')
   })
 
-  console.error(`    ${dim('Then re-stage:')}  ${cyan('git add redirects.ts && git commit')}`)
+  console.error(`    ${dim('Then re-stage:')}  git add redirects.ts && git commit`)
   console.error('')
 }

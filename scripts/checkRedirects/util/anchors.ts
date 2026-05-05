@@ -20,18 +20,19 @@ const extractHeadingSlugs = (markdown: string): string[] => {
     .replace(/```[\s\S]*?```/g, '')
 
   const slugs: string[] = []
+  const occurrences: Record<string, number> = {}
   const regex = /^#{1,6}\s+(.+?)(?:\s*\{#([^}]+)\})?\s*$/gm
 
   let match
 
   while ((match = regex.exec(content)) !== null) {
     const [ _, text, id ] = match
+    const baseSlug = id || slugifyHeading(text)
+    const count = occurrences[baseSlug] ?? 0
+    const slug = count === 0 ? baseSlug : `${baseSlug}-${count}`
 
-    const slug = id || slugifyHeading(text)
-
-    if (!slugs.includes(slug)) {
-      slugs.push(slug)
-    }
+    occurrences[baseSlug] = count + 1
+    slugs.push(slug)
   }
 
   return slugs

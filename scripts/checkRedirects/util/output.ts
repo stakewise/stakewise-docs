@@ -1,4 +1,5 @@
 import { errorLabel, bold, dim, red } from './colors'
+import { log } from './log'
 
 
 export type BrokenAnchor = {
@@ -21,48 +22,44 @@ export const printBrokenAnchors = (broken: BrokenAnchor[]): void => {
     ? 'Broken redirect target in redirects.ts'
     : `Broken redirect targets in redirects.ts (${broken.length})`
 
-  console.error('')
-  console.error(`  ${errorLabel} ${bold(heading)}`)
+  log(`  ${errorLabel} ${bold(heading)}`)
 
   broken.forEach((entry, index) => {
     const { target, anchor, filePath, fromList, available } = entry
-
-    console.error('')
-    console.error(`    ${bold(target)}`)
-    console.error('')
+    const lines: string[] = [ `    ${bold(target)}`, '' ]
 
     if (filePath) {
-      console.error(`    ${dim('file:')}            ${filePath}`)
-      console.error(`    ${dim('missing anchor:')}  ${red('#' + anchor)}`)
+      lines.push(
+        `    ${dim('file:')}            ${filePath}`,
+        `    ${dim('missing anchor:')}  ${red('#' + anchor)}`,
+      )
     }
     else {
       const [ pathPart ] = target.split('#')
-      console.error(`    ${dim('issue:')}  ${red('target file not found')} for ${pathPart}`)
+      lines.push(`    ${dim('issue:')}  ${red('target file not found')} for ${pathPart}`)
     }
 
-    console.error('')
+    lines.push('')
 
     if (fromList.length === 1) {
-      console.error(`    ${dim('used by:')}         ${fromList[0]}`)
+      lines.push(`    ${dim('used by:')}         ${fromList[0]}`)
     }
     else {
-      console.error(`    ${dim(`used by ${fromList.length} redirects:`)}`)
-      fromList.forEach((from) => console.error(`      ${from}`))
+      lines.push(`    ${dim(`used by ${fromList.length} redirects:`)}`)
+      fromList.forEach((from) => lines.push(`      ${from}`))
     }
 
     if (available && available.length) {
-      console.error('')
-      console.error(`    ${dim('available anchors:')}`)
-      available.forEach((slug) => console.error(`      #${slug}`))
+      lines.push('', `    ${dim('available anchors:')}`)
+      available.forEach((slug) => lines.push(`      #${slug}`))
     }
 
     if (index < broken.length - 1) {
-      console.error('')
-      console.error(`    ${dim('─'.repeat(50))}`)
+      lines.push('', `    ${dim('─'.repeat(50))}`)
     }
-  })
 
-  console.error('')
+    log(lines)
+  })
 }
 
 export const printMissingRedirects = (missing: Missing[]): void => {
@@ -70,22 +67,26 @@ export const printMissingRedirects = (missing: Missing[]): void => {
     ? 'Missing redirect in redirects.ts'
     : `Missing redirects in redirects.ts (${missing.length})`
 
-  console.error('')
-  console.error(`  ${errorLabel} ${bold(heading)}`)
-  console.error('')
-  console.error(`    ${dim('Add the following entries:')}`)
-  console.error('')
+  const lines: string[] = [
+    `  ${errorLabel} ${bold(heading)}`,
+    '',
+    `    ${dim('Add the following entries:')}`,
+    '',
+  ]
 
   missing.forEach(({ oldPath, expectedUrl, newPath, toUrl }) => {
     const note = newPath
       ? `from ${oldPath} → ${newPath}`
       : `from ${oldPath} (deleted)`
 
-    console.error(`      // ${note}`)
-    console.error(`      { from: '${expectedUrl}', to: '${toUrl}' },`)
-    console.error('')
+    lines.push(
+      `      // ${note}`,
+      `      { from: '${expectedUrl}', to: '${toUrl}' },`,
+      '',
+    )
   })
 
-  console.error(`    ${dim('Then re-stage:')}  git add redirects.ts && git commit`)
-  console.error('')
+  lines.push(`    ${dim('Then re-stage:')}  git add redirects.ts && git commit`)
+
+  log(lines)
 }

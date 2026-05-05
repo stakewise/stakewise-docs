@@ -1,6 +1,6 @@
 import {
   green, pathToUrl, validateAnchors, printMissingRedirects, readDiff, parseDiff, isContentFile,
-  readRedirectsSource, parseRedirectFroms, checkDuplicates,
+  readRedirectsSource, parseRedirectFroms, checkDuplicates, log,
 } from './util'
 
 import type { Missing } from './util'
@@ -38,9 +38,7 @@ const main = (): void => {
 
   if (!missing.length) {
     if (useStdin) {
-      console.log('')
-      console.log(`  ${green('ok:')} All renamed/deleted files have redirects.`)
-      console.log('')
+      log(`  ${green('ok:')} All renamed/deleted files have redirects.`)
     }
 
     process.exit(0)

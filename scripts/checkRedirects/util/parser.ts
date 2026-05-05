@@ -1,6 +1,7 @@
 import { execSync } from 'child_process'
 
 import { errorLabel, bold, cyan } from './colors'
+import { log } from './log'
 
 
 const normalizeFrom = (value: string): string =>
@@ -15,9 +16,7 @@ export const readRedirectsSource = (): string => {
       return execSync('git show HEAD:redirects.ts', { encoding: 'utf8' })
     }
     catch {
-      console.error('')
-      console.error(`  ${errorLabel} ${bold('redirects.ts not found in git index or HEAD.')}`)
-      console.error('')
+      log(`  ${errorLabel} ${bold('redirects.ts not found in git index or HEAD.')}`)
 
       process.exit(1)
     }
@@ -55,13 +54,11 @@ export const checkDuplicates = (source: string): void => {
       ? 'Duplicate `from` in redirects.ts'
       : `Duplicate \`from\` entries in redirects.ts (${duplicates.length})`
 
-    console.error('')
-    console.error(`  ${errorLabel} ${bold(heading)}`)
-    console.error('')
+    const lines: string[] = [ `  ${errorLabel} ${bold(heading)}`, '' ]
 
-    duplicates.forEach(([ key ]) => console.error(`    ${cyan(key)}`))
+    duplicates.forEach(([ key ]) => lines.push(`    ${cyan(key)}`))
 
-    console.error('')
+    log(lines)
 
     process.exit(1)
   }

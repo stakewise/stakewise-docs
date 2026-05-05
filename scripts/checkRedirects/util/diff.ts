@@ -16,10 +16,13 @@ export const parseDiff = (raw: string): DiffEntry[] => {
   for (const line of lines) {
     const [ status, oldPath, newPath ] = line.split('\t')
 
-    if (status === 'D' && oldPath) {
+    const isDeleted = status === 'D'
+    const isRenamed = status.startsWith('R')
+
+    if (isDeleted && oldPath) {
       entries.push({ oldPath })
     }
-    else if (status.startsWith('R') && oldPath && newPath) {
+    else if (isRenamed && oldPath && newPath) {
       entries.push({ oldPath, newPath })
     }
   }

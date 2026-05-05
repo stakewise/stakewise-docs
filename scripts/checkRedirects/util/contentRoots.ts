@@ -18,6 +18,7 @@ export const pathToUrl = (filePath: string): string => {
     .toLowerCase()
 
   const root = contentRoots.find(({ dir }) => stripped.startsWith(dir + '/'))
+
   let url = root
     ? root.basePath + stripped.slice(root.dir.length)
     : '/' + stripped

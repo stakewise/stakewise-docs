@@ -27,6 +27,7 @@ export const readRedirectsSource = (): string => {
 export const parseRedirectFroms = (source: string): string[] => {
   const froms: string[] = []
   const regex = /from:\s*['"]([^'"]+)['"]/g
+
   let match
 
   while ((match = regex.exec(source)) !== null) {

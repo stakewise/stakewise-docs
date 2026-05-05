@@ -26,6 +26,7 @@ const extractHeadingSlugs = (markdown: string): string[] => {
 
   while ((match = regex.exec(content)) !== null) {
     const [ _, text, id ] = match
+
     const slug = id || slugifyHeading(text)
 
     if (!slugs.includes(slug)) {
@@ -38,7 +39,7 @@ const extractHeadingSlugs = (markdown: string): string[] => {
 
 export const validateAnchors = (redirectsSource: string): void => {
   const pairRegex = /\{\s*from:\s*['"]([^'"]+)['"]\s*,\s*to:\s*['"]([^'"]+)['"]/g
-  const fromsByTarget: Record<string, string[]> = {}
+  const fromByTarget: Record<string, string[]> = {}
 
   let match
 
@@ -49,13 +50,13 @@ export const validateAnchors = (redirectsSource: string): void => {
       continue
     }
 
-    fromsByTarget[target] = fromsByTarget[target] ?? []
-    fromsByTarget[target].push(from)
+    fromByTarget[target] = fromByTarget[target] ?? []
+    fromByTarget[target].push(from)
   }
 
   const broken: BrokenAnchor[] = []
 
-  for (const [ target, fromList ] of Object.entries(fromsByTarget)) {
+  for (const [ target, fromList ] of Object.entries(fromByTarget)) {
     const [ pathPart, anchor ] = target.split('#')
     const filePath = resolveToFilePath(pathPart)
 

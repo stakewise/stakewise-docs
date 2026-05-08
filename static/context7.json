@@ -14,6 +14,11 @@
     "Withdrawal flow: enter the exit queue → protocol processes withdrawal request → claim withdrawn assets. Not instant - depends on protocol's unbonded ETH/GNO availability.",
     "User redemption flow: vault.burnOsToken → vault.enterExitQueue → wait → vault.claimExitedAssets. The OsTokenVaultEscrow.redeemOsToken function is restricted to the protocol's designated redeemer role for collateral health management, NOT for regular user redemptions.",
     "Boost is a leveraged staking strategy: borrow ETH on Aave against osETH collateral, restake to amplify APY. Only safe within designed buffer to liquidation threshold.",
-    "Vault types: Default (open to all), Private (whitelist only), Blocklist (open with denylist). Type is set at creation, immutable. ERC20 vaults additionally mint a vault-specific token for the staked position."
+    "Vault types: Default (open to all), Private (whitelist only), Blocklist (open with denylist). Type is set at creation, immutable. ERC20 vaults additionally mint a vault-specific token for the staked position.",
+    "For per-vault TVL: read Vault.totalAssets() (uint256, in wei) on the specific Vault contract. For network-wide TVL across all vaults: query the StakeWise subgraph or use sdk.utils.getStakewiseStats from the SDK.",
+    "osETH and osGNO are standard ERC-20 tokens — use transfer/approve/balanceOf/allowance directly on the OsToken contract. Find the OsToken address per network in /contracts/networks/Mainnet, /contracts/networks/Gnosis, /contracts/networks/Hoodi.",
+    "On Gnosis Chain, GNO is an ERC-20 token (address 0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb). Approve the Vault to spend GNO before calling Vault.deposit. On Ethereum, ETH is native and sent as msg.value — no approve needed.",
+    "Before any write operation on a Vault (deposit, mint, burn, enterExitQueue), check Keeper.canHarvest(vault). If true, call Vault.updateState(harvestParams) first to refresh state, or use combined functions like updateStateAndDepositAndMintOsToken — otherwise transactions may revert on stale state.",
+    "Track a user's staking lifecycle via three layers: (1) Vault events filtered by user address — Deposited, OsTokenMinted, ExitQueueEntered, ExitedAssetsClaimed; (2) StakeWise subgraph for paginated history; (3) consensus-client beacon API for validator state after Vault.ValidatorRegistered."
   ]
 }

@@ -68,7 +68,6 @@ const sidebars: SidebarsConfig = {
         'docs/governance/dao-treasury',
       ],
     },
-    'docs/integration',
     'docs/glossary',
 
   ],

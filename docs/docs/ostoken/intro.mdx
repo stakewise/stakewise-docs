@@ -1,21 +1,19 @@
 ---
 title: osToken
-description: Learn what osToken is and how to get it
+description: osToken is StakeWise's liquid, overcollateralized staking token on Ethereum and Gnosis.
 ---
 
 import Image from '@theme/IdealImage'
 
 # osToken
 
-osToken is a liquid staking token that accrues staking rewards when held. It is a generic name for StakeWise's network-specific ERC-20 tokens:
+Staked ETH and GNO earn rewards, but the stake itself is a non-transferable share of the staking pool. osToken turns that stake into a transferable asset that can be [used across DeFi](https://app.stakewise.io/ecosystem) to earn additional rewards.
+
+osToken is the generic name for StakeWise's network-specific liquid staking ERC-20 tokens:
 
 - **osETH** on Ethereum
 - **osGNO** on Gnosis Chain
 
-<Image img={require('./img/osToken_intro.png')} alt="osToken overview - liquid staking token for StakeWise" />
+osToken is overcollateralized: more ETH or GNO is always staked than osToken issued. osToken is a repricing token: it accrues staking rewards by appreciating against the underlying asset, rather than increasing the token balance in the user's wallet.
 
-osToken is issued against assets staked in a Vault to allow using staked capital in decentralized applications to trade, borrow, lend, and restake. Hence, osTokens represent the underlying staked assets and the rewards earned.
-
-Short for **Overcollateralized Staked Token**, osToken requires that the value of staked assets exceed the value of osToken issued. This overcollateralization acts as a safety buffer, protecting holders and the protocol from validator penalties or underperformance of permissionless Vaults.
-
-A defining feature is that osToken can be minted against validators run by anyone – from solo stakers to professional operators – making access to liquid staking fully permissionless and non-custodial.
+<Image img={require('./img/osToken_intro.png')} alt="osETH overview - liquid staking token for StakeWise" />

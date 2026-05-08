@@ -1,0 +1,88 @@
+---
+id: integration
+title: Integration
+sidebar_position: 1
+description: Direct smart contract integration pattern for Gnosis Chain (GNO stake → osGNO mint). For Ethereum and general SDK usage, see the SDK reference.
+---
+
+# Integration
+
+For most integrations, use the [`@stakewise/v3-sdk`](/sdk/) — it handles
+approve, multicall, harvest checks, and stake calculator inputs internally.
+
+This page documents one Gnosis-specific pattern that the SDK quick-starts cover
+only for Ethereum: **stake GNO + mint osGNO via direct contract calls**.
+
+## Stake GNO and mint osGNO (Gnosis Chain)
+
+GNO is an ERC-20 token (not the native asset of Gnosis Chain). The Vault must
+be approved to spend GNO before deposit, so the flow takes three transactions.
+
+```ts
+import { BrowserProvider, Contract, ZeroAddress, parseEther } from 'ethers'
+
+const GNO_ADDRESS = '0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb'
+
+const eip1193Provider = window.ethereum
+
+const browserProvider = new BrowserProvider(eip1193Provider, {
+  chainId: 100, // Gnosis Chain
+  name: 'gnosis',
+})
+
+type Input = {
+  amount: string
+  userAddress: string
+  vaultAddress: string
+  osTokenShares: bigint
+}
+
+const stakeAndMintOsGno = async (values: Input) => {
+  const { amount, userAddress, vaultAddress, osTokenShares } = values
+
+  try {
+    const assets = parseEther(amount)
+    const signer = await browserProvider.getSigner(userAddress)
+
+    const gno = new Contract(GNO_ADDRESS, [
+      'function approve(address spender, uint256 amount) returns (bool)',
+    ], signer)
+
+    const vault = new Contract(vaultAddress, [
+      'function deposit(uint256 assets, address receiver, address referrer) returns (uint256 shares)',
+      'function mintOsToken(address receiver, uint256 osTokenShares, address referrer) returns (uint256 assets)',
+    ], signer)
+
+    // 1. Approve the Vault to spend GNO
+    const approveTx = await gno.approve(vaultAddress, assets)
+    await browserProvider.waitForTransaction(approveTx.hash)
+
+    // 2. Deposit GNO into the Vault
+    const depositTx = await vault.deposit(assets, userAddress, ZeroAddress)
+    await browserProvider.waitForTransaction(depositTx.hash)
+
+    // 3. Mint osGNO against the staked position
+    const mintTx = await vault.mintOsToken(userAddress, osTokenShares, ZeroAddress)
+    await browserProvider.waitForTransaction(mintTx.hash)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+stakeAndMintOsGno({
+  amount: '0.5', // GNO
+  osTokenShares: parseEther('0.45'), // osGNO to mint
+  userAddress: 'USER_ADDRESS',
+  vaultAddress: 'VAULT_ADDRESS',
+})
+```
+
+Find Vault addresses on the [vault marketplace](https://app.stakewise.io) or
+via the `VaultsRegistry` contract. Per-network protocol contracts are listed in
+[Networks → Gnosis](/contracts/networks/Gnosis).
+
+For all other operations — deposit ETH on Ethereum, mint osETH, redeem
+(unstake) for the underlying asset, transfer osToken, query balances or
+exchange rates — use the [SDK](/sdk/), which handles state freshness checks,
+the StakeCalculator helper, and exit-queue polling automatically.

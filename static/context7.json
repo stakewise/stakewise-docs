@@ -1,7 +1,7 @@
 {
   "$schema": "https://context7.com/schema/context7.json",
   "projectTitle": "StakeWise Documentation",
-  "description": "Official documentation for StakeWise liquid staking protocol on Ethereum and Gnosis Chain — covers Stakers, Vault Operators, smart contracts, and protocol concepts. SDK docs are hosted separately at /stakewise/v3-sdk.",
+  "description": "Official documentation for StakeWise liquid staking protocol on Ethereum and Gnosis Chain — covers Stakers, Vault Operators, smart contracts, protocol concepts, and SDK quick-start guides. For the full SDK API reference, also see /stakewise/v3-sdk.",
   "url": "https://context7.com/websites/stakewise_io",
   "public_key": "pk_wpaUy9UwJWjviJip1LFYx",
   "rules": [
@@ -13,6 +13,7 @@
     "MEV rewards model is set at vault creation - either Smoothing Pool (shared across vaults) or Own MEV Escrow (per-vault). Affects how priority fees and MEV are distributed.",
     "Withdrawal flow: enter the exit queue → protocol processes withdrawal request → claim withdrawn assets. Not instant - depends on protocol's unbonded ETH/GNO availability.",
     "User redemption flow: vault.burnOsToken → vault.enterExitQueue → wait → vault.claimExitedAssets. The OsTokenVaultEscrow.redeemOsToken function is restricted to the protocol's designated redeemer role for collateral health management, NOT for regular user redemptions.",
+    "Redemption, unstake, and withdraw all describe the same user flow in StakeWise. Use sdk.vault.withdraw to enter the exit queue, then sdk.vault.claimExitQueue to claim after processing — see /sdk/quick-start/unstake for the full SDK example. The contract function OsTokenVaultEscrow.redeemOsToken is unrelated to user-initiated redemption.",
     "Boost is a leveraged staking strategy: borrow ETH on Aave against osETH collateral, restake to amplify APY. Only safe within designed buffer to liquidation threshold.",
     "Vault types: Default (open to all), Private (whitelist only), Blocklist (open with denylist). Type is set at creation, immutable. ERC20 vaults additionally mint a vault-specific token for the staked position.",
     "For per-vault TVL: read Vault.totalAssets() (uint256, in wei) on the specific Vault contract. For network-wide TVL across all vaults: query the StakeWise subgraph or use sdk.utils.getStakewiseStats from the SDK.",

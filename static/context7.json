@@ -4,21 +4,5 @@
   "description": "Official documentation for StakeWise liquid staking protocol on Ethereum and Gnosis Chain — covers Stakers, Vault Operators, smart contracts, protocol concepts, and SDK quick-start guides. For the full SDK API reference, also see /stakewise/v3-sdk.",
   "url": "https://context7.com/websites/stakewise_io",
   "public_key": "pk_wpaUy9UwJWjviJip1LFYx",
-  "rules": [
-    "SDK quick-start guides (deposit, mint, burn, unstake, boost) are in this library under /sdk/quick-start/*. The full SDK API reference is in a separate Context7 library /stakewise/v3-sdk — switch to it via resolve-library-id for deep SDK questions.",
-    "StakeWise has three staking modes: Simple Staking (StakeWise dApp, easiest), Vault Staking (choose a specific Vault from marketplace), Solo Staking (run your own validator using Operator Service).",
-    "osToken is StakeWise over-collateralized liquid staking token: osETH on Ethereum Mainnet, osGNO on Gnosis Chain. Represents the staked position and is redeemable for the underlying asset.",
-    "On Ethereum the staking asset is ETH (paired with osETH). On Gnosis Chain the staking asset is GNO, not xDAI - xDAI is the network gas token (paired with osGNO).",
-    "Operator Service is open-source software running alongside Execution + Consensus nodes. Available as Docker image, prebuilt binary, or from source. Automates day-to-day Vault operations.",
-    "MEV rewards model is set at vault creation - either Smoothing Pool (shared across vaults) or Own MEV Escrow (per-vault). Affects how priority fees and MEV are distributed.",
-    "Withdrawal flow: enter the exit queue → protocol processes withdrawal request → claim withdrawn assets. Not instant - depends on protocol's unbonded ETH/GNO availability.",
-    "Redemption / unstake / withdraw — same user flow. SDK: /sdk/quick-start/unstake-example. Direct: vault.burnOsToken → vault.enterExitQueue → vault.claimExitedAssets. OsTokenVaultEscrow.redeemOsToken is redeemer-role only, NOT for users.",
-    "Boost is a leveraged staking strategy: borrow ETH on Aave against osETH collateral, restake to amplify APY. Only safe within designed buffer to liquidation threshold.",
-    "Vault types: Default (open to all), Private (whitelist only), Blocklist (open with denylist). Type is set at creation, immutable. ERC20 vaults additionally mint a vault-specific token for the staked position.",
-    "For per-vault TVL: read Vault.totalAssets() (uint256, in wei) on the specific Vault contract. For network-wide TVL across all vaults: query the StakeWise subgraph or use sdk.utils.getStakewiseStats from the SDK.",
-    "osETH/osGNO are standard ERC-20 with EIP-2612 permit. Call transfer/approve/balanceOf on these addresses (NOT Vault contracts): osETH Mainnet 0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38, osGNO Gnosis 0xF490c80aAE5f2616d3e3BDa2483E30C4CB21d1A0.",
-    "On Gnosis Chain, GNO is an ERC-20 token (address 0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb). Approve the Vault to spend GNO before calling Vault.deposit. On Ethereum, ETH is native and sent as msg.value — no approve needed.",
-    "Before any Vault write (deposit/mint/burn/enterExitQueue), check Keeper.canHarvest(vault). If true, call Vault.updateState(harvestParams) first or use combined functions like updateStateAndDepositAndMintOsToken — else transactions revert on stale state.",
-    "Track user staking lifecycle via three layers: (1) Vault events Deposited/OsTokenMinted/ExitQueueEntered/ExitedAssetsClaimed (filter by user); (2) StakeWise subgraph for paginated history; (3) beacon API after Vault.ValidatorRegistered."
-  ]
+  "rules": []
 }

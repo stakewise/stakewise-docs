@@ -1,8 +1,4 @@
 {
-  "$schema": "https://context7.com/schema/context7.json",
-  "projectTitle": "StakeWise Documentation",
-  "description": "Official documentation for StakeWise liquid staking protocol on Ethereum and Gnosis Chain — covers Stakers, Vault Operators, smart contracts, protocol concepts, and SDK quick-start guides. For the full SDK API reference, also see /stakewise/v3-sdk.",
   "url": "https://context7.com/websites/stakewise_io",
-  "public_key": "pk_wpaUy9UwJWjviJip1LFYx",
-  "rules": []
+  "public_key": "pk_wpaUy9UwJWjviJip1LFYx"
 }

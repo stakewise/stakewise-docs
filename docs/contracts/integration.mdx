@@ -18,10 +18,18 @@ GNO is an ERC-20 token (not the native asset of Gnosis Chain). The Vault must
 be approved to spend GNO before deposit, so the flow takes three transactions:
 **approve → deposit → mint osGNO**.
 
+Before the deposit, check `Keeper.canHarvest(vault)`. If it returns `true`,
+the Vault state is stale — call `Vault.updateState(harvestParams)` first
+(or use a combined `updateStateAndDeposit` variant) or the deposit may
+revert. Harvest params are produced by StakeWise oracles; obtain them via the
+SDK helper `sdk.vault.getHarvestParams({ vaultAddress })` or by querying the
+StakeWise oracle endpoints directly.
+
 ```ts
 import { BrowserProvider, Contract, ZeroAddress, parseEther } from 'ethers'
 
 const GNO_ADDRESS = '0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb'
+const KEEPER_ADDRESS = '0xcAC0e3E35d3BA271cd2aaBE688ac9DB1898C26aa' // Gnosis Keeper
 
 const eip1193Provider = window.ethereum
 
@@ -32,17 +40,22 @@ const browserProvider = new BrowserProvider(eip1193Provider, {
 
 type Input = {
   amount: string
-  userAddress: string
   vaultAddress: string
   osTokenShares: bigint
+  harvestParams: HarvestParams // see SDK sdk.vault.getHarvestParams
 }
 
 const stakeAndMintOsGno = async (values: Input) => {
-  const { amount, userAddress, vaultAddress, osTokenShares } = values
+  const { amount, vaultAddress, osTokenShares, harvestParams } = values
 
   try {
     const assets = parseEther(amount)
-    const signer = await browserProvider.getSigner(userAddress)
+    const signer = await browserProvider.getSigner()
+    const userAddress = await signer.getAddress()
+
+    const keeper = new Contract(KEEPER_ADDRESS, [
+      'function canHarvest(address vault) view returns (bool)',
+    ], browserProvider)
 
     const gno = new Contract(GNO_ADDRESS, [
       'function approve(address spender, uint256 amount) returns (bool)',
@@ -51,7 +64,14 @@ const stakeAndMintOsGno = async (values: Input) => {
     const vault = new Contract(vaultAddress, [
       'function deposit(uint256 assets, address receiver, address referrer) returns (uint256 shares)',
       'function mintOsToken(address receiver, uint256 osTokenShares, address referrer) returns (uint256 assets)',
+      'function updateState(tuple(bytes32 rewardsRoot, int160 reward, uint160 unlockedMevReward, bytes32[] proof) harvestParams)',
     ], signer)
+
+    // 0. Refresh Vault state if stale
+    if (await keeper.canHarvest(vaultAddress)) {
+      const updateTx = await vault.updateState(harvestParams)
+      await browserProvider.waitForTransaction(updateTx.hash)
+    }
 
     // 1. Approve the Vault to spend GNO
     const approveTx = await gno.approve(vaultAddress, assets)
@@ -69,18 +89,11 @@ const stakeAndMintOsGno = async (values: Input) => {
     console.error(error)
   }
 }
-
-stakeAndMintOsGno({
-  amount: '0.5', // GNO
-  osTokenShares: parseEther('0.45'), // osGNO to mint
-  userAddress: 'USER_ADDRESS',
-  vaultAddress: 'VAULT_ADDRESS',
-})
 ```
 
 Find Vault addresses on the [vault marketplace](https://app.stakewise.io) or
-via the `VaultsRegistry` contract. Per-network protocol contracts are listed in
-[Networks → Gnosis](/contracts/networks/Gnosis).
+via the `VaultsRegistry` contract. Per-network protocol contracts (including
+Keeper) are listed in [Networks → Gnosis](/contracts/networks/Gnosis).
 
 ## Transfer osETH or osGNO (ERC-20 operations)
 
@@ -108,16 +121,16 @@ const browserProvider = new BrowserProvider(eip1193Provider, {
 
 type Input = {
   amount: string
-  fromAddress: string
   toAddress: string
 }
 
 const transferOsGno = async (values: Input) => {
-  const { amount, fromAddress, toAddress } = values
+  const { amount, toAddress } = values
 
   try {
     const value = parseEther(amount)
-    const signer = await browserProvider.getSigner(fromAddress)
+    const signer = await browserProvider.getSigner()
+    const fromAddress = await signer.getAddress()
 
     const osToken = new Contract(OSGNO_ADDRESS, [
       'function transfer(address to, uint256 amount) returns (bool)',
@@ -143,7 +156,6 @@ const transferOsGno = async (values: Input) => {
 
 transferOsGno({
   amount: '0.5', // osGNO
-  fromAddress: 'USER_ADDRESS',
   toAddress: 'RECIPIENT_ADDRESS',
 })
 ```

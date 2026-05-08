@@ -1,22 +1,22 @@
 ---
 id: integration
-title: Integration
+title: Direct contract integration
 sidebar_position: 1
-description: Direct smart contract integration pattern for Gnosis Chain (GNO stake → osGNO mint). For Ethereum and general SDK usage, see the SDK reference.
+description: Direct smart contract patterns that complement the SDK quick-starts — Gnosis Chain GNO stake, osToken ERC-20 operations (transfer, approve, permit) on osETH and osGNO.
 ---
 
-# Integration
+# Direct contract integration
 
-For most integrations, use the [`@stakewise/v3-sdk`](/sdk/) — it handles
-approve, multicall, harvest checks, and stake calculator inputs internally.
+This page documents direct smart contract patterns that complement the
+[SDK quick-starts](/sdk/). For most JavaScript / TypeScript integrations,
+use the SDK — it handles approve, multicall, harvest checks, and stake
+calculator inputs automatically.
 
-This page documents one Gnosis-specific pattern that the SDK quick-starts cover
-only for Ethereum: **stake GNO + mint osGNO via direct contract calls**.
-
-## Stake GNO and mint osGNO (Gnosis Chain)
+## Stake GNO on Gnosis Chain
 
 GNO is an ERC-20 token (not the native asset of Gnosis Chain). The Vault must
-be approved to spend GNO before deposit, so the flow takes three transactions.
+be approved to spend GNO before deposit, so the flow takes three transactions:
+**approve → deposit → mint osGNO**.
 
 ```ts
 import { BrowserProvider, Contract, ZeroAddress, parseEther } from 'ethers'
@@ -82,7 +82,79 @@ Find Vault addresses on the [vault marketplace](https://app.stakewise.io) or
 via the `VaultsRegistry` contract. Per-network protocol contracts are listed in
 [Networks → Gnosis](/contracts/networks/Gnosis).
 
-For all other operations — deposit ETH on Ethereum, mint osETH, redeem
-(unstake) for the underlying asset, transfer osToken, query balances or
-exchange rates — use the [SDK](/sdk/), which handles state freshness checks,
-the StakeCalculator helper, and exit-queue polling automatically.
+## Transfer osETH or osGNO (ERC-20 operations)
+
+osETH and osGNO are standard ERC-20 tokens with EIP-2612 `permit` support.
+Use them directly via the OsToken contract address — supports `transfer`,
+`transferFrom`, `approve`, `balanceOf`, `allowance`, `permit`.
+
+OsToken contract addresses (from [contract networks](/contracts/networks/)):
+
+- **osETH** on Ethereum Mainnet: `0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38`
+- **osETH** on Hoodi testnet: `0x7345fC8268459413beE9e9dd327f31283C65Ee7e`
+- **osGNO** on Gnosis Chain: `0xF490c80aAE5f2616d3e3BDa2483E30C4CB21d1A0`
+
+```ts
+import { BrowserProvider, Contract, parseEther } from 'ethers'
+
+const OSGNO_ADDRESS = '0xF490c80aAE5f2616d3e3BDa2483E30C4CB21d1A0'
+
+const eip1193Provider = window.ethereum
+
+const browserProvider = new BrowserProvider(eip1193Provider, {
+  chainId: 100, // Gnosis Chain
+  name: 'gnosis',
+})
+
+type Input = {
+  amount: string
+  fromAddress: string
+  toAddress: string
+}
+
+const transferOsGno = async (values: Input) => {
+  const { amount, fromAddress, toAddress } = values
+
+  try {
+    const value = parseEther(amount)
+    const signer = await browserProvider.getSigner(fromAddress)
+
+    const osToken = new Contract(OSGNO_ADDRESS, [
+      'function transfer(address to, uint256 amount) returns (bool)',
+      'function transferFrom(address from, address to, uint256 amount) returns (bool)',
+      'function approve(address spender, uint256 amount) returns (bool)',
+      'function balanceOf(address account) view returns (uint256)',
+      'function allowance(address owner, address spender) view returns (uint256)',
+    ], signer)
+
+    const balance = await osToken.balanceOf(fromAddress)
+
+    if (balance < value) {
+      throw new Error('Insufficient osGNO balance.')
+    }
+
+    const tx = await osToken.transfer(toAddress, value)
+    await browserProvider.waitForTransaction(tx.hash)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+transferOsGno({
+  amount: '0.5', // osGNO
+  fromAddress: 'USER_ADDRESS',
+  toAddress: 'RECIPIENT_ADDRESS',
+})
+```
+
+Substitute the Mainnet osETH address (`0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38`)
+and `chainId: 1` for Ethereum Mainnet to operate on osETH.
+
+## Use the SDK for everything else
+
+For deposits on Ethereum, redemptions (unstake), boost / unboost, balance and
+APY queries, exchange-rate reads, vault data, staker action history — use the
+[SDK](/sdk/). It handles state freshness checks via `Keeper.canHarvest`, the
+`StakeCalculator` helper for share computations, and exit-queue polling
+automatically.

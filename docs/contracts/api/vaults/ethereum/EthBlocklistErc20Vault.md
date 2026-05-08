@@ -6,7 +6,7 @@ description: "Ethereum staking vault with ERC-20 token and blocklist functionali
 
 # EthBlocklistErc20Vault
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthBlocklistErc20Vault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthBlocklistErc20Vault.sol)
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [EthErc20Vault →](./EthErc20Vault), [VaultBlocklist →](../modules/VaultBlocklist), IEthBlocklistErc20Vault
 

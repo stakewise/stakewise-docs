@@ -1,0 +1,228 @@
+---
+id: osToken-erc20
+title: osToken ERC-20 operations
+sidebar_position: 2
+description: Transfer, approve, and read balances of osETH and osGNO tokens. osETH and osGNO are standard ERC-20 tokens with EIP-2612 permit support — accessible via sdk.contracts.tokens.mintToken in the StakeWise V3 SDK.
+---
+
+# osToken ERC-20 operations
+
+osETH and osGNO are standard ERC-20 tokens with EIP-2612 `permit` support.
+The StakeWise V3 SDK exposes the osToken contract for the configured network
+as `sdk.contracts.tokens.mintToken`, which automatically resolves to the
+correct address (osETH on Mainnet/Hoodi, osGNO on Gnosis Chain).
+
+OsToken contract addresses *(also available in [Networks](/contracts/networks/))*:
+
+- **osETH** on Ethereum Mainnet: `0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38`
+- **osETH** on Hoodi testnet: `0x7345fC8268459413beE9e9dd327f31283C65Ee7e`
+- **osGNO** on Gnosis Chain: `0xF490c80aAE5f2616d3e3BDa2483E30C4CB21d1A0`
+
+## Transfer osGNO to another address (Gnosis Chain)
+
+```ts
+import { BrowserProvider, parseEther } from 'ethers'
+import { StakeWiseSDK, Network } from '@stakewise/v3-sdk'
+
+const eip1193Provider = window.ethereum
+
+const browserProvider = new BrowserProvider(eip1193Provider, {
+  chainId: Network.Gnosis,
+  name: 'gnosis',
+})
+
+const sdk = new StakeWiseSDK({
+  network: Network.Gnosis,
+  provider: browserProvider,
+})
+
+type Input = {
+  amount: string
+  userAddress: string
+  toAddress: string
+}
+
+const transferOsGno = async (values: Input) => {
+  const { amount, userAddress, toAddress } = values
+
+  try {
+    const value = parseEther(amount)
+    const osTokenContract = sdk.contracts.tokens.mintToken
+
+    const balance = await osTokenContract.balanceOf(userAddress)
+
+    if (balance < value) {
+      throw new Error('Insufficient osGNO balance.')
+    }
+
+    const signer = await sdk.provider.getSigner(userAddress)
+    const signedContract = osTokenContract.connect(signer)
+
+    const tx = await signedContract.transfer(toAddress, value)
+
+    await sdk.provider.waitForTransaction(tx.hash)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+transferOsGno({
+  amount: '0.5', // osGNO
+  userAddress: 'USER_ADDRESS',
+  toAddress: 'RECIPIENT_ADDRESS',
+})
+```
+
+## Transfer osETH to another address (Ethereum Mainnet)
+
+The same code works on Ethereum — only the network in the SDK constructor
+changes. `sdk.contracts.tokens.mintToken` automatically resolves to the
+osETH contract.
+
+```ts
+import { BrowserProvider, parseEther } from 'ethers'
+import { StakeWiseSDK, Network } from '@stakewise/v3-sdk'
+
+const eip1193Provider = window.ethereum
+
+const browserProvider = new BrowserProvider(eip1193Provider, {
+  chainId: Network.Mainnet,
+  name: 'mainnet',
+})
+
+const sdk = new StakeWiseSDK({
+  network: Network.Mainnet,
+  provider: browserProvider,
+})
+
+type Input = {
+  amount: string
+  userAddress: string
+  toAddress: string
+}
+
+const transferOsEth = async (values: Input) => {
+  const { amount, userAddress, toAddress } = values
+
+  try {
+    const value = parseEther(amount)
+    const osTokenContract = sdk.contracts.tokens.mintToken
+
+    const balance = await osTokenContract.balanceOf(userAddress)
+
+    if (balance < value) {
+      throw new Error('Insufficient osETH balance.')
+    }
+
+    const signer = await sdk.provider.getSigner(userAddress)
+    const signedContract = osTokenContract.connect(signer)
+
+    const tx = await signedContract.transfer(toAddress, value)
+
+    await sdk.provider.waitForTransaction(tx.hash)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+transferOsEth({
+  amount: '0.5', // osETH
+  userAddress: 'USER_ADDRESS',
+  toAddress: 'RECIPIENT_ADDRESS',
+})
+```
+
+## Approve a spender (e.g. a DeFi protocol)
+
+```ts
+import { BrowserProvider, parseEther } from 'ethers'
+import { StakeWiseSDK, Network } from '@stakewise/v3-sdk'
+
+const eip1193Provider = window.ethereum
+
+const browserProvider = new BrowserProvider(eip1193Provider, {
+  chainId: Network.Mainnet,
+  name: 'mainnet',
+})
+
+const sdk = new StakeWiseSDK({
+  network: Network.Mainnet,
+  provider: browserProvider,
+})
+
+type Input = {
+  amount: string
+  userAddress: string
+  spenderAddress: string
+}
+
+const approveOsToken = async (values: Input) => {
+  const { amount, userAddress, spenderAddress } = values
+
+  try {
+    const value = parseEther(amount)
+    const osTokenContract = sdk.contracts.tokens.mintToken
+
+    const signer = await sdk.provider.getSigner(userAddress)
+    const signedContract = osTokenContract.connect(signer)
+
+    const tx = await signedContract.approve(spenderAddress, value)
+
+    await sdk.provider.waitForTransaction(tx.hash)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+approveOsToken({
+  amount: '1.0', // osETH
+  userAddress: 'USER_ADDRESS',
+  spenderAddress: 'SPENDER_CONTRACT_ADDRESS',
+})
+```
+
+## Read balance and allowance
+
+```ts
+import { StakeWiseSDK, Network } from '@stakewise/v3-sdk'
+import { formatEther } from 'ethers'
+
+const sdk = new StakeWiseSDK({
+  network: Network.Mainnet,
+  endpoints: {
+    web3: 'https://mainnet.infura.io/v3/...',
+  },
+})
+
+type Input = {
+  ownerAddress: string
+  spenderAddress: string
+}
+
+const readOsTokenState = async (values: Input) => {
+  const { ownerAddress, spenderAddress } = values
+
+  try {
+    const osTokenContract = sdk.contracts.tokens.mintToken
+
+    const [ balance, allowance ] = await Promise.all([
+      osTokenContract.balanceOf(ownerAddress),
+      osTokenContract.allowance(ownerAddress, spenderAddress),
+    ])
+
+    console.log('osETH balance:', formatEther(balance))
+    console.log('osETH allowance:', formatEther(allowance))
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+
+readOsTokenState({
+  ownerAddress: 'USER_ADDRESS',
+  spenderAddress: 'SPENDER_CONTRACT_ADDRESS',
+})
+```

@@ -1,17 +1,69 @@
 @use 'mixins' as *;
 
-.lightIcon {
-  display: none;
 
-  @include dark-theme {
-    display: block;
+.root {
+  display: inline-flex;
+}
+
+.lightIcon,
+.darkIcon,
+.systemIcon {
+  display: none;
+}
+
+html[data-theme-choice='light'] .lightIcon,
+html[data-theme-choice='dark'] .darkIcon,
+html[data-theme-choice='system'] .systemIcon {
+  display: block;
+}
+
+.items {
+  z-index: 100;
+  min-width: 200px;
+  padding: 8px 0;
+  border-radius: 12px;
+  list-style: none;
+  outline: none;
+
+  @include crystal-panel;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 160px;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--moon);
+  text-align: left;
+
+  @media (hover: hover) {
+    &:hover,
+    &[data-focus] {
+      background: rgba(var(--moon-rgb), .05);
+    }
+  }
+
+  &.itemSelected {
+    background: rgba(var(--lavender-rgb), .1);
   }
 }
 
-.darkIcon {
-  display: block;
-
-  @include dark-theme {
-    display: none;
-  }
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  border-radius: 100%;
+  background: rgba(var(--moon-rgb), .05);
+  color: rgba(var(--moon-rgb), .7);
+  fill: currentColor;
 }

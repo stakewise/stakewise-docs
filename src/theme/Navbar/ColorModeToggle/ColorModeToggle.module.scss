@@ -5,6 +5,18 @@
   display: inline-flex;
 }
 
+.lightIcon,
+.darkIcon,
+.systemIcon {
+  display: none;
+}
+
+html[data-theme-choice='light'] .lightIcon,
+html[data-theme-choice='dark'] .darkIcon,
+html[data-theme-choice='system'] .systemIcon {
+  display: block;
+}
+
 .items {
   z-index: 100;
   min-width: 200px;

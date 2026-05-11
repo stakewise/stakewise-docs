@@ -6,7 +6,7 @@ description: "Custom error definitions used across contracts"
 
 # Errors
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/Errors.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/Errors.sol)
 
 Contains all the custom errors.
 

@@ -6,7 +6,7 @@ description: "Flash loan contract for borrowing up to 100,000 osToken shares in 
 
 # OsTokenFlashLoans
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsTokenFlashLoans.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsTokenFlashLoans.sol)
 
 **Inherits:** [ReentrancyGuard ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol), IOsTokenFlashLoans
 

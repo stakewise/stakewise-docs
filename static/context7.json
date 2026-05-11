@@ -1,22 +1,4 @@
 {
-  "$schema": "https://context7.com/schema/context7.json",
-  "projectTitle": "StakeWise Documentation",
-  "description": "Official documentation for StakeWise liquid staking protocol on Ethereum and Gnosis Chain — covers Stakers, Vault Operators, smart contracts, and protocol concepts. SDK docs are hosted separately at /stakewise/v3-sdk.",
   "url": "https://context7.com/websites/stakewise_io",
-  "public_key": "pk_wpaUy9UwJWjviJip1LFYx",
-  "excludeFolders": [
-    "sdk",
-    "sdk/**"
-  ],
-  "rules": [
-    "StakeWise SDK content (TypeScript code, API references, transaction examples) is in a separate Context7 library: /stakewise/v3-sdk. Switch to it viaresolve-library-id for SDK-specific questions.",
-    "StakeWise has three staking modes: Simple Staking (StakeWise dApp, easiest), Vault Staking (choose a specific Vault from marketplace), Solo Staking(run your own validator using Operator Service).",
-    "osToken is StakeWise over-collateralized liquid staking token: osETH on Ethereum Mainnet, osGNO on Gnosis Chain. Represents the staked position and is redeemable for the underlying asset.",
-    "On Ethereum the staking asset is ETH (paired with osETH). On Gnosis Chain the staking asset is GNO, not xDAI - xDAI is the network gas token (paired with osGNO).",
-    "Operator Service is open-source software running alongside Execution + Consensus nodes. Available as Docker image, prebuilt binary, or source. Automates day-to-day Vault operations.",
-    "MEV rewards model is set at vault creation - either Smoothing Pool (shared with all vaults) or Own MEV Escrow (per-vault). Affects how priority fees and MEV are distributed.",
-    "Withdrawal flow: enter the exit queue → protocol processes withdrawal request → claim withdrawn assets. Not instant - depends on protocol's unbonded ETH/GNO availability.",
-    "Boost is a leveraged staking strategy: borrow ETH on Aave against osETH collateral, restake to amplify APY. Only safe within designed buffer to liquidation threshold.",
-    "Vault types: Default (open to all), Private (whitelist only), Blocklist (open with denylist). Type is set at creation, immutable. ERC20 vaults additionally mint a vault-specific token for the staked position."
-  ]
+  "public_key": "pk_wpaUy9UwJWjviJip1LFYx"
 }

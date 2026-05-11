@@ -6,7 +6,7 @@ description: "MEV escrow owned by individual vault"
 
 # OwnMevEscrow
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/mev/OwnMevEscrow.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/mev/OwnMevEscrow.sol)
 
 **Inherits:** IOwnMevEscrow
 

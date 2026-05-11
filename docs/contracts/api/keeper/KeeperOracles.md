@@ -6,7 +6,7 @@ description: "Oracle signature verification system for off-chain oracle whitelis
 
 # KeeperOracles
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/keeper/KeeperOracles.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/keeper/KeeperOracles.sol)
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [EIP712 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/EIP712.sol), IKeeperOracles
 

@@ -6,7 +6,7 @@ description: "Custom Ethereum non-ERC20 vault with blocklist, own MEV and withou
 
 # EthFoxVault
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/custom/EthFoxVault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/custom/EthFoxVault.sol)
 
 **Inherits:** [VaultImmutables →](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../../modules/VaultAdmin), [VaultVersion →](../../modules/VaultVersion), [VaultFee →](../../modules/VaultFee), [VaultState →](../../modules/VaultState), [VaultValidators →](../../modules/VaultValidators), [VaultEnterExit →](../../modules/VaultEnterExit), [VaultMev →](../../modules/VaultMev), [VaultEthStaking →](../../modules/VaultEthStaking), [VaultBlocklist →](../../modules/VaultBlocklist), [Multicall →](../../../base/Multicall), IEthFoxVault
 

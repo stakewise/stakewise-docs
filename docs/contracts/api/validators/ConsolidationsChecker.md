@@ -6,7 +6,7 @@ description: "Contract for checking signatures of oracles for validators consoli
 
 # ConsolidationsChecker
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/ConsolidationsChecker.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/ConsolidationsChecker.sol)
 
 **Inherits:** [EIP712 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/cryptography/EIP712.sol), IConsolidationsChecker
 

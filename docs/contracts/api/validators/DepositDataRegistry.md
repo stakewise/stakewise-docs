@@ -6,7 +6,7 @@ description: "Contract for managing Vault's deposit data and validator registrat
 
 # DepositDataRegistry
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/DepositDataRegistry.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/DepositDataRegistry.sol)
 
 **Inherits:** [Multicall →](../base/Multicall), IDepositDataRegistry
 

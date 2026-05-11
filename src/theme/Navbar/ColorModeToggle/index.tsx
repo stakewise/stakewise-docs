@@ -2,6 +2,7 @@ import React from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { useColorMode, type ColorMode } from '@docusaurus/theme-common'
 import IconSystemColorMode from '@theme/Icon/SystemColorMode'
+import useIsBrowser from '@docusaurus/useIsBrowser'
 import IconLightMode from '@theme/Icon/LightMode'
 import IconDarkMode from '@theme/Icon/DarkMode'
 import cx from 'classnames'
@@ -26,20 +27,27 @@ const options: Option[] = [
   { value: null, label: 'System', Icon: IconSystemColorMode },
 ]
 
+const systemOption = options[2]
+
 const ColorModeToggle: React.FC = () => {
+  const isBrowser = useIsBrowser()
   const { colorModeChoice, setColorMode } = useColorMode()
+
+  const current = isBrowser
+    ? options.find(({ value }) => value === colorModeChoice) ?? systemOption
+    : systemOption
+
+  const { Icon: CurrentIcon, label: currentLabel } = current
 
   return (
     <Menu as="div" className={s.root}>
       <MenuButton
         id="color-mode-toggle"
         className='btn-crystal'
-        aria-label='Toggle color mode'
-        title='Toggle color mode'
+        aria-label={`Choose color mode, currently ${currentLabel}`}
+        title={`Color mode: ${currentLabel}`}
       >
-        <IconLightMode aria-hidden className={s.lightIcon} />
-        <IconDarkMode aria-hidden className={s.darkIcon} />
-        <IconSystemColorMode aria-hidden className={s.systemIcon} />
+        <CurrentIcon aria-hidden />
       </MenuButton>
       <MenuItems anchor={{ to: 'bottom end', gap: 16 }} className={s.items}>
         {

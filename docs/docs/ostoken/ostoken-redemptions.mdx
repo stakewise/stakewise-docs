@@ -35,7 +35,7 @@ The `OsTokenRedeemer` is the on-chain contract that holds all redemption state: 
 
 1. Pin the snapshot to a finalized block so all the following steps read the same on-chain state.
 2. Fetch all allocators (addresses that have minted osToken) from the subgraph.
-3. Skip [Boost](../vaults/boost.mdx) positions. Each Boost leverage position has its own proxy contract that holds the osToken on the user's behalf, so those proxy addresses are removed from the minters list, and each user's leveraged shares are subtracted from their balance to avoid double-counting.
+3. Skip [Boost](../vaults/boost) positions. Each Boost leverage position has its own proxy contract that holds the osToken on the user's behalf, so those proxy addresses are removed from the minters list, and each user's leveraged shares are subtracted from their balance to avoid double-counting.
 4. Compute `kept` shares — osToken in trackable locations: mainnet, Arbitrum, and DeFi protocols indexed by DeBank or Rabby. Anything else is treated as missing.
 5. Compute `redeemable = minted − kept`, split it across the user's vaults proportionally to where they minted, and sort by LTV descending then amount descending so the riskiest positions are drawn down first.
 :::

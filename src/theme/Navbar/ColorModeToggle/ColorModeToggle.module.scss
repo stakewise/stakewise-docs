@@ -6,14 +6,12 @@
 }
 
 .lightIcon,
-.darkIcon,
-.systemIcon {
+.darkIcon {
   display: none;
 }
 
-html[data-theme-choice='light'] .lightIcon,
-html[data-theme-choice='dark'] .darkIcon,
-html[data-theme-choice='system'] .systemIcon {
+html[data-theme='light'] .lightIcon,
+html[data-theme='dark'] .darkIcon {
   display: block;
 }
 

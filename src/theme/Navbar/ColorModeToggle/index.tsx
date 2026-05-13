@@ -47,7 +47,6 @@ const ColorModeToggle: React.FC = () => {
       >
         <IconLightMode aria-hidden className={s.lightIcon} />
         <IconDarkMode aria-hidden className={s.darkIcon} />
-        <IconSystemColorMode aria-hidden className={s.systemIcon} />
       </MenuButton>
       <MenuItems anchor={{ to: 'bottom end', gap: 16 }} className={s.items}>
         {

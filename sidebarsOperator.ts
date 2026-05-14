@@ -60,6 +60,7 @@ const sidebars: SidebarsConfig = {
         'manage-vault/vault-administration',
         'manage-vault/fee-claiming',
         'manage-vault/add-extra-rewards',
+        'manage-vault/vault-interface',
       ],
     },
     {

@@ -7,7 +7,7 @@ import Image from '@theme/IdealImage';
 
 # osToken Redemptions
 
-Redemptions are a protocol-internal peg-maintenance mechanism that converts osToken back to ETH/GNO at the protocol exchange rate.
+Redemptions are an in-protocol peg-maintenance mechanism that converts osToken back to ETH or GNO at the protocol [exchange rate](/docs/ostoken/how-ostoken-works#exchange-rate).
 
 Every osToken is minted against Vault collateral and must remain backed by that collateral. The minter takes on a corresponding debt against their Vault collateral and can burn the osToken at any time to repay the debt. The protocol's invariant is **total osToken supply = total debt**.
 
@@ -23,9 +23,9 @@ The redemption flow is a coordinated process between the [Operator Service ↗](
 
 The Operator Service has two responsibilities:
 
-1. **Computes redeemable positions** — the "who can be redeemed, and by how much" calculation. It uploads the list of eligible positions to [IPFS](https://ipfs.stakewise.io/ipfs/bafkreihbwhyaqskcczhuanu2nbdgdlfbwfwgbirue6kvlw4nrc5d2snqxa) and computes a Merkle tree that commits to each entry. StakeWise then submits the root and IPFS hash on-chain, incrementing the `nonce` — a version tag baked into every entry of the list, so bumping it automatically invalidates every proof from the previous version.
+1. **Computes redeemable positions** — the "who can be redeemed, and by how much" calculation. It uploads the list of eligible positions to [IPFS](https://ipfs.stakewise.io/ipfs/bafkreihbwhyaqskcczhuanu2nbdgdlfbwfwgbirue6kvlw4nrc5d2snqxa) and computes a Merkle tree that commits to each entry. StakeWise governance then submits the root and IPFS hash on-chain, incrementing the `nonce` — a version tag baked into every entry of the list, so bumping it automatically invalidates every proof from the previous version.
 
-2. **Processes redemptions** — runs a loop that reads and writes to `OsTokenRedeemer`. When the redemption conditions are met, it fetches all positions from IPFS, decides how much to redeem from each position, builds a Merkle multi-proof, and submits a multicall that refreshes Vault state and calls `redeemOsTokenPositions`. The Operator Service runs from the `positionsManager` address set by StakeWise.
+2. **Processes redemptions** — runs a loop that reads and writes to `OsTokenRedeemer`. When the redemption conditions are met, it fetches all positions from IPFS, decides how much to redeem from each position, builds a Merkle multi-proof, and submits a multicall that refreshes Vault state and calls `redeemOsTokenPositions`. The Operator Service runs from the `positionsManager` address set by StakeWise governance.
 
 The `OsTokenRedeemer` is the on-chain contract that holds all redemption state: the published Merkle root and IPFS hash, the nonce, per-position redemption progress, and the exit queue. It also executes the redemption itself: verifies the Merkle proofs, calls each Vault's `redeemOsToken` to burn the minter's debt and release the corresponding ETH/GNO, and manages the exit queue.
 
@@ -40,6 +40,9 @@ The `OsTokenRedeemer` is the on-chain contract that holds all redemption state: 
 :::
 
 ## Flow
+
+The redemption lifecycle moves osToken through six stages — from entering the redeemer's queue to claiming ETH/GNO once the batch is checkpointed.
+
 ### 1. osToken Enters the Queue
 
 osToken is sent to the `OsTokenRedeemer` contract and a ticket is issued — a unique cumulative index recording the entry's place in the queue and how much is owed. The entry now carries the right to claim ETH/GNO later.

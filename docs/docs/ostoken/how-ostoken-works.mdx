@@ -7,31 +7,36 @@ import Image from '@theme/IdealImage'
 
 # How osToken Works
 
-osToken is created through **minting** — issuing new osTokens against ETH or GNO staked as collateral in a Vault.
-To keep every osToken fully backed, the protocol caps how much can be minted against a stake through the **Loan-to-Value (LTV)** ratio.
-This cap is what makes osToken overcollateralized.
+osToken is created through **minting** — issuing new osTokens against ETH or GNO staked as collateral in a Vault. A maximum **Loan-to-Value (LTV)** ratio limits how much osToken can be minted against the stake, keeping every osToken overcollateralized.
 
-As staking rewards accumulate, the osToken **exchange rate** rises, making each osToken worth more of the underlying asset over time.
-If a position's LTV drifts too high, **redemptions** and **liquidations** restore it within safe bounds.
-When a user wants to exit, **burning** osToken returns it to the Vault and unlocks the underlying stake.
+The osToken **exchange rate** is the ratio between the total assets backing osToken and its total supply. It rises as staking rewards accrue, making each osToken worth more of the underlying asset over time.
+
+**Redemptions** convert osToken back to ETH/GNO at this exchange rate. Used by the protocol to close any gap between the market price and the exchange rate, they keep osToken's market value aligned with its fair value.
+
+If a position becomes thinly collateralized, **liquidations** act as a last resort to restore its collateralization. When a user wants to exit voluntarily, **burning** osToken returns it to the Vault and unlocks the underlying stake.
 
 Together, these mechanisms keep osToken safe to hold and use.
 
 ## Minting
 
-Only registered Vaults with active validator(s) and synced rewards can mint osToken.
-The ability to mint also serves as a price stability mechanism, helping prevent secondary market premiums on osToken.
-You can get osToken through [simple staking](/staker/simple-staking), [vault staking](/staker/vault-staking), or by buying it on a DEX.
-How much osToken you can mint against your stake depends on the LTV ratio.
+You can get osToken in three ways:
+
+- [Stake on the main app page](/staker/simple-staking) — your ETH is routed through a [Meta Vault](/docs/vaults/meta-vaults) that distributes deposits across the best-performing Sub-vaults (currently just the [Genesis Vault ↗](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885)), and osToken is minted against your stake automatically.
+- [Pick a specific Vault from the marketplace](/staker/vault-staking) — stake into it, then optionally mint osToken against your stake.
+- Buy osToken on a DEX.
+
+How much osToken you can mint against a given stake is capped by the Vault's maximum Loan-to-Value (LTV) ratio.
+
+Only registered Vaults that are collateralized (have active validators) and harvested (rewards synced via the Keeper) can mint osToken. Minting acts as a price-stability mechanism: when osToken trades at a premium, anyone can stake, mint at the protocol rate, and sell — pushing the price back down until the premium clears.
 
 ## LTV Ratio
 
-The LTV ratio creates a buffer between the collateral and the issued osETH.
+The LTV ratio creates a buffer between the collateral and the issued osToken.
 
 :::custom-notes[Example]
 With 100 ETH staked in a 90% LTV Vault at 1.05 exchange rate:
 
-- Maximum mintable osETH: `100 × 0.9 ÷ 1.05 = 85.71 osETH`
+- Maximum mintable osToken: `100 × 0.9 ÷ 1.05 = 85.71 osToken`
 - Overcollateralization: `10 ETH` remains as safety buffer
 :::
 
@@ -47,135 +52,152 @@ StakeWise DAO can adjust any individual Vault's LTV based on its risk profile.
 
 LTV is continuously tracked through thresholds that determine position status:
 
-<Image img={require('./img/grade.png')} alt="osETH position health grades - Healthy, Moderate, Risky, Unhealthy" />
-<p style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', textAlign: 'center', marginTop: '-0.5rem'}}>
-Users maintain healthy positions by keeping LTV well below limits, adding collateral, or burning osETH.
-</p>
+Each minter's position falls into one of four grades — Healthy, Moderate, Risky, Unhealthy — based on how close LTV is to the mint cap and the liquidation threshold. In **DAO-approved Vaults** these thresholds don't apply.
 
-In **DAO-approved Vaults** these thresholds don't apply: redemptions are handled differently and liquidations are disabled at the contract level.
+<Image img={require('./img/grade.png')} alt="osToken position health grades - Healthy, Moderate, Risky, Unhealthy" />
 
 ## Exchange Rate
 
-The osETH/ETH exchange rate reflects the fair amount of ETH you receive when redeeming osETH within the protocol.
-As validators earn rewards, total assets grow, osETH appreciates, and the exchange rate rises — each osETH becomes a claim on more ETH over time.
+osToken exchange rate is the canonical conversion rate between osToken and the underlying staked asset (ETH or GNO):
 
-The rate of appreciation is controlled by the `avgRewardPerSecond` variable and is set by a decentralized oracle network.
-Oracles identify the user with the highest LTV across all Vaults and match the rate to that user's Vault APY.
-This mechanism ensures that osETH appreciation keeps pace with the least collateralized position in the entire protocol.
-When necessary, oracles adjust `avgRewardPerSecond` downward so that osETH appreciation does not outpace the collateral backing it.
-On every state update, this rate determines how much profit accrues to total assets.
+```
+exchange rate = total assets backing osToken / total osToken supply
+```
+
+The protocol uses this rate as the single source of truth for every conversion between osToken and the underlying asset.
+
+The rate rises over time as staking rewards accrue. Appreciation is controlled by a single on-chain variable, `avgRewardPerSecond`, on the [`OsTokenVaultController`](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306). On every state update, the protocol adds new profit to total assets:
+
+```
+profit = avgRewardPerSecond × totalAssets × timeElapsed
+```
+
+A portion of this profit (`feePercent`) is minted as new osToken to the DAO treasury; the remainder grows the exchange rate for all holders.
+
+Only the [`Keeper`](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5) contract — the rewards aggregator for StakeWise's decentralized oracle network — can update `avgRewardPerSecond`. Off-chain, oracles identify the most exposed user (highest LTV across all Vaults) and match `avgRewardPerSecond` to that user's Vault APY.
+
+This guarantees osToken appreciation never outpaces the collateral backing it: even the most exposed position grows fast enough to stay solvent. When necessary, oracles adjust `avgRewardPerSecond` downward so osToken appreciation stays conservative relative to actual collateral performance.
 
 ## Redemption
 
-Redemption acts as early intervention when positions drift toward risky erosion of collateral.
-In **90% LTV Vaults**, redemption activates when a position reaches **91.5% LTV**.
-At this point, anyone can burn part of that position's osETH in exchange for an equivalent share of the Vault's collateral.
-The burn amount is calculated so that the position's LTV is restored precisely to 90%.
-Importantly, the staker whose tokens are redeemed does not lose value — they keep the osETH burned on their behalf.
+Redemptions are the process of converting osToken back to its underlying asset (ETH or GNO) at the protocol exchange rate.
+
+StakeWise manages them through the [`OsTokenRedeemer`](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract. Vaults version 1 (mainnet only) retain a permissionless mechanism that's currently disabled.
+
+### Managed Redemption
+
+osToken's market price on DEXes can drift from the protocol exchange rate. StakeWise monitors this spread and performs redemptions whenever osToken trades at a discount.
+
+See [osToken Redemptions](/docs/ostoken/ostoken-redemptions) for the exact mechanics.
+
+### Permissionless Redemption
+
+When a position's LTV crosses 91.5%, anyone can redeem part of its osToken against its collateral to restore the LTV to 90%.
 
 :::custom-notes[Formula: Redeemable Amount (90% LTV)]
 $$
-{\small Redeemable\ osETH = \frac{10 \times Minted\ osETH \times Exchange\ Rate - 9 \times Staked\ ETH}{Exchange\ Rate}}
+{\small Redeemable\ osToken = \frac{Minted\ osToken \times Exchange\ Rate - 0.9 \times Staked\ ETH}{0.1 \times Exchange\ Rate}}
 $$
+
+Derived by solving `(Minted − R) × Rate / (Staked − R × Rate) = 0.9`, where `R` is the redeemable osToken amount.
 :::
 
-:::custom-notes[Example: Bob's Redemption at 91.6% LTV]
-Bob stakes **100 ETH** and mints **87.238 osETH** at an exchange rate of **1.05 ETH/osETH**.
+:::custom-notes[Example: Redemption Above the 91.5% Threshold]
+Bob stakes **100 ETH** and mints **85.714 osToken** at an exchange rate of **1.05 ETH/osToken** — the 90% LTV cap.
 
-- Value of minted osETH: `87.238 × 1.05 = 91.6 ETH`
-- Loan-to-Value: `91.6 ÷ 100 = 91.6%` → above **91.5% threshold**
+Over time, the exchange rate rises to **1.0687**, lifting his LTV:
+- Value of minted osToken: `85.714 × 1.0687 ≈ 91.6 ETH`
+- Loan-to-Value: `91.6 ETH ÷ 100 ETH = 91.6%` → above **91.5% threshold**
 
 **Redemption calculation:**
-- Redeemable osETH = `(10 × 87.238 × 1.05 - 9 × 100) ÷ 1.05 = 15.238`
-- Redeemer burns **15.238 osETH** and receives **16 ETH**
+- Redeemable osToken = `(85.714 × 1.0687 − 0.9 × 100) ÷ (0.1 × 1.0687) = 1.6 ÷ 0.10687 ≈ 14.97`
+- The redeemer burns **14.97 osToken** and receives **16 ETH** from Bob's collateral (`14.97 × 1.0687`)
 
 **After redemption:**
-- Bob's minted balance: **72 osETH**
+- Bob's minted balance: **70.74 osToken**
 - Bob's staked collateral: **84 ETH**
-- New LTV: **90%** (restored to safety)
-- Bob **retains the 15.238 osETH** burned on his behalf → **no value lost**
+- New LTV: `(70.74 × 1.0687) ÷ 84 ETH = 90%` (restored to the cap)
+- The position shrinks at fair value: the released ETH matches the debt cleared at the protocol exchange rate — no value lost.
 :::
-
-Positions in **99.99% LTV Vaults** are also subject to redemption, with amounts redeemed determined by the protocol's redemption request volume.
-The LTV of redeemed positions will remain above or equal to 99.99% after redemption, not affecting the position owner in any scenario.
 
 ## Liquidation
 
-Liquidation serves as the last resort for closing thinly collateralized positions.
-In **90% LTV Vaults**, if a position exceeds the **92% LTV liquidation threshold**, anyone can close it entirely by burning all minted osETH against the collateral.
-The liquidator receives the underlying collateral value plus a **1% liquidation premium**, deducted from the staker's collateral as a penalty.
+Liquidation is the last resort for closing thinly collateralized positions. In **90% LTV Vaults**, the liquidation threshold is set to **92% LTV**: when a position crosses it, anyone can liquidate part or all of it.
+
+A liquidator burns their own osToken to clear a portion of the staker's debt and receives the underlying value plus a **1% premium**, deducted from the staker's collateral.
 
 :::custom-notes[Formula: Liquidation Payout]
 $$
-{\small ETH\ Payout = (Minted\ osETH \times Exchange\ Rate) \times 1.01}
+{\small ETH\ Payout = (Burned\ osToken \times Exchange\ Rate) \times 1.01}
 $$
 :::
 
-:::custom-notes[Example: Alice's Liquidation at 92% LTV]
-Alice stakes **100 ETH** and mints **87.629 osETH** at an exchange rate of **1.05 ETH/osETH**.
+:::custom-notes[Example: Full Liquidation at 92.01% LTV]
+Alice stakes **100 ETH** and mints **85.714 osToken** at an exchange rate of **1.05 ETH/osToken** — the 90% LTV cap.
 
-- Value of minted osETH: `87.629 × 1.05 = 92.01 ETH`
-- Loan-to-Value: `92.01 ÷ 100 = 92.01%` → above **92% threshold**
+Over time, the exchange rate rises to **1.0735**, lifting her LTV past the **92% liquidation threshold**:
+- Value of minted osToken: `85.714 × 1.0735 ≈ 92.01 ETH`
+- Loan-to-Value: `92.01 ETH ÷ 100 ETH = 92.01%` → above the **92% threshold**
 
-**Liquidation process:**
-- ETH payout = `(87.629 × 1.05) × 1.01 = 92.93 ETH`
-- Liquidator burns **87.629 osETH** and receives **92.93 ETH**
+**Liquidation (full):**
+- A liquidator burns **85.714 osToken** from their wallet
+- ETH payout = `(85.714 × 1.0735) × 1.01 ≈ 92.93 ETH`, taken from Alice's collateral
 
-**After liquidation:**
-- Alice's minted balance: **0 osETH**
+**After:**
+- Alice's minted balance: **0 osToken** (debt cleared)
 - Alice's remaining collateral: **7.07 ETH**
-- Alice keeps her original **87.629 osETH**
-- **Loss: 1% of collateral** as liquidation penalty
+- Alice's wallet osToken: unchanged
+- Net loss: **~0.92 ETH** — the 1% premium on the liquidated debt, deducted from her collateral
 :::
 
-Positions in **99.99% LTV Vaults** are exempt from liquidation, as their APY parity ensures position health remains stable.
+Positions in **99.99% LTV Vaults** are exempt: liquidations are disabled at the contract level. The exemption is safe because the exchange rate appreciation is capped at those Vaults' APY, so positions stay solvent by design.
 
 ## Burning
 
-Burning is the process of returning minted osETH to the Vault in exchange for unlocking the staked collateral that backs it.
-To fully unstake, a user must burn the entire amount of osETH they minted, plus any protocol fees accrued.
+Burning is the process of returning minted osToken to the Vault in exchange for unlocking the staked collateral that backs it.
 
-Partial burns are also possible, allowing users to reduce debt, improve LTV, or free up a portion of their stake.
-The burn amount is calculated using the current fair exchange rate to ensure that the redeemed assets always match the true underlying value of the returned tokens.
+Users can burn any amount: a full burn clears the entire debt, while partial burns reduce debt, improve LTV, or free up a portion of the stake. Protocol fees accrue automatically into the position over time, so a full burn includes the original mint plus accrued fees. The burn amount is calculated at the current protocol exchange rate.
 
-The amount of ETH that can be unstaked at any moment is determined by maintaining the osETH position within its healthy LTV range.
-After unstaking, the value of minted osETH must remain at or below:
+The amount of ETH that can be unstaked at any moment is determined by maintaining the osToken position within its LTV cap. After unstaking, the value of minted osToken must remain at or below:
+
 - **90%** of staked ETH in a **90% LTV Vault**
 - **99.99%** of staked ETH in a **99.99% LTV Vault**
 
 The protocol calculates the **maximum unstakable ETH** as:
 
-:::custom-notes[Formula - 90% LTV]
+:::custom-notes[Formula: 90% LTV]
 $$
-{\small MaxUnstakeableETH = StakedETH - \dfrac{osETHMinted \times ExchangeRate}{0.9}}
+{\small MaxUnstakableETH = StakedETH - \dfrac{osTokenMinted \times ExchangeRate}{0.9}}
 $$
 :::
 
-:::custom-notes[Formula – 99.99% LTV]
+:::custom-notes[Formula: 99.99% LTV]
 $$
-{\small MaxUnstakeableETH = StakedETH - \dfrac{osETHMinted \times ExchangeRate}{0.9999}}
+{\small MaxUnstakableETH = StakedETH - \dfrac{osTokenMinted \times ExchangeRate}{0.9999}}
 $$
 :::
 
 :::custom-notes[Example: Bob's 90% LTV Position]
-Bob stakes **100 ETH** and mints **50 osETH** at an exchange rate of **1.05 ETH/osETH**.
-- Value of minted osETH: `50 × 1.05 = 52.5 ETH`
+Bob stakes **100 ETH** and mints **50 osToken** at an exchange rate of **1.05 ETH/osToken**.
+
+- Value of minted osToken: `50 × 1.05 = 52.5 ETH`
 - LTV: `52.5 ÷ 100 = 52.5%` → safely below **90%**
 - Maximum unstakable ETH: `100 − (52.5 ÷ 0.9) = 41.667 ETH`
 
-After unstaking **41.667 ETH**, Bob's LTV = **90%**
+After unstaking **41.667 ETH**, Bob's LTV = **90%**.
 :::
 
-:::custom-notes[Alice's 99.99% LTV Position]
-Alice stakes **100 ETH** and mints **50 osETH** at the same **1.05** rate.
-- Value of minted osETH: `52.5 ETH`
+:::custom-notes[Example: Alice's 99.99% LTV Position]
+Alice stakes **100 ETH** and mints **50 osToken** at the same **1.05** rate.
+
+- Value of minted osToken: `52.5 ETH`
 - LTV: `52.5 ÷ 100 = 52.5%` → well below **99.99%**
 - Maximum unstakable ETH: `100 − (52.5 ÷ 0.9999) = 47.495 ETH`
 
-After unstaking **47.495 ETH**, Alice's LTV = **99.99%**
+After unstaking **47.495 ETH**, Alice's LTV = **99.99%**.
 :::
 
-When a user burns osETH as part of a full exit, the Vault may not have liquid ETH immediately available — validators must go through the Ethereum exit queue. An escrow system holds the osETH position alongside the underlying stake during this period, unwinding both in lockstep as ETH becomes available. This keeps every osETH fully backed throughout the exit process.
+When a user exits a Vault while still holding osToken debt, the Vault may not have liquid ETH immediately available — validators must go through the Ethereum exit queue. An escrow contract holds the osToken position alongside the underlying stake until ETH is freed, then unwinds both in lockstep. This keeps every osToken fully backed throughout the exit process.
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> DAO-approved Vault requirements: minimum 10,000 ETH staked, maximum 5% Vault fee, consistently above-median network performance, latest Vault version deployed, and 5M SWISE tokens locked as slashing insurance. <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>

@@ -1,18 +1,18 @@
 ---
-id: setDepositDataManager
-slug: /sdk/api/vault/transactions/setdepositdatamanager
-description: Use the StakeWise SDK setDepositDataManager method to assign a deposit data manager to v2+ vaults.
+id: ejectSubVault
+slug: /sdk/api/vault/transactions/ejectsubvault
+description: Use the StakeWise SDK ejectSubVault method to remove an active sub-vault from a StakeWise V3 meta vault registry. Called by the meta vault curator to drop an in-use sub-vault from the registry.
 ---
 
 #### Description:
 
-Adding deposit data manager to vaults **version 2** or higher
+Ejecting a sub-vault from the vault registry.
 
 #### Arguments:
 
 | Name           | Type     | Required | Description               |
 |----------------|----------|----------|---------------------------|
-| managerAddress | `string` | **Yes**  | New deposit-data manager  |
+| subVaultAddress | `string` | **Yes**  | The sub-vault address to eject  |
 | userAddress    | `string` | **Yes**  | The user address          |
 | vaultAddress   | `string` | **Yes**  | The address of the vault  |
 
@@ -20,20 +20,20 @@ Adding deposit data manager to vaults **version 2** or higher
 
 ```ts
 const params = {
-  managerAddress: '0x...',
+  subVaultAddress: '0x...',
   vaultAddress: '0x...',
   userAddress: '0x...',
 }
 
 // Send transaction
-const hash = await sdk.vault.setDepositDataManager(params)
+const hash = await sdk.vault.ejectSubVault(params)
 
 // Wait for the transaction to be confirmed and indexed
 await sdk.provider.waitForTransaction(hash)
 await sdk.utils.waitForSubgraph({ hash })
 
 // When you sign transactions on the backend (for custodians)
-const { data, to } = await sdk.vault.setDepositDataManager.encode(params)
+const { data, to } = await sdk.vault.ejectSubVault.encode(params)
 // Get an approximate gas per transaction
-const gas = await sdk.vault.setDepositDataManager.estimateGas(params)
+const gas = await sdk.vault.ejectSubVault.estimateGas(params)
 ```

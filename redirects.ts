@@ -35,4 +35,36 @@ export default [
     from: '/operator/additional-actions/add-extra-rewards',
     to: '/operator/manage-vault/add-extra-rewards',
   },
+  {
+    from: '/sdk/03-quick-start/boost',
+    to: '/sdk/quick-start/boost',
+  },
+  {
+    from: '/sdk/03-quick-start/burn-os-token',
+    to: '/sdk/quick-start/burn-os-token',
+  },
+  {
+    from: '/sdk/03-quick-start/deposit-to-vault',
+    to: '/sdk/quick-start/deposit-to-vault',
+  },
+  {
+    from: '/sdk/03-quick-start/get-user-data',
+    to: '/sdk/quick-start/get-user-data',
+  },
+  {
+    from: '/sdk/03-quick-start/get-vault-data',
+    to: '/sdk/quick-start/get-vault-data',
+  },
+  {
+    from: '/sdk/03-quick-start/mint-os-token',
+    to: '/sdk/quick-start/mint-os-token',
+  },
+  {
+    from: '/sdk/03-quick-start/unboost',
+    to: '/sdk/quick-start/unboost',
+  },
+  {
+    from: '/sdk/03-quick-start/unstake',
+    to: '/sdk/quick-start/unstake',
+  },
 ]

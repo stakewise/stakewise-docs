@@ -1,65 +1,44 @@
 ---
 title: Technical Architecture
-description: Learn about Vault deployment, modular design, and upgrade flexibility
+description: Learn how Vaults are deployed across Ethereum and Gnosis, the proxy pattern that makes them upgradeable, and their modular design.
 ---
 
 import Image from '@theme/IdealImage'
 
-# Technical Architecture
-
-<Image img={require('./img/technical_architecture.png')} alt="StakeWise Vault technical architecture overview" />
+A Vault is a self-contained on-chain system: a proxy that holds state, an implementation that holds logic, and a set of modules within it, each handling one responsibility — staking, accounting, fees, MEV, access control, and more.
 
 ## Vault Deployment
 
-Each Vault in the StakeWise protocol is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is the contract users interact with. It holds all persistent state — including user balances — and stores Vault-specific configuration set during initialization, which defines its core operational characteristics.
-Vaults are created through factory contracts such as [EthVaultFactory ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) by:
+<Image img={require('./img/technical_architecture.png')} alt="StakeWise Vault technical architecture overview" />
 
-1. Deploying a proxy that reserves storage for all Vault data and sets its initial configuration during the initializer call.
-2. Pointing the proxy to a shared implementation contract that contains the Vault's logic and module integration.
-3. Registering the Vault in the [VaultsRegistry ↗](https://etherscan.io/address/0x3a0008a588772446f6e656133C2D5029CC4FC20E#code) — the canonical on-chain list of all valid Vaults and factories.
+Each Vault is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is what users interact with — it holds all persistent state, including user balances and the Vault-specific configuration set during initialization. Logic lives in a separate implementation contract, so new Vault versions can be released without redeploying each Vault or migrating user data.
 
-:::custom-warning[Important]
-To mitigate economic attacks during the vulnerable initial phase of a Vault's lifetime, the factory requires a security deposit of 1 gwei at creation.
-:::
+Vaults are created through network-specific factory contracts. On Ethereum, an [`EthVaultFactory` ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) is deployed for each Vault variant (Standard, Private, Blocklist, ERC-20); on Gnosis, the equivalent [`GnoVaultFactory` ↗](https://gnosisscan.io/address/0x7A8cbBf690084E43De778173cfAcf7313c9122DD#code) plays the same role. Each call to `createVault`:
 
-:::custom-notes[Deep Dive]
-All Vault factory addresses can be found in [Networks →](../../contracts/networks/).
+1. Deploys a new ERC-1967 proxy pointing to the shared implementation contract.
+2. Calls the proxy's initializer to set the Vault's initial configuration.
+3. Registers the new Vault in the [VaultsRegistry ↗](https://etherscan.io/address/0x3a0008a588772446f6e656133C2D5029CC4FC20E#code) — the canonical on-chain list of all valid Vaults.
+
+If the Vault is configured to use its own MEV rewards escrow, the factory also deploys an [`OwnMevEscrow`](../../contracts/api/vaults/ethereum/mev/OwnMevEscrow) contract and wires it to the Vault during initialization. Otherwise, the Vault is connected to the [`SharedMevEscrow` ↗](https://etherscan.io/address/0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86) (Smoothing Pool).
+
+:::custom-warning[Security Deposit Required]
+To mitigate the [ERC-4626 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/issues/3706) inflation attack while a Vault's share supply is still small, initialization requires a security deposit of at least 1 gwei.
 :::
 
 ## Modular Design
 
 <Image img={require('./img/modular_architecture.png')} alt="StakeWise Vault modular smart contract architecture" />
 
-The constructor parameters set during deployment link the Vault to essential StakeWise infrastructure
-and the Ethereum Beacon Chain. Each Vault is built from specialized modules that split responsibilities into distinct areas, including:
+At initialization, the Vault is linked to [StakeWise smart contracts](../../contracts/networks/) and the Ethereum Beacon Chain. These links are immutable: once set, they cannot be changed. Each Vault is then composed from specialized modules, each responsible for a distinct area:
 
-**Validator lifecycle** — adding, approving, and exiting validators.
+**User deposits and exits** — minting shares for deposited assets and processing withdrawal requests against the exit queue.
 
-**Deposit and withdrawal** — staking to and withdrawing from the Beacon Chain.
+**Validator lifecycle** — registering new validators on the Beacon Chain, funding them from pooled deposits, and processing their exits.
 
-**Fee enforcement** — calculating and applying protocol and operator fees.
+**Fee enforcement** — calculating and applying protocol and operator fees on accrued rewards.
 
-**MEV capture** — routing execution-layer rewards either to a Vault-specific escrow or to a Smoothing Pool.
+**MEV capture** — routing execution-layer rewards either to a Vault-specific escrow or to the shared Smoothing Pool.
 
-:::custom-notes[Architecture Note]
-This modular architecture ensures that all Vault types (ETH, GNO, private, ERC-20) share consistent behavior and allows new features to be added without breaking existing Vaults.
-:::
+**osETH integration** — letting depositors mint osETH against their staked position without unstaking.
 
-## State Tracking
-
-Vaults maintain an internal accounting ledger that tracks the value of all user stakes.
-This ledger is updated whenever user activity or protocol events affect stake values, such as deposits, withdrawals, reward distributions, or MEV payouts.
-Updates occur automatically when users interact with the Vault, and operators can trigger updates manually when necessary, for example, to refresh valuations before osETH minting.
-
-## Upgrade Flexibility
-
-Every Vault is an independent staking pool, and its smart contracts cannot be unilaterally changed or upgraded by the StakeWise DAO.
-Because the proxy pattern separates storage from logic, upgrades can be applied without affecting user balances or redeploying the contract.
-Only the implementation contract changes, while the proxy — holding all state — remains untouched.
-
-The DAO may release new Vault contract versions to improve efficiency or safety, but upgrading is always optional —
-Vaults can opt to keep their current version.
-All upgrades are subject to community governance approval, providing strong guarantees for user protection and protocol integrity.
-
-The Vault architecture is deployed in parallel on both the Ethereum and Gnosis networks through equivalent contract implementations,
-such as `EthVault` and `GnoVault`.
+Modules combine in different ways to produce the [Vault types](./vault-types). ERC-20, Private, and Blocklist Vaults are additive variants of the same staking core, layering tokenization or membership rules on top. MetaVaults reuse the same share-accounting, fee, and exit-queue logic, but delegate staking itself to a set of sub-vaults.

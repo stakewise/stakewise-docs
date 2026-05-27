@@ -42,6 +42,7 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/ostoken/how-ostoken-works',
+        'docs/ostoken/ostoken-redemptions',
       ],
     },
     {

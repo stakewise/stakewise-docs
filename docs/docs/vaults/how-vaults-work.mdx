@@ -26,7 +26,7 @@ Depositors can also mint [osETH](../ostoken/intro) against their stake — a liq
 
 Vaults pool deposits and register validators on the Beacon Chain once they accumulate enough assets — 32 ETH on Ethereum, 1 GNO on Gnosis.
 
-The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro). Each registration requires [approval from 8 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Deposit data is generated automatically during registration. Once approved, validators enter the Beacon Chain's [activation queue ↗](https://www.validatorqueue.com/) and begin earning rewards when active.
+The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro). Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Deposit data is generated automatically during registration. Once approved, validators enter the Beacon Chain's [activation queue ↗](https://www.validatorqueue.com/) and begin earning rewards when active.
 
 The [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)) raised the maximum validator balance from 32 ETH to 2048 ETH, enabling **consolidation** — merging many `0x01` validators<sup><a href="#fn-1" id="fnref-1" style={{textDecoration: 'none'}}>1</a></sup> (capped at 32 ETH) into fewer high-balance `0x02` ones (up to 2048 ETH) to reduce infrastructure overhead and allow partial withdrawals of rewards above 32 ETH without exiting.
 

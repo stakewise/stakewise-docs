@@ -35,4 +35,12 @@ export default [
     from: '/operator/additional-actions/add-extra-rewards',
     to: '/operator/manage-vault/add-extra-rewards',
   },
+  {
+    from: '/docs/vaults/customization',
+    to: '/docs/vaults/configuration',
+  },
+  {
+    from: '/docs/vaults/meta-vaults',
+    to: '/docs/vaults/vault-types#metavault',
+  },
 ]

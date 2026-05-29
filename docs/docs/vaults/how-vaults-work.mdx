@@ -1,135 +1,108 @@
 ---
 title: How Vaults Work
-description: Learn how Vaults register validators, distribute rewards, and process withdrawals
+description: How Vaults accept deposits, register validators, distribute rewards, and process withdrawals.
 ---
 
 import Tooltip from '@site/src/components/Tooltip/Tooltip';
 import Image from '@theme/IdealImage'
 
-# How Vaults Work
+Every Vault has a [Vault operator](/operator/introduction) responsible for its validators. The operator runs the infrastructure directly or delegates it to a third party. Operating a Vault means running the [Operator Service ↗](https://github.com/stakewise/v3-operator) — StakeWise software that automates a Vault's day-to-day operations — alongside Ethereum [consensus](../../operator/staking-nodes#consensus-client) and [execution](../../operator/staking-nodes#execution-client) clients.
+
+Every Vault action — deposits, validator registration, reward distribution, and withdrawals — is executed on-chain by the Vault's smart contracts. The Operator Service runs off-chain and initiates these on-chain calls automatically. The sections below walk through each stage.
+
+## Deposits
+
+<Image img={require('./img/deposit_flow.png')} alt="Deposit flow - user deposits ETH and gets Vault shares" />
+
+When a user deposits ETH, the Vault issues **shares** representing their proportional ownership of the pool's assets. Share value increases automatically as rewards accumulate — no token swaps or conversions occur during staking. Shares are non-transferable, except in [ERC-20 Vaults](./vault-types#erc-20-vault), where they are issued as a tradable token.
+
+Each Vault has a configurable [capacity](./configuration#capacity) — deposits of any size are accepted up to that limit. Some Vaults restrict who can deposit: [private Vaults](./vault-types#private-vault) accept deposits only from whitelisted addresses, while [blocklist Vaults](./vault-types#blocklist-vault) prohibit blocklisted wallets.
+
+Depositors can also mint [osETH](../ostoken/intro) against their stake — a liquid token usable across DeFi while the underlying stake keeps earning rewards. osETH grows in value over time: each osETH is redeemable for more ETH as staking rewards accrue. How much osETH a user can mint depends on the Vault's LTV ratio.
 
 ## Validator Registration
 
-Vaults collect user deposits and manage the validator lifecycle through smart contracts.
-When a Vault accumulates enough assets — 32 ETH on Ethereum or 1 GNO on Gnosis — the system initiates validator registration.
-
-<Tooltip content={<><strong>Vault operator(s)</strong> <br /> Entities or individuals who run validators for a Vault. They operate the infrastructure and run the <a href="https://github.com/stakewise/v3-operator" className="tooltip-link">operator service software ↗</a> that automates essential Vault management tasks — such as validator registration, consolidations, and withdrawals.</>}>The Vault operator</Tooltip>
-runs specialized software (the [Operator Service ↗](https://github.com/stakewise/v3-operator)) alongside their Ethereum [consensus →](../../operator/staking-nodes#consensus-client) and [execution →](../../operator/staking-nodes#execution-client) clients
-that monitor deposit levels and handle the technical validator setup process.
-
 <Image img={require('./img/validator_registration.png')} alt="Vault validator registration process diagram" />
 
-When sufficient funds are available, this service submits validator registration requests to the StakeWise [Oracle network →](../oracles/intro).
-The Operator Service must receive 8 out of 11 approvals from Oracles to register a validator for the Vault.
-The service automatically generates deposit data during registration, eliminating the need for pre-uploaded deposit data files. Once approved, validators enter the Beacon Chain's activation queue. [Network ↗](https://www.validatorqueue.com/) conditions determine how quickly they begin earning staking rewards.
+Vaults pool deposits and register validators on the Beacon Chain once they accumulate enough assets — 32 ETH on Ethereum, 1 GNO on Gnosis.
 
-Vaults support two types of validators: `0x01` or `0x02`<sup><a href="#fn-1" id="fnref-1">1</a></sup>.
-The default type is `0x02`. To register `0x01` validators instead, add the `--validators-type=0x01` flag when starting the Operator Service. Note that automatic funding (topping up existing validators) is disabled when using `0x01` validators.
-Existing `0x01` validators can be migrated to `0x02` via [consolidation](../../operator/manage-validators/consolidate-validators).
-When registering validators, the Operator Service prioritizes funding existing `0x02` validators by selecting those with the highest current balance and topping them up to 2048 ETH before creating new validators.
+The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro). Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Deposit data is generated automatically during registration. Once approved, validators enter the Beacon Chain's [activation queue ↗](https://www.validatorqueue.com/) and begin earning rewards when active.
 
-The technical process for registering validators involves coordination between the Operator Service and the Oracle network:
+The [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)) raised the maximum validator balance from 32 ETH to 2048 ETH, enabling **consolidation** — merging many `0x01` validators<sup><a href="#fn-1" id="fnref-1" style={{textDecoration: 'none'}}>1</a></sup> (capped at 32 ETH) into fewer high-balance `0x02` ones (up to 2048 ETH) to reduce infrastructure overhead and allow partial withdrawals of rewards above 32 ETH without exiting.
+
+The Operator Service registers new validators as `0x02` by default, and existing `0x01` validators can be migrated via [consolidation](../../operator/manage-validators/consolidate-validators). When registering, the Operator Service prioritizes funding existing `0x02` validators — selecting those with the highest current balance and topping them up to 2048 ETH before creating new ones.
 
 :::custom-notes[Validator Registration Process]
 The Operator Service performs the following steps:
-1. Check if the Vault has enough assets to register a validator (e.g., 32 ETH for Ethereum)
-2. Get the next free validator key from the used keystore
-3. Obtain the BLS signature for exit messages<sup><a href="#fn-2" id="fnref-2" style={{textDecoration: 'none'}}>2</a></sup> using local keystores or a [remote signer →](../../operator/alternative-key-management/remote-signer)
+1. Check if the Vault has enough assets to register a validator (32 ETH for Ethereum).
+2. Get the next free validator key from the used keystore.
+3. Obtain the BLS signature for exit messages<sup><a href="#fn-2" id="fnref-2" style={{textDecoration: 'none'}}>2</a></sup> using local keystores or a [remote signer](../../operator/alternative-key-management/remote-signer).
 4. Share the validator's exit signature with StakeWise Oracles:
-    - Split the BLS signature<sup><a href="#fn-3" id="fnref-3" style={{textDecoration: 'none'}}>3</a></sup> using [Shamir's Secret Sharing ↗](https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing) (number of shares = number of Oracles)
-    - Encrypt each signature share with the corresponding Oracle's public key
-    - Send the encrypted shares to all Oracles and receive registration signatures in return
+    - Split the BLS signature<sup><a href="#fn-3" id="fnref-3" style={{textDecoration: 'none'}}>3</a></sup> using [Shamir's Secret Sharing ↗](https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing) (number of shares = number of Oracles).
+    - Encrypt each signature share with the corresponding Oracle's public key.
+    - Send the encrypted shares to all Oracles and receive registration signatures in return.
 5. Submit a transaction to the Vault contract to register the validator.
-:::
-
-Vaults can have several node operators running validators and support <Tooltip content={<><strong>Distributed Validator Technology</strong> <br /> A solution designed to overcome a single-operator trust problem by splitting a validator's private key among multiple independent operators. <br /> More on DVT - <a href="https://ethereum.org/en/staking/dvt/" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">ethereum.org ↗</a></>}>Distributed Validator Technology</Tooltip> (DVT) to increase redundancy.
-
-:::custom-notes[Deep Dive]
-For more details on how Oracles handle the validator registration approval process, see [Validator Registration Approval →](../oracles/oracle-duties#validator-registration-approval).
 :::
 
 ## Reward Distribution
 
 <Image img={require('./img/rewards_distribution.png')} alt="Vault reward distribution flow - consensus and execution rewards" />
 
-Once validators are registered and active, they earn:
-- **Consensus layer rewards**: Block proposals, attestations, and sync committee participation
-- **Execution layer rewards**: <Tooltip content={<><strong>MEV (Maximum Extractable Value)</strong> <br /> Additional profits that validators can earn when proposing blocks by reordering, including, or excluding transactions within a block. MEV opportunities include arbitrage, liquidations, and sandwich attacks.</>}>MEV</Tooltip>, transaction fees, and block tips
+Once active, validators earn:
 
-Validators receive rewards only between their activation and exit epochs.
+- **Consensus-layer rewards** — for block proposals, attestations, and sync-committee participation.
+- **Execution-layer rewards** — [MEV ↗](https://ethereum.org/developers/docs/mev/) and transaction priority fees.
 
-The Vault initially holds rewards as liquid ETH until there is enough to register additional validators.
+These rewards are [calculated off-chain](../oracles/oracle-duties#reward-distribution) by the StakeWise [Oracle network](../oracles/intro) every **12 hours**: Oracles publish per-Vault rewards to an [IPFS hash ↗](https://ipfs.stakewise.io/ipfs/bafkreicoxcsrs652goyanvyjjhgljn6pqpf6zqweu7sobaeybdjrhqomfq), build a Merkle tree over that data, and submit a signed Merkle root to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5), which verifies the signatures and stores the root.
 
-After the <Tooltip content={<><strong>Pectra</strong> <br /> The Prague/Electra (Pectra) hardfork activated on 07-May-2025 at epoch 364032, introducing significant changes to both execution and consensus layers. Key features include variable validator effective balance (32-2048 ETH via EIP-7251), execution layer triggerable exits (EIP-7002), improved deposit processing (EIP-6110), BLS12-381 precompile (EIP-2537), programmable EOAs (EIP-7702), and increased blob throughput (EIP-7691), establishing a base layer for future scaling efforts.</>}>[Pectra ↗](https://ethereum.org/en/roadmap/pectra/)</Tooltip> upgrade,
-<Tooltip content={<><strong>EIP-7251</strong> <br /> Ethereum Improvement Proposal that increases the maximum effective balance of validators from 32 ETH to 2048 ETH, enabling validator consolidation and partial withdrawals.</>}>[EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)</Tooltip> allows Vaults to merge multiple 32 ETH validators into fewer `0x02` compound validators with higher effective balances, thus
-improving efficiency and reducing infrastructure overhead, while allowing partial withdrawals of rewards above 32 ETH.
-Each Vault decides whether to:
+Each Vault then pulls in its own rewards through a **harvest**.
 
-- Reinvest accumulated rewards into additional staking via consolidation, or
+:::custom-notes[Harvest Mechanics]
+A harvest does the following:
 
-- Keep rewards as <Tooltip content={<><strong>Unbounded ETH</strong> <br /> ETH that is not locked in validators (32 ETH increments). This includes excess deposits, staking rewards, and MEV that have not been allocated to new validators yet.</>}>unbounded ETH</Tooltip>
-within the Vault for greater liquidity.
-
-Rewards are calculated off-chain by the StakeWise Oracle Network.
-
-:::custom-notes[Deep Dive]
-For detailed information about the reward distribution process, see [*Oracles*: Reward Distribution →](../oracles/oracle-duties#reward-distribution).
+1. **Verifies the proof**. The Keeper contract checks the Vault proof for its claimed rewards against the stored root.
+2. **Calculates new rewards**. Rewards are tracked as a running total, so subtracting the previous total leaves what the Vault has earned (or lost) since its last harvest.
+3. **Moves MEV rewards into the Vault**. Execution rewards sit in a MEV escrow; the Vault pulls them in.
+4. **Applies the change**. The Vault's total assets are computed and per-share value is updated; on gains only, the Vault fee is minted to the fee recipient as new shares.
+5. **Processes the exit queue**. The Vault marks how much of the exit queue is now covered by available assets and makes them claimable.
 :::
+
+The Vault then decides what to do with that ETH:
+
+- **Top-up** — add ETH to existing `0x02` validators, growing their effective balance up to the 2048 ETH maximum.
+- **Consolidate** — merge multiple `0x01` validators into a single `0x02` validator (`0x01` + `0x01` → `0x02`).
+- **Keep ETH as-is** — leave the ETH in the Vault for greater liquidity.
 
 ## Withdrawals
 
-<Image img={require('./img/withdrawal_process.png')} alt="Vault withdrawal and exit queue process" />
+<Image img={require('./img/withdrawal_process.png')} alt="Vault withdrawal process - check queue, pay from available ETH, partial withdrawals, full exits" />
 
-Users can mint osTokens for instant liquidity or withdraw. When users choose to unstake, they enter the Vault's **exit queue** and receive an **exit queue ticket** that tracks their place in line.
-As ETH becomes available to the Vault, users can claim what is available.
-If only part of the requested amount is available, they can claim that portion immediately and receive an updated ticket for the remainder.
+Every **12 hours**, the Operator Service:
 
-Partial withdrawals for `0x02` compound validators are now supported and can now be triggered from the execution layer via [EIP-7002](https://eips.ethereum.org/EIPS/eip-7002)<sup><a href="#fn-4" id="fnref-4">4</a></sup>.
-The withdrawal fulfillment process is automated by the Operator Service, which manages validator exits and partial withdrawals among other responsibilities to ensure timely processing of the exit queue.
+1. **Checks available ETH** — unbonded ETH already in the Vault (deposits + unallocated rewards) and harvested MEV.
+2. **Triggers partial withdrawals** from `0x02` compound validators via [EIP-7002 ↗](https://eips.ethereum.org/EIPS/eip-7002) if more ETH is needed.
+3. **Triggers full validator exits** through a Vault contract call if partial withdrawals are insufficient.
 
-:::custom-info[Processing Time]
-On mainnet, partial withdrawals typically complete faster (≈27–28 hours), while full exits can take **up to one month** to finalize.
+:::custom-info[Oracle Fallback]
+If the Operator Service fails to trigger exits within **24 hours**, StakeWise Oracles execute them automatically using exit signatures pre-committed at registration.
 :::
-
-## Validator Exits
-
-The Operator Service automatically triggers validator exits when required.
-By default, the Operator Service checks every **12 hours** (configurable via `WITHDRAWALS_INTERVAL`) to process queued withdrawal requests.
-If partial withdrawals are not possible, the Operator Service initiates **full exits**.
-If the Operator Service fails to exit validators within **24 hours**, **Oracles will step in** and perform the exits instead.
 
 <Image img={require('./img/exit_process.png')} alt="Validator exit process with Oracle fallback" />
 
-The process is as follows:
+When a user clicks [Unstake](/staker/vault-staking#how-to-unstake) or [Unboost](/staker/boost#how-to-unboost) in the StakeWise interface:
 
-1. **Regular check**. Every 12 hours, the Vault checks for pending positions in the exit queue and first attempts to satisfy them with ETH that is already available to the Vault — i.e., unbonded ETH (deposits + unallocated rewards) and harvested MEV.
-2. **Initiate exits if needed**. If available ETH is insufficient, the Operator Service initiates validator exits to free up the remaining amount. If there are `0x02` validators in the vault, the operator service will trigger partial withdrawals from these validators. If the required amount is larger than what is available from partial withdrawals, the operator service will trigger validator exits through a vault contract call.
-3. **Oracle enforcement of exits**. If the Operator Service does not initiate partial or full withdrawals, the Oracle network will automatically execute a full withdrawal after 24 hours using the exit signatures they have received during validator registration.
+1. `enterExitQueue` is called on the Vault contract — for boosted positions, the call is routed through the Boost proxy.
+2. The user enters the Vault's **exit queue** — a first-in, first-out line fulfilled as ETH becomes available.
+3. The user's position is tracked by an **exit queue ticket**, which is filled in whole or in part from that ETH; if filled partially, an updated ticket is issued for the remainder.
+4. Once a ticket is fully filled, the user calls `claimExitedAssets` (after a short claim delay) to withdraw the ETH.
 
-The exit queue advances whenever the Vault **syncs state** — both on **user actions**
-(entering the queue, deposits/withdrawals) and on the **Operator Service-driven syncs**<sup><a href="#fn-5" id="fnref-5">5</a></sup>.
-Throughout the process, user assets are safe in the Vault's smart contracts and are never controlled by any third party.
-
-Exit processing time depends on the Ethereum network conditions.
-Staked assets continue earning rewards until validators complete the exit.
-Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en/staking/withdrawals/#validator-sweeping) to the Vault and becomes claimable by users according to their ticket number.
-
-## osToken
-
-osTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vault using their shares as backing (aka collateral), providing liquidity without unstaking. osToken can be traded or used in DeFi while the underlying stake continues earning rewards.
-
-The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint — this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#fn-6" id="fnref-6">6</a></sup>.
-
-:::custom-notes[Deep Dive]
-For more details on how osToken works, see [osToken →](../ostoken/intro).
-:::
+Staked assets continue earning rewards until validators complete the exit. Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en/staking/withdrawals/#validator-sweeping) to the Vault and becomes claimable by users in ticket order. Exit processing time depends on Ethereum network conditions — check the current [validator queue ↗](https://www.validatorqueue.com/) for up-to-date estimates.
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities:
-  `0x01` validators (Type 1) use the current 32 ETH limit with automatic sweeps of excess balance, while
-  `0x02` validators (Type 2) support higher effective balances up to 2048 ETH with compounding rewards and partial withdrawals.
+  <span>1.</span> `0x01` and `0x02` refer to withdrawal credential types that determine validator capabilities.
+  `0x01` validators (Type 1) use the 32 ETH limit with automatic sweeps of excess balance.
+  `0x02` validators (Type 2) support effective balances up to 2048 ETH with compounding rewards and partial withdrawals.
   Converting from `0x01` to `0x02` is irreversible.
-  By default, the `0x02` validators are registered. To register `0x01` validators, add the flag `--validators-type=0x01`.
   <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>
 
@@ -143,17 +116,4 @@ For more details on how osToken works, see [osToken →](../ostoken/intro).
   <span>3.</span>
   BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">here</a>.
   <a href="#fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>
-
-
-<div id="fn-4" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>4.</span> You can disable partial withdrawals by adding the `--disable-withdrawals` flag to the Operator Service start command. In this case, all withdrawals will be processed via full validator exits using Oracles. <a href="#fnref-4" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>
-
-<div id="fn-5" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>5.</span> Vault state can also be updated by the Vault operator by passing the `--harvest-vault` flag to the Operator Service `start` command. Harvest occurs every **12 hours** and the gas fees are paid by the hot wallet linked to the Operator Service. <a href="#fnref-5" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
-</div>
-
-<div id="fn-6" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
-  <span>6.</span> To qualify for the higher LTV, Vaults must meet strict DAO-defined criteria, including: Minimum stake: ≥ 10k ETH (for osETH) or ≥ 5k GNO (for osGNO); Vault fee ≤ 5% for ETH, ≤ 15% for GNO; Consistently above-median performance; Running the latest Vault version; Vault Operator's locked SWISE bond: 5M for ETH, 1M for GNO. <a href="#fnref-6" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

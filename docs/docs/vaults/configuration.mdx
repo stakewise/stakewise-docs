@@ -1,0 +1,92 @@
+---
+title: Configuration
+description: Configure StakeWise Vault parameters — capacity, MEV strategy, management roles, branding, and fees.
+toc_max_heading_level: 3
+---
+
+import Image from '@theme/IdealImage'
+
+When [creating a Vault](/operator/create-regular-vault), operators set parameters that define how it operates — deposit capacity, MEV strategy, management roles, branding, and fees. Some are fixed at creation; others can be updated later by designated roles.
+
+<Image img={require('./img/config.png')} alt="Vault Configuration Parameters" />
+
+## Immutable Parameters
+
+Capacity and MEV strategy are immutable parameters set once during Vault creation.
+
+### Capacity
+
+The maximum ETH a Vault can accept; if unset, deposits are unlimited. The cap is enforced on every deposit — transactions that would exceed it revert with a `CapacityExceeded` error. This is useful for matching Vault size to the node operator's infrastructure.
+
+### MEV Strategy
+
+<Image img={require('./img/mev_strategy.png')} alt="Vault MEV strategy options - Smoothing Pool vs Own Escrow" />
+
+MEV (Maximal Extractable Value) is the extra profit validators can capture when proposing blocks.
+Vaults can use either a **Smoothing Pool** or **Own Escrow** to collect block rewards. This choice is set at creation and can't be changed.
+
+#### Smoothing Pool {#smoothing-pool}
+
+Rewards are pooled across multiple Vaults and distributed in proportion to each Vault's stake, providing more stable and predictable returns regardless of block proposal frequency.
+
+For example, a Vault with only a few validators can still receive periodic small payouts from the Smoothing Pool.
+In return, when one of its validators does earn a block proposal reward, that reward flows to the Smoothing Pool to be shared among all participating Vaults.
+
+Vaults that use the Smoothing Pool must set every relay to one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints). This ensures a consistently high contribution to the Smoothing Pool from every participating Vault.
+
+#### Own Escrow
+
+Each Vault keeps its own block rewards. Because nothing is shared, the Vault can pick any relay — targeting maximum value capture at the cost of higher variability.
+
+## Roles
+
+<Image img={require('./img/roles.png')} alt="Protocol Roles Diagram" />
+
+Every Vault has several key roles for the internal management of the staking process. All are assigned by the **Admin** — through the **Settings → Roles** tab on the Vault page, or by calling the corresponding function on the Vault contract.
+
+### Admin
+
+Primary controller of the Vault, and its creator by default. An Admin can be a single wallet, multisig, or DAO. The Admin's authority covers:
+
+- Assigning and reassigning every role, including its own
+- Updating the Vault's branding and fees
+- Setting the fee recipient and shareholder splits
+- Upgrading the Vault to a new contract version
+
+### Vault Fee Claimer
+
+Triggers [claims of accumulated Vault fees](/operator/manage-vault/fee-claiming) on behalf of shareholders.
+
+By default a Vault's fees go to a single recipient. To split them, the Admin points the recipient at a **Fee Splitter** — a contract that divides incoming fees among multiple shareholders by their configured shares — set on the Vault page under **Settings → Vault fee**.
+
+### Whitelist Manager
+
+Adds or removes the addresses authorized to deposit. Only present in Private Vaults.
+
+### Blocklist Manager
+
+Adds or removes the addresses blocked from depositing. Only present in Blocklist Vaults.
+
+### Validators Manager
+
+Authorizes the Vault's core validator operations — registration, funding, consolidation, and withdrawals. The [Operator Service automates most of the validator lifecycle](/operator/launch-operator-service#core-functions), and each on-chain action it submits must be signed by the address assigned to this role.
+
+## Settings
+
+Branding and fees are configurable parameters updated by the Admin.
+
+### Branding
+
+The Vault's name, description, and image. Set and updated on the Vault page under **Settings → Branding**. Updates go live immediately.
+
+:::custom-stakewise[Vault Verification]
+New or updated Vaults carry an **Unverified Vault** label until the StakeWise team reviews and marks the Vault as verified. Stakers can be confident about the authenticity of this information, i.e., a Vault branded by Operator A is indeed controlled and run by Operator A.
+:::
+
+### Fee
+
+A [percentage fee](../fees/intro) charged on staking rewards, ranging from 0% to 100%.
+
+Initially set during Vault creation and updated later on the Vault page under **Settings → Vault fee**, subject to protocol restrictions: each increase is capped at 20% relative to the current fee (e.g., a 10% fee can rise to at most 12%), with a 3-day delay between updates. If the current fee is 0%, it cannot exceed 1% on the first increase.
+
+The fee is automatically deducted from rewards when the Vault state is updated, and transferred to the Vault's fee recipient.

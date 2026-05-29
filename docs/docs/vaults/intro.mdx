@@ -1,19 +1,13 @@
 ---
 title: Vaults
-description: Learn what Vaults are and what you can do with them
+description: Dive deep into Vaults — permissionless, non-custodial, highly configurable staking pools for ETH and GNO with complementary in-protocol yield features like Boost and osETH.
 ---
 
-Vaults are isolated staking pools that process ETH and GNO deposits for staking, distribute rewards, and handle withdrawals in a trustless and non-custodial manner.
+import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
-ETH and GNO deposits into any Vault can only be used to launch validators for that specific Vault. Any rewards (or penalties) accumulated by these validators will belong to the Vault.
-This isolates each Vault, allowing depositors to customize their staking experience to their needs.
+A Vault is an isolated staking pool — a <Tooltip content="A program that runs on the Ethereum blockchain — a collection of code (its functions) and data (its state) that resides at a specific address on-chain.">smart contract</Tooltip> that processes ETH and GNO deposits, distributes rewards, and handles withdrawals in a trustless, non-custodial manner.
+Vaults do not socialize risk: each deposit can only fund that Vault's validators, and any [rewards](/staker/rewards) or penalties are contained within it.
 
-Individuals, professional node operators, DAOs, communities, and institutions can deploy a Vault to enable ETH and GNO staking on specific terms, like a bespoke staking fee, unique mix of operators, custom MEV strategy, capacity, branding, and optional ERC-20 Vault Token issuance.
+Anyone — from solo stakers to DAOs and institutions — can [create a Vault](/operator/create-regular-vault) and run it on their own terms: bespoke fee, MEV strategy, and optionally [ERC-20 Vault](./vault-types#erc-20-vault) token. [MetaMask ↗](https://blog.stakewise.io/caseStudy/how-metamask-launched-pooled-staking-with-stakewise), [Chorus One ↗](https://blog.stakewise.io/caseStudy/how-chorus-one-launched-retail-staking-with-stakewise), and [NodeSet ↗](https://blog.stakewise.io/caseStudy/how-nodeset-launched-decentralized-pooled-staking-with-stakewise) use the same infrastructure to power their staking products.
 
-All deposits, reward distribution, and withdrawals are handled by smart contracts, making staking in Vaults fully non-custodial.
-
-When staking into a Vault, users deposit ETH or GNO and receive Vault shares representing their proportional ownership of the pool's assets. Vaults use a shares-based accounting system where:
-- Shares are non-transferable (unless the Vault is an ERC-20 Vault)
-- Shares may not appear in portfolio tracking applications
-- Share value increases automatically as staking rewards accumulate
-- No token swaps or conversions occur during staking
+Beyond base staking rewards, Vaults add yield-enhancing features. Most include [Boost](./boost), a built-in strategy that amplifies returns (historically 4–6% APY), and every Vault lets depositors mint [osETH](../ostoken/intro) — a liquid token that unlocks [DeFi yield opportunities](https://app.stakewise.io/ecosystem) without unstaking.

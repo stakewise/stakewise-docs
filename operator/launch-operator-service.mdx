@@ -101,7 +101,7 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
     Pull Official Image
 
     ```bash
-    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.13
+    docker pull europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.14
     ```
 
     Alternatively, build the Docker image locally:
@@ -109,7 +109,7 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
     ```bash
     git clone https://github.com/stakewise/v3-operator.git
     cd v3-operator
-    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.13 .
+    docker build --pull -t europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.14 .
     ```
 
     Run commands using this format:
@@ -118,7 +118,7 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
     docker run --rm -ti \
     -u $(id -u):$(id -g) \
     -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.13 \
+    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.14 \
     src/main.py COMMAND \
     --flagA=123 \
     --flagB=xyz

@@ -35,4 +35,8 @@ export default [
     from: '/operator/additional-actions/add-extra-rewards',
     to: '/operator/manage-vault/add-extra-rewards',
   },
+  {
+    from: '/docs/governance/dao-treasury',
+    to: '/docs/governance/treasury',
+  },
 ]

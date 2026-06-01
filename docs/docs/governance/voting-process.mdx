@@ -1,0 +1,82 @@
+---
+title: Voting Process
+description: How StakeWise DAO governance works — from idea to Snapshot vote, on-chain execution, bonds, and the escalation game.
+---
+
+import Image from '@theme/IdealImage'
+
+# Voting Process
+
+The StakeWise DAO is governed entirely by its community. Anyone can propose changes to the protocol, and SWISE holders decide whether those changes are accepted. The sections below describe how an idea becomes a governance vote.
+
+## Governance Process
+
+<Image img={require('./img/from_idea_to_execution.png')} alt="From Idea to Execution Chart" />
+
+Every proposal moves through three phases:
+
+### Phase 1 — Ideation
+
+Anyone can start a proposal by posting an idea in the **Ideas** category with the `phase-1` tag. The goal of this phase is to refine the idea through community input, stakeholder feedback, and discussion. There is no formal threshold to move forward — only the need for visible community support.
+
+### Phase 2 — Specification
+
+Once an idea has been refined, the proposer writes it up as a formal **StakeWise Improvement Proposal (SWIP)** using the template below and posts it in the **Proposals** category with the `phase-2` tag. An informal forum poll then measures DAO sentiment over **5 days**. To advance to Phase 3, the poll must close with more votes in favour of the change than against; otherwise the proposal is dismissed.
+
+:::custom-notes[SWIP Template]
+Every formal proposal posted in the **Proposals** category follows this structure:
+
+- **Executive summary** — a short, plain-language overview of what the proposal does.
+- **Motivation** — the problem the proposal solves and why it matters.
+- **Specification** — the precise details of the proposed change.
+- **Considerations** — risks, trade-offs, and alternative approaches.
+- **Vote & discussion** — the question put to the DAO and the space for community input.
+
+Following this structure makes proposals easier to evaluate and helps them advance through the governance phases.
+:::
+
+### Phase 3 — Snapshot
+
+A **Snapshot vote** opens for **7 days**, sourcing the decision from SWISE holders. The SWIP is updated with a link to the vote and the `phase-3` tag to signal that DAO action is required. The proposal passes if YES votes outnumber NO votes, subject to the quorum rules below.
+
+:::custom-info[Who can submit and what counts]
+- **Submission threshold:** anyone holding at least **1,000,000 SWISE** can submit a proposal and start the vote.
+- **Validity:** for the result to count, **YES votes must exceed NO votes**, and at least **3,000,000 SWISE** must participate in total.
+:::
+
+## On-Chain Execution
+
+Not every proposal has on-chain effects — some are signalling-only. Proposals that *do* include on-chain actions are secured by a bonding mechanism that guarantees the on-chain action matches the actual Snapshot result.
+
+Execution moves through four steps:
+
+### Step 1 — Bond Submission
+
+After the Snapshot vote ends, anyone can post a **1,000,000 SWISE bond** asserting the vote's outcome (for example, *"the vote ended YES"*). This submission opens the escalation game.
+
+### Step 2 — The Escalation Game
+
+<Image img={require('./img/escalation_game.png')} alt="Escalation Game Chart" />
+
+A **24-hour countdown** begins. During that window, anyone who disagrees with the submitted answer can challenge it by posting the opposite answer — but they must put up **double the previous bond**. Every challenge resets the 24-hour timer and doubles the required bond again:
+
+`1M SWISE → 2M → 4M → 8M → …`
+
+There is no formal cap; the progression continues until no one challenges within the 24-hour window. When the timer finally runs out, the last-standing answer wins, and **the winning side claims the losing side's bonds**.
+
+:::custom-info[Why This Works]
+The escalation game is an economic mechanism for settling disputes about a vote's result. Anyone can challenge an incorrect answer, but each challenge is twice as expensive as the previous one.
+
+Because the community that voted for the true outcome has a much larger economic power than any single attacker trying to flip the result, defending the true answer is always cheaper than overturning it.
+:::
+
+### Step 3 — Multisig Cooldown
+
+Once the escalation game settles, a **24-hour cooldown period** begins. During this window, the [DAO multisig](./treasury#multisig) can reject the result.
+
+### Step 4 — Execution
+
+After the cooldown ends:
+
+- **Anyone** can execute the vote on-chain (execution costs gas).
+- **Winning bonders** can withdraw their bonds along with the bonds claimed from the losing side.

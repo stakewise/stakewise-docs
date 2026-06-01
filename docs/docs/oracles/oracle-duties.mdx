@@ -11,28 +11,20 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 ## Validator Registration Approval
 
-Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
-
 <Image img={require('./img/validator_registration_approval.png')} alt="Oracle validator registration approval process" />
 
-The [Operator Service →](../../operator/launch-operator-service) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
-When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
-This is done to maintain the protocol's ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
-The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
+Oracles approve validator registration requests before the Vault contract forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-:::custom-notes[Approval Process]
-1. Operator sends the validator registration requests and encrypted exit signatures to the Oracles.
-2. Oracles sign approval messages that include the current tree root hash from the Beacon Chain Deposit Contract.
-3. Operator submits registration to the Vault contract with Oracle signatures.
-4. Vault contract calls the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) to validate Oracle signatures and confirm the tree root hash hasn't changed.
-5. Vault transfers ETH to the Beacon Chain deposit contract to complete validator registration.
-:::
+Once the Operator Service has [prepared a new validator](../vaults/how-vaults-work#validator-registration), it sends an approval request to every Oracle, including the validator public key, the deposit signature, the current `deposit_root`, an expiration deadline, and each Oracle's encrypted exit share.
 
-This process ensures Oracles approve validators based on current Beacon Chain state, bridging the consensus and execution layers while preventing stale approvals and replay attacks.
+Each Oracle then independently:
 
-:::custom-notes[Deep Dive]
-For details on how the Operator Service initiates and prepares validator registration, see the [Validator Registration →](../vaults/how-vaults-work#validator-registration) section in Vaults.
-:::
+1. re-derives the Vault's withdrawal credentials from the Vault address and verifies the deposit signature against those credentials;
+2. decrypts its own exit-signature share and verifies it is a valid BLS signature against the corresponding public-key shard;
+3. verifies the `deposit_root` matches current Beacon Chain state and commits to it by signing its approval message;
+4. uploads the encrypted exit shares to IPFS and includes the IPFS hash in the approval message it signs, so the location of the shares becomes part of the on-chain record.
+
+Once enough Oracles have signed, the Operator Service submits the bundled signatures to the Vault contract. The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) verifies the threshold (`validatorsMinOracles`, currently **6 of 11**) and confirms the current `deposit_root` still matches the one the Oracles signed. The last check protects against the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/). Finally, the Vault forwards the deposit to the Beacon Chain Deposit Contract, and the validator is queued for activation.
 
 ## Reward Distribution
 

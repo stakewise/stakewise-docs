@@ -22,9 +22,13 @@ Each Oracle then independently:
 1. re-derives the Vault's withdrawal credentials from the Vault address and verifies the deposit signature against those credentials;
 2. decrypts its own exit-signature share and verifies it is a valid BLS signature against the corresponding public-key shard;
 3. verifies the `deposit_root` matches current Beacon Chain state and commits to it by signing its approval message;
-4. uploads the encrypted exit shares to IPFS and includes the IPFS hash in the approval message it signs, so the location of the shares becomes part of the on-chain record.
+4. includes the IPFS hash of the encrypted exit shares in the approval message it signs. The shares are uploaded to IPFS. This is done to maintain the protocol's ability to exit validators on demand.
 
-Once enough Oracles have signed, the Operator Service submits the bundled signatures to the Vault contract. The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) verifies the threshold (`validatorsMinOracles`, currently **6 of 11**) and confirms the current `deposit_root` still matches the one the Oracles signed. The last check protects against the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/). Finally, the Vault forwards the deposit to the Beacon Chain Deposit Contract, and the validator is queued for activation.
+Once enough Oracles have signed, the Operator Service submits the bundled signatures to the Vault contract. The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) verifies the signature threshold is met (`validatorsMinOracles`, currently **6 of 11**) and confirms the current `deposit_root` still matches the one the Oracles signed.
+
+The recheck guards two things. The pre-signed exit signature is bound to a specific validator index the Operator Service predicted at registration — a new deposit would shift that index and invalidate the signature. The recheck also protects from the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/), where a malicious operator races their own deposit ahead of the Vault's.
+
+Once everything passes, the Vault forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code). The deposit enters the Beacon Chain's [deposit queue ↗](https://beaconcha.in/validators/queues) before the validator is queued for activation. Processing time depends on network congestion.
 
 ## Reward Distribution
 

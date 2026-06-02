@@ -1,14 +1,14 @@
 ---
-title: Create Meta Vault
-description: Step-by-step guide to creating a Meta Vault through the StakeWise UI — delegate staked assets across sub-vaults without running validators yourself.
+title: Create MetaVault
+description: Step-by-step guide to creating a MetaVault through the StakeWise UI — delegate staked assets across sub-vaults without running validators yourself.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Create Meta Vault
+# Create MetaVault
 
-Creating a Meta Vault is done via the StakeWise UI and takes just a few minutes. Once your Meta Vault is created, run the Operator Service with the [`process-meta-vaults`](./operate-meta-vault#3-run-process-meta-vaults) command to keep it in sync with its sub-vaults.
+Creating a MetaVault is done via the StakeWise UI and takes just a few minutes. Once it's created, [add sub-vaults](./configure-meta-vault) for it to delegate to, then run the Operator Service with the [`process-meta-vaults`](./operate-meta-vault#3-run-process-meta-vaults) command to keep it in sync with them.
 
 :::custom-notes[Test on Hoodi First]
 To try the full Vault setup on a testnet, open **Settings** <img src="/icons/stakewise/gear_icon.png" alt="gear button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> in the StakeWise App and enable **Show Testnets**. Then switch to the Hoodi network to create and test your Vault before going to mainnet.
@@ -25,7 +25,7 @@ You'll need some Hoodi ETH to cover gas fees. Get testnet ETH from a faucet:
 
 ## Step 1: Select Vault Type
 
-Vault type is set once at creation — select **Meta Vault**. You can optionally enable:
+Vault type is set once at creation — select **MetaVault**. You can optionally enable:
 
 - **Private** — Restrict deposits to approved wallets only.
 - **ERC-20 Token** — Stakers receive a token they can hold in their wallet and transfer to others.
@@ -63,7 +63,7 @@ Click **Create Vault** to submit your configuration and create the Vault.
 
 ## Step 5: Transaction Confirmation
 
-Confirm the transaction in your wallet to deploy your Meta Vault. Once the transaction confirms, your Meta Vault is live and visible on the **Operate** page.
+Confirm the transaction in your wallet to deploy your MetaVault. Once the transaction confirms, your MetaVault is live and visible on the **Operate** page.
 
 ## Where to Find Your Vault Address
 
@@ -73,9 +73,9 @@ You'll need your Vault address to configure and run the Operator Service.
   <TabItem value="url" label="From URL" default>
     Navigate to your Vault page — the address is included in the URL:
     ```
-    https://stakewise.io/vault/mainnet/0x1234567890abcdef...
-                                       ^^^^^^^^^^^^^^^^^^^
-                                        Your Vault Address
+    https://app.stakewise.io/vault/mainnet/0x1234567890abcdef...
+                                           ^^^^^^^^^^^^^^^^^^^
+                                            Your Vault Address
     ```
   </TabItem>
   <TabItem value="details" label="From Details Section">
@@ -85,3 +85,10 @@ You'll need your Vault address to configure and run the Operator Service.
     4. Copy the displayed address
   </TabItem>
 </Tabs>
+
+## Next Steps
+
+Your MetaVault is deployed but not yet functional. To put it to work:
+
+1. [Configure it](./configure-meta-vault) — add the sub-vaults it will delegate deposits to.
+2. [Operate it](./operate-meta-vault) — run the Operator Service to keep it in sync with those sub-vaults.

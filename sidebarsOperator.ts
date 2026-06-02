@@ -11,6 +11,7 @@ const sidebars: SidebarsConfig = {
     'start-operator',
     'operator-monitoring',
     'smoothing-pool-relays',
+    'vault-interface',
     {
       type: 'category',
       label: 'Meta Vault',

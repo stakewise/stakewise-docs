@@ -1,0 +1,122 @@
+---
+title: Vault Interface
+description: Scaffold and deploy your own branded staking frontend for your StakeWise Vault using the open-source vault-interface template and CLI.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Vault Interface
+
+If you want stakers to deposit through your own site instead of [app.stakewise.io](https://app.stakewise.io/), you can use the open-source [`stakewise/vault-interface`](https://github.com/stakewise/vault-interface) — a Next.js frontend you connect to your Vault and deploy in a few minutes under your own domain.
+
+The UI supports Ethereum, Gnosis Chain, and Hoodi Testnet, and offers the same style and set of actions stakers can take on [app.stakewise.io](https://app.stakewise.io/): deposit, withdraw, mint, burn, boost, and unboost<sup><a href="#fn-1" id="fnref-1">1</a></sup>. They can also see stats, unstake/unboost progress, and claim assets.
+
+Building a staking interface from scratch takes time and engineering resources. The template gives you a production-ready UI. StakeWise keeps the template in sync with the latest released features and constantly improves it.
+
+There are two ways to set it up:
+
+- **CLI (recommended)** — run [`npx @stakewise/create-vault-interface`](https://www.npmjs.com/package/@stakewise/create-vault-interface), which walks you through configuration and generates a ready-to-run project.
+- **Manual setup** — clone the repository, update the `.env` file with your configuration, install dependencies, and deploy.
+
+:::custom-info[Live demo]
+Try the live demo at [vault-interface-lemon.vercel.app ↗](https://vault-interface-lemon.vercel.app/) before deploying your own. For a real-world example, [Serenita ↗](https://app.serenita.io/) runs this template in production against their [Vault ↗](https://app.stakewise.io/vault/mainnet/0xb36fc5e542cb4fc562a624912f55da2758998113) — a good reference for what a customized deployment looks like.
+:::
+
+## Requirements
+
+- [Node.js ↗](https://nodejs.org/en/download) `24.12.0` or higher (see `.nvmrc`).
+- [pnpm ↗](https://pnpm.io/installation) — run `corepack enable && corepack prepare pnpm@latest --activate`<sup><a href="#fn-2" id="fnref-2">2</a></sup>.
+- Git — recommended (the CLI initializes a fresh repository).
+
+## Setup
+
+<Tabs groupId="vault-interface-setup">
+  <TabItem value="cli" label="CLI (recommended)" default>
+
+Run the CLI to scaffold a configured project in a few minutes:
+
+```bash
+npx @stakewise/create-vault-interface
+```
+
+**The CLI will**:
+
+1. Ask for the values listed in the [configuration reference](#configuration-reference).
+2. Clone `stakewise/vault-interface` into your chosen folder (without git history).
+3. Apply the brand color you chose (or change it later — see [Theming](#theming)).
+4. Generate a populated `.env` file.
+5. Initialize a fresh git repository with an initial commit.
+6. Optionally run `pnpm install`, then `npx vercel` to deploy.
+
+  </TabItem>
+  <TabItem value="manual" label="Manual setup">
+
+1. Clone [`stakewise/vault-interface`](https://github.com/stakewise/vault-interface).
+2. Create a `.env` file in the project root and copy in the contents of [`.env.example` ↗](https://github.com/stakewise/vault-interface/blob/main/.env.example).
+3. Replace each value with your configuration from the [configuration reference](#configuration-reference).
+4. Install dependencies: `pnpm install`.
+5. Start the dev server with `pnpm dev` and open [http://localhost:5005](http://localhost:5005) to preview.
+6. Deploy to production:
+   - **Using Vercel** — follow [Vercel instructions ↗](https://vercel.com/docs) to connect your repository to Vercel and automatically build and serve the app.
+   - **Self-hosting** — run `pnpm build` to prepare the app, then deploy the build output to your hosting service.
+
+  </TabItem>
+</Tabs>
+
+## Configuration reference
+
+Each row maps a CLI prompt to its `.env` variable. The CLI writes these for you; for manual setup, set them in `.env` yourself. The canonical list lives in [`.env.example` ↗](https://github.com/stakewise/vault-interface/blob/main/.env.example).
+
+| CLI prompt | `.env` variable | Description |
+| --- | --- | --- |
+| Project&nbsp;name | — (CLI only) | Defaults to `vault-interface`. |
+| Site&nbsp;title | `NEXT_PUBLIC_TITLE` | Used in site metadata. |
+| Theme | — (CLI only) | Optional. If enabled, prompts for `#rrggbb` values for the light and dark themes. |
+| Networks | Set by the per-network variables below | Multi-select: Mainnet / Gnosis / Hoodi. |
+| Vault&nbsp;address | `NEXT_PUBLIC_MAINNET_VAULT_ADDRESS`, `NEXT_PUBLIC_GNOSIS_VAULT_ADDRESS`, `NEXT_PUBLIC_HOODI_VAULT_ADDRESS` | Required for each selected network. Validated as `0x` followed by 40 hex characters. |
+| RPC&nbsp;URL | `NEXT_PUBLIC_MAINNET_NETWORK_URL`, `NEXT_PUBLIC_GNOSIS_NETWORK_URL`, `NEXT_PUBLIC_HOODI_NETWORK_URL` | Required for each selected network. Hoodi testnet only appears when `VERCEL_ENV` is not set to `production`; in production, users can switch to the testnet only through their wallet interface. |
+| Fallback&nbsp;RPC | `NEXT_PUBLIC_MAINNET_FALLBACK_URL`, `NEXT_PUBLIC_GNOSIS_FALLBACK_URL`, `NEXT_PUBLIC_HOODI_FALLBACK_URL` | Optional backup RPC for each selected network. |
+| Site&nbsp;domain | `NEXT_PUBLIC_OWNER_DOMAIN` | Required. Used in site metadata, e.g. `app.example.io`. |
+| X&nbsp;account | `NEXT_PUBLIC_OWNER_X_ACCOUNT` | Optional. Handle for site metadata. |
+| Wallet | `NEXT_PUBLIC_WALLET_CONNECT_ID` | Optional. WalletConnect Project ID. |
+| Referrer | `NEXT_PUBLIC_REFERRER` | Optional. Validated as `0x` address. |
+| Languages | `NEXT_PUBLIC_LOCALES` | Defaults to `en, ru, fr, es, pt, de, zh`. Restrict with a comma-separated list, e.g. `NEXT_PUBLIC_LOCALES=en, zh`. |
+| Currencies | `NEXT_PUBLIC_CURRENCIES` | Defaults to `usd, eur, gbp, cny, jpy, krw, aud`. Restrict with a comma-separated list. |
+| Security | `NEXT_PUBLIC_CONTENT_SECURITY_POLICY` | Optional. Content-Security-Policy. Whitespace-separated origins allowed to embed the site in a frame, e.g. `https://app.safe.global https://*.blockscout.com`. |
+
+:::custom-info[Hiding specific actions]
+If your Vault doesn't support some actions (e.g. no osToken minting), you can hide their tabs from the UI by setting the matching `NEXT_PUBLIC_DISABLE_*` variable to any truthy value. See [`.env.example` ↗](https://github.com/stakewise/vault-interface/blob/main/.env.example) for the full list.
+:::
+
+## Theming
+
+The UI ships with light and dark themes. The initial theme matches the user's system preference and can be changed from the settings menu.
+
+Brand colors live in `src/styles/settings.scss`. After editing them, run:
+
+```bash
+pnpm colors
+```
+
+This script generates RGB versions from your hex codes and updates:
+
+- `src/styles/tailwind/layers/base.css`
+- `src/styles/tailwind/theme.css`
+- `src/styles/variables.scss`
+
+The favicon is a 16x16 image in the `public/` folder. By default, the osETH logo is used — replace the file to use your own.
+
+:::custom-info[Still have questions?]
+If you need any help with the template, reach out to the StakeWise team via [info@stakewise.io](mailto:info@stakewise.io), [Telegram ↗](https://t.me/stakewise_io), or [Discord ↗](https://discord.com/invite/2BSdr2g).
+:::
+
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> Mint and Burn are available only if your Vault has osToken enabled. Boost and Unboost also require Ethereum Vault version 2+.
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="fn-2" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>2.</span> The `pnpm install` command (alias: `pnpm i`) is used to install all dependencies for a Node.js project listed in the `package.json` file, generating a `pnpm-lock.yaml` file to ensure consistent installations. It is faster and more disk-space efficient than `npm install` because it uses a centralized content-addressable store to create hard links for packages. For more details, see <a href="https://pnpm.io/motivation" target="_blank" rel="noopener noreferrer nofollow">pnpm.io/motivation ↗</a>.
+  <a href="#fnref-2" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

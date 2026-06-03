@@ -58,7 +58,7 @@ Every 12 hours, Oracles:
 1. Calculate the new MEV that arrived in the shared escrow since the last vote;
 2. Reject misbehaving Vaults (e.g. redirecting the fee recipient, using an untrusted relay, or skimming rewards);
 3. Split the new MEV among Vaults, weighted by their validators' attestation rewards on the Beacon Chain;
-4. Lock each Vault's share until the Vault has been active and non-rejected through the full period (or until all its validators have fully withdrawn) — then unlock it.
+4. Lock each Vault's newly distributed share, releasing it once the Vault produces its next correct MEV block (or once all its validators have fully withdrawn).
 :::
 
 ## Validator Exits

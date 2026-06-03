@@ -15,20 +15,20 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 Oracles approve validator registration requests before the Vault contract forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-Once the Operator Service has [prepared a new validator](../vaults/how-vaults-work#validator-registration), it sends an approval request to every Oracle, including the validator public key, the deposit signature, the current `deposit_root`, an expiration deadline, and each Oracle's encrypted exit share.
+The Operator Service monitors the Vault and, once enough ETH has accumulated (32 ETH per validator), prepares a registration and sends an **approval request** to all 11 Oracles. The request carries all the information each Oracle needs to verify the registration trustlessly, including the encrypted exit signature shares that let the protocol exit the validators on demand.
 
-Each Oracle then independently:
+Each Oracle independently:
 
-1. re-derives the Vault's withdrawal credentials from the Vault address and verifies the deposit signature against those credentials;
-2. decrypts its own exit-signature share and verifies it is a valid BLS signature against the corresponding public-key shard;
-3. verifies the `deposit_root` matches current Beacon Chain state and commits to it by signing its approval message;
-4. includes the IPFS hash of the encrypted exit shares in the approval message it signs. The shares are uploaded to IPFS. This is done to maintain the protocol's ability to exit validators on demand.
+1. rebuilds the deposit message and verifies the deposit signature against it;
+2. decrypts its own exit signature share and verifies it is a valid BLS signature against the corresponding public-key shard;
+3. confirms that none of the public keys are already registered and that each validator is assigned the next expected index;
+4. uploads the encrypted exit shares to IPFS and signs an approval message that commits to their IPFS hash, the current `deposit_root`, the Vault address, the validators payload (public keys and deposit signatures), and an expiration deadline.
 
-Once enough Oracles have signed, the Operator Service submits the bundled signatures to the Vault contract. The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) verifies the signature threshold is met (`validatorsMinOracles`, currently **6 of 11**) and confirms the current `deposit_root` still matches the one the Oracles signed.
+Once at least 6 Oracles have signed, the Operator Service bundles those signatures and submits them to the [Keeper ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) — the smart contract that enforces the rules on-chain.
 
-The recheck guards two things. The pre-signed exit signature is bound to a specific validator index the Operator Service predicted at registration — a new deposit would shift that index and invalidate the signature. The recheck also protects from the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/), where a malicious operator races their own deposit ahead of the Vault's.
+The Keeper confirms the 6-of-11 threshold is met and that the `deposit_root` still matches what the Oracles signed, ensuring the Deposit Contract's state did not change since the Oracles approved — which also protects against the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/).
 
-Once everything passes, the Vault forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code). The deposit enters the Beacon Chain's [deposit queue ↗](https://beaconcha.in/validators/queues) before the validator is queued for activation. Processing time depends on network congestion.
+Once everything passes, the Vault forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code). The deposit enters the Beacon Chain's deposit queue, and the validator is created once the pending deposit is processed.
 
 ## Reward Distribution
 

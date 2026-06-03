@@ -15,7 +15,7 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 Oracles approve validator registration requests before the Vault contract forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-The Operator Service monitors the Vault and, once enough ETH has accumulated (32 ETH per validator), prepares a registration and sends an **approval request** to all 11 Oracles. The request carries all the information each Oracle needs to verify the registration trustlessly, including the encrypted exit signature shares that let the protocol exit the validators on demand.
+The Operator Service monitors the Vault and, once enough ETH has accumulated (at least 32 ETH), prepares a registration and sends an **approval request** to all 11 Oracles. The request carries all the information each Oracle needs to verify the registration trustlessly, including the encrypted exit signature shares that let the protocol exit the validators on demand.
 
 Each Oracle independently:
 

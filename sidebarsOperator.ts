@@ -13,7 +13,7 @@ const sidebars: SidebarsConfig = {
     'smoothing-pool-relays',
     {
       type: 'category',
-      label: 'Meta Vault',
+      label: 'MetaVault',
       link: {
         type: 'doc',
         id: 'meta-vault/overview',

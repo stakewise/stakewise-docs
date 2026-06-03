@@ -1,30 +1,30 @@
 ---
-title: Operate Meta Vault
-description: Install the Operator Service and run the process-meta-vaults command to keep your Meta Vault in sync with its sub-vaults.
+title: Operate MetaVault
+description: Install the Operator Service and run the process-meta-vaults command to keep your MetaVault in sync with its sub-vaults.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Operate Meta Vault
+# Operate MetaVault
 
-A Meta Vault doesn't operate autonomously. It sits on top of a tree of sub-vaults whose state must be kept current on-chain: rewards need to be harvested, completed exit requests claimed, and newly deposited assets forwarded to the sub-vaults.
+A MetaVault doesn't operate autonomously. It sits on top of a tree of sub-vaults whose state must be kept current on-chain: rewards need to be harvested, completed exit requests claimed, and newly deposited assets forwarded to the sub-vaults.
 
-The [Operator Service ↗](https://github.com/stakewise/v3-operator) performs these actions on behalf of the Meta Vault. Once configured, it runs continuously. On every Keeper rewards update (roughly every 12 hours), it traverses the Meta Vault tree and submits one multicall transaction per Meta Vault to:
+The [Operator Service ↗](https://github.com/stakewise/v3-operator) performs these actions on behalf of the MetaVault. Once configured, it runs continuously. On every Keeper rewards update (roughly every 12 hours), it traverses the MetaVault tree and submits one multicall transaction per MetaVault to:
 
 - Harvest each harvestable sub-vault.
 - Claim any sub-vault exit requests whose delay has elapsed.
-- Update the Meta Vault's own state.
+- Update the MetaVault's own state.
 
-It then checks each Meta Vault's withdrawable balance and, once enough user deposits have accumulated in the Meta Vault (above the configured threshold), the Operator Service submits a separate transaction to forward the assets into the sub-vaults.
+It then checks each MetaVault's withdrawable balance and, once enough user deposits have accumulated in the MetaVault (above the configured threshold), the Operator Service submits a separate transaction to forward the assets into the sub-vaults.
 
 ## 1. Install the Operator Service
 
-Install the Operator Service by following the Operator Service [installation guide](/operator/launch-operator-service#installation), then return here to configure it for your Meta Vault.
+Install the Operator Service by following the Operator Service [installation guide](/operator/launch-operator-service#installation), then return here to configure it for your MetaVault.
 
 ## 2. Set Up a Wallet
 
-The Operator Service requires a funded wallet to sign the transactions that keep the Meta Vault operational.
+The Operator Service requires a funded wallet to sign the transactions that keep the MetaVault operational.
 
 ### Option A — Create a new wallet
 
@@ -47,9 +47,13 @@ Export a private key from an existing wallet, then set it as an environment vari
 export WALLET_PRIVATE_KEY="0xyour_private_key_here"
 ```
 
+:::custom-info[Fund Your Wallet]
+The wallet pays gas for every transaction the Operator Service submits. Make sure the wallet holds a small amount of ETH (or xDAI on Gnosis) to cover gas.
+:::
+
 ## 3. Run `process-meta-vaults`
 
-The `process-meta-vaults` command triggers transactions to update states and process deposits and exits for one or more Meta Vaults.
+The `process-meta-vaults` command triggers transactions to update states and process deposits and exits for one or more MetaVaults.
 
 ```bash
 ./operator process-meta-vaults \
@@ -61,7 +65,7 @@ The `process-meta-vaults` command triggers transactions to update states and pro
 ```
 
 The following parameters are required:
-- `--vaults` — Comma separated addresses of Meta Vaults to process
+- `--vaults` — Comma separated addresses of MetaVaults to process
 - `--execution-endpoints` — Comma separated API endpoints for execution nodes. You can find public RPC endpoints on [Chainlist ↗](https://chainlist.org/chain/1)
 - `--network` — The network: `mainnet`, `hoodi`, or `gnosis`. Can also be set via the `NETWORK` environment variable; if neither is provided, the command will prompt interactively.
 - If using [Option A](#option-a--create-a-new-wallet): `--wallet-file` and `--wallet-password-file` flags

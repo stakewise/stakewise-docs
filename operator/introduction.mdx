@@ -6,7 +6,7 @@ description: Learn what operating a Vault means, why you should try, what you ca
 # Introduction
 
 A StakeWise [Vault](/docs/vaults/intro) is a highly customizable, non-custodial staking pool that accepts ETH from depositors, processes staking rewards, and lets users withdraw anytime.
-There are two types of Vault: a [Regular Vault](./create-regular-vault), which runs validators to secure the Ethereum network and earn rewards, and a [Meta Vault](./meta-vault/overview), which doesn't run validators itself and instead allocates stake across multiple sub-vaults.
+There are two types of Vault: a [Regular Vault](./create-regular-vault), which runs validators to secure the Ethereum network and earn rewards, and a [MetaVault](./meta-vault/overview), which doesn't run validators itself and instead allocates stake across multiple sub-vaults.
 
 Anyone — from solo stakers to professional node operators and institutions managing thousands of ETH — can create a Vault via [app.stakewise.io ↗](https://app.stakewise.io). It is fully permissionless and trustless. All staking logic is enforced by immutable smart contracts on-chain. [StakeWise infrastructure ↗](https://stakewise.io/institution) already powers staking solutions deployed by [MetaMask ↗](https://blog.stakewise.io/caseStudy/how-metamask-launched-pooled-staking-with-stakewise) and [Chorus One ↗](https://blog.stakewise.io/caseStudy/how-chorus-one-launched-retail-staking-with-stakewise).
 
@@ -17,7 +17,7 @@ Vaults support a wide range of staking use cases. A few common examples:
 - **Stake for yourself** — Run your own validators, keep 100% of rewards, and stay liquid by minting [osETH](/docs/ostoken/intro) — an overcollateralized liquid staking token you can [use across DeFi ↗](https://app.stakewise.io/ecosystem) to earn additional rewards.
 - **Offer staking to others** — Accept deposits and earn fees, or launch a white-label staking product powered by StakeWise smart contracts.
 - **Institutional or DAO treasury staking** — Configure compliance controls, gate access with a Private or Block list, and optionally issue an ERC-20 Vault token.
-- **Scale with Meta Vaults** — Delegate deposits across multiple sub-vaults without running validators yourself, unlocking modular staking strategies.
+- **Scale with MetaVaults** — Delegate deposits across multiple sub-vaults without running validators yourself, unlocking [modular staking strategies](/docs/vaults/meta-vaults#use-cases).
 
 ## What Can I Earn?
 
@@ -33,7 +33,7 @@ A Vault with 1,000 ETH staked at ~3.5% APY and a 5% fee earns approximately 1.75
 
 ## What Are the Costs?
 
-Costs depend on your Vault type (Regular or Meta) and whether you run the node yourself or delegate to a third party. Since Meta Vaults don't run validators, they skip the infrastructure cost, but they still need a funded operator wallet to cover gas for their operations.
+Costs depend on your Vault type (Regular or Meta) and whether you run the node yourself or delegate to a third party. Since MetaVaults don't run validators, they skip the infrastructure cost, but they still need a funded operator wallet to cover gas for their operations.
 
 - **Infrastructure** — As of March 2026, running a node requires a dedicated machine with at least 64 GB of RAM, a 4TB SSD, and a stable internet connection. You can use pre-built staking hardware like [Home x StakeWise Pro ↗](https://dappnode.com/collections/staking-collection/products/dappnode-home-x-stakewise-pro), rent a cloud server, or delegate node operations to a third party — in which case your costs depend on your arrangement with the provider.
 - **Gas** — The Operator Service submits on-chain transactions funded from your operator wallet. Gas costs are minimal during normal network conditions and fluctuate with congestion. Check the [Ethereum Gas Tracker ↗](https://etherscan.io/gastracker) for current rates.
@@ -42,5 +42,5 @@ Costs depend on your Vault type (Regular or Meta) and whether you run the node y
 
 Operating a Vault is a commitment. Your [Vault's performance](/docs/vaults/vault-performance) is ultimately your responsibility.
 If you run a Regular Vault, you (or the node operator you delegate to) are responsible for the full validator stack.
-If you run a Meta Vault, you don't manage validators — the sub-vaults do.
-Both Regular and Meta Vaults rely on the [Operator Service](./launch-operator-service) to automate day-to-day Vault operations.
+If you run a MetaVault, you don't manage validators — the sub-vaults do.
+Both Regular and MetaVaults rely on the [Operator Service](./launch-operator-service) to automate day-to-day Vault operations.

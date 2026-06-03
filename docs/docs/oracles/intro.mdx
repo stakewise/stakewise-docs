@@ -1,31 +1,21 @@
 ---
 title: Oracles
-description: Learn how Oracles validate transactions and distribute rewards
+description: Meet the 11 independent operators that form the Oracle network bridging the Beacon Chain and Vault contracts
 ---
-
-
-# Oracles
 
 Oracles are specialized entities that connect blockchains to external data sources, enabling smart contracts to access real-world information.
 
-In the StakeWise protocol, Oracles monitor validator performance data on the Beacon Chain and reach consensus on validator registration approvals, reward distribution, and exit processes within Vaults.
+In the StakeWise protocol, Oracles act as a decentralized signing committee bridging the Beacon Chain and Vaults — reporting staking rewards and penalties, approving validator registrations and consolidations, and enabling validator exits.
 
-Oracles are a crucial part of the protocol, and they must remain sufficiently decentralized and maintain high uptime for StakeWise to work seamlessly.
+Oracles hold no funds and never submit transactions themselves; they only produce signed attestations. The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#readContract) verifies those attestations on-chain, enforcing a signature threshold (currently 6 of 11 Oracles) before any update takes effect.
 
-The protocol operates with [11 Oracles](#oracle-network-participants) selected and [approved ↗](https://vote.stakewise.io/#/proposal/0x54ceedefd1060fbad17ab6181be5a90da4c686dc071d1f6121d24c0398700be6)
-by the StakeWise DAO through governance processes.
-These Oracles form a decentralized network of independent nodes that ensures protocol resilience and prevents single points of failure.
-This distributed approach eliminates centralized control, reduces regulatory capture risks, and ensures protocol longevity through consensus-based decision making.
-
-Oracle decisions require threshold-based consensus depending on the operation.
-Validator registration requires 8 out of 11 Oracle signatures, while reward updates need 6 out of 11 signatures.
-
-Through Oracle consensus, all Vaults stay synced with the Beacon Chain, display accurate information, trigger secure and timely new validator registrations, and fulfill exit requests.
-These duties are performed automatically using Oracle software developed by the StakeWise team, with no manual actions involved.
-
-Oracles are one of the protocol's building blocks to deliver seamless staking and unstaking experiences.
+Each Oracle is operated by an independent entity [approved ↗](https://v1.snapshot.box/#/stakewise.eth/proposal/0x54ceedefd1060fbad17ab6181be5a90da4c686dc071d1f6121d24c0398700be6) by the StakeWise DAO and runs the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) software developed by the StakeWise team.
 
 ## Oracle Network Participants
+
+The protocol currently operates with **11 Oracles**, listed below:
+
+<div className="pl-6">
 
 1. [Chorus One ↗](https://chorus.one/)
 2. [Stake.fish ↗](https://stake.fish/)
@@ -38,3 +28,5 @@ Oracles are one of the protocol's building blocks to deliver seamless staking an
 9. [P2P ↗](https://p2p.org/)
 10. [DSRV ↗](https://www.dsrvlabs.com/)
 11. [StakeWise Labs ↗](https://x.com/stakewise_io) (the development team)
+
+</div>

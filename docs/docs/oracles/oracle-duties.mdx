@@ -11,28 +11,24 @@ Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes an
 
 ## Validator Registration Approval
 
-Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
-
 <Image img={require('./img/validator_registration_approval.png')} alt="Oracle validator registration approval process" />
 
-The [Operator Service →](../../operator/launch-operator-service) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
-When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
-This is done to maintain the protocol's ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
-The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
+Oracles approve validator registration requests before the Vault contract forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-:::custom-notes[Approval Process]
-1. Operator sends the validator registration requests and encrypted exit signatures to the Oracles.
-2. Oracles sign approval messages that include the current tree root hash from the Beacon Chain Deposit Contract.
-3. Operator submits registration to the Vault contract with Oracle signatures.
-4. Vault contract calls the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) to validate Oracle signatures and confirm the tree root hash hasn't changed.
-5. Vault transfers ETH to the Beacon Chain deposit contract to complete validator registration.
-:::
+The Operator Service monitors the Vault and, once enough ETH has accumulated (at least 32 ETH), prepares a registration and sends an **approval request** to all 11 Oracles. The request carries all the information each Oracle needs to verify the registration trustlessly, including the encrypted exit signature shares that let the protocol exit the validators on demand.
 
-This process ensures Oracles approve validators based on current Beacon Chain state, bridging the consensus and execution layers while preventing stale approvals and replay attacks.
+Each Oracle independently:
 
-:::custom-notes[Deep Dive]
-For details on how the Operator Service initiates and prepares validator registration, see the [Validator Registration →](../vaults/how-vaults-work#validator-registration) section in Vaults.
-:::
+1. rebuilds the deposit message and verifies the deposit signature against it;
+2. decrypts its own exit signature share and verifies it is a valid BLS signature against the corresponding public-key shard;
+3. confirms that none of the public keys are already registered and that each validator is assigned the next expected index;
+4. uploads the encrypted exit shares to IPFS and signs an approval message that commits to their IPFS hash, the current `deposit_root`, the Vault address, the validators payload (public keys and deposit signatures), and an expiration deadline.
+
+Once at least 6 Oracles have signed, the Operator Service bundles those signatures and submits them to the [Keeper ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) — the smart contract that enforces the rules on-chain.
+
+The Keeper confirms the 6-of-11 threshold is met and that the `deposit_root` still matches what the Oracles signed, ensuring the Deposit Contract's state did not change since the Oracles approved — which also protects against the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/).
+
+Once everything passes, the Vault forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code). The deposit enters the Beacon Chain's deposit queue, and the validator is created once the pending deposit is processed.
 
 ## Reward Distribution
 

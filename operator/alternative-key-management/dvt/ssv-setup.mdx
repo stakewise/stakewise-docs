@@ -73,7 +73,12 @@ The Docker command outputs `encrypted_private_key.json` to your current director
 
 </details>
 
-The file contains your operator's RSA key pair: the private key, encrypted with your password, which the SSV node uses to decrypt its assigned validator key shares; and the public key `pubkey` in plaintext, which you use to register the operator on SSV. To print the `pubkey`, run:
+The file contains your operator's RSA key pair:
+
+- **Private key** — encrypted with your password; the SSV node uses it to decrypt its assigned validator key shares.
+- **Public key** (`pubkey`) — stored in plaintext; you use it to register the operator on SSV.
+
+To print the `pubkey`, run:
 
 ```bash
 grep -o '"pubkey":"[^"]*"' encrypted_private_key.json

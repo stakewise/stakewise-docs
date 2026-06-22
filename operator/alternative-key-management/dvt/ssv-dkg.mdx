@@ -5,7 +5,12 @@ description: Create distributed validators on SSV Network through a DKG ceremony
 
 # DKG Ceremony
 
-In the DKG ceremony the SSV operators generate the validator key shares together. The full private key is never constructed on any machine. The ceremony is run with [`ssv-dkg` ↗](https://github.com/ssvlabs/ssv-dkg) and involves two roles: **operators**, who each run a long-lived `ssv-dkg` service, and an **Initiator**, who triggers the ceremony and collects its outputs (the Initiator does not need to be an operator, though in a self-run cluster it usually is). The full [ceremony flow ↗](https://docs.ssv.network/stakers/tools/ssv-dkg-client/#flow-description) is abstracted away by the [SSV webapp ↗](https://app.ssv.network), which generates the command and the resulting files for you.
+In the DKG ceremony the SSV operators generate the validator key shares together. The full private key is never constructed on any machine. The ceremony is run with [`ssv-dkg` ↗](https://github.com/ssvlabs/ssv-dkg) and involves two roles:
+
+- **Operators** — each runs a long-lived `ssv-dkg` service to take part in a ceremony.
+- **Initiator** — triggers the ceremony and collects its outputs. The Initiator does not need to be an operator, though in a self-run cluster it usually is.
+
+The full [ceremony flow ↗](https://docs.ssv.network/stakers/tools/ssv-dkg-client/#flow-description) is abstracted away by the [SSV webapp ↗](https://app.ssv.network), which generates the command and the resulting files for you.
 
 ## How Vaults Use the DKG Ceremony
 
@@ -151,7 +156,7 @@ docker run \
   -u $(id -u):$(id -g) \
   --env-file .env \
   -v $(pwd)/data:/data \
-  europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v2.0.0
+  europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v2.1.0
 ```
 
 ## Step 5: Run the DVT Relayer
@@ -197,7 +202,7 @@ VALIDATORS_MANAGER_PASSWORD_FILE=/data/validators-manager-password.txt
 4. Pull and run the Relayer:
 
 ```bash
-export DVT_RELAYER_VERSION=v1.0.0
+export DVT_RELAYER_VERSION=v1.1.0
 docker run --rm -ti \
   --env-file .env \
   -v $(pwd)/data:/data \

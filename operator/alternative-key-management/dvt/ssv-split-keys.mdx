@@ -14,7 +14,7 @@ This flow suits two kinds of scenarios:
 
 ## Select Operators
 
-1. In the SSV webapp, open **Run a Distributed Validator** — click **Distribute Validators** on the "Join the SSV Network" landing (new accounts), or go **Validator Clusters → Create a cluster** if you already have an operator or cluster.
+1. In the SSV webapp, open **Run a Distributed Validator**: click **Distribute Validators** on the "Join the SSV Network" landing (new accounts), or go to **Validator Clusters → Create a cluster** if you already have an operator or cluster.
 
 2. Select **Generate new key shares**
 <img src="/img/distribute-validator-keys-2.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
@@ -22,8 +22,8 @@ This flow suits two kinds of scenarios:
 3. Choose the cluster size and select your operators, then click **Next**. Search for an operator by **ID** or name.
 <img src="/img/distribute-validator-keys-3.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-:::custom-warning[Private operators must whitelist you]
-A padlock icon next to an operator means it's **private** (permissioned) — you can only select it if the wallet you're creating the cluster with is whitelisted in that operator's settings. For your own operators, whitelist your wallet; for third-party private operators, ask them to whitelist you.
+:::custom-warning[Private Operators Must Whitelist You]
+A padlock icon next to an operator means it's **private** (permissioned). You can only select it if the wallet you're creating the cluster with is whitelisted in that operator's settings. For your own operators, whitelist your wallet; for third-party private operators, ask them to whitelist you.
 :::
 
 ## Generate Key Shares
@@ -66,9 +66,9 @@ Generating Keyshares file, this might take a few minutes do not close terminal.
 Key distribution successful! Find your key shares file at:
 /Users/user/ssv-keys/keyshares-1763995534.json
 ```
-This splits your validator key into encrypted shares using Shamir Secret Sharing (SSS), with each share encrypted for a specific operator.
+This splits your validator key into encrypted shares using Shamir's Secret Sharing (SSS), with each share encrypted for a specific operator.
 
-## Register the Validator
+## Register Validator
 
 8. Upload the generated **KeyShares File**
 <img src="/img/distribute-validator-keys-6.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
@@ -89,7 +89,7 @@ Understand [how fees are managed ↗](https://docs.ssv.network/operators/operato
 12. Acknowledge the risk and click **Next**
 <img src="/img/distribute-validator-keys-10.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-:::custom-warning[Critical - Stop Other Validator Clients]
+:::custom-warning[Critical: Stop Other Validator Clients]
 Before this final registration, shut down any existing validator client running this key. Once the SSV operators start signing with their shares, running the same key elsewhere will result in slashing.
 :::
 
@@ -99,4 +99,4 @@ Review transaction details and complete two transactions:
      2. Click **Register Validator** and confirm in your wallet
 <img src="/img/distribute-validator-keys-11.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
 
-14. Congratulations! 🎉 Your validator is now registered on the SSV network and being managed by your selected operators.
+14. Congratulations! 🎉 Your validator is now registered on the SSV Network and being managed by your selected operators.

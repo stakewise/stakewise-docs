@@ -9,7 +9,7 @@ description: Run validators with SSV Network's distributed validator technology 
 
 Each operator runs an **SSV node** — the software that implements the SSV protocol and communicates with the network's smart contracts. It connects to the operator's consensus and execution clients, receives encrypted key shares, and performs validator duties (attestations and proposals) using only a **share** of the validator key: a threshold of shares is enough to produce a valid signature.
 
-You can run your validators on SSV in two ways, which differ in how the validator key is created:
+You can run your validators on the SSV Network in two ways, which differ in how the validator key is created:
 
 - [Split Keys](/operator/alternative-key-management/dvt/ssv-split-keys) — generate a full validator key, then split it into shares and distribute them to the operators. The Operator Service has access to the full key and uses it to register new validators.
 - [DKG Ceremony](/operator/alternative-key-management/dvt/ssv-dkg) — SSV operators generate the key shares together through a ceremony. The full private key is never constructed on any machine, at any point in its lifecycle. The Operator Service has no access to the key shares. The registration of the new validators happens through the DVT Relayer.

@@ -32,13 +32,14 @@ A DVT setup is made up of several components that work together:
 
 During registration, the DVT Relayer coordinates the operators' Sidecars and collects their signature shares.
 
-1. The Operator Service determines the starting validator index and deposit amounts and sends a registration request to the Relayer.
+1. The Operator Service determines the starting validator index and deposit amounts and sends a **registration request** to the Relayer.
 2. The Relayer creates the corresponding **pending validators** and exposes them via its API to the Sidecars.
-3. The Sidecars poll the Relayer for pending validators that are awaiting signatures, create **deposit** and **exit signature shares** for those validators, and push the shares back to the Relayer.
-4. The Relayer processes deposit and exit signature shares:
+3. The Sidecars poll the Relayer for pending validators that are awaiting signatures, create **deposit and exit signature shares** for those validators, and push the shares back to the Relayer.
+4. The Relayer processes the signature shares:
 
     - Receives the signature shares from the Sidecars.
-    - Restores the full **deposit** and **exit signatures** from the Sidecar shares and verifies the restored signatures.
-    - For the **exit signature**, splits that full signature into a new set of shares — one per Oracle — and encrypts each with that Oracle's public key; the raw exit signature is never exposed. The deposit signature is kept whole. It then fills in the signatures on the pending validators, and the **encrypted Oracle shares** are available through the Relayer API.
-5. The Operator Service repeats the registration request each block, polling until all pending validators have their signatures ready.
-6. Once the signatures are ready, the Operator Service registers those validators in the **Vault contract**.
+    - Restores the full **deposit and exit signatures** from the Sidecar shares and verifies the restored signatures.
+    - For the exit signature, splits that full signature into a new set of shares — one per Oracle — and encrypts each with that Oracle's public key; the raw exit signature is never exposed. The deposit signature is kept whole. It then fills in the signatures on the pending validators, and the **encrypted Oracle shares** are available through the Relayer API.
+5. The Operator Service repeats the registration request each block, polling until the Relayer has reconstructed every validator's signatures and returned the **Validators Manager signature** that authorizes the registration.
+6. The Operator Service requests approval from the StakeWise Oracles, forwarding the validators and their encrypted Oracle shares. The Oracles validate the data and return a combined **approval** once enough of them vote.
+7. The Operator Service submits the registration to the Vault contract, providing both authorizations: the **Oracles' approval** and the **Validators Manager signature**. The Vault deposits the stake, and the validators join the Beacon Chain's activation queue. They become active once the queue clears, which depends on how many deposits the network is currently processing.

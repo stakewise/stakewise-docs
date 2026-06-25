@@ -15,7 +15,7 @@ StakeWise Vaults support both [Obol ↗](https://obol.org) and [SSV ↗](https:/
 
 <Image img={require('./img/dvt.png')} alt="dvt" />
 
-Validators have a single public-private key pair (the validator key) for consensus participation (block proposals, attestations) and a withdrawal address that determines where staked funds are sent upon exit. Validator keys must stay online continuously, making them vulnerable to compromise.
+Validators have a single public-private key pair (the validator key) for consensus participation (block proposals, attestations) and a withdrawal address that determines where staked funds are sent upon exit. The validator key must stay online continuously, so running it on a single node is a single point of failure: if that node goes offline, the validator stops performing its duties.
 
 DVT addresses this vulnerability by distributing the validator key across multiple nodes as a group of BLS private keys that together operate as a threshold key for participating in proof-of-stake consensus. Each node signs with its own key share, producing a signature share. A threshold number of shares (e.g., 3 out of 4) can collectively produce valid signatures, so the validator keeps signing even if some nodes go offline.
 
@@ -42,4 +42,4 @@ During registration, the DVT Relayer coordinates the operators' Sidecars and col
     - For the exit signature, splits that full signature into a new set of shares — one per Oracle — and encrypts each with that Oracle's public key; the raw exit signature is never exposed. The deposit signature is kept whole. It then fills in the signatures on the pending validators, and the **encrypted Oracle shares** are available through the Relayer API.
 5. The Operator Service repeats the registration request each block, polling until the Relayer has reconstructed every validator's signatures and returned the **Validators Manager signature** that authorizes the registration.
 6. The Operator Service requests approval from the StakeWise Oracles, forwarding the validators and their encrypted Oracle shares. The Oracles validate the data and return a combined **approval** once enough of them vote.
-7. The Operator Service submits the registration to the Vault contract, providing both authorizations: the **Oracles' approval** and the **Validators Manager signature**. The Vault deposits the stake, and the validators join the Beacon Chain's activation queue. They become active once the queue clears, which depends on how many deposits the network is currently processing.
+7. The Operator Service submits the registration to the Vault contract, providing both authorizations: the **Oracles' approval** and the **Validators Manager signature**. The Vault deposits the stake, and the validators join the Beacon Chain's activation queue. Each becomes active once its deposit is processed, which can take a while depending on how many deposits are ahead of it in the queue.

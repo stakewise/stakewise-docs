@@ -1,30 +1,30 @@
 ---
 title: Treasury
-description: The StakeWise DAO Treasury — assets controlled by SWISE holders and deployed through governance votes.
+description: "The StakeWise DAO Treasury: assets controlled by SWISE holders and deployed through governance votes."
 ---
 
 # Treasury
 
-The StakeWise DAO Treasury is a transparent, on-chain pool of assets controlled directly by SWISE token holders. Secured by smart contracts, it holds the protocol's capital — primarily **osETH** and **SWISE** — and exists to ensure the protocol's longevity and self-sustainability.
+The StakeWise DAO Treasury is a transparent, on-chain pool of assets controlled directly by SWISE token holders. Secured by smart contracts, it holds the protocol's capital (primarily **osETH** and **SWISE**) and exists to ensure its longevity and self-sustainability.
 
 :::custom-info[Treasury Addresses]
 - **Ethereum:** [0x144a98cb1CdBb23610501fE6108858D9B7D24934 ↗](https://etherscan.io/address/0x144a98cb1CdBb23610501fE6108858D9B7D24934)
 - **Gnosis:** [0x8737f638E9af54e89ed9E1234dbC68B115CD169e ↗](https://gnosisscan.io/address/0x8737f638E9af54e89ed9E1234dbC68B115CD169e)
 :::
 
-## How Spending Is Decided
+## How the Treasury Spends
 
-The Treasury's operational framework relies on smart contracts and social consensus: no single individual can unilaterally withdraw assets, and every spend follows the same path. Each expenditure is proposed and discussed on the [community forum](./community-forum), then approved by SWISE holders through a [Snapshot vote](./voting-process). Every outflow leaves a verifiable record of how the DAO has chosen to allocate its capital.
+The Treasury's operational framework relies on smart contracts and social consensus: no individual can unilaterally withdraw assets, and every spend follows the same path. Each expenditure is proposed and discussed on the community forum, then approved by SWISE holders through a Snapshot vote. Every outflow leaves a verifiable record of how the DAO has chosen to allocate its capital.
 
 In practice, those decisions have taken many forms:
 
-- [SWIP-38 ↗](https://forum.stakewise.io/t/swip-38-deploy-400-oseth-from-the-stakewise-dao-treasury-into-fluid-for-protocol-owned-liquidity/2008) — transferred 400 osETH from the Treasury to the Liquidity Committee to seed protocol-owned liquidity for osETH on [Fluid ↗](https://fluid.io/), so the DAO acts as its own liquidity provider instead of renting liquidity through token incentives.
-- [SWIP-30 ↗](https://forum.stakewise.io/t/swip-30-gradually-replace-swise-liquidity-incentives-with-oseth-from-treasury/1794) — began gradually replacing SWISE token emissions to liquidity providers with osETH paid out of protocol revenue, reducing dilution while keeping incentives in place.
-- [SWIP-31 ↗](https://forum.stakewise.io/t/swip-31-issue-development-grant-for-stakewise-labs/1881) — issued a 12-month grant of 500 osETH and 500 osGNO to StakeWise Labs in 2025 to cover engineering, business development, and operational costs, supplementing the team's node-operating revenue.
+- [SWIP-38 ↗](https://forum.stakewise.io/t/swip-38-deploy-400-oseth-from-the-stakewise-dao-treasury-into-fluid-for-protocol-owned-liquidity/2008) transferred 400 osETH from the Treasury to the Liquidity Committee to seed protocol-owned liquidity for osETH on [Fluid ↗](https://fluid.io/), so the DAO acts as its own liquidity provider instead of renting liquidity through token incentives.
+- [SWIP-30 ↗](https://forum.stakewise.io/t/swip-30-gradually-replace-swise-liquidity-incentives-with-oseth-from-treasury/1794) began gradually replacing SWISE token emissions to liquidity providers with osETH paid out of protocol revenue, reducing dilution while keeping incentives in place.
+- [SWIP-31 ↗](https://forum.stakewise.io/t/swip-31-issue-development-grant-for-stakewise-labs/1881) issued a 12-month grant of 500 osETH and 500 osGNO to StakeWise Labs in 2025 to cover engineering, business development, and operational costs, supplementing the team's node-operating revenue.
 
 ## Multisig
 
-The Treasury is a [Gnosis Safe ↗](https://safe.global/) multisig with 7 members. It uses the [SafeSnap module ↗](https://docs.snapshot.box/v1-interface/plugins/safesnap-reality) — which lets approved Snapshot votes trigger Safe transactions — to execute decisions on-chain.
+The Treasury is a [Gnosis Safe ↗](https://safe.global/) multisig with 7 members. It uses the [SafeSnap module ↗](https://docs.snapshot.box/v1-interface/plugins/safesnap-reality) (which lets approved Snapshot votes trigger Safe transactions) to execute decisions on-chain.
 
 Because any account can submit a transaction to the Safe via SafeSnap, the committee's role is to monitor proposed transactions and reject any that fall outside what the DAO has approved. Rejecting a transaction requires **4 of 7 committee members** to co-sign.
 

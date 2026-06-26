@@ -5,87 +5,59 @@ description: Amplify staking rewards up to 3x with StakeWise Boost. Learn how os
 
 import Image from '@theme/IdealImage'
 
-StakeWise Boost is a one-click yield amplification strategy: it uses your osETH as collateral on Aave to borrow additional ETH, which is then staked to amplify your rewards.
+StakeWise Boost is a one-click yield amplification strategy that uses osETH as collateral to borrow additional ETH on Aave and restake it in the Vault. The process repeats multiple times, resulting in a single staking position. Boost’s rewards are the surplus from the extra staked ETH’s rewards, after the Aave borrowing fee and Vault operator fees. StakeWise charges no additional fee for using Boost.
 
-:::custom-tips[Boost Your Rewards]
-To start using Boost right away, see [this guide](/staker/boost).
-:::
+<Image img={require('./img/boost_flow.png')} alt="Boost flow" />
 
-## How Boost Works
+Boost executes automatically in a few steps:
 
-Boost combines your original osETH with ETH borrowed from Aave into a single staking position:
+1. The staker deposits osETH into [Boost via the Vault or Stake page](/staker/boost#how-to-boost).
+2. Boost uses the osETH as collateral on Aave to borrow ETH against it.
+3. The borrowed ETH is staked in the Vault, which mints new osETH.
+4. Steps 2–3 repeat, increasing the amount of ETH earning staking rewards.
 
-1. You deposit osETH into [Boost via the Vault or Stake page](/staker/boost).
-2. Boost uses your osETH as collateral on Aave to borrow additional ETH.
-3. The borrowed ETH is staked in the Vault on your behalf.
-4. Steps 2–3 repeat in a loop, amplifying your rewards.
-
-<Image img={require('./img/stakewise_boost_money_flow.png')} alt="Boost flow explanation" />
-
-The amount of amplification depends on the [Vault's osETH LTV](../ostoken/how-ostoken-works#loan-to-value-limits) — how much osETH you can mint per unit staked (distinct from Aave's borrow LTV in [Safety](#safety)):
+The amount of amplification depends on the Vault's osETH LTV (how much osETH can be minted per unit of ETH staked), distinct from Aave's borrow LTV:
 
 - **6x looping** in Vaults with 90% osETH LTV
 - **14x looping** in Vaults with 100% osETH LTV
 
-This can amplify staking rewards up to **3x** compared to normal staking. Over the mid-term (a 6+ month holding period), Boost historically generates ~1–3 percentage points above the base staking rate, depending on the spread between staking rewards and Aave borrow rates, for a total APY of approximately **4–6%**.
+Over the mid-term (6+ months), Boost has historically added **~1–3 percentage points** over the base staking rate, for a total APY of roughly **4–6%**.
 
-Staking rewards are earned on the entire amount, so even after Aave interest and operator fees, net rewards beat those from staking your original deposit alone. StakeWise charges no additional fee for using Boost.
+:::custom-tips[Get Started With Boost]
+To start using Boost right away, see [this guide](/staker/boost).
+:::
 
 ## Safety
 
-The biggest risks of any looped position are **collateral depeg** and **LTV (Loan-to-Value) drift toward liquidation**. In Boost, both are mitigated by design.
+The biggest risks of any looped position are **collateral depeg** and **LTV drift toward liquidation**. Boost mitigates both by design.
 
-### No Depeg Liquidations
+**No depeg liquidations.** Aave values osETH using StakeWise's native price feed rather than volatile secondary-market prices, so collateral is always worth what osETH can be redeemed for. This removes depeg as a source of liquidation.
 
-A depeg occurs when an asset loses its intended value and trades at a different price.
+**A built-in LTV buffer.** If borrow costs ever exceed staking rewards, debt grows faster than collateral and LTV drifts upward; Boost keeps that drift slow and bounded. On Aave, LTV is the ratio of borrowed value to collateral value, and three numbers bound the position:
 
-Boost eliminates depeg-related liquidation risks because Aave uses StakeWise's native price feed for osETH instead of volatile secondary-market prices. Your collateral is always valued at what osETH can be redeemed for.
+- **Max LTV (93%)**: the most that can be borrowed against the collateral when opening a loan.
+- **Liquidation Threshold (95%)**: the point at which the position becomes undercollateralized.
+- **Current LTV**: where the position sits now, drifting with the spread between staking APY and Aave's borrow APY.
 
-### LTV Has a Built-In Buffer
+In normal markets the drift goes the safe way: staking rewards outpace borrow costs, so collateral grows faster than debt and LTV decreases over time. [Historical data ↗](https://blog.stakewise.io/caseStudy/how-stakewise-boost-keeps-your-rewards-juicy-and-your-stake-safe#:~:text=Scenario%201%3A%20When,passing%20day.) shows LTV rises only about 1 day in 9, and even under a sustained negative spread liquidation from 93% would take over a year.
 
-If borrow costs rise above staking rewards, the loan can grow faster than the collateral and push LTV toward liquidation. Boost is structured so that this drift is slow and bounded.
+**Automatic unboost.** As a final safeguard, when a position reaches **94.5% LTV** anyone can trigger an unboosting transaction on the holder's behalf, and the StakeWise core team monitors positions to do so when needed. Funds always remain under the holder's control, and since Boost never relies on the secondary market to repay debt, exits aren't exposed to slippage.
 
-LTV on Aave is the ratio of your borrow to your collateral. Three numbers bound your position:
-
-- **Max LTV — 93%**: the highest you can borrow against your osETH collateral when opening a loan.
-- **Liquidation Threshold — 95%**: the point at which a position becomes undercollateralized.
-- **Current LTV**: where your position sits right now, drifting slowly with the spread between staking APY and Aave's borrow APY.
-
-In normal markets the LTV actually **decreases** over time. Staking rewards outpace borrow costs, so your collateral grows faster than your debt — continuously de-risking the position. [Historical data ↗](https://blog.stakewise.io/caseStudy/how-stakewise-boost-keeps-your-rewards-juicy-and-your-stake-safe#:~:text=Scenario%201%3A%20When,passing%20day.) shows LTV rises on roughly 1 day in 9, and even under a sustained negative spread (borrow APY exceeding staking APY by ~2%) liquidation would take over a year from the 93% starting point.
-
-<Image img={require('./img/danger_zone.png')} alt="LTV safety buffer between Max LTV and Liquidation Threshold" />
-
-### Automatic Unboost
-
-As a final safeguard, when any boosted position reaches **94.5% LTV**, anyone in the community can trigger an unboosting transaction on your behalf. The StakeWise core team actively monitors all boosted positions and triggers these protective exits when necessary. Funds always remain under your control.
-
-Boost does not rely on the secondary market for repaying debt, so your profit is not affected by slippage during exits.
-
-From a smart contract security perspective, your exposure is limited to the node operators of your chosen Vault and the smart contracts of StakeWise and Aave, both of which are regularly audited.
+Smart-contract exposure is limited to the chosen Vault's node operators and the regularly audited StakeWise and Aave contracts.
 
 ## Market Conditions
 
-Two market-driven conditions can affect your Boost position:
+Two market-driven conditions can affect a Boost position.
 
-### Borrow APY Exceeds Staking APY
-
-Boost APY depends on the spread between your Vault's staking APY and Aave's variable WETH borrow APY — it's positive when borrow APY is below staking APY, and negative when it exceeds it.
-
-You can monitor the current WETH variable borrow APY in the **Borrow Info** section of the [WETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&marketName=proto_mainnet_v3).
+**When borrow APY exceeds staking APY.** Boost APY depends on the spread between the Vault's staking APY and Aave's variable WETH borrow APY: it's positive when borrow APY is below staking APY, and negative when it exceeds it. The current WETH variable borrow APY can be monitored in the **Borrow Info** section of the [WETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&marketName=proto_mainnet_v3).
 
 :::custom-warning[Negative APY Alert]
-If you see a negative APY on your Boost position, it means the WETH borrow APY on Aave currently exceeds your Vault's staking APY.
+A negative APY on a Boost position means the WETH borrow APY on Aave currently exceeds the Vault's staking APY.
 If the APY remains negative for more than 7 consecutive days, consider exiting Boost manually.
 Stay connected with the [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g) community for real-time updates on market conditions.
 :::
 
-### osETH Supply Cap Reached
-
-Boost deposits osETH as collateral on Aave, which enforces a maximum supply cap.
-When total supplied osETH reaches this cap, no additional osETH can be deposited, making it impossible to open new boosted positions.
-Existing boosted positions are not affected, but new boosts cannot be initiated until supply drops below the cap.
-
-You can monitor the current supply level in the **Supply Info** section of the [osETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xf1c9acdc66974dfb6decb12aa385b9cd01190e38&marketName=proto_mainnet_v3).
+**When the osETH supply cap is reached.** Boost deposits osETH as collateral on Aave, which enforces a maximum supply cap. When total supplied osETH reaches this cap, no additional osETH can be deposited, making it impossible to open new boosted positions. Existing boosted positions are not affected, but new boosts cannot be initiated until supply drops below the cap. The current supply level can be monitored in the **Supply Info** section of the [osETH reserve on Aave ↗](https://app.aave.com/reserve-overview/?underlyingAsset=0xf1c9acdc66974dfb6decb12aa385b9cd01190e38&marketName=proto_mainnet_v3).
 
 :::custom-notes[Further Reading]
 - [StakeWise Boost: A DeFi-Native Yield Amplification Strategy Made Simple ↗](https://blog.stakewise.io/caseStudy/stakewise-boost-a-defi-native-yield-amplification-strategy-made-simple)

@@ -16,10 +16,9 @@ Vault efficiency consists of two main components:
 
 All scores are calculated over the **past 7 days**.
 
-
 ## Proposer Performance
 
-Block proposals depend on luck. Since MEV rewards can vary greatly between blocks, only the number of blocks processed is counted — reward sizes are ignored to avoid relying on chance.
+Block proposals depend on luck. Since MEV rewards can vary greatly between blocks, only the number of blocks proposed is counted — reward sizes are ignored to avoid relying on chance.
 
 ### Calculation Method
 
@@ -43,7 +42,7 @@ Verify that your validator clients are configured with the correct **fee recipie
 
 ## Attester Performance
 
-Attestations are the primary source of validator income — roughly 85% of all rewards — and pay for correct consensus votes with timely inclusion.
+Attestations are the primary source of validator income — roughly 85% of all rewards — and pay for correct consensus votes that are included on time.
 
 An attestation consists of three votes:
 - **Head vote**
@@ -67,7 +66,7 @@ attester_score = total_rewards / ideal_rewards
 :::
 
 :::custom-info[Why Sync Committee Is Excluded]
-Sync committee rewards are excluded from calculations as they constitute only 3% of consensus layer rewards and depend entirely on luck.
+Sync committee rewards are excluded from calculations as they constitute only 3% of Consensus Layer rewards and depend entirely on luck.
 :::
 
 ## Final Scoring Formula

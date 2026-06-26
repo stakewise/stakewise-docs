@@ -13,7 +13,7 @@ A Vault is a self-contained on-chain system: a proxy that holds state, an implem
 
 Each Vault is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is what users interact with — it holds all persistent state, including user balances and the Vault-specific configuration set during initialization. Logic lives in a separate implementation contract, so new Vault versions can be released without redeploying each Vault or migrating user data.
 
-Vaults are created through network-specific factory contracts. On Ethereum, an [`EthVaultFactory` ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) is deployed for each Vault variant (Standard, Private, Blocklist, ERC-20); on Gnosis, the equivalent [`GnoVaultFactory` ↗](https://gnosisscan.io/address/0x7A8cbBf690084E43De778173cfAcf7313c9122DD#code) plays the same role. Each call to `createVault`:
+Vaults are created through network-specific factory contracts. On Ethereum, an [`EthVaultFactory` ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) is deployed for each Vault variant (Standard, ERC-20, Private, Blocklist); on Gnosis, the equivalent [`GnoVaultFactory` ↗](https://gnosisscan.io/address/0x7A8cbBf690084E43De778173cfAcf7313c9122DD#code) plays the same role. Each call to `createVault`:
 
 1. Deploys a new ERC-1967 proxy pointing to the shared implementation contract.
 2. Calls the proxy's initializer to set the Vault's initial configuration.
@@ -37,7 +37,7 @@ At initialization, the Vault is linked to [StakeWise smart contracts](../../cont
 
 **Fee enforcement** — calculating and applying protocol and operator fees on accrued rewards.
 
-**MEV capture** — routing execution-layer rewards either to a Vault-specific escrow or to the shared Smoothing Pool.
+**MEV capture** — routing Execution Layer rewards either to a Vault-specific escrow or to the shared Smoothing Pool.
 
 **osETH integration** — letting depositors mint osETH against their staked position without unstaking.
 

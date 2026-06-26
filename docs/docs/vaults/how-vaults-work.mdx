@@ -6,7 +6,7 @@ description: How Vaults accept deposits, register validators, distribute rewards
 import Tooltip from '@site/src/components/Tooltip/Tooltip';
 import Image from '@theme/IdealImage'
 
-Every Vault has a [Vault operator](/operator/introduction) responsible for its validators. The operator runs the infrastructure directly or delegates it to a third party. Operating a Vault means running the [Operator Service ↗](https://github.com/stakewise/v3-operator) — StakeWise software that automates a Vault's day-to-day operations — alongside Ethereum [consensus](../../operator/staking-nodes#consensus-client) and [execution](../../operator/staking-nodes#execution-client) clients.
+Every Vault has an [operator](/operator/introduction) responsible for its validators. The operator runs the infrastructure directly or delegates it to a third party. Operating a Vault means running the [Operator Service ↗](https://github.com/stakewise/v3-operator) — StakeWise software that automates a Vault's day-to-day operations — alongside Ethereum [consensus](../../operator/staking-nodes#consensus-client) and [execution](../../operator/staking-nodes#execution-client) clients.
 
 Every Vault action — deposits, validator registration, reward distribution, and withdrawals — is executed on-chain by the Vault's smart contracts. The Operator Service runs off-chain and initiates these on-chain calls automatically. The sections below walk through each stage.
 
@@ -16,9 +16,9 @@ Every Vault action — deposits, validator registration, reward distribution, an
 
 When a user deposits ETH, the Vault issues **shares** representing their proportional ownership of the pool's assets. Share value increases automatically as rewards accumulate — no token swaps or conversions occur during staking. Shares are non-transferable, except in [ERC-20 Vaults](./vault-types#erc-20-vault), where they are issued as a tradable token.
 
-Each Vault has a configurable [capacity](./configuration#capacity) — deposits of any size are accepted up to that limit. Some Vaults restrict who can deposit: [private Vaults](./vault-types#private-vault) accept deposits only from whitelisted addresses, while [blocklist Vaults](./vault-types#blocklist-vault) prohibit blocklisted wallets.
+Each Vault has a configurable [capacity](./configuration#capacity) — deposits of any size are accepted up to that limit. Some Vaults restrict who can deposit: [Private Vaults](./vault-types#private-vault) accept deposits only from whitelisted addresses, while [Blocklist Vaults](./vault-types#blocklist-vault) prohibit blocklisted wallets.
 
-Depositors can also mint [osETH](../ostoken/intro) against their stake — a liquid token usable across DeFi while the underlying stake keeps earning rewards. osETH grows in value over time: each osETH is redeemable for more ETH as staking rewards accrue. How much osETH a user can mint depends on the Vault's LTV ratio.
+Depositors can also mint [osETH](../ostoken/intro) against their stake — a liquid token usable across DeFi while the underlying stake keeps earning rewards. osETH grows in value over time: each osETH is worth more ETH as staking rewards accrue. How much osETH a user can mint depends on the Vault's LTV (Loan-to-Value) ratio.
 
 ## Validator Registration
 
@@ -26,16 +26,24 @@ Depositors can also mint [osETH](../ostoken/intro) against their stake — a liq
 
 Vaults pool deposits and register validators on the Beacon Chain once they accumulate enough assets — 32 ETH on Ethereum, 1 GNO on Gnosis.
 
-The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro). Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Deposit data is generated automatically during registration. Once approved, validators enter the Beacon Chain's [activation queue ↗](https://www.validatorqueue.com/) and begin earning rewards when active.
+The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro), generating the deposit data automatically. Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Once approved, the Vault contract sends the 32 ETH deposit to the Ethereum deposit contract. Before the validator becomes active and starts attesting or proposing blocks, it travels through the Beacon Chain's activation pipeline.
+
+:::custom-notes[Activation Waiting Times]
+Activation time depends on the Consensus Layer's deposit queue, which processes deposits at a capped rate. Once a deposit clears the queue, only a short fixed delay remains before the validator can participate.
+
+1. **Deposit queue** — the deposit joins the Consensus Layer's processing queue (`state.pending_deposits`), rate-limited to 16 deposits per epoch and a churn budget of 256 ETH per epoch, shared between activations and exits. Under heavy demand, deposits can wait weeks or months.
+2. **Fixed delay** — once written into the registry, the validator waits a fixed ~7–8 epochs (~45–50 min). Most of this is a lookahead delay that stops anyone predicting and gaming committee assignments.
+3. **Active** — the validator begins attesting and earning rewards.
+:::
 
 The [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)) raised the maximum validator balance from 32 ETH to 2048 ETH, enabling **consolidation** — merging many `0x01` validators<sup><a href="#fn-1" id="fnref-1" style={{textDecoration: 'none'}}>1</a></sup> (capped at 32 ETH) into fewer high-balance `0x02` ones (up to 2048 ETH) to reduce infrastructure overhead and allow partial withdrawals of rewards above 32 ETH without exiting.
 
-The Operator Service registers new validators as `0x02` by default, and existing `0x01` validators can be migrated via [consolidation](../../operator/manage-validators/consolidate-validators). When registering, the Operator Service prioritizes funding existing `0x02` validators — selecting those with the highest current balance and topping them up to 2048 ETH before creating new ones.
+The Operator Service registers new validators as `0x02` by default, and existing `0x01` validators can be migrated via [consolidation](../../operator/manage-validators/consolidate-validators). When registering, it prioritizes funding existing `0x02` validators — selecting those with the highest current balance and topping them up to 2048 ETH before creating new ones.
 
-:::custom-notes[Validator Registration Process]
+:::custom-notes[Under the Hood]
 The Operator Service performs the following steps:
-1. Check if the Vault has enough assets to register a validator (32 ETH for Ethereum).
-2. Get the next free validator key from the used keystore.
+1. Check if the Vault has enough assets to register a validator (32 ETH on Ethereum).
+2. Get the next free validator key from the keystore.
 3. Obtain the BLS signature for exit messages<sup><a href="#fn-2" id="fnref-2" style={{textDecoration: 'none'}}>2</a></sup> using local keystores or a [remote signer](../../operator/alternative-key-management/remote-signer).
 4. Share the validator's exit signature with StakeWise Oracles:
     - Split the BLS signature<sup><a href="#fn-3" id="fnref-3" style={{textDecoration: 'none'}}>3</a></sup> using [Shamir's Secret Sharing ↗](https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing) (number of shares = number of Oracles).
@@ -50,26 +58,26 @@ The Operator Service performs the following steps:
 
 Once active, validators earn:
 
-- **Consensus-layer rewards** — for block proposals, attestations, and sync-committee participation.
-- **Execution-layer rewards** — [MEV ↗](https://ethereum.org/developers/docs/mev/) and transaction priority fees.
+- **Consensus Layer rewards** — for block proposals, attestations, and sync-committee participation.
+- **Execution Layer rewards** — [MEV ↗](https://ethereum.org/developers/docs/mev/) and transaction priority fees.
 
-These rewards are [calculated off-chain](../oracles/oracle-duties#reward-distribution) by the StakeWise [Oracle network](../oracles/intro) every **12 hours**: Oracles publish per-Vault rewards to an [IPFS hash ↗](https://ipfs.stakewise.io/ipfs/bafkreicoxcsrs652goyanvyjjhgljn6pqpf6zqweu7sobaeybdjrhqomfq), build a Merkle tree over that data, and submit a signed Merkle root to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5), which verifies the signatures and stores the root.
+These rewards are [calculated off-chain](../oracles/oracle-duties#reward-distribution) by the StakeWise [Oracle network](../oracles/intro) every **12 hours**: Oracles publish per-Vault rewards to [IPFS ↗](https://ipfs.stakewise.io/ipfs/bafkreicoxcsrs652goyanvyjjhgljn6pqpf6zqweu7sobaeybdjrhqomfq), build a Merkle tree over that data, and submit a signed Merkle root to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5), which verifies the signatures and stores the root.
 
 Each Vault then pulls in its own rewards through a **harvest**.
 
 :::custom-notes[Harvest Mechanics]
 A harvest does the following:
 
-1. **Verifies the proof**. The Keeper contract checks the Vault proof for its claimed rewards against the stored root.
+1. **Verifies the proof**. The Keeper contract checks the Vault's proof of its claimed rewards against the stored root.
 2. **Calculates new rewards**. Rewards are tracked as a running total, so subtracting the previous total leaves what the Vault has earned (or lost) since its last harvest.
-3. **Moves MEV rewards into the Vault**. Execution rewards sit in a MEV escrow; the Vault pulls them in.
-4. **Applies the change**. The Vault's total assets are computed and per-share value is updated; on gains only, the Vault fee is minted to the fee recipient as new shares.
-5. **Processes the exit queue**. The Vault marks how much of the exit queue is now covered by available assets and makes them claimable.
+3. **Moves MEV rewards into the Vault**. Execution rewards sit in an MEV escrow; the Vault pulls them in.
+4. **Applies the change**. The Vault's total assets are computed and per-share value is updated; only on gains, the Vault fee is minted to the fee recipient as new shares.
+5. **Processes the exit queue**. The Vault marks how much of the exit queue is now covered by available assets, making that portion of the queue claimable.
 :::
 
 The Vault then decides what to do with that ETH:
 
-- **Top-up** — add ETH to existing `0x02` validators, growing their effective balance up to the 2048 ETH maximum.
+- **Top up** — add ETH to existing `0x02` validators, growing their effective balance up to the 2048 ETH maximum.
 - **Consolidate** — merge multiple `0x01` validators into a single `0x02` validator (`0x01` + `0x01` → `0x02`).
 - **Keep ETH as-is** — leave the ETH in the Vault for greater liquidity.
 
@@ -93,7 +101,7 @@ When a user clicks [Unstake](/staker/vault-staking#how-to-unstake) or [Unboost](
 
 1. `enterExitQueue` is called on the Vault contract — for boosted positions, the call is routed through the Boost proxy.
 2. The user enters the Vault's **exit queue** — a first-in, first-out line fulfilled as ETH becomes available.
-3. The user's position is tracked by an **exit queue ticket**, which is filled in whole or in part from that ETH; if filled partially, an updated ticket is issued for the remainder.
+3. The user's position is tracked by an **exit-queue ticket**, which is filled in whole or in part from that ETH; if filled partially, an updated ticket is issued for the remainder.
 4. Once a ticket is fully filled, the user calls `claimExitedAssets` (after a short claim delay) to withdraw the ETH.
 
 Staked assets continue earning rewards until validators complete the exit. Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en/staking/withdrawals/#validator-sweeping) to the Vault and becomes claimable by users in ticket order. Exit processing time depends on Ethereum network conditions — check the current [validator queue ↗](https://www.validatorqueue.com/) for up-to-date estimates.

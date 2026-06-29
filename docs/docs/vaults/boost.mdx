@@ -16,6 +16,8 @@ Boost executes automatically in a few steps:
 3. The borrowed ETH is staked in the Vault, which mints new osETH.
 4. Steps 2–3 repeat, increasing the amount of ETH earning staking rewards.
 
+<Image img={require('./img/boost_reward_flow.png')} alt="Boost reward flow" />
+
 The amount of amplification depends on the Vault's osETH LTV (how much osETH can be minted per unit of ETH staked), distinct from Aave's borrow LTV:
 
 - **6x looping** in Vaults with 90% osETH LTV

@@ -57,11 +57,25 @@ The reward update process has protocol-wide impact.
 
 ## Validator Exits
 
-The validator exit process is automated and trustless.
-Validator exits require exit signatures that are generated during the validator registration process.
+The validator exit process is automated and trustless. During validator registration, the Operator Service generates each validator's pre-signed exit message, splits it into BLS signature shares using a threshold scheme, and encrypts a share for every Oracle, so the validators can always be exited, even if the Vault operator disappears.
 
-As part of registration, the Operator Service encrypts exit signatures using Shamir's secret sharing and distributes them to all Oracles.
+When a Vault has unstake requests, the Operator Service covers them first, using partial withdrawals from its `0x02` validators rather than exiting them. Only if the operator has not freed enough ETH within the `force_withdrawals_period` (24 hours) do the Oracles step in: they identify which validators must exit, reconstruct the exit signatures from their shares, and publish those exits over their APIs for submission on-chain through the Vault contract.
 
-:::custom-notes[Key Benefit]
-This approach ensures validators can be exited on demand while maintaining protocol security through decentralized signature management.
+Because Oracles can only exit validators in full, this ordering matters. Covering a small unstake request with a full exit could withdraw an entire compounding validator of up to 2048 ETH, so a Vault relies on its Operator Service to meet requests precisely through partial withdrawals, leaving the Oracle path as a fallback.
+
+## Validator Consolidations
+
+The [Pectra upgrade ↗](https://ethereum.org/en/roadmap/pectra/) introduced compounding validators: validators with `0x02` withdrawal credentials that can hold up to 2048 ETH of effective balance, instead of the previous 32 ETH cap. A Vault can upgrade an existing `0x01` validator to `0x02`, or merge several validators into a single compounding validator.
+
+**Creating a new compounding validator** (upgrading `0x01` to `0x02`) requires Oracle approval, because it introduces a validator the protocol has not yet recorded. The Operator Service sends a **consolidation request**, each Oracle confirms the keys are active validators of the Vault and returns a signed approval, and the Vault contract submits the consolidation once the [ConsolidationsChecker contract ↗](https://etherscan.io/address/0x033E5BaE5bdc459CBb7d388b41a9d62020Be810F#code) verifies that a threshold of Oracles (currently 6 of 11) has signed.
+
+**Merging into an existing compounding validator**, by contrast, needs no Oracle approval: the Vault contract only checks that the destination is already a registered `0x02` validator.
+
+:::custom-info[Under the Hood]
+Oracles are off-chain nodes that bridge the Vault and the Beacon Chain. The smart contracts that define a Vault's behavior live on the Execution Layer, while the validators earning its rewards run on the Consensus Layer, and the Execution Layer cannot read Consensus Layer state. Oracles read that state, do the work it requires off-chain, and sign the result, so the Vault can act on it.
+
+Oracles never submit transactions themselves; they only sign messages and expose them over their HTTP APIs. Getting those signatures on-chain is left to two off-chain services that fetch them:
+
+- The **Operator Service**, a Vault's automation software, obtains Oracle approvals for the validator operations it submits, such as registration and consolidation, and includes those signatures in the transaction it sends to the Vault contract.
+- The [Keeper service ↗](https://github.com/stakewise/v3-keeper) handles reward distribution. It polls each Oracle's API for signed reward votes, aggregates a threshold of them, and submits the transaction to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code).
 :::

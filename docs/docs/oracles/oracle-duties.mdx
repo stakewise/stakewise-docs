@@ -57,9 +57,11 @@ The reward update process has protocol-wide impact.
 
 ## Validator Exits
 
-The validator exit process is automated and trustless. During validator registration, the Operator Service generates each validator's pre-signed exit message, splits it into BLS signature shares using a threshold scheme, and encrypts a share for every Oracle — so the validators can always be exited, even if the operator disappears.
+The validator exit process is automated and trustless. During validator registration, the Operator Service generates each validator's pre-signed exit message, splits it into BLS signature shares using a threshold scheme, and encrypts a share for every Oracle, so the validators can always be exited, even if the Vault operator disappears.
 
-When a Vault has unstake requests, the Oracles independently identify which validators must exit and publish those exits over their APIs. The Operator Service picks up the Oracle-signalled exits and triggers them on-chain through the Vault contract.
+When a Vault has unstake requests, the Operator Service covers them first, using partial withdrawals from its `0x02` validators rather than exiting them. Only if the operator has not freed enough ETH within the `force_withdrawals_period` (24 hours) do the Oracles step in: they identify which validators must exit, reconstruct the exit signatures from their shares, and publish those exits over their APIs for submission on-chain through the Vault contract.
+
+Because Oracles can only exit validators in full, this ordering matters. Covering a small unstake request with a full exit could withdraw an entire compounding validator of up to 2048 ETH, so a Vault relies on its Operator Service to meet requests precisely through partial withdrawals, leaving the Oracle path as a fallback.
 
 ## Validator Consolidations
 

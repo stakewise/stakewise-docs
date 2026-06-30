@@ -42,7 +42,7 @@ Oracles periodically vote on the consensus rewards and penalties accumulated by 
 
 Each Oracle independently:
 
-1. computes each Vault's consensus rewards from its validators' Beacon Chain balances;
+1. computes each Vault's consensus rewards and penalties from its validators' Beacon Chain balances;
 2. computes each Vault's MEV rewards — for Smoothing Pool Vaults, a proportional slice of the shared escrow; for Vaults with their own MEV escrow, the on-chain unlocked amount;
 3. builds a Merkle tree of all per-Vault rewards and computes each Vault's proof;
 4. uploads the full snapshot (every Vault's rewards + every Vault's proof) to IPFS;

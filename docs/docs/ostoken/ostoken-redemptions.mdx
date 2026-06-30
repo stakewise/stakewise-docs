@@ -23,9 +23,9 @@ The redemption flow is a coordinated process between the [Operator Service ↗](
 
 The Operator Service has two responsibilities:
 
-1. **Computes redeemable positions** — the "who can be redeemed, and by how much" calculation. It uploads the list of eligible positions to [IPFS](https://ipfs.stakewise.io/ipfs/bafkreihbwhyaqskcczhuanu2nbdgdlfbwfwgbirue6kvlw4nrc5d2snqxa) and computes a Merkle tree that commits to each entry. StakeWise governance then submits the root and IPFS hash on-chain, incrementing the `nonce` — a version tag baked into every entry of the list, so bumping it automatically invalidates every proof from the previous version.
+1. **Computes redeemable positions** — the "who can be redeemed, and by how much" calculation. It uploads the list of eligible positions to [IPFS ↗](https://ipfs.stakewise.io/ipfs/bafkreihbwhyaqskcczhuanu2nbdgdlfbwfwgbirue6kvlw4nrc5d2snqxa) and computes a Merkle tree that commits to each entry. StakeWise governance then submits the root and IPFS hash on-chain, incrementing the `nonce` — a version tag baked into every entry of the list, so bumping it automatically invalidates every proof from the previous version.
 
-2. **Processes redemptions** — runs a loop that reads and writes to `OsTokenRedeemer`. When the redemption conditions are met, it fetches all positions from IPFS, decides how much to redeem from each position, builds a Merkle multi-proof, and submits a multicall that refreshes Vault state and calls `redeemOsTokenPositions`. The Operator Service runs from the `positionsManager` address set by StakeWise governance.
+2. **Processes redemptions** — runs a loop that reads and writes to `OsTokenRedeemer`. When the redemption conditions are met, it fetches all positions from IPFS, decides how much to redeem from each position, builds a Merkle multiproof, and submits a multicall that refreshes Vault state and calls `redeemOsTokenPositions`. The Operator Service runs from the `positionsManager` address set by StakeWise governance.
 
 The `OsTokenRedeemer` is the on-chain contract that holds all redemption state: the published Merkle root and IPFS hash, the nonce, per-position redemption progress, and the exit queue. It also executes the redemption itself: verifies the Merkle proofs, calls each Vault's `redeemOsToken` to burn the minter's debt and release the corresponding ETH/GNO, and manages the exit queue.
 
@@ -34,9 +34,9 @@ The `OsTokenRedeemer` is the on-chain contract that holds all redemption state: 
 
 1. Pin the snapshot to a finalized block so all the following steps read the same on-chain state.
 2. Fetch all allocators (addresses that have minted osToken) from the subgraph.
-3. Skip [Boost](../vaults/boost) positions. Each Boost leverage position has its own proxy contract that holds the osToken on the user's behalf, so those proxy addresses are removed from the minters list, and each user's leveraged shares are subtracted from their balance to avoid double-counting.
+3. Skip [Boost](/docs/vaults/boost) positions. Each Boost leverage position has its own proxy contract that holds the osToken on the user's behalf, so those proxy addresses are removed from the minters list, and each user's leveraged shares are subtracted from their balance to avoid double-counting.
 4. Compute `kept` shares — osToken in trackable locations: mainnet, Arbitrum, and DeFi protocols indexed by DeBank or Rabby. Anything else is treated as missing.
-5. Compute `redeemable = minted − kept`, split it across the user's vaults proportionally to where they minted, and sort by LTV descending then amount descending so the riskiest positions are drawn down first.
+5. Compute `redeemable = minted − kept`, split it across the user's Vaults proportionally to where they minted, and sort by LTV descending then amount descending so the riskiest positions are drawn down first.
 :::
 
 ## Flow
@@ -49,20 +49,20 @@ osToken is sent to the `OsTokenRedeemer` contract and a ticket is issued — a u
 
 ### 2. Operator Service Prepares the Next Redemption
 
-The Operator Service monitors the on-chain state. If a previous redemption round has redeemed ETH/GNO waiting to be checkpointed, it first calls `processExitQueue` to finalize that batch so the assets become claimable.
+The Operator Service monitors the on-chain state. If a previous redemption round has redeemed ETH/GNO that is waiting to be checkpointed, it first calls `processExitQueue` to finalize that batch so the assets become claimable.
 
 It then checks whether there's enough queued osToken to submit a new redemption.
 
 ### 3. Operator Service Submits a Redemption
 
-The Operator Service downloads the published list from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then builds a Merkle multiproof against the published root and submits a multicall to `OsTokenRedeemer` that refreshes Vault state and calls `redeemOsTokenPositions`.
+The Operator Service downloads the published list from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from Sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then builds a Merkle multiproof against the published root and submits a multicall to `OsTokenRedeemer` that refreshes Vault state and calls `redeemOsTokenPositions`.
 
 The redemption is now in flight; verification and execution happen on-chain.
 
 ### 4. OsTokenRedeemer Executes the Redemption
 
 The contract rebuilds each leaf, verifies the Merkle multiproof against the stored root, and caps the amount independently per position.
-For each verified position, it calls the Vault's `redeemOsToken` to burn the minter's osToken debt and send the equivalent ETH (using the Vault's just-updated state) to the redeemer.
+For each verified position, it calls the Vault's `redeemOsToken` to burn the minter's osToken debt and send the equivalent ETH/GNO (using the Vault's just-updated state) to the redeemer.
 
 The queued shares are now matched against missing positions — settled, but not yet claimable.
 

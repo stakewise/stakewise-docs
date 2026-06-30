@@ -9,11 +9,11 @@ import Image from '@theme/IdealImage'
 
 osToken is created through **minting** — issuing new osTokens against ETH or GNO staked as collateral in a Vault. A maximum **Loan-to-Value (LTV)** ratio limits how much osToken can be minted against the stake, keeping every osToken overcollateralized.
 
-The osToken **exchange rate** is the ratio between the total assets backing osToken and its total supply. It rises as staking rewards accrue, making each osToken worth more of the underlying asset over time.
+The osToken **exchange rate** is the amount of the underlying asset a user receives from StakeWise when redeeming osToken. It rises as staking rewards accrue, making each osToken worth more of the underlying asset over time.
 
-**Redemptions** convert osToken back to ETH/GNO at this exchange rate. Used by the protocol to close any gap between the market price and the exchange rate, they keep osToken's market value aligned with its fair value.
+**Redemptions** convert osToken back to ETH/GNO at this exchange rate. The protocol uses them to close any gap between osToken's market price and its fair value, keeping the two aligned.
 
-If a position becomes thinly collateralized, **liquidations** act as a last resort to restore its collateralization. When a user wants to exit voluntarily, **burning** osToken returns it to the Vault and unlocks the underlying stake.
+When a user no longer needs the osToken, **burning** it unlocks the underlying stake. If osTokens remain minted but become thinly collateralized, **liquidations** act as a last resort to restore healthy collateralization.
 
 Together, these mechanisms keep osToken safe to hold and use.
 
@@ -21,7 +21,7 @@ Together, these mechanisms keep osToken safe to hold and use.
 
 You can get osToken in three ways:
 
-- [Stake on the main app page](/staker/simple-staking) — your ETH is routed through a [Meta Vault](/docs/vaults/meta-vaults) that distributes deposits across the best-performing Sub-vaults (currently just the [Genesis Vault ↗](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885)), and osToken is minted against your stake automatically.
+- [Stake on the main app page](/staker/simple-staking) — your ETH is routed through a [MetaVault](/docs/vaults/meta-vaults) that distributes deposits across the best-performing Sub-vaults (currently just the [Genesis Vault ↗](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885)), and osToken is minted against your stake automatically.
 - [Pick a specific Vault from the marketplace](/staker/vault-staking) — stake into it, then optionally mint osToken against your stake.
 - Buy osToken on a DEX.
 
@@ -45,28 +45,24 @@ LTV limits vary by Vault type:
 | Vault Type     | Ethereum (osETH) | Gnosis (osGNO) | Safety Mechanism                              |
 |----------------|------------------|----------------|-----------------------------------------------|
 | Standard       | 90% LTV          | 90% LTV        | 10% overcollateralization buffer              |
-| DAO-Approved   | 99.99% LTV       | 99.95% LTV     | 5M SWISE operator bond |
+| DAO-approved   | 99.99% LTV       | 99.95% LTV     | 5M SWISE operator bond |
 
 To qualify for the 99.99% LTV, Vaults must meet strict performance criteria<sup><a href="#fn-1" id="fnref-1">1</a></sup> and post a SWISE slashing bond.
 StakeWise DAO can adjust any individual Vault's LTV based on its risk profile.
 
-LTV is continuously tracked through thresholds that determine position status:
+LTV is continuously tracked through thresholds that determine position status.
 
-Each minter's position falls into one of four grades — Healthy, Moderate, Risky, Unhealthy — based on how close LTV is to the mint cap and the liquidation threshold. In **DAO-approved Vaults** these thresholds don't apply.
+Each minter's position falls into one of four grades — Healthy, Moderate, Risky, Unhealthy — based on how close LTV is to the liquidation threshold. In **DAO-approved Vaults** these thresholds don't apply.
 
 <Image img={require('./img/grade.png')} alt="osToken position health grades - Healthy, Moderate, Risky, Unhealthy" />
 
 ## Exchange Rate
 
-osToken exchange rate is the canonical conversion rate between osToken and the underlying staked asset (ETH or GNO):
-
-```
-exchange rate = total assets backing osToken / total osToken supply
-```
+The osToken exchange rate is the amount of the underlying asset (ETH or GNO) a user receives from StakeWise when redeeming osToken. It serves as the protocol-calculated conversion rate between osToken and the underlying staked asset.
 
 The protocol uses this rate as the single source of truth for every conversion between osToken and the underlying asset.
 
-The rate rises over time as staking rewards accrue. Appreciation is controlled by a single on-chain variable, `avgRewardPerSecond`, on the [`OsTokenVaultController`](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306). On every state update, the protocol adds new profit to total assets:
+The rate rises over time as staking rewards accrue. Appreciation is controlled by a single on-chain variable, `avgRewardPerSecond`, on the [`OsTokenVaultController` ↗](https://etherscan.io/address/0x2A261e60FB14586B474C208b1B7AC6D0f5000306). On every state update, the protocol adds new profit to total assets:
 
 ```
 profit = avgRewardPerSecond × totalAssets × timeElapsed
@@ -74,15 +70,15 @@ profit = avgRewardPerSecond × totalAssets × timeElapsed
 
 A portion of this profit (`feePercent`) is minted as new osToken to the DAO treasury; the remainder grows the exchange rate for all holders.
 
-Only the [`Keeper`](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5) contract — the rewards aggregator for StakeWise's decentralized oracle network — can update `avgRewardPerSecond`. Off-chain, oracles identify the most exposed user (highest LTV across all Vaults) and match `avgRewardPerSecond` to that user's Vault APY.
+Only the [`Keeper` ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5) contract — the rewards aggregator for StakeWise's decentralized oracle network — can update `avgRewardPerSecond`. Off-chain, oracles identify the most exposed user (highest LTV across all Vaults) and match `avgRewardPerSecond` to that user's Vault APY.
 
 This guarantees osToken appreciation never outpaces the collateral backing it: even the most exposed position grows fast enough to stay solvent. When necessary, oracles adjust `avgRewardPerSecond` downward so osToken appreciation stays conservative relative to actual collateral performance.
 
 ## Redemption
 
-Redemptions are the process of converting osToken back to its underlying asset (ETH or GNO) at the protocol exchange rate.
+Redemption is the process of converting osToken back to its underlying asset (ETH or GNO) at the protocol exchange rate.
 
-StakeWise manages them through the [`OsTokenRedeemer`](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract. Vaults version 1 (mainnet only) retain a permissionless mechanism that's currently disabled.
+StakeWise manages them through the [`OsTokenRedeemer` ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract. Vaults version 1 (mainnet only) retain a permissionless mechanism that's currently disabled.
 
 ### Managed Redemption
 
@@ -91,6 +87,8 @@ osToken's market price on DEXes can drift from the protocol exchange rate. Stake
 See [osToken Redemptions](/docs/ostoken/ostoken-redemptions) for the exact mechanics.
 
 ### Permissionless Redemption
+
+This mechanism exists only on Version 1 Vaults (mainnet) and is currently disabled. The description below covers how it works when active.
 
 When a position's LTV crosses 91.5%, anyone can redeem part of its osToken against its collateral to restore the LTV to 90%.
 
@@ -117,7 +115,7 @@ Over time, the exchange rate rises to **1.0687**, lifting his LTV:
 - Bob's minted balance: **70.74 osToken**
 - Bob's staked collateral: **84 ETH**
 - New LTV: `(70.74 × 1.0687) ÷ 84 ETH = 90%` (restored to the cap)
-- The position shrinks at fair value: the released ETH matches the debt cleared at the protocol exchange rate — no value lost.
+- The position shrinks at fair value: the released ETH matches the debt cleared at the protocol exchange rate, with no value lost.
 :::
 
 ## Liquidation
@@ -197,7 +195,7 @@ Alice stakes **100 ETH** and mints **50 osToken** at the same **1.05** rate.
 After unstaking **47.495 ETH**, Alice's LTV = **99.99%**.
 :::
 
-When a user exits a Vault while still holding osToken debt, the Vault may not have liquid ETH immediately available — validators must go through the Ethereum exit queue. An escrow contract holds the osToken position alongside the underlying stake until ETH is freed, then unwinds both in lockstep. This keeps every osToken fully backed throughout the exit process.
+When a user exits a Vault while still holding osToken debt, the Vault may not have liquid ETH immediately available, since validators must go through the Ethereum exit queue. An escrow contract holds the osToken position alongside the underlying stake until ETH is freed, then unwinds both in lockstep. This keeps every osToken fully backed throughout the exit process.
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> DAO-approved Vault requirements: minimum 10,000 ETH staked, maximum 5% Vault fee, consistently above-median network performance, latest Vault version deployed, and 5M SWISE tokens locked as slashing insurance. <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>

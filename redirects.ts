@@ -43,4 +43,8 @@ export default [
     from: '/docs/vaults/meta-vaults',
     to: '/docs/vaults/vault-types#metavault',
   },
+  {
+    from: '/docs/governance/dao-treasury',
+    to: '/docs/governance/treasury',
+  },
 ]

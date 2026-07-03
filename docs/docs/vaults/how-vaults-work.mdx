@@ -118,7 +118,7 @@ Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en
 
 osTokens (`osETH` or `osGNO`) are ERC-20 tokens that users can mint from any Vault using their shares as backing (aka collateral), providing liquidity without unstaking. osToken can be traded or used in DeFi while the underlying stake continues earning rewards.
 
-The system keeps more staked assets backing each osToken than the token is worth. This safety buffer protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint — this ranges from standard ratios around 90% up to 99.99% for DAO-approved Vaults<sup><a href="#fn-6" id="fnref-6">6</a></sup>.
+For most Vaults, the system keeps more staked assets backing each osToken than the token is worth — a safety buffer that protects users and keeps the system stable. The Vault's Loan-to-Value ratio determines how much users can mint, from standard ratios around 90% up to 100% for DAO-approved Vaults, which rely on a SWISE operator bond instead of a buffer<sup><a href="#fn-6" id="fnref-6">6</a></sup>.
 
 :::custom-notes[Deep Dive]
 For more details on how osToken works, see [osToken →](../ostoken/intro).

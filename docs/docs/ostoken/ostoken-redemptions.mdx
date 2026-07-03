@@ -9,9 +9,9 @@ import Image from '@theme/IdealImage';
 
 Redemptions are an in-protocol peg-maintenance mechanism that converts osToken back to ETH or GNO at the protocol [exchange rate](/docs/ostoken/how-ostoken-works#exchange-rate).
 
-Every osToken is minted against Vault collateral and must remain backed by that collateral. The minter takes on a corresponding debt against their Vault collateral and can burn the osToken at any time to repay the debt. The protocol's invariant is **total osToken supply = total debt**.
+Every osToken is minted against Vault collateral (the user's stake in the Vault) and must remain backed by that collateral. The minter takes on a corresponding debt against their Vault collateral and can burn the osToken at any time to repay the debt and withdraw their stake.
 
-If the minter transfers the osToken away, the minter's on-chain debt is unchanged. From the protocol's perspective: the minter owes `X` osToken worth of debt, but only `Y < X` is still in their hands. The delta `X − Y` is what the protocol calls **redeemable** — osToken that exists somewhere but is no longer tied to a minter.
+If the minter transfers the osToken away, the minter's on-chain debt in the Vault is unchanged. From the protocol's perspective: the minter owes `X` osToken worth of debt, but only `Y < X` is still in their hands. The delta `X − Y` is what the protocol calls **redeemable** — osToken that exists somewhere but is no longer tied to the minter.
 
 Redemption burns the missing portion of the minter's debt against their collateral and releases the corresponding ETH/GNO at the protocol exchange rate.
 
@@ -39,7 +39,7 @@ The Operator Service computes the redeemable positions in five steps:
 
 ### 2. osToken Enters the Queue
 
-osToken is sent to the `OsTokenRedeemer` contract and a ticket is issued — a unique cumulative index recording the entry's place in the queue and how much is owed. The entry now carries the right to claim ETH/GNO later.
+When osToken trades below the protocol exchange rate, StakeWise buys it on the secondary market and sends it to the `OsTokenRedeemer`, entering the queue. A ticket is issued — a unique cumulative index recording the entry's place in the queue and how much is owed — carrying the right to claim ETH/GNO later.
 
 ### 3. Operator Service Prepares the Next Redemption
 
@@ -73,7 +73,7 @@ When osToken enters the queue, the assets aren't released right away. The contra
 
 `positionTicket = (all previously processed shares) + (shares already queued ahead)`
 
-The queue drains as the contract processes redemptions, moving shares from *queued* to *redeemed*. Redeemed shares are matched with ETH/GNO but can't be claimed yet — that requires a checkpoint.
+The queue clears as the contract processes redemptions, moving shares from *queued* to *redeemed*. Redeemed shares are matched with ETH/GNO but can't be claimed yet — that requires a checkpoint.
 
 **Checkpoints**
 

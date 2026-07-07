@@ -6,7 +6,7 @@ description: How Vaults accept deposits, register validators, distribute rewards
 import Tooltip from '@site/src/components/Tooltip/Tooltip';
 import Image from '@theme/IdealImage'
 
-Every Vault has an [operator](/operator/introduction) responsible for its validators. The operator runs the infrastructure directly or delegates it to a third party. Operating a Vault means running the [Operator Service ↗](https://github.com/stakewise/v3-operator) — StakeWise software that automates a Vault's day-to-day operations — alongside Ethereum [consensus](../../operator/staking-nodes#consensus-client) and [execution](../../operator/staking-nodes#execution-client) clients.
+Every Vault has [operator(s)](/operator/introduction) responsible for its validators. Operator(s) run the infrastructure directly or delegate it to a third party. Operating a Vault means running the [Operator Service ↗](https://github.com/stakewise/v3-operator) — StakeWise software that automates a Vault's day-to-day operations — alongside Ethereum [consensus](../../operator/staking-nodes#consensus-client) and [execution](../../operator/staking-nodes#execution-client) clients.
 
 Every Vault action — deposits, validator registration, reward distribution, and withdrawals — is executed on-chain by the Vault's smart contracts. The Operator Service runs off-chain and initiates these on-chain calls automatically. The sections below walk through each stage.
 
@@ -14,11 +14,11 @@ Every Vault action — deposits, validator registration, reward distribution, an
 
 <Image img={require('./img/deposit_flow.png')} alt="Deposit flow - user deposits ETH and gets Vault shares" />
 
-When a user deposits ETH, the Vault issues **shares** representing their proportional ownership of the pool's assets. Share value increases automatically as rewards accumulate — no token swaps or conversions occur during staking. Shares are non-transferable, except in [ERC-20 Vaults](./vault-types#erc-20-vault), where they are issued as a tradable token.
+When a user deposits assets into the Vault (ETH or GNO), the Vault issues **shares** representing their proportional ownership of the pool's assets. Share value increases automatically as rewards accumulate — no token swaps or conversions occur during staking. Shares are non-transferable, except in [ERC-20 Vaults](./vault-types#erc-20-vault), where they are issued as a tradable token.
 
 Each Vault has a configurable [capacity](./configuration#capacity) — deposits of any size are accepted up to that limit. Some Vaults restrict who can deposit: [Private Vaults](./vault-types#private-vault) accept deposits only from whitelisted addresses, while [Blocklist Vaults](./vault-types#blocklist-vault) prohibit blocklisted wallets.
 
-Depositors can also mint [osETH](../ostoken/intro) against their stake — a liquid token usable across DeFi while the underlying stake keeps earning rewards. osETH grows in value over time: each osETH is worth more ETH as staking rewards accrue. How much osETH a user can mint depends on the Vault's LTV (Loan-to-Value) ratio.
+Depositors can also mint [osToken](../ostoken/intro) (osETH or osGNO) against their stake — a liquid token usable across DeFi while the underlying stake keeps earning rewards. osToken grows in value over time: for example, each osETH is worth more ETH as staking rewards accrue. How much osToken a user can mint depends on the Vault's LTV (Loan-to-Value) ratio.
 
 ## Validator Registration
 
@@ -26,23 +26,23 @@ Depositors can also mint [osETH](../ostoken/intro) against their stake — a liq
 
 Vaults pool deposits and register validators on the Beacon Chain once they accumulate enough assets — 32 ETH on Ethereum, 1 GNO on Gnosis.
 
-The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro), generating the deposit data automatically. Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Once approved, the Vault contract sends the 32 ETH deposit to the Ethereum deposit contract. Before the validator becomes active and starts attesting or proposing blocks, it travels through the Beacon Chain's activation pipeline.
+The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro), generating the deposit data automatically. Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Once approved, the Vault contract sends the required amount of assets to the network's staking deposit contract. Before the validator becomes active and starts attesting or proposing blocks, it travels through the Beacon Chain's activation pipeline.
 
-:::custom-notes[Activation Waiting Times]
+:::custom-notes[Validator Activation Waiting Times]
 Activation time depends on the Consensus Layer's deposit queue, which processes deposits at a capped rate. Once a deposit clears the queue, only a short fixed delay remains before the validator can participate.
 
-1. **Deposit queue** — the deposit joins the Consensus Layer's processing queue (`state.pending_deposits`), rate-limited to 16 deposits per epoch and a churn budget of 256 ETH per epoch, shared between activations and exits. Under heavy demand, deposits can wait weeks or months.
-2. **Fixed delay** — once written into the registry, the validator waits a fixed ~7–8 epochs (~45–50 min). Most of this is a lookahead delay that stops anyone predicting and gaming committee assignments.
+1. **Deposit queue** — the deposit joins the Consensus Layer's processing queue (`state.pending_deposits`), rate-limited to 16 deposits per epoch and a churn budget shared between activations and exits (256 ETH per epoch on Ethereum, 2 GNO per epoch on Gnosis Chain). Under heavy demand, deposits can wait weeks or months.
+2. **Fixed delay** — once written into the registry, the validator waits a fixed ~7–8 epochs (~45–50 min on Ethereum, ~9–11 min on Gnosis Chain, whose epochs are shorter). Most of this is a lookahead delay that stops anyone predicting and gaming committee assignments.
 3. **Active** — the validator begins attesting and earning rewards.
 :::
 
-The [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)) raised the maximum validator balance from 32 ETH to 2048 ETH, enabling **consolidation** — merging many `0x01` validators<sup><a href="#fn-1" id="fnref-1" style={{textDecoration: 'none'}}>1</a></sup> (capped at 32 ETH) into fewer high-balance `0x02` ones (up to 2048 ETH) to reduce infrastructure overhead and allow partial withdrawals of rewards above 32 ETH without exiting.
+The [Pectra ↗](https://ethereum.org/en/roadmap/pectra/) upgrade ([EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251)) raised the maximum validator balance from 32 ETH to 2048 ETH, enabling **consolidation** — merging many `0x01` validators<sup><a href="#fn-1" id="fnref-1" style={{textDecoration: 'none'}}>1</a></sup> (capped at 32 ETH) into fewer high-balance `0x02` ones (up to 2048 ETH) to reduce infrastructure overhead and allow partial withdrawals of rewards above 32 ETH without exiting. A similar upgrade was introduced on Gnosis Chain, raising the cap from 1 GNO to 64 GNO.
 
 The Operator Service registers new validators as `0x02` by default, and existing `0x01` validators can be migrated via [consolidation](../../operator/manage-validators/consolidate-validators). When registering, it prioritizes funding existing `0x02` validators — selecting those with the highest current balance and topping them up to 2048 ETH before creating new ones.
 
 :::custom-notes[Under the Hood]
 The Operator Service performs the following steps:
-1. Check if the Vault has enough assets to register a validator (32 ETH on Ethereum).
+1. Check if the Vault has enough assets to register a validator (32 ETH on Ethereum, 1 GNO on Gnosis Chain).
 2. Get the next free validator key from the keystore.
 3. Obtain the BLS signature for exit messages<sup><a href="#fn-2" id="fnref-2" style={{textDecoration: 'none'}}>2</a></sup> using local keystores or a [remote signer](../../operator/alternative-key-management/remote-signer).
 4. Share the validator's exit signature with StakeWise Oracles:
@@ -75,15 +75,15 @@ A harvest does the following:
 5. **Processes the exit queue**. The Vault marks how much of the exit queue is now covered by available assets, making that portion of the queue claimable.
 :::
 
-The Vault then decides what to do with that ETH:
+The Vault then decides what to do with those assets (ETH or GNO):
 
-- **Top up** — add ETH to existing `0x02` validators, growing their effective balance up to the 2048 ETH maximum.
+- **Top up** — e.g. add ETH to existing `0x02` validators, growing their effective balance up to the 2048 ETH maximum.
 - **Consolidate** — merge multiple `0x01` validators into a single `0x02` validator (`0x01` + `0x01` → `0x02`).
-- **Keep ETH as-is** — leave the ETH in the Vault for greater liquidity.
+- **Keep assets as-is** — leave ETH or GNO in the Vault for greater liquidity.
 
 ## Withdrawals
 
-<Image img={require('./img/withdrawal_process.png')} alt="Vault withdrawal process - check queue, pay from available ETH, partial withdrawals, full exits" />
+<Image img={require('./img/withdrawal_process.png')} alt="Vault withdrawal process - check queue, pay from available unbonded assets, partial withdrawals, full exits" />
 
 Every **12 hours**, the Operator Service:
 

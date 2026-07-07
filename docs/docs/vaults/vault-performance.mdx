@@ -6,110 +6,129 @@ description: Understand StakeWise Vault performance scoring, including proposer 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Vault performance represents the average performance of its validators. The scoring system uses a simple formula to evaluate Vault efficiency as the ratio of actual rewards to the ideal achievable, minimizing the influence of luck. Stakers use this score to compare Vaults when choosing where to stake.
+A Vault's performance score measures how reliably its validators carry out their on-chain duties: attestations and block proposals. It is not an arbitrary rating. The Beacon Chain rewards and penalizes every validator according to exact protocol rules.
 
-Vault efficiency consists of two main components:
+For each validator, the [Beacon API ↗](https://ethereum.github.io/beacon-APIs/#/Rewards/getAttestationsRewards) reports two numbers: `ideal_rewards` (what flawless performance would have earned) and `total_rewards` (what the validator actually earned, after any penalties). StakeWise reads these values and calculates a single score across all of a Vault's validators over the **last 7 days**.
 
-**<img src="/icons/stakewise/rewards.png" alt="" aria-hidden="true" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle', marginRight: '8px'}} />Proposer Performance** (**20% weight**)
-
-**<img src="/icons/stakewise/sparks.png" alt="" aria-hidden="true" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle', marginRight: '8px'}} />Attester Performance** (**80% weight**)
-
-All scores are calculated over the **past 7 days**.
-
-## Proposer Performance
-
-Block proposals depend on luck. Since MEV rewards can vary greatly between blocks, only the number of blocks proposed is counted — reward sizes are ignored to avoid relying on chance.
-
-### Calculation Method
-
-The `proposal_score` is calculated by dividing the number of proposed blocks by the total number of blocks. Validators are not penalized for missed blocks; a validator only scores 0 if it misses every opportunity.
-
-:::custom-notes[Formula: Proposer Score]
-```
-proposal_score = proposed_block_count / (proposed_block_count + missed_block_count)
-```
-
-**Where:**
-- `proposed_block_count` – Number of successfully proposed blocks
-- `missed_block_count` – Number of missed blocks
-:::
-
-:::custom-warning[Block Reward Recipient]
-A block is considered **missing** if the transaction fee or MEV is sent to the incorrect address, which negatively impacts the Vault performance score.
-
-Verify that your validator clients are configured with the correct **fee recipient address**. You can locate this address (Block reward recipient) on the Vault page in the **Details** section.
-:::
-
-## Attester Performance
-
-Attestations are the primary source of validator income — roughly 85% of all rewards — and pay for correct consensus votes that are included on time.
-
-An attestation consists of three votes:
-- **Head vote**
-- **Source vote**
-- **Target vote**
-
-If a validator votes correctly on all three with optimal inclusion delay, they receive 100% of the potential reward.
-
-### Calculation Method
-
-The beacon node API provides `idealReward` for an epoch, representing the maximum potential rewards based on optimal performance. This enables the calculation of the attester score:
-
-:::custom-notes[Formula: Attester Score]
-```
-attester_score = total_rewards / ideal_rewards
-```
-
-**Where:**
-- `total_rewards` – Sum of validator rewards fetched via beacon API
-- `ideal_rewards` – Sum of ideal rewards fetched via beacon API
-:::
-
-:::custom-info[Why Sync Committee Is Excluded]
-Sync committee rewards are excluded from calculations as they constitute only 3% of Consensus Layer rewards and depend entirely on luck.
-:::
-
-## Final Scoring Formula
-
-The overall Vault performance combines both proposer and attester scores with weighted importance:
-
-:::custom-notes[Formula: Overall Score]
-```
-score = (8/10 * attester_score + 2/10 * proposal_score) * 100
-```
-
-This formula reflects that attestations are the primary source of validator rewards (80% weight), while block proposals provide additional rewards (20% weight).
-:::
-
-## Performance Grades
-
-Vault grades are based on the 7-day average performance:
+Each Vault gets one of four grades depending on the score:
 
 <Tabs groupId="performance-grades">
   <TabItem value="excellent" label={<span><img src="/icons/stakewise/green.png" alt="green" style={{width: '16px', height: '16px', display: 'inline', verticalAlign: 'middle', marginRight: '6px'}} />Excellent</span>} default>
-    **99.6–100%**
+    **Ethereum: [99.61, 100]% · Gnosis: [98.1, 100]%**
 
-    - No missed blocks or a very small percentage of them
-    - Validators perform excellently in attestations
+    - No missed blocks, or a very small percentage of them
+    - Validators attest with near-perfect accuracy
     - Less than 0.5% missed attestation rewards
   </TabItem>
   <TabItem value="good" label={<span><img src="/icons/stakewise/yellow.png" alt="yellow" style={{width: '16px', height: '16px', display: 'inline', verticalAlign: 'middle', marginRight: '6px'}} />Good</span>}>
-    **99.2–99.6%**
+    **Ethereum: [99.21, 99.61)% · Gnosis: [97.5, 98.1)%**
 
-    - No missed blocks or a very small percentage of them
+    - No missed blocks, or a very small percentage of them
     - Validators perform well in attestations
     - Less than 1% missed attestation rewards
   </TabItem>
   <TabItem value="moderate" label={<span><img src="/icons/stakewise/orange.png" alt="orange" style={{width: '16px', height: '16px', display: 'inline', verticalAlign: 'middle', marginRight: '6px'}} />Moderate</span>}>
-    **97.1–99.2%**
+    **Ethereum: [97.09, 99.21)% · Gnosis: [96.2, 97.5)%**
 
     - The Vault has issues
     - Up to 3% missed attestations and/or blocks
   </TabItem>
   <TabItem value="bad" label={<span><img src="/icons/stakewise/red.png" alt="red" style={{width: '16px', height: '16px', display: 'inline', verticalAlign: 'middle', marginRight: '6px'}} />Bad</span>}>
-    **0–97.1%**
+    **Ethereum: [0, 97.09)% · Gnosis: [0, 96.2)%**
 
     - Validators are not performing correctly
     - Missing blocks or poorly handling attestations
   </TabItem>
 </Tabs>
+
+Read on to see what makes up this score and how it is calculated.
+
+## Attester Performance — 80%
+
+Attester performance is **80% of the Vault score**.
+
+Most of a validator's work is attesting. Once per epoch, the validator publishes a signed attestation that contains three votes<sup><a href="#fn-1" id="fnref-1" style={{textDecoration: 'none'}}>1</a></sup>:
+
+- **Source vote**: a timely vote for the correct source checkpoint.
+- **Target vote**: a timely vote for the correct target checkpoint.
+- **Head vote**: a timely vote for the correct head block.
+
+These votes keep the network in agreement and are a validator's **primary source of income**. Each vote carries a certain weight toward the reward, and together the three make up **84.4% of total rewards**. Missing the source or target vote carries a penalty, while a missed head vote only forgoes its share.
+
+The Beacon API provides `ideal_rewards` for an epoch — the most a validator could have earned with optimal performance. The attester score compares actual to ideal:
+
+$$
+{\small \text{attester\_score} = \frac{\text{total\_rewards}}{\text{ideal\_rewards}}}
+$$
+
+**Where:**
+- `total_rewards` – sum of the Vault's validator rewards, from the Beacon API
+- `ideal_rewards` – sum of the corresponding ideal rewards
+
+:::custom-notes[How Attestations Secure Ethereum]
+New to attestations? Each one is a validator's vote on the state of the chain.
+
+The chain runs in **epochs** split into **slots** (32 on Ethereum, 16 on Gnosis), and each validator attests once per epoch. The first slot of an epoch is its **checkpoint**, a shared reference point the network justifies and finalizes.
+
+An attestation's three votes do two jobs:
+
+- **Keep growing** — the *head vote* names the current tip to build on (fork-choice rule LMD-GHOST).
+- **Lock in history** — the *source* and *target* votes finalize old blocks (Casper FFG). The **source** is the latest checkpoint already justified; the **target** is the one being justified next.
+
+When two-thirds of staked ETH back the same source→target link, the target is **justified**; once the next checkpoint is justified too, it becomes **finalized**. Reversing a finalized checkpoint would take a third of all staked ETH being slashed, and that cost is the finality guarantee.
+
+For more, see [Ethereum's Gasper overview ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/gasper/).
+:::
+
+## Proposer Performance — 20%
+
+Proposer performance is **20% of the Vault score**.
+
+Every so often, a validator is randomly chosen to **propose** a block. Because the payout — transaction-fee tips and **MEV** (*maximal extractable value*: extra value from how transactions are ordered) — swings wildly from block to block, the score ignores *how much* a block earns and counts only *whether* an assigned block was proposed. This keeps the metric about reliability, not luck.
+
+$$
+{\small \text{proposal\_score} = \frac{\text{proposed\_block\_count}}{\text{proposed\_block\_count} + \text{missed\_block\_count}}}
+$$
+
+**Where:**
+- `proposed_block_count` – Number of blocks the validator successfully proposed
+- `missed_block_count` – Number of blocks the validator was assigned but missed
+
+A missed proposal only forgoes its reward; there's no extra penalty. A block also counts as **missed** if its fees or MEV go to the wrong address, which lowers the Vault's score.
+
+## Final Scoring Formula
+
+The overall Vault score combines the two components by weight:
+
+$$
+{\small \text{score} = \left( \frac{8}{10} \times \text{attester\_score} + \frac{2}{10} \times \text{proposal\_score} \right) \times 100}
+$$
+
+The **80/20 split is StakeWise's own choice**, not the protocol's exact reward split. It keeps the metric simple while still reflecting reality: attestations do most of the work and are the steadiest signal of real performance, whereas proposals — and the MEV attached to them — are unpredictable, since a validator can be offline for five minutes and miss its only block of the week.
+
+This is a deliberate simplification of beaconcha.in's [BeaconScore ↗](https://docs.beaconcha.in/beaconscore/introduction), which is **reward-weighted** across *three* duties, with each weight set by that duty's share of ideal reward over the window. Long-term, those shares track the protocol's reward budget:
+
+- ~84% attestation duties (54/64)
+- ~13% block proposals (8/64)
+- ~3% sync committee duties (2/64)
+
+StakeWise uses just two components — **attester (80%)** and **proposer (20%)** — and leaves sync committee duty out of the score entirely, so a Vault's grade comes down to the two duties that dominate day to day and are most within an operator's control.
+
+:::custom-info[MetaVaults]
+A MetaVault has no validators of its own — it spreads deposits across several Sub-vaults. Its performance score is the **share-weighted average** of its Sub-vaults' scores, so each Sub-vault influences the grade in proportion to how much stake sits in it:
+
+$$
+{\small \text{score}_{\text{meta}} = \frac{\sum_i \text{score}_i \times \text{shares}_i}{\sum_i \text{shares}_i}}
+$$
+
+**Where:**
+- $\text{score}_i$ – the performance score of Sub-vault $i$, computed with the 80/20 formula above
+- $\text{shares}_i$ – Sub-vault $i$'s total shares (its size)
+
+Larger Sub-vaults move the MetaVault's score more than smaller ones. A MetaVault is scored only once **all** of its Sub-vaults have a score; if any is still unscored, it stays unscored rather than showing a partial average. Nested MetaVaults resolve **bottom-up**: the innermost are scored first, feeding into their parents.
+:::
+
+<div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>1.</span> The three votes differ in how quickly they must be included. The source vote must be recorded within 5 slots (its inclusion deadline), and the head vote in the very next slot. Since [EIP-7045 ↗](https://eips.ethereum.org/EIPS/eip-7045), the target vote has no separate inclusion deadline; it counts anywhere within the valid inclusion window, which the EIP extended to the end of the next epoch.
+  <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>

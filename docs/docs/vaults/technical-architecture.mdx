@@ -29,7 +29,7 @@ To mitigate the [ERC-4626 ↗](https://github.com/OpenZeppelin/openzeppelin-cont
 
 <Image img={require('./img/modular_architecture.png')} alt="StakeWise Vault modular smart contract architecture" />
 
-At initialization, the Vault is linked to [StakeWise smart contracts](../../contracts/networks/) and the Ethereum Beacon Chain. These links are immutable: once set, they cannot be changed. Each Vault is then composed from specialized modules, each responsible for a distinct area:
+At initialization, the Vault is linked to [StakeWise smart contracts](../../contracts/networks/) and the Ethereum or Gnosis Beacon Chain. These links are immutable: once set, they cannot be changed. Each Vault is then composed from specialized modules, each responsible for a distinct area:
 
 **User deposits and exits** — minting shares for deposited assets and processing withdrawal requests against the exit queue.
 

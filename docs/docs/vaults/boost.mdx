@@ -5,7 +5,7 @@ description: Amplify staking rewards up to 3x with StakeWise Boost. Learn how os
 
 import Image from '@theme/IdealImage'
 
-StakeWise Boost is a one-click yield amplification strategy that uses osETH as collateral to borrow additional ETH on Aave and restake it in the Vault. The process repeats multiple times, resulting in a single staking position. Boost’s rewards are the surplus from the extra staked ETH’s rewards, after the Aave borrowing fee and Vault operator fees. StakeWise charges no additional fee for using Boost.
+StakeWise Boost is a one-click yield amplification strategy that uses osETH as collateral to borrow additional ETH on Aave and restake it in the Vault. The process repeats multiple times, resulting in a single staking position. Boost’s rewards are the surplus from the extra staked ETH’s rewards, after the Aave borrowing fee. StakeWise charges no additional fee for using Boost.
 
 <Image img={require('./img/boost_flow.png')} alt="Boost flow" />
 
@@ -18,7 +18,7 @@ Boost executes automatically in a few steps:
 
 <Image img={require('./img/boost_reward_flow.png')} alt="Boost reward flow" />
 
-The amount of amplification depends on the Vault's osETH LTV (how much osETH can be minted per unit of ETH staked), distinct from Aave's borrow LTV:
+The magnitude of amplification depends on the Vault's osETH LTV (how much osETH can be minted per unit of ETH staked), distinct from Aave's borrow LTV:
 
 - **6x looping** in Vaults with 90% osETH LTV
 - **14x looping** in Vaults with 100% osETH LTV
@@ -31,17 +31,17 @@ To start using Boost right away, see [this guide](/staker/boost).
 
 ## Safety
 
-The biggest risks of any looped position are **collateral depeg** and **LTV drift toward liquidation**. Boost mitigates both by design.
+The biggest risks for a typical leveraged position are **collateral depeg** and **LTV drift toward liquidation**. Boost mitigates both by design.
 
 **No depeg liquidations.** Aave values osETH using StakeWise's native price feed rather than volatile secondary-market prices, so collateral is always worth what osETH can be redeemed for. This removes depeg as a source of liquidation.
 
-**A built-in LTV buffer.** If borrow costs ever exceed staking rewards, debt grows faster than collateral and LTV drifts upward; Boost keeps that drift slow and bounded. On Aave, LTV is the ratio of borrowed value to collateral value, and three numbers bound the position:
+**A built-in LTV buffer.** If borrow costs ever exceed staking rewards, debt grows faster than collateral and LTV drifts upward. Boost has a 2% buffer between the Max LTV (93%) and the Liquidation Threshold (95%) on Aave, which gives it room to absorb sustained negative spread without a liquidation. For historical data, see the [blog post ↗](https://blog.stakewise.io/caseStudy/how-stakewise-boost-keeps-your-rewards-juicy-and-your-stake-safe). On Aave, LTV is the ratio of borrowed value to collateral value, and three numbers bound the position:
 
 - **Max LTV (93%)**: the most that can be borrowed against the collateral when opening a loan.
 - **Liquidation Threshold (95%)**: the point at which the position becomes undercollateralized.
 - **Current LTV**: where the position sits now, drifting with the spread between staking APY and Aave's borrow APY.
 
-In normal markets the drift goes the safe way: staking rewards outpace borrow costs, so collateral grows faster than debt and LTV decreases over time. [Historical data ↗](https://blog.stakewise.io/caseStudy/how-stakewise-boost-keeps-your-rewards-juicy-and-your-stake-safe#:~:text=Scenario%201%3A%20When,passing%20day.) shows LTV rises only about 1 day in 9, and even under a sustained negative spread liquidation from 93% would take over a year.
+In normal markets the drift goes the safe way: staking rewards outpace borrow costs, so collateral grows faster than debt and LTV decreases over time.
 
 **Automatic unboost.** As a final safeguard, when a position reaches **94.5% LTV** anyone can trigger an unboosting transaction on the holder's behalf, and the StakeWise core team monitors positions to do so when needed. Funds always remain under the holder's control, and since Boost never relies on the secondary market to repay debt, exits aren't exposed to slippage.
 

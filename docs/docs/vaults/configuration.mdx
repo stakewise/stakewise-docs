@@ -6,7 +6,7 @@ toc_max_heading_level: 3
 
 import Image from '@theme/IdealImage'
 
-When [creating a Vault](/operator/create-regular-vault), operators set parameters that define how it operates — deposit capacity, MEV strategy, management roles, branding, and fees. Some are fixed at creation; others can be updated later by designated roles.
+When [creating a Vault](/operator/create-regular-vault), operators set parameters that define how it operates — deposit capacity, MEV strategy, Vault management roles, branding, and fees. Some are fixed at creation; others can be updated later.
 
 <Image img={require('./img/config.png')} alt="Vault Configuration Parameters" />
 
@@ -16,27 +16,27 @@ Capacity and MEV strategy are immutable parameters set once during Vault creatio
 
 ### Capacity
 
-The maximum ETH a Vault can accept; if unset, deposits are unlimited. The cap is enforced on every deposit — transactions that would exceed it revert with a `CapacityExceeded` error. This is useful for matching Vault size to the node operator's infrastructure.
+The maximum amount of assets (ETH or GNO) a Vault can accept; if unset, deposits are unlimited. The cap is enforced on every deposit — transactions that would exceed it revert with a `CapacityExceeded` error. This is useful for matching Vault size to the node operator's infrastructure.
 
 ### MEV Strategy
 
 <Image img={require('./img/mev_strategy.png')} alt="Vault MEV strategy options - Smoothing Pool vs Own Escrow" />
 
 MEV (Maximal Extractable Value) is the extra profit validators can capture when proposing blocks.
-Vaults can use either a **Smoothing Pool** or **Own Escrow** to collect block rewards. This choice is set at creation and can't be changed.
+Vaults can use either a **Smoothing Pool** or **Own Escrow** to collect MEV from proposing blocks. This choice is set at Vault creation and can't be changed later.
 
 #### Smoothing Pool {#smoothing-pool}
 
-Rewards are pooled across multiple Vaults and distributed in proportion to each Vault's stake, providing more stable and predictable returns regardless of block proposal frequency.
+Rewards are pooled across multiple Vaults and distributed in proportion to each Vault's total assets staked, providing more stable and predictable returns regardless of block proposal frequency.
 
-For example, a Vault with only a few validators can still receive periodic small payouts from the Smoothing Pool.
+For example, a Vault with only a few validators will still receive periodic small payouts from the Smoothing Pool.
 In return, when one of its validators does earn a block proposal reward, that reward flows to the Smoothing Pool to be shared among all participating Vaults.
 
-Vaults that use the Smoothing Pool must set every relay to one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints). This ensures a consistently high contribution to the Smoothing Pool from every participating Vault.
+Vaults that use the Smoothing Pool must set every relay to one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints). This ensures that individual Vaults' contributions to the Smoothing Pool are tracked and the risk of non-contribution is mitigated.
 
 #### Own Escrow
 
-Each Vault keeps its own block rewards. Because nothing is shared, the Vault can pick any relay — targeting maximum value capture at the cost of higher variability.
+Each Vault keeps its own MEV rewards. Because nothing is shared, the Vault can pick any relay — targeting maximum value capture at the cost of higher variability.
 
 ## Roles
 
@@ -55,9 +55,9 @@ Primary controller of the Vault, and its creator by default. An Admin can be a s
 
 ### Vault Fee Claimer
 
-Triggers [claims of accumulated Vault fees](/operator/manage-vault/fee-claiming) on behalf of shareholders.
+Triggers [claims of accumulated Vault fees](/operator/manage-vault/fee-claiming) on behalf of stakeholders.
 
-By default a Vault's fees go to a single recipient. To split them, the Admin points the recipient at a **Fee Splitter** — a contract that divides incoming fees among multiple shareholders by their configured shares — set on the Vault page under **Settings → Vault fee**.
+By default a Vault's fees go to a single recipient. To split them, the Admin submits the Fee Splitter address, a contract that divides incoming fees among multiple stakeholders according to specified proportions, as the Vault fee recipient, set on the Vault page under **Settings → Vault fee**.
 
 ### Whitelist Manager
 
@@ -77,7 +77,7 @@ Branding and fees are configurable parameters updated by the Admin.
 
 ### Branding
 
-The Vault's name, description, and image. Set and updated on the Vault page under **Settings → Branding**. Updates go live immediately.
+The Vault's name, description, and image. Set and updated on the Vault page under **Settings → Branding**. Updates go live immediately. Vault re-verification is required upon every Branding update.
 
 :::custom-stakewise[Vault Verification]
 New or updated Vaults carry an **Unverified Vault** label until the StakeWise team reviews and marks the Vault as verified. Stakers can be confident about the authenticity of this information, i.e., a Vault branded by Operator A is indeed controlled and run by Operator A.

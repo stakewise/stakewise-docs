@@ -5,136 +5,136 @@ description: Key terms and concepts in the StakeWise protocol
 
 # Glossary
 
-### Blocklist Vault
+### <img src="/icons/glossary/blocklist-vault.png" alt="Blocklist Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Blocklist Vault
 A Vault type that accepts deposits from any wallet except those on a specified blocklist. The blocklist is managed by the Whitelist/Blocklist Manager role.
 
-### Boost
+### <img src="/icons/glossary/boost.png" alt="Boost" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Boost
 A StakeWise feature that amplifies staking rewards by using osTokens as collateral on Aave to borrow additional assets, which are then staked again. This creates a leverage loop that can provide up to 3x boost in staking rewards compared to normal staking.
 
 ### Burning
 The process of returning minted osTokens to a Vault in exchange for unlocking the staked collateral that backs them. Users must burn all minted osTokens plus accrued protocol fees to fully unstake. Partial burns are possible to reduce debt or improve position health.
 
-### Compound Validator (0x02)
+### <img src="/icons/glossary/compound-validator.png" alt="Compound Validator (0x02)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Compound Validator
 A validator type that supports variable effective balances from 32 ETH up to 2048 ETH (or 1 GNO to 64 GNO on Gnosis Chain). These validators support automatic funding, compounding rewards, and partial withdrawals. Converting from 0x01 to 0x02 is irreversible.
 
-### Consolidation
+### <img src="/icons/glossary/consolidation.png" alt="Consolidation" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Consolidation
 The process of merging multiple legacy validators (0x01) into compound validators (0x02), or combining the balance of existing compound validators to improve capital efficiency and reduce infrastructure overhead.
 
-### DAO-Approved Vault
+### <img src="/icons/glossary/dao-approved-vault.png" alt="DAO-Approved Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> DAO-Approved Vault
 Vaults that meet stringent DAO criteria (defined in [SWIP-24 ↗](https://forum.stakewise.io/t/swip-24-establish-a-policy-for-enabling-100-oseth-minting-in-select-vaults/1724)) and qualify for 100% minting threshold (LTV) for osETH/osGNO—enabling automatic liquid staking token issuance without overcollateralization.
 This maximizes capital efficiency and unlocks advanced use cases like consumer liquid staking, exchange integrations, and leveraged DeFi strategies.
 Requirements include substantial stake (≥10k ETH / ≥5k GNO), fee caps (≤5% / ≤15%), above-median performance, Vault v3, significant SWISE bond (5M / 1M), and DAO governance approval.
 
-### ERC-20 Vault
+### <img src="/icons/glossary/erc20-vault.png" alt="ERC-20 Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> ERC-20 Vault
 A Vault type that issues transferable ERC-20 tokens representing stake in the Vault. Operators set the token's name and symbol, enabling custom DeFi ecosystems around the Vault's token. Users can transfer their stake as long as they don't have osToken minted against it.
 
-### Automatic Unboost
+### <img src="/icons/glossary/automatic-unboost.png" alt="Automatic Unboost" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Automatic Unboost
 A safety mechanism in Boost that automatically unboosts positions approaching the liquidation threshold. When any position reaches 94.5% LTV, anyone can trigger an automatic unboosting transaction to protect the user, with all funds remaining under the original owner's control.
 
-### Exit Queue
+### <img src="/icons/glossary/exit-queue.png" alt="Exit Queue" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Exit Queue
 A queue system that manages withdrawal requests from a Vault. When users request to withdraw, they receive a position ticket tracking their place in line. As ETH becomes available through unbonded assets or validator exits, users can claim their funds according to their queue position.
 
 ### OsToken Exchange Rate
 The amount of underlying assets (ETH or GNO) that can be received when redeeming osToken within the protocol. This rate increases over time as staking rewards accrue, reflected through the `convertToAssets` and `convertToShares` functions in the osTokenVaultController contract.
 
-### Fee Recipient
+### <img src="/icons/glossary/fee-recipient.png" alt="Fee Recipient" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Fee Recipient
 The address designated to receive Vault fees. Set by the Vault Admin and can be updated over time. Typically the Vault operator or a multisig controlled by the operator team.
 
-### Harvest
+### <img src="/icons/glossary/harvest.png" alt="Harvest" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Harvest
 The process of updating a Vault's state on-chain, which synchronizes the Vault's balance with the consensus layer, applies fee accruals, and processes the exit queue. Can be triggered automatically by the Operator Service (every 12 hours by default) or manually by users during interactions.
 
-### Keeper
+### <img src="/icons/glossary/keeper.png" alt="Keeper" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Keeper
 The StakeWise smart contract that coordinates communication between the Operator Service and the Oracle network. The Keeper manages validator registration approvals by ensuring proper Oracle consensus, and processes reward updates including consensus rewards and Smoothing Pool distributions from the Oracle network.
 
-### Legacy Validator (0x01)
+### <img src="/icons/glossary/legacy-validator.png" alt="Legacy Validator (0x01)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Legacy Validator
 The original validator type with a fixed stake of 32 ETH (or 1 GNO on Gnosis Chain). These validators automatically sweep excess balance above 32 ETH back to the withdrawal address. No top-up funding is available for 0x01 validators.
 
 ### Liquidation
 In 90% LTV Vaults, the process of closing an unhealthy osToken position that exceeds 92% LTV. Anyone can liquidate by burning all minted osTokens against the collateral. The liquidator receives the underlying collateral value plus a 1% premium, with the penalty deducted from the staker's collateral. Positions in 99.99% LTV Vaults are exempt from liquidation.
 
-### LTV (Loan-to-Value)
+### <img src="/icons/glossary/ltv.png" alt="LTV (Loan-to-Value)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> LTV (Loan-to-Value)
 The ratio of minted osToken value to staked collateral value, expressed as a percentage. Standard Vaults have 90% LTV, while DAO-approved Vaults can have up to 99.99% LTV (osETH) or 99.95% LTV (osGNO). This determines the maximum amount of osToken that can be minted against staked assets.
 
-### MetaVault
+### <img src="/icons/glossary/metavault.png" alt="MetaVault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> MetaVault
 A Vault type that does not register validators directly, instead delegating accumulated assets to sub-Vaults managed by the Vault Admin. Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic.
 
-### Minting
+### <img src="/icons/glossary/minting.png" alt="Minting" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Minting
 The process of issuing osTokens against staked assets held in a Vault. Minting limits are determined by the Vault's LTV ratio to ensure overcollateralization. Users can mint osTokens to access liquidity while their stake continues earning rewards.
 
-### Operator Service
+### <img src="/icons/glossary/operator-service.png" alt="Operator Service" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Operator Service
 Specialized software that node operators run alongside their Ethereum consensus and execution clients to manage Vault operations. Automates validator registration, consolidations, withdrawals, state updates, and fee claims.
 
-### Oracle Network
+### <img src="/icons/glossary/oracle-network.png" alt="Oracle Network" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Oracle Network
 StakeWise's decentralized network of Oracle nodes that connects smart contracts to the Beacon Chain. Manages validator registration approvals, calculates rewards and penalties, maintains osToken exchange rates, and enforces validator exits when needed.
 
-### osETH
-The overcollateralized liquid staking token on Ethereum. A repricing ERC-20 token that represents staked ETH plus accumulated rewards, with its value increasing over time as staking rewards accrue.
-
-### osGNO
-The overcollateralized liquid staking token on Gnosis Chain. A repricing ERC-20 token that represents staked GNO plus accumulated rewards, with its value increasing over time as staking rewards accrue.
-
-### osToken
+### <img src="/icons/glossary/ostoken.png" alt="osToken" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> osToken
 Short for Overcollateralized Staked Token. StakeWise's liquid staking tokens (osETH on Ethereum, osGNO on Gnosis Chain) that represent staked assets plus accrued rewards. The value of staked assets backing osToken exceeds the token's value, providing a safety buffer against slashing and validator underperformance.
 
-### osToken Fee
+### <img src="/icons/glossary/oseth.png" alt="osETH" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> osETH
+The overcollateralized liquid staking token on Ethereum. A repricing ERC-20 token that represents staked ETH plus accumulated rewards, with its value increasing over time as staking rewards accrue.
+
+### <img src="/icons/glossary/osgno.png" alt="osGNO" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> osGNO
+The overcollateralized liquid staking token on Gnosis Chain. A repricing ERC-20 token that represents staked GNO plus accumulated rewards, with its value increasing over time as staking rewards accrue.
+
+### <img src="/icons/glossary/ostoken-fee.png" alt="osToken Fee" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> osToken Fee
 A 5% fee charged by StakeWise DAO on rewards accumulated by osToken. The fee is applied continuously to users' osToken debt (the amount they must burn to exit), with collected fees going to the DAO Treasury.
 
-### Partial Withdrawal
+### <img src="/icons/glossary/partial-withdrawal.png" alt="Partial Withdrawal" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Partial Withdrawal
 A withdrawal of rewards from a compound validator (0x02) without fully exiting the validator. Enabled by EIP-7002, partial withdrawals allow Vaults to access accumulated rewards above the minimum stake requirement while keeping validators active.
 
-### OsToken Position
+### <img src="/icons/glossary/ostoken-position.png" alt="OsToken Position" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> OsToken Position
 An osToken minting position representing the relationship between a user's staked collateral in a Vault and their minted osToken debt. Position health is tracked through LTV ratios.
 
-### Exit Queue Ticket
+### <img src="/icons/glossary/exit-queue-ticket.png" alt="Exit Queue Ticket" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Exit Queue Ticket
 A record issued when a user enters the exit queue, tracking their place in line and the amount they've requested to withdraw. Users can claim available funds according to their ticket number as ETH becomes available in the Vault.
 
-### Private Vault
+### <img src="/icons/glossary/private-vault.png" alt="Private Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Private Vault
 A Vault type that only accepts deposits from wallets that have been whitelisted by the Vault Admin. Access control is managed by the Whitelist/Blocklist Manager role.
 
 ### Repricing Token
 A token whose redemption value increases over time rather than its quantity. osToken is a repricing token—each osETH or osGNO becomes worth more of the underlying asset as staking rewards accrue, reflected through an increasing exchange rate.
 
-### Smoothing Pool
+### <img src="/icons/glossary/smoothing-pool.png" alt="Smoothing Pool" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Smoothing Pool
 A mechanism for distributing block proposal rewards (MEV and priority fees) evenly across all participating Vaults. Instead of keeping volatile block rewards, Vaults contribute them to a pool that provides stable, predictable returns. Vaults using the smoothing pool must operate [DAO-approved MEV relays →](/operator/smoothing-pool-relays).
 
-### Standard Vault
+### <img src="/icons/glossary/standard-vault.png" alt="Standard Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Standard Vault
 The most common Vault type that accepts deposits from any wallet and issues non-transferable shares that earn rewards. Users receive Vault shares representing their proportional stake in the Vault.
 
-### SWISE
+### <img src="/icons/glossary/swise.png" alt="SWISE" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> SWISE
 The governance token of StakeWise DAO. SWISE holders vote on protocol parameters, oracle selection, upgrades, fees, and other governance decisions through StakeWise Improvement Proposals (SWIPs).
 
-### Unbonded ETH
+### <img src="/icons/glossary/unbonded-eth.png" alt="Unbonded ETH" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Unbonded ETH
 ETH in a Vault that is not locked in validators. This includes excess deposits, staking rewards, and MEV that have not been allocated to new validators yet. Unbonded ETH provides liquidity for processing withdrawals from the exit queue.
 
-### Unboost Queue
+### <img src="/icons/glossary/unboost-queue.png" alt="Unboost Queue" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Unboost Queue
 A queue system that manages withdrawal requests from Boost positions. When users request to unboost, they enter the queue and can claim their assets as they will exit from the validators.
 
-### Vault
+### <img src="/icons/glossary/vault.png" alt="Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault
 An isolated, customizable smart contract that functions as an individual staking pool. Vault operators accept deposits from stakers, register and manage validators, and offer tailored staking services. Each Vault operates independently with its own fee structure, MEV strategy, and risk profile.
 
-### Vault Admin
+### <img src="/icons/glossary/vault-admin.png" alt="Vault Admin" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault Admin
 The primary controller of a Vault, responsible for overall configuration. The Admin can manage all roles and permissions, modify fees and fee recipients, update branding, and configure Vault settings. Can be a single wallet, multisig, or DAO.
 
-### Vault Capacity
+### <img src="/icons/glossary/vault-capacity.png" alt="Vault Capacity" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault Capacity
 An immutable deposit limit set during Vault creation that controls the maximum amount of ETH the Vault can accept. When left unset, Vaults have unlimited capacity by default. Helps operators control validator set size based on infrastructure capabilities.
 
-### Own Escrow
+### <img src="/icons/glossary/own-escrow.png" alt="Own Escrow" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Own Escrow
 MEV strategy where block proposal rewards are collected solely by individual Vaults. Own Escrow allows a Vault to choose an independent approach to earning block production rewards, like using any relay of choice, because it does not rely on sharing such rewards with other Vaults. Own Escrow targets maximum value capture but with increased variability.
 
-### Vault Fee
+### <img src="/icons/glossary/vault-fee.png" alt="Vault Fee" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault Fee
 A percentage fee charged by Vault operators on staking rewards, ranging from 0% to 100%. The fee is automatically deducted when Vault state is updated and the vault shares are minted to the fee recipient. Fees can only be increased by 20% at a time with a 3-day delay between updates.
 
-### Vault Fee Claimer
+### <img src="/icons/glossary/vault-fee-claimer.png" alt="Vault Fee Claimer" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault Fee Claimer
 A Vault role that can claim accumulated Vault fees on behalf of the Vault's fee recipients. Set by the Vault Admin.
 
-### Vault Operator
+### <img src="/icons/glossary/vault-operator.png" alt="Vault Operator" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault Operator
 Entities or individuals who run validators for a Vault. They operate the infrastructure and run the Operator Service software that automates essential Vault management tasks such as validator registration, consolidations, and withdrawals.
 
-### Vault Shares
+### <img src="/icons/glossary/vault-shares.png" alt="Vault Shares" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Vault Shares
 The accounting mechanism used by all Vaults to represent a user's proportional stake in the Vault. Shares accrue rewards over time and can be used as collateral for minting osTokens. In Standard, Private, and Blocklist Vaults, shares are non-transferable. In ERC-20 Vaults, shares are represented as transferable ERC-20 tokens.
 
-### Validators Manager
+### <img src="/icons/glossary/validators-manager.png" alt="Validators Manager" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Validators Manager
 A critical Vault role that grants permission to execute validator operations including registration, funding, consolidation, and withdrawals. The Operator Service requires this role to automatically manage the Vault's validators.
 
-### Whitelist/Blocklist Manager
+### <img src="/icons/glossary/whitelist-blocklist-manager.png" alt="Whitelist/Blocklist Manager" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Whitelist/Blocklist Manager
 A Vault role that controls deposit access permissions. Can add or remove accounts authorized to deposit (whitelist) or prohibited from depositing (blocklist). Only appears in Private Vaults or Vaults with blocklist functionality enabled.

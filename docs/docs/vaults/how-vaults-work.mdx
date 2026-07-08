@@ -29,7 +29,7 @@ Vaults pool deposits and register validators on the Beacon Chain once they accum
 The Operator Service monitors Vault balances and submits validator registration requests to the StakeWise [Oracle network](../oracles/intro), generating the deposit data automatically. Each registration requires [approval from 6 of 11 Oracles](../oracles/oracle-duties#validator-registration-approval) before it is submitted on-chain. Once approved, the Vault contract sends the required amount of assets to the network's staking deposit contract. Before the validator becomes active and starts attesting or proposing blocks, it travels through the Beacon Chain's activation pipeline.
 
 :::custom-notes[Validator Activation Waiting Times]
-Activation time depends on the Consensus Layer's deposit queue, which processes deposits at a capped rate. Once a deposit clears the queue, only a short fixed delay remains before the validator can participate.
+Activation time depends on the Consensus Layer's [deposit queue ↗](https://www.validatorqueue.com/), which processes deposits at a capped rate. Once a deposit clears the queue, only a short fixed delay remains before the validator can participate.
 
 1. **Deposit queue** — the deposit joins the Consensus Layer's processing queue (`state.pending_deposits`), rate-limited to 16 deposits per epoch and a churn budget shared between activations and exits (256 ETH per epoch on Ethereum, 2 GNO per epoch on Gnosis Chain). Under heavy demand, deposits can wait weeks or months.
 2. **Fixed delay** — once written into the registry, the validator waits a fixed ~7–8 epochs (~45–50 min on Ethereum, ~9–11 min on Gnosis Chain, whose epochs are shorter). Most of this is a lookahead delay that stops anyone predicting and gaming committee assignments.

@@ -3,6 +3,8 @@ title: Automated Node Setup
 description: Automatically install and manage Reth and Lighthouse clients with the StakeWise Operator Service. Simplify node setup, syncing, and status monitoring.
 ---
 
+import { CommandSnippet } from '@site/src/components';
+
 # Automated Node Setup
 
 :::custom-warning[Experimental Feature]
@@ -19,9 +21,7 @@ The Operator Service includes built-in commands to automatically install and man
 
 Installs Reth and Lighthouse binaries to the data directory.
 
-```bash
-./operator node-install --network=mainnet
-```
+<CommandSnippet template={`./operator node-install --network={{mainnet}}`} />
 
 | Flag | Description |
 |------|-------------|
@@ -33,10 +33,8 @@ Installs Reth and Lighthouse binaries to the data directory.
 ## `node-start`
 
 To start the node services and begin syncing:
-```bash
-./operator node-start \
-  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf
-```
+<CommandSnippet template={`./operator node-start \\
+  --vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}}`} />
 
 | Flag | Description |
 |------|-------------|
@@ -55,10 +53,8 @@ Instead of running `node-start` separately, you can add the `--run-nodes` flag t
 
 Displays sync status of execution and consensus clients, plus validator information.
 
-```bash
-./operator node-status \
-  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf
-```
+<CommandSnippet template={`./operator node-status \\
+  --vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}}`} />
 
 | Flag | Description |
 |------|-------------|

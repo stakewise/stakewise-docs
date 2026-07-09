@@ -6,7 +6,7 @@ description: Start the StakeWise Operator Service with local keystores or extern
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
-import { CheckItem } from '@site/src/components';
+import { CheckItem, CommandSnippet } from '@site/src/components';
 
 # Start Operator
 
@@ -32,36 +32,30 @@ Choose the format matching your installation method:
 
 <Tabs groupId="installation-types">
   <TabItem value="binary" label="Binary" default>
-    ```bash
-    ./operator start \
-      --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-      --consensus-endpoints=https://consensus-node \
-      --execution-endpoints=https://execution-node
-    ```
+    <CommandSnippet template={`./operator start \\
+  --vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}} \\
+  --consensus-endpoints={{https://consensus-node}} \\
+  --execution-endpoints={{https://execution-node}}`} />
   </TabItem>
 
   <TabItem value="docker" label="Docker">
     For Docker, you first need to mount the folder containing validator keystores and include the `--data-dir` flag alongside the `start` command:
-    ```bash
-    docker run --restart on-failure:10 \
-    -u $(id -u):$(id -g) \
-    -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.14 \
-    src/main.py start \
-    --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-    --data-dir=/data \
-    --consensus-endpoints=http://localhost:5052 \
-    --execution-endpoints=http://localhost:8545
-    ```
+    <CommandSnippet template={`docker run --restart on-failure:10 \\
+-u $(id -u):$(id -g) \\
+-v ~/.stakewise/:/data \\
+europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v4.1.14 \\
+src/main.py start \\
+--vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}} \\
+--data-dir=/data \\
+--consensus-endpoints={{http://localhost:5052}} \\
+--execution-endpoints={{http://localhost:8545}}`} />
   </TabItem>
 
   <TabItem value="source" label="Source Files">
-    ```bash
-    PYTHONPATH=. poetry run python src/main.py start \
-    --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-    --consensus-endpoints=http://localhost:5052 \
-    --execution-endpoints=http://localhost:8545
-    ```
+    <CommandSnippet template={`PYTHONPATH=. poetry run python src/main.py start \\
+--vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}} \\
+--consensus-endpoints={{http://localhost:5052}} \\
+--execution-endpoints={{http://localhost:8545}}`} />
   </TabItem>
 </Tabs>
 

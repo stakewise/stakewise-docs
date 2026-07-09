@@ -5,6 +5,7 @@ description: Start the Operator Service V3 to begin automated validator registra
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { CommandSnippet } from '@site/src/components';
 
 # Start Operator
 
@@ -12,36 +13,30 @@ Run the Operator Service using the `start` command with your Vault address and n
 
 <Tabs groupId="installation-types">
   <TabItem value="binary" label="Binary" default>
-    ```bash
-    ./operator start \
-      --vault=0xf27...10ad9 \
-      --consensus-endpoints=https://consensus-node \
-      --execution-endpoints=https://execution-node
-    ```
+    <CommandSnippet template={`./operator start \\
+  --vault={{0xf27...10ad9}} \\
+  --consensus-endpoints={{https://consensus-node}} \\
+  --execution-endpoints={{https://execution-node}}`} />
   </TabItem>
 
   <TabItem value="docker" label="Docker">
     For Docker, mount the folder containing validator keystores and include the `--data-dir` flag:
-    ```bash
-    docker run --restart on-failure:10 \
-    -u $(id -u):$(id -g) \
-    -v ~/.stakewise/:/data \
-    europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \
-    src/main.py start-local \
-    --vault=0xf27...10ad9 \
-    --data-dir=/data \
-    --consensus-endpoints=http://localhost:5052 \
-    --execution-endpoints=http://localhost:8545
-    ```
+    <CommandSnippet template={`docker run --restart on-failure:10 \\
+-u $(id -u):$(id -g) \\
+-v ~/.stakewise/:/data \\
+europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \\
+src/main.py start-local \\
+--vault={{0xf27...10ad9}} \\
+--data-dir=/data \\
+--consensus-endpoints={{http://localhost:5052}} \\
+--execution-endpoints={{http://localhost:8545}}`} />
   </TabItem>
 
   <TabItem value="source" label="Source Files">
-    ```bash
-    PYTHONPATH=. poetry run python src/main.py start-local \
-    --vault=0xf27...10ad9 \
-    --consensus-endpoints=http://localhost:5052 \
-    --execution-endpoints=http://localhost:8545
-    ```
+    <CommandSnippet template={`PYTHONPATH=. poetry run python src/main.py start-local \\
+--vault={{0xf27...10ad9}} \\
+--consensus-endpoints={{http://localhost:5052}} \\
+--execution-endpoints={{http://localhost:8545}}`} />
   </TabItem>
 </Tabs>
 

@@ -28,15 +28,26 @@ const parseTemplate = (template: string): { segments: Segment[]; defaults: strin
 
   while ((match = regex.exec(template)) !== null) {
     if (match.index > lastIndex) {
-      segments.push({ type: 'text', value: template.slice(lastIndex, match.index) })
+      segments.push({
+        type: 'text',
+        value: template.slice(lastIndex, match.index),
+      })
     }
-    segments.push({ type: 'field', index: defaults.length })
+
+    segments.push({
+      type: 'field',
+      index: defaults.length,
+    })
+
     defaults.push(match[1])
     lastIndex = regex.lastIndex
   }
 
   if (lastIndex < template.length) {
-    segments.push({ type: 'text', value: template.slice(lastIndex) })
+    segments.push({
+      type: 'text',
+      value: template.slice(lastIndex),
+    })
   }
 
   return { segments, defaults }
@@ -56,18 +67,24 @@ const CommandSnippet: React.FC<CommandSnippetProps> = ({ template }) => {
     })
   }
 
-  const assembled = useMemo(
-    () =>
-      segments
-        .map((seg) => (seg.type === 'text' ? seg.value : values[seg.index]))
-        .join(''),
-    [segments, values]
-  )
+  const assembled = useMemo(() => (
+    segments
+      .map((seg) => (seg.type === 'text' ? seg.value : values[seg.index]))
+      .join('')
+  ), [segments, values])
 
   const handleCopy = () => {
-    navigator.clipboard?.writeText(assembled).then(() => {
+    if (!navigator.clipboard) {
+      return
+    }
+
+    navigator.clipboard.writeText(assembled).then(() => {
       setCopied(true)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+
       timeoutRef.current = setTimeout(() => setCopied(false), 1000)
     })
   }
@@ -80,16 +97,16 @@ const CommandSnippet: React.FC<CommandSnippetProps> = ({ template }) => {
             if (seg.type === 'text') {
               return <span key={i}>{seg.value}</span>
             }
-            const value = values[seg.index] ?? ''
+            const value = values[seg.index] || ''
             return (
               <input
                 key={i}
                 className={s.field}
-                value={value}
-                size={Math.max(value.length, 1)}
+                autoCorrect="off"
                 spellCheck={false}
                 autoCapitalize="off"
-                autoCorrect="off"
+                value={value}
+                size={Math.max(value.length, 1)}
                 aria-label="Editable command value"
                 onChange={(e) => handleChange(seg.index, e.target.value)}
               />

@@ -1,3 +1,5 @@
+@use 'mixins' as *;
+
 .snippet {
   position: relative;
   margin-bottom: var(--ifm-leading);
@@ -26,17 +28,25 @@
   font-size: inherit;
   line-height: inherit;
   color: inherit;
-  padding: 0.05rem 1.35rem 0.05rem 0.4rem;
-  margin: 0 0.15rem;
-  background-color: var(--ifm-background-color);
+  padding: 0.5rem 1.5rem 0.5rem 1rem;
+  margin: 0 0.35rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.4rem center;
   background-size: 0.85em 0.85em;
-  border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 4px;
   outline: none;
   min-width: 1ch;
+
+  @include light-theme {
+    border: solid 1px #c0c0d7;
+    background-color: #d6d6e7;
+  }
+
+  @include dark-theme {
+    border: solid 1px #5f6373;
+    background-color: #272a36;
+  }
 
   &:focus {
     border-color: var(--ifm-color-primary);

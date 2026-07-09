@@ -95,9 +95,15 @@ const CommandSnippet: React.FC<CommandSnippetProps> = ({ template }) => {
         <code className={s.code}>
           {segments.map((seg, i) => {
             if (seg.type === 'text') {
-              return <span key={i}>{seg.value}</span>
+              return (
+                <span key={i}>
+                  {seg.value}
+                </span>
+              )
             }
+
             const value = values[seg.index] || ''
+
             return (
               <input
                 key={i}

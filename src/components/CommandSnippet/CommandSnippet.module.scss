@@ -1,0 +1,127 @@
+@use 'mixins' as *;
+
+.snippet {
+  position: relative;
+  margin-bottom: var(--ifm-leading);
+}
+
+.pre {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  --ifm-pre-padding: 1rem;
+  background: var(--prism-background-color, var(--ifm-code-background));
+  border-radius: var(--ifm-code-border-radius);
+  font-size: var(--ifm-code-font-size);
+}
+
+.code {
+  display: inline-flex;
+  align-items: center;
+  white-space: pre;
+  font-family: var(--ifm-font-family-monospace);
+  line-height: var(--ifm-pre-line-height);
+}
+
+.field {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  padding: 0.5rem 1.5rem 0.5rem 1rem;
+  margin: 0 0.35rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.4rem center;
+  background-size: 0.85em 0.85em;
+  border-radius: 4px;
+  outline: none;
+  min-width: 1ch;
+
+  @include light-theme {
+    border: solid 1px #c0c0d7;
+    background-color: #d6d6e7;
+  }
+
+  @include dark-theme {
+    border: solid 1px #5f6373;
+    background-color: #272a36;
+  }
+
+  &:focus {
+    border-color: var(--ifm-color-primary);
+    box-shadow: 0 0 0 1px var(--ifm-color-primary);
+  }
+}
+
+// Mirrors Docusaurus's built-in CodeBlock copy button so it looks identical.
+.buttonGroup {
+  display: flex;
+  column-gap: 0.2rem;
+  position: absolute;
+  right: calc(var(--ifm-pre-padding, 1rem) / 2);
+  top: calc(var(--ifm-pre-padding, 1rem) / 2);
+
+  button {
+    display: flex;
+    align-items: center;
+    background: var(--prism-background-color, var(--ifm-code-background));
+    color: var(--prism-color, var(--ifm-color-content));
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: var(--ifm-global-radius);
+    padding: 0.4rem;
+    line-height: 0;
+    transition: opacity var(--ifm-transition-fast) ease-in-out;
+    opacity: 0;
+  }
+
+  button:focus-visible,
+  button:hover {
+    opacity: 1 !important;
+  }
+}
+
+.snippet:hover .buttonGroup button {
+  opacity: 0.4;
+}
+
+.copyButtonIcons {
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.copyButtonIcon,
+.copyButtonSuccessIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  fill: currentColor;
+  opacity: inherit;
+  width: inherit;
+  height: inherit;
+  transition: all var(--ifm-transition-fast) ease;
+}
+
+.copyButtonSuccessIcon {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.33);
+  opacity: 0;
+  color: #00d600;
+}
+
+.copyButtonCopied {
+  opacity: 1 !important;
+
+  .copyButtonIcon {
+    transform: scale(0.33);
+    opacity: 0;
+  }
+
+  .copyButtonSuccessIcon {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    transition-delay: 0.075s;
+  }
+}

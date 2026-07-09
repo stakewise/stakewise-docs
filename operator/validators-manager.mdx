@@ -4,6 +4,7 @@ description: Set up the Validators Manager role for your StakeWise Vault. Create
 ---
 
 import Image from '@theme/IdealImage'
+import { CommandSnippet } from '@site/src/components'
 
 # Validators Manager
 
@@ -42,9 +43,7 @@ You may reuse the same mnemonic as your validator keys or generate a separate on
 
 Export a private key from an existing wallet, then set it as an environment variable:
 
-```bash
-export WALLET_PRIVATE_KEY="0xyour_private_key_here"
-```
+<CommandSnippet template={`export WALLET_PRIVATE_KEY="{{0xyour_private_key_here}}"`} />
 
 If both `WALLET_PRIVATE_KEY` and wallet keystore files are configured, the private key takes precedence over the wallet files.
 

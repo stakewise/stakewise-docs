@@ -11,7 +11,7 @@ A Vault type that accepts deposits from any wallet except those on a specified b
 ### <img src="/icons/glossary/boost.png" alt="Boost" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Boost
 A StakeWise feature that amplifies staking rewards by using osTokens as collateral on Aave to borrow additional assets, which are then staked again. This creates a leverage loop that can provide up to 3x boost in staking rewards compared to normal staking.
 
-### Burning
+### <img src="/icons/glossary/burning.png" alt="Burning" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Burning
 The process of returning minted osTokens to a Vault in exchange for unlocking the staked collateral that backs them. Users must burn all minted osTokens plus accrued protocol fees to fully unstake. Partial burns are possible to reduce debt or improve position health.
 
 ### <img src="/icons/glossary/compound-validator.png" alt="Compound Validator (0x02)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Compound Validator
@@ -34,7 +34,7 @@ A safety mechanism in Boost that automatically unboosts positions approaching th
 ### <img src="/icons/glossary/exit-queue.png" alt="Exit Queue" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Exit Queue
 A queue system that manages withdrawal requests from a Vault. When users request to withdraw, they receive a position ticket tracking their place in line. As ETH becomes available through unbonded assets or validator exits, users can claim their funds according to their queue position.
 
-### OsToken Exchange Rate
+### <img src="/icons/glossary/ostoken-exchange-rate.png" alt="osToken Exchange Rate" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> OsToken Exchange Rate
 The amount of underlying assets (ETH or GNO) that can be received when redeeming osToken within the protocol. This rate increases over time as staking rewards accrue, reflected through the `convertToAssets` and `convertToShares` functions in the osTokenVaultController contract.
 
 ### <img src="/icons/glossary/fee-recipient.png" alt="Fee Recipient" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Fee Recipient
@@ -49,7 +49,7 @@ The StakeWise smart contract that coordinates communication between the Operator
 ### <img src="/icons/glossary/legacy-validator.png" alt="Legacy Validator (0x01)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Legacy Validator
 The original validator type with a fixed stake of 32 ETH (or 1 GNO on Gnosis Chain). These validators automatically sweep excess balance above 32 ETH back to the withdrawal address. No top-up funding is available for 0x01 validators.
 
-### Liquidation
+### <img src="/icons/glossary/liquidation.png" alt="Liquidation" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Liquidation
 In 90% LTV Vaults, the process of closing an unhealthy osToken position that exceeds 92% LTV. Anyone can liquidate by burning all minted osTokens against the collateral. The liquidator receives the underlying collateral value plus a 1% premium, with the penalty deducted from the staker's collateral. Positions in 99.99% LTV Vaults are exempt from liquidation.
 
 ### <img src="/icons/glossary/ltv.png" alt="LTV (Loan-to-Value)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> LTV (Loan-to-Value)
@@ -91,7 +91,7 @@ A record issued when a user enters the exit queue, tracking their place in line 
 ### <img src="/icons/glossary/private-vault.png" alt="Private Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Private Vault
 A Vault type that only accepts deposits from wallets that have been whitelisted by the Vault Admin. Access control is managed by the Whitelist/Blocklist Manager role.
 
-### Repricing Token
+### <img src="/icons/glossary/repricing-token.png" alt="Repricing Token" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Repricing Token
 A token whose redemption value increases over time rather than its quantity. osToken is a repricing token—each osETH or osGNO becomes worth more of the underlying asset as staking rewards accrue, reflected through an increasing exchange rate.
 
 ### <img src="/icons/glossary/smoothing-pool.png" alt="Smoothing Pool" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Smoothing Pool

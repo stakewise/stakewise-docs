@@ -14,7 +14,6 @@ const sidebars: SidebarsConfig = {
       items: [
         'docs/stakewise-protocol/understanding-liquid-staking',
         'docs/stakewise-protocol/what-is-stakewise',
-        'docs/stakewise-protocol/governance-swise-token',
       ],
     },
     {

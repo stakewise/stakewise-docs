@@ -5,12 +5,15 @@ description: Learn how StakeWise Protocol enables decentralized liquid staking o
 
 # The StakeWise Protocol
 
-StakeWise is a liquid staking protocol for Ethereum, designed to make staking more flexible, secure, and accessible.
+StakeWise is a liquid staking protocol for Ethereum and Gnosis Chain, designed to make staking more flexible, secure, and accessible. Anyone can start staking. There is no minimum ETH/GNO deposit, no validator node to run, and no technical setup required.
 
-Rather than consisting of one large staking pool, StakeWise has a network of permissionless, customizable, and non-custodial staking pools deployed by various service providers, allowing individuals and organizations to pick which nodes will stake their ETH, helping them find the most suitable staking arrangement. All pools offer on-demand liquidity and DeFi integrations for users' stake via osToken, providing the flexibility to get the token only when needed.
+Instead of one large staking pool, StakeWise is built around [Vaults](/docs/vaults/intro): permissionless, customizable, and non-custodial staking pools deployed by various operators.
+Vaults already handle billions of US dollars' worth of staked assets, powering solutions from [MetaMask ↗](https://blog.stakewise.io/caseStudy/how-metamask-launched-pooled-staking-with-stakewise), [Chorus One ↗](https://blog.stakewise.io/caseStudy/how-chorus-one-launched-retail-staking-with-stakewise), [Blockchain.com ↗](https://www.blockchain.com/), [Ledger Live ↗](https://www.ledger.com/ledger-live), and others.
+StakeWise also develops strategies to increase rewards, such as [Boost](../vaults/boost), with more coming soon.
 
-The protocol is implemented as a mix of both upgradable (via dual governance) smart contracts that must keep up with the changes in Ethereum's Proof-of-Stake specification, and persistent, non-upgradable smart contracts designed to prioritize security and self-custody, and to function without centralized intermediaries who may selectively restrict access to the service.
+Stakers choose the exact terms on which they stake, and can mint [osToken](/docs/ostoken/intro), StakeWise's liquid staking token, to put their stake to work across the [DeFi ecosystem ↗](https://app.stakewise.io/ecosystem) and earn more on top of their staking rewards.
 
-StakeWise was formally introduced with the release of its [Litepaper in 2022 ↗](https://www.stakewise.io/stakewise-v3.pdf), which set out the vision for a modular staking protocol designed to counter centralization risks and expand user choice. Since then, the protocol has continued to evolve to embody the core ethos of Ethereum and DeFi, specifically the non-custodial, trustless nature that allows self-sovereignty to truly thrive.
+The protocol is implemented with two types of smart contracts:
 
-Most users lack either the technical expertise to run validator nodes or the 32 ETH required to stake. StakeWise addresses this by providing an essential base layer that lowers both technical and capital barriers to ETH staking.
+- **Upgradable contracts** keep the protocol current with Ethereum's proof-of-stake specification. Upgrades are never automatic: a new version must first be approved through StakeWise DAO governance, and it applies to a Vault only after its operator explicitly [opts in](/operator/operator-service-v3/v4-upgrade-guide#how-to-upgrade).
+- **Non-upgradable contracts** have no upgrade path: once deployed on-chain, their code can never be changed. This locks in self-custody and the right to withdraw, so no intermediary can rewrite those rules or selectively restrict access to the service.

@@ -47,4 +47,8 @@ export default [
     from: '/docs/governance/dao-treasury',
     to: '/docs/governance/treasury',
   },
+  {
+    from: '/docs/stakewise-protocol/governance-swise-token',
+    to: '/docs/governance/intro',
+  },
 ]

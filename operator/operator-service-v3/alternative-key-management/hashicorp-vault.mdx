@@ -3,6 +3,8 @@ title: HashiCorp Vault
 description: Load validator signing keys from a HashiCorp Vault instance in Operator Service V3.
 ---
 
+import { CommandSnippet } from '@site/src/components';
+
 # HashiCorp Vault
 
 The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance, avoiding storage of keystores on the filesystem. This approach is best suited for node operators who already have most of StakeWise Operator functionality implemented in their systems, and only need integration for validators registration or pooling support.
@@ -40,17 +42,15 @@ Passing the following options to the `start` command will enable loading validat
 Make sure the keystores directory is empty before running this command, otherwise the operator will prefer local keystores.
 :::
 
-```bash
-./operator start \
-  --network=mainnet \
-  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-  --consensus-endpoints=https://consensus-node \
-  --execution-endpoints=https://execution-node \
-  --hashi-vault-url=https://hashi-vault:8200 \
-  --hashi-vault-token=hvs.abcde \
-  --hashi-vault-key-path=keystores1 \
-  --hashi-vault-key-path=keystores2
-```
+<CommandSnippet template={`./operator start \\
+  --network={{mainnet}} \\
+  --vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}} \\
+  --consensus-endpoints={{https://consensus-node}} \\
+  --execution-endpoints={{https://execution-node}} \\
+  --hashi-vault-url={{https://hashi-vault:8200}} \\
+  --hashi-vault-token={{hvs.abcde}} \\
+  --hashi-vault-key-path={{keystores1}} \\
+  --hashi-vault-key-path={{keystores2}}`} />
 
 ### `start` flags
 

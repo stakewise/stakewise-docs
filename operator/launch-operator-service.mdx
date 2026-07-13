@@ -6,6 +6,7 @@ description: The Operator Service is required software for running a Vault. Unde
 import Image from '@theme/IdealImage'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { CommandSnippet } from '@site/src/components';
 
 # Launch Operator Service
 
@@ -79,9 +80,7 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
 
     To install a specific version to a custom location:
 
-    ```bash
-    curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b <path> <version>
-    ```
+    <CommandSnippet template={`curl -sSfL https://raw.githubusercontent.com/stakewise/v3-operator/master/scripts/install.sh | sh -s -- -b {{<path>}} {{<version>}}`} />
 
     **Option B — Manual download**
 

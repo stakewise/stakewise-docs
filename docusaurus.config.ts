@@ -285,7 +285,7 @@ const config: Config = {
       theme: prismThemes.github,
       defaultLanguage: 'typescript',
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ['json', 'bash', 'javascript', 'python', 'solidity'],
+      additionalLanguages: ['json', 'bash', 'javascript', 'python', 'solidity', 'ini'],
     },
   } satisfies Preset.ThemeConfig,
 }

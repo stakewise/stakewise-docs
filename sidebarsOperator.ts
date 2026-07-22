@@ -43,7 +43,18 @@ const sidebars: SidebarsConfig = {
             id: 'alternative-key-management/dvt/overview',
           },
           items: [
-            'alternative-key-management/dvt/ssv-setup',
+            {
+              type: 'category',
+              label: 'SSV',
+              link: {
+                type: 'doc',
+                id: 'alternative-key-management/dvt/ssv-setup',
+              },
+              items: [
+                'alternative-key-management/dvt/ssv-split-keys',
+                'alternative-key-management/dvt/ssv-dkg',
+              ],
+            },
             'alternative-key-management/dvt/obol-setup',
           ],
         },

@@ -3,6 +3,8 @@ title: Remote Signer
 description: Configure the StakeWise Operator Service with Web3Signer for remote key signing. Isolate validator keys from the Operator for improved security.
 ---
 
+import { CommandSnippet } from '@site/src/components';
+
 # Remote Signer
 
 The Remote Signer mode lets you isolate validator signing keys from the Operator Service. Instead of storing keystores locally, the Operator queries a remote signer like [Web3Signer ↗](https://docs.web3signer.consensys.io/)<sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup> for deposit and exit message signatures.
@@ -52,13 +54,11 @@ Done. Successfully configured operator to use remote signer for 10 public key(s)
 
 Provide the operator with the URL to your remote signer instance using the `--remote-signer-url` flag:
 
-```bash
-./operator start-remote-signer \
-  --vault=0x834F27bC8670491b75af512d943f01D5383F87Cf \
-  --consensus-endpoints=https://consensus-node \
-  --execution-endpoints=https://execution-node \
-  --remote-signer-url=https://remote-signer:9000
-```
+<CommandSnippet template={`./operator start-remote-signer \\
+  --vault={{0x834F27bC8670491b75af512d943f01D5383F87Cf}} \\
+  --consensus-endpoints={{https://consensus-node}} \\
+  --execution-endpoints={{https://execution-node}} \\
+  --remote-signer-url={{https://remote-signer:9000}}`} />
 
 You should see a message similar to this one after starting the operator:
 

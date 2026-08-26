@@ -3,6 +3,8 @@ title: Fee Claiming
 description: Set up fee distribution among shareholders and automate periodic fee claiming for your StakeWise Vault using the Fee Splitter system.
 ---
 
+import { CommandSnippet } from '@site/src/components';
+
 # Fee Claiming
 
 StakeWise Vaults can charge a fee on the rewards they earn, set by the Vault admin as a percentage at creation time. That fee is directed to a single address called the fee recipient.
@@ -45,13 +47,11 @@ Assigning this role is what authorizes the Operator to call `enterExitQueueOnBeh
 
 Add the `--claim-fee-splitter` flag when starting the Operator Service:
 
-```bash
-./operator start \
-  --vault=0x3320a...10aD9 \
-  --consensus-endpoints=http://localhost:5052 \
-  --execution-endpoints=http://localhost:8545 \
-  --claim-fee-splitter
-```
+<CommandSnippet template={`./operator start \\
+  --vault={{0x3320a...10aD9}} \\
+  --consensus-endpoints={{http://localhost:5052}} \\
+  --execution-endpoints={{http://localhost:8545}} \\
+  --claim-fee-splitter`} />
 
 On each cycle, the Operator combines multiple operations into a single multicall transaction:
 

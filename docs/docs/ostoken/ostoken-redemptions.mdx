@@ -19,9 +19,9 @@ Redemption burns the missing portion of the minter's debt against their collater
 
 <Image img={require('./img/redemptions.png')} alt="osToken redemption flow between the Operator Service and the OsTokenRedeemer contract" />
 
-The redemption flow is coordinated between four actors: **osToken holders**, who supply the osToken to redeem by entering the redeemer's exit queue; the [Operator Service ↗](https://github.com/stakewise/v3-operator), which computes who can be redeemed and by how much, and executes the redemptions on-chain as the redeemer's `positionsManager`; **StakeWise**, which authorizes the list of redeemable positions on-chain; and the [OsTokenRedeemer ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract, which verifies and settles them.
+The redemption flow is coordinated between five actors: **osToken holders**, who supply the osToken to redeem by entering the redeemer's exit queue; the [Operator Service ↗](https://github.com/stakewise/v3-operator), which computes who can be redeemed and by how much, and executes the redemptions on-chain as the redeemer's `positionsManager`; **StakeWise**, which authorizes the list of redeemable positions on-chain; the [Oracle network](/docs/oracles/oracle-duties), which keeps Vault state current and forces validator exits when queued redemptions go unfilled; and the [OsTokenRedeemer ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract, which verifies and settles them.
 
-The flow draws on two independent tracks that converge once both are ready: the Operator Service publishes the list of redeemable positions (Step 1), while osToken holders queue osToken for redemption (Step 2). The remaining steps consume both. In full, it runs in seven steps:
+The flow draws on two independent tracks that converge once both are ready: the Operator Service publishes the list of redeemable positions (Step 1), while osToken holders queue osToken for redemption (Step 2). The remaining steps consume both. In full, it runs in eight steps:
 
 ### 1. Operator Service Computes the Redeemable Positions
 
@@ -55,15 +55,29 @@ It then checks whether there's enough queued osToken to submit a new redemption.
 
 The Operator Service downloads the published list from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from Sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then refreshes the state of the target Vaults in a separate multicall transaction, builds a Merkle multiproof against the published root, and calls `redeemOsTokenPositions` on `OsTokenRedeemer` for each position.
 
+The state refresh is only possible because the Oracles have voted on and signed a rewards root: a Vault that has fallen more than one reward update behind cannot be redeemed from until it is harvested against that root. See [Reward Distribution](/docs/oracles/oracle-duties#reward-distribution).
+
 The redemption is now in flight; verification and execution happen on-chain.
 
-### 5. OsTokenRedeemer Executes the Redemption
+### 5. Oracles Force Exits if the Queue Stalls
+
+A Vault can only pay out what it holds in liquid assets, so a redemption is capped by the Vault's withdrawable balance. Operator Services set aside the assets their Vaults owe to the redeemer before registering new validators, which normally keeps enough on hand. When it does not — the Vault has everything staked, or its Operator Service is unresponsive — the [Oracle network](/docs/oracles/oracle-duties) steps in and forces validator exits until the queue can be filled.
+
+This is the same enforcement that backs the [Vault exit queue](/docs/vaults/how-vaults-work#validator-exits), applied to redemption demand instead of withdrawal requests.
+
+:::custom-notes[Under the Hood]
+Every cycle, each Oracle records the redeemer's cumulative exit queue ticket. It then looks up the ticket as it stood one forced withdrawals period ago and calls `getExitQueueMissingAssets` on it — whatever is still unfilled after that grace period is a shortfall the Vaults have to cover.
+
+The shortfall is padded by a small multiplier (`1.0023` by default) to absorb the osToken exchange rate rising while the assets are exiting, then split across Vaults using the same published positions list. Each Vault's share is added to its withdrawal demand, and the Oracles release the exit signature shards for as many of its validators as it takes to cover the amount.
+:::
+
+### 6. OsTokenRedeemer Executes the Redemption
 
 The contract rebuilds each leaf, verifies the Merkle multiproof against the stored root, and caps the amount independently per position. For each verified position, it calls the Vault's `redeemOsToken` to burn the minter's osToken debt and send the equivalent ETH/GNO (using the Vault's just-updated state) to the redeemer.
 
 The queued shares are now matched against missing positions — settled, but not yet claimable.
 
-### 6. Batch Is Checkpointed
+### 7. Batch Is Checkpointed
 
 Once the configured delay has elapsed — 12 hours on both Ethereum and Gnosis — `processExitQueue` creates a new checkpoint that matches the redeemed shares to their ETH/GNO and marks the assets as claimable. This call is also permissionless, so anyone can trigger it; in practice the Operator Service does. Tickets that fall within this checkpoint can now be claimed.
 
@@ -96,6 +110,10 @@ A checkpoint is a snapshot that says: *"at this point in the queue, this many sh
 If only some of the ticket is covered and the rest is still queued, the contract pays out the covered portion and rolls the remainder into a new exit request at the next ticket. The rest can be claimed after the next checkpoint.
 ::::
 
-### 7. ETH/GNO Is Claimed
+### 8. ETH/GNO Is Claimed
 
 The ticket holder calls `claimExitedAssets` with their ticket and the matching checkpoint index, and the contract pays out the corresponding ETH/GNO. If the ticket spans more than one checkpoint, the covered portion is paid out and the remainder rolls into a new ticket that can be claimed after a later checkpoint.
+
+:::custom-notes[Deep Dive]
+For more details on how Oracles distribute rewards and enforce validator exits, see [Oracle Duties →](/docs/oracles/oracle-duties).
+:::

@@ -1,13 +1,13 @@
 ---
 title: Oracle Duties
-description: Learn about validator registration approval, reward distribution, and validator exits
+description: Learn about validator registration approval, reward distribution, validator exits, and osToken redemptions
 ---
 
 import Image from '@theme/IdealImage'
 
 # Oracle Duties
 
-Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes and are responsible for validator registration, reward distribution, and validator exits.
+Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes and are responsible for validator registration, reward distribution, validator exits, and osToken redemptions.
 
 ## Validator Registration Approval
 
@@ -64,4 +64,16 @@ As part of registration, the Operator Service encrypts exit signatures using Sha
 
 :::custom-notes[Key Benefit]
 This approach ensures validators can be exited on demand while maintaining protocol security through decentralized signature management.
+:::
+
+## osToken Redemptions
+
+Oracles also watch the [OsTokenRedeemer ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract, where osToken holders queue their tokens to be redeemed for ETH or GNO at the protocol exchange rate.
+
+Redemptions are paid out of the Vaults' liquid assets. If a queued redemption is still unfilled after the forced withdrawals period, Oracles calculate how much each Vault is short, add that amount to the Vault's withdrawal demand, and release exit signatures for as many of its validators as it takes to cover it — the same enforcement they apply to the Vault exit queue.
+
+Oracles do not authorize redemptions. The list of redeemable positions is computed by the Operator Service and approved on-chain by StakeWise; Oracles only read it to work out which Vaults owe assets.
+
+:::custom-notes[Deep Dive]
+For the full redemption flow, from queue entry to claiming, see [osToken Redemptions →](../ostoken/ostoken-redemptions).
 :::

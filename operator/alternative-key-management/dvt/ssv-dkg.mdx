@@ -34,39 +34,41 @@ Each operator runs a long-lived `ssv-dkg` service to take part in DKG ceremonies
 - **Minimum:** an [AWS `t3.medium` ↗](https://aws.amazon.com/ec2/instance-types/) or equivalent machine dedicated to DKG.
 - **Recommended:** an AWS `t3.large` or higher tier.
 
-Minimum Docker resource allocation:
-
-```yaml
-deploy:
-  resources:
-    limits:
-      cpus: "1"
-      memory: 500M
-```
+Give the container at least **1 CPU** and **500 MB** of memory. With the `docker run` command below, add `--cpus 1 --memory 500m`.
 :::
 
 1. Create an `operator.config.yaml` in the same folder as your `encrypted_private_key.json` and `password` files:
 
 ```yaml
-privKey: /data/encrypted_private_key.json
-privKeyPassword: /data/password
+privKey: ./data/encrypted_private_key.json
+privKeyPassword: ./data/password
 operatorID: 1          # your SSV operator ID
 port: 3030
 logLevel: info
-logFilePath: /data/debug.log
-outputPath: /data/output
+logFilePath: ./data/debug.log
+outputPath: ./data/output
 ```
+
+:::custom-warning[Paths Must Be Relative]
+`ssv-dkg` accepts local paths only. An absolute path in `--configPath`, `privKey`, `privKeyPassword`, `logFilePath`, or `outputPath` makes it exit with `should be local` before the service starts. The container's working directory is `/ssv-dkg`, so `./data/...` resolves to the mounted `/ssv-dkg/data`.
+:::
 
 2. Start the service:
 
 ```bash
 docker run --restart unless-stopped --name ssv_dkg -p 3030:3030 \
-  -v "$(pwd)":/data -u `id -u $USER` -it \
-  "ssvlabs/ssv-dkg:v3.0.3" start-operator --configPath /data/operator.config.yaml
+  -v "$(pwd)":/ssv-dkg/data -u `id -u $USER` -it \
+  "ssvlabs/ssv-dkg:v3.1.1" start-operator --configPath ./data/operator.config.yaml
 ```
 
 :::custom-warning[Expose the DKG Port]
 The Initiator connects to your endpoint during a ceremony. Expose the port you configured on the machine firewall and in the Docker container command. Otherwise, your DKG node will not be available.
+:::
+
+3. Publish your DKG endpoint so Initiators can reach you. In the [SSV webapp ↗](https://app.ssv.network), open your operator, choose **Edit Details**, and set the DKG endpoint as `protocol:ip:port` (a domain name works in place of the IP). Until you do, the webapp will not treat your operator as DKG-enabled and cannot build its `--operatorsInfo` entry.
+
+:::custom-warning[All Operators Must Run the Same Version]
+`ssv-dkg` enforces an exact version match between the Initiator and every operator — a ceremony mixing versions fails. Agree on a tag with your cluster before anyone upgrades, and pin it rather than using `latest`.
 :::
 
 ## Step 2: Generate the Key Shares
@@ -80,12 +82,16 @@ This guide uses the [SSV webapp ↗](https://app.ssv.network), which generates t
 3. Set the number of validators and the **Withdrawal Address** to your **Vault contract address**, then confirm.
 4. Copy the generated command and run it on a machine with Docker. The webapp pre-fills `--owner`, `--nonce`, `--withdrawAddress`, `--operatorIDs`, and `--operatorsInfo` (each operator's ID, RSA key, and endpoint).
 
+:::custom-tips[Check the Operators First]
+A stale endpoint or mismatched DKG metadata on any operator stops the ceremony before it begins. Swap `init` for `ping` in the generated command to healthcheck the whole set first, and fix any operator that fails before running the ceremony.
+:::
+
 <details className="custom-details">
 <summary>Example generated command</summary>
 
 ```bash
-docker pull ssvlabs/ssv-dkg:v3.0.3 && docker run --rm -v "$(pwd)":/ssv-dkg/data -it \
-  "ssvlabs/ssv-dkg:v3.0.3" init \
+docker pull ssvlabs/ssv-dkg:v3.1.1 && docker run --rm -v "$(pwd)":/ssv-dkg/data -it \
+  "ssvlabs/ssv-dkg:v3.1.1" init \
   --owner <YOUR_SSV_WALLET> --nonce <NONCE> \
   --withdrawAddress <YOUR_VAULT_ADDRESS> \
   --operatorIDs 1,2,3,4 \
@@ -97,21 +103,20 @@ docker pull ssvlabs/ssv-dkg:v3.0.3 && docker run --rm -v "$(pwd)":/ssv-dkg/data 
 
 For every flag and what it does, see SSV's [command-line reference ↗](https://docs.ssv.network/stakers/tools/ssv-dkg-client/commands-and-config/#base-initiator-options).
 
-The ceremony writes a `ceremony-<timestamp>/` directory with `keyshares.json`, `deposit_data.json`, and `proofs.json`:
+The ceremony writes a `ceremony-<timestamp>/` directory holding one sub-directory per validator, named after the owner nonce and the validator's public key:
 
 <details className="custom-details">
 <summary>Ceremony output</summary>
 
 ```
 ceremony-<timestamp>/
-├─ <nonce>-0x<validator public key>/
-│  ├─ deposit_data.json     # Deposit data to activate the validator — not used by StakeWise (the Vault deposits)
-│  ├─ keyshares.json        # Encrypted shares, to register on SSV
-│  └─ proof.json            # Proof used to reshare to new operators later
-├─ deposit_data.json        # Aggregated across all validators
-├─ keyshares.json           # Aggregated across all validators
-└─ proofs.json              # Aggregated across all validators
+└─ 000000-0x<validator public key>/
+   ├─ deposit_data.json     # Deposit data to activate the validator — not used by StakeWise (the Vault deposits)
+   ├─ keyshares.json        # Encrypted shares, to register on SSV
+   └─ proofs.json           # Proofs used to reshare to new operators later
 ```
+
+Creating **more than one** validator in a single ceremony adds aggregated `deposit_data.json`, `keyshares.json`, and `proofs.json` at the top of `ceremony-<timestamp>/`, covering every validator at once. With `--validators 1` only the per-validator directory is written, so use the files inside it.
 
 The `keyshares.json` holds each share encrypted to its operator's RSA key. For the full format, see SSV's [`keyshares.json` structure ↗](https://docs.ssv.network/developers/security/keyshares-structure).
 
@@ -128,7 +133,7 @@ The Initiator registers the key shares on SSV so the encrypted shares are publis
 After the ceremony, the webapp shows a **Deposit Validator** step and a **Register Validator** step:
 
 1. **Skip the Launchpad deposit.** Click **"My validator has been activated"** to unlock registration. You are *not* depositing 32 ETH yourself.
-2. Click **Register Validator**, upload the ceremony's **`keyshares.json`**, and complete registration (Fund the Cluster → Approve SSV → Register Validator), the same [registration steps](/operator/alternative-key-management/dvt/ssv-split-keys#register-validator) as Split Keys.
+2. Click **Register Validator**, upload the ceremony's **`keyshares.json`** — the one inside the validator's `000000-0x...` directory, or the aggregated file at the top of `ceremony-<timestamp>/` if you created several validators at once — and complete registration (Fund the Cluster → Approve SSV → Register Validator), the same [registration steps](/operator/alternative-key-management/dvt/ssv-split-keys#register-validator) as Split Keys.
 
 ## Step 4: Run the DVT Sidecar
 
@@ -140,7 +145,9 @@ Each operator runs one [DVT Sidecar ↗](https://github.com/stakewise/dvt-operat
 cp .env.example .env
 ```
 
-2. Set the values for your SSV operator:
+2. In a `data/` directory next to the `.env`, place this operator's `encrypted_private_key.json` and `password` — the same two files you used to run the SSV node and the DKG service.
+
+3. Set the values for your SSV operator. The container runs from `/app`, so every path must point inside the mounted `/data`:
 
 ```ini
 # Network: mainnet or hoodi
@@ -150,21 +157,28 @@ NETWORK=mainnet
 CLUSTER_TYPE=SSV
 
 # URL of your DVT Relayer
-RELAYER_ENDPOINT=http://relayer
+RELAYER_ENDPOINT=http://relayer:8000
 
 # This operator's SSV key (same files used to run the node and the DKG service).
 # This is the RSA operator key used to DECRYPT the on-chain share — not a validator key share.
-SSV_OPERATOR_KEY_FILE=encrypted_private_key.json
-SSV_OPERATOR_PASSWORD_FILE=password
+SSV_OPERATOR_KEY_FILE=/data/encrypted_private_key.json
+SSV_OPERATOR_PASSWORD_FILE=/data/password
 # This operator's SSV operator ID
 SSV_OPERATOR_ID=1
 
 # Execution and consensus client endpoints (the execution endpoint is used to read the on-chain shares)
 EXECUTION_ENDPOINT=http://execution:8545
 CONSENSUS_ENDPOINT=http://consensus:5052
+
+# Local database file
+DATABASE=/data/dvt-operator-sidecar.db
 ```
 
-3. Run the container:
+:::custom-notes[Keep the Database]
+The Sidecar records which SSV `ValidatorAdded` events it has already scanned in `DATABASE`. Left at its default it lands in the read-only `/app` working directory, so point it at `/data` and keep the file — otherwise each restart rescans the chain from the cluster's first block.
+:::
+
+4. Run the container:
 
 ```bash
 docker run \
@@ -187,7 +201,11 @@ cp .env.example .env
 2. In a `data/` directory, place the files the Relayer reads:
 
    - `validators-manager-key.json` and `validators-manager-password.txt` — the keystore and password for the Ethereum wallet set as your Vault's [Validators Manager](/operator/validators-manager). This is an externally owned account (EOA) that signs registration transactions, not a validator signing key.
-   - `public_keys.txt` — the distributed validator **public** keys, one per line. Take the `pubkey` of each validator from the ceremony's `deposit_data.json`.
+   - `public_keys.txt` — the distributed validator **public** keys, one per line. Each validator's `000000-0x...` ceremony directory is named after its public key, and the same value is the `pubkey` field of the `deposit_data.json` inside it:
+
+     ```bash
+     jq -r '.[].pubkey' ceremony-*/*/deposit_data.json | sed 's/^/0x/' > data/public_keys.txt
+     ```
 
 3. Set the values (file paths point inside the mounted `/data`):
 
@@ -203,8 +221,8 @@ SIGNATURE_THRESHOLD=3
 NETWORK=mainnet
 
 # Execution and consensus client endpoints
-EXECUTION_ENDPOINT=https://execution
-CONSENSUS_ENDPOINT=https://consensus
+EXECUTION_ENDPOINT=http://execution:8545
+CONSENSUS_ENDPOINT=http://consensus:5052
 
 # Validator public keys to register, one per line
 PUBLIC_KEYS_FILE=/data/public_keys.txt
@@ -225,12 +243,22 @@ docker run --rm -ti \
   europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-relayer:$DVT_RELAYER_VERSION
 ```
 
+:::custom-warning[Restrict Access to the Relayer]
+The Relayer has no authentication, and it signs funding, withdrawal, and consolidation requests with the Validators Manager wallet. Anyone who can reach it can obtain a signature authorizing your Vault's validators to be withdrawn. Keep it on a private network reachable only by the Sidecars and the Operator Service, and do not publish port 8000 to the internet.
+:::
+
 ## Step 6: Start the Operator Service
 
-Because the Operator Service has no keystores, the Initiator starts it in Relayer mode, pointing at the DVT Relayer:
+The Operator Service has no keystores here, so the Initiator runs it in [Relayer (API Mode)](/operator/alternative-key-management/api-mode) pointing at the DVT Relayer.
+
+First, set your Vault's [Validators Manager](/operator/validators-manager) to the address of the Relayer's `validators-manager-key.json` wallet. The Vault rejects registrations signed by any other address.
+
+Then start the service:
 
 ```bash
-./operator start-relayer
+./operator start-relayer --vault=[ENTER YOUR VAULT CONTRACT ADDRESS HERE] --relayer-endpoint=http://relayer:8000
 ```
+
+See [Relayer (API Mode)](/operator/alternative-key-management/api-mode) for the remaining options and the environment-variable form.
 
 The Operator Service polls the Relayer for validators that have all required signatures and registers them in the Vault contract. At that moment the **Vault deposits its pooled ETH**, and the validator is created on the Beacon Chain. Once it activates, the SSV operators perform its duties using their shares.

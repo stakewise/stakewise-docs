@@ -182,6 +182,10 @@ CONFIG_PATH=/config.yaml -p 13001:13001 -p 12001:12001/udp -p 15000:15000 -p 160
 
 It launches the SSV node, which connects to your beacon and execution clients, joins the SSV network, and streams its logs to your terminal as it starts up and begins performing duties.
 
+:::custom-notes[Running in Background]
+The logs let you verify startup. Press Ctrl-C to detach — `--restart unless-stopped` brings the node back up on its own. To start detached in the first place, add `-d` after `docker run`.
+:::
+
 **Peer-to-peer Ports Configuration and Firewall**
 
 On your firewall, open the ports set in the run command: **13001 TCP** and **12001 UDP** for peer-to-peer traffic, plus **15000 TCP** (metrics) and **16000 TCP** (health). To use different ports, change them in both `config.yaml` and the run command.
@@ -206,15 +210,19 @@ You'll need your **operator public key** `pubkey` (from Step 1) and a wallet —
 
 3. Paste your **Operator Public Key** and click **Register Operator**
 
+<img src="/img/ssv-setup-3.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
 :::custom-info[Private vs. Public]
 The operator you registered is meant to run your Vault's validators alongside the other cluster members. By default an operator is **Public** — anyone can register validators to it. To keep other stakers out, switch **Operator Status** to **Private** ([permissioned ↗](https://docs.ssv.network/learn/network-overview/operators/permissioned-operators/)): then only the wallets you whitelist can register validators to it — i.e. assign it a share of a distributed validator.
 :::
 
-<img src="/img/ssv-setup-3.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
-
 4. Set Operator **Annual fee** and click **Next**
 
 <img src="/img/ssv-setup-4.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />
+
+:::custom-notes[Operator Fee]
+Your fee (in SSV tokens) is charged per validator that selects you, and earnings accumulate in your operator balance for you to withdraw at any time. You can change it later: decreases apply immediately, increases go through a waiting period that [protects stakers ↗](https://docs.ssv.network/operators/operator-management/updating-operator-fees). If you only run your own Vault's validators, the fee is money you pay yourself.
+:::
 
 5. Double-check everything and click **Confirm**
 <img src="/img/ssv-setup-5.png" alt="SSV Setup" style={{marginTop: '10px', marginBottom: '20px'}} />

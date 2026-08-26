@@ -6,7 +6,7 @@ description: "Genesis vault for Ethereum staking migrated from StakeWise Legacy"
 
 # EthGenesisVault
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthGenesisVault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthGenesisVault.sol)
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [EthVault →](./EthVault), IEthGenesisVault
 

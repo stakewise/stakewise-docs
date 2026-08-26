@@ -6,7 +6,7 @@ description: "Abstract contract for splitting vault rewards among shareholders b
 
 # RewardSplitter
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/misc/RewardSplitter.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/misc/RewardSplitter.sol)
 
 **Inherits:** IRewardSplitter, [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [Multicall →](../base/Multicall)
 

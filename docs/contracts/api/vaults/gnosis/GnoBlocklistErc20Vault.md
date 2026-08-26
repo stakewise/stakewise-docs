@@ -6,7 +6,7 @@ description: "Gnosis staking vault with blocklist and ERC-20 token functionality
 
 # GnoBlocklistErc20Vault
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoBlocklistErc20Vault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoBlocklistErc20Vault.sol)
 
 **Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [GnoErc20Vault →](./GnoErc20Vault), [VaultBlocklist →](../modules/VaultBlocklist), IGnoBlocklistErc20Vault
 

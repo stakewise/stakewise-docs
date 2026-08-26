@@ -6,7 +6,7 @@ description: "Gnosis-specific contract for redeeming osTokens for GNO"
 
 # GnoOsTokenRedeemer
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/GnoOsTokenRedeemer.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/GnoOsTokenRedeemer.sol)
 
 **Inherits:** IGnoOsTokenRedeemer, [OsTokenRedeemer →](./OsTokenRedeemer)
 

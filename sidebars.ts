@@ -66,7 +66,10 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/governance/stakewise-dao',
-        'docs/governance/dao-treasury',
+        'docs/governance/tokenomics',
+        'docs/governance/community-forum',
+        'docs/governance/voting-process',
+        'docs/governance/treasury',
       ],
     },
     'docs/glossary',

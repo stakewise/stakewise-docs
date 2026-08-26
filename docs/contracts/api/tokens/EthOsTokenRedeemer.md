@@ -6,7 +6,7 @@ description: "Ethereum-specific contract for redeeming osTokens for ETH"
 
 # EthOsTokenRedeemer
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/EthOsTokenRedeemer.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/EthOsTokenRedeemer.sol)
 
 **Inherits:** IEthOsTokenRedeemer, [ReentrancyGuard ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/ReentrancyGuard.sol), [OsTokenRedeemer →](./OsTokenRedeemer)
 

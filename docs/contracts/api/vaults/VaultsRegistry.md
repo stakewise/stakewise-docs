@@ -4,7 +4,7 @@ description: VaultsRegistry contract API reference for tracking StakeWise vaults
 ---
 
 # VaultsRegistry
-[Git Source](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/VaultsRegistry.sol)
+[Git Source](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/VaultsRegistry.sol)
 
 **Inherits:**
 [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IVaultsRegistry

@@ -191,7 +191,9 @@ const config: Config = {
   ],
 
   themeConfig: {
-    respectPrefersColorScheme: true,
+    colorMode: {
+      respectPrefersColorScheme: true,
+    },
     image: 'img/opengraph.png',
     metadata: [
       { name: 'twitter:site', content: '@stakewise_io' },

@@ -6,7 +6,7 @@ description: "Abstract contract for checking validators manager signature and de
 
 # ValidatorsChecker
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/ValidatorsChecker.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/ValidatorsChecker.sol)
 
 **Inherits:** [Multicall →](../base/Multicall), IValidatorsChecker
 

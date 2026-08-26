@@ -6,7 +6,7 @@ description: "Curator for evenly managing assets in sub-vaults"
 
 # BalancedCurator
 
-[Git Source ↗](https://github.com/stakewise/eth-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/curators/BalancedCurator.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/curators/BalancedCurator.sol)
 
 **Inherits:** ISubVaultsCurator
 

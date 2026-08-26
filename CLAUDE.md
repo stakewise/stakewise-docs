@@ -75,7 +75,7 @@ import { CommandSnippet, CheckItem, Tooltip } from '@site/src/components';
 
 **Images** — `import Image from '@theme/IdealImage'` then `<Image img={require('./img/foo.png')} alt="foo" />`. The theme override (`src/theme/IdealImage/index.tsx`) adds a `sources={{light, dark}}` prop for theme-aware screenshots.
 
-**Links** — external links get a `↗` suffix, internal cross-references a `→`: `[Automated Node Setup →](/operator/manage-validators/automated-node-setup)`, `[app.stakewise.io ↗](https://app.stakewise.io)`. `src/theme/CustomLink/CustomLink.tsx` handles `target`/`rel` automatically, so never write raw `<a target="_blank">`.
+**Links** — external links get a `↗` suffix: `[app.stakewise.io ↗](https://app.stakewise.io)`. Internal cross-references take no suffix — `[Automated Node Setup](/operator/manage-validators/automated-node-setup)`. Older pages still carry a `→` suffix on internal links; that convention is being retired, so don't add new ones, and drop them from any page you rewrite. `src/theme/CustomLink/CustomLink.tsx` handles `target`/`rel` automatically, so never write raw `<a target="_blank">`.
 
 ## Operator docs are version-split
 

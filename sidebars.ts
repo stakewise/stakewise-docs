@@ -26,11 +26,11 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/vaults/how-vaults-work',
-        'docs/vaults/customization',
+        'docs/vaults/vault-types',
+        'docs/vaults/configuration',
         'docs/vaults/vault-performance',
         'docs/vaults/boost',
         'docs/vaults/technical-architecture',
-        'docs/vaults/meta-vaults'
       ],
     },
     {

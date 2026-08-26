@@ -17,7 +17,7 @@ Vaults support a wide range of staking use cases. A few common examples:
 - **Stake for yourself** — Run your own validators, keep 100% of rewards, and stay liquid by minting [osETH](/docs/ostoken/intro) — an overcollateralized liquid staking token you can [use across DeFi ↗](https://app.stakewise.io/ecosystem) to earn additional rewards.
 - **Offer staking to others** — Accept deposits and earn fees. Launch a full white-label staking product powered by StakeWise smart contracts, or use the open-source [Vault Interface](./vault-interface) template — a ready-made staking website.
 - **Institutional or DAO treasury staking** — Configure compliance controls, gate access with a Private or Block list, and optionally issue an ERC-20 Vault token.
-- **Scale with MetaVaults** — Delegate deposits across multiple sub-vaults without running validators yourself, unlocking [modular staking strategies](/docs/vaults/meta-vaults#use-cases).
+- **Scale with MetaVaults** — Delegate deposits across multiple sub-vaults without running validators yourself, unlocking [modular staking strategies](/docs/vaults/vault-types#use-cases).
 
 ## What Can I Earn?
 
@@ -29,7 +29,7 @@ What you can earn depends on your strategy but your earnings mainly consist of:
 A Vault with 1,000 ETH staked at ~3.5% APY and a 5% fee earns approximately 1.75 ETH/year in operator fees. At 10,000 ETH, that becomes 17.5 ETH/year.
 :::
 
-- [MEV rewards](/docs/vaults/customization#mev-strategy) — Choose between the Smoothing Pool (rewards are shared across participating Vaults proportional to their size, more consistent) or Own MEV Escrow (your Vault keeps all its MEV, higher upside but more variable).
+- [MEV rewards](/docs/vaults/configuration#mev-strategy) — Choose between the Smoothing Pool (rewards are shared across participating Vaults in proportion to the attestation rewards their validators earned, more consistent) or Own MEV Escrow (your Vault keeps all its MEV, higher upside but more variable).
 
 ## What Are the Costs?
 

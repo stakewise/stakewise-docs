@@ -13,13 +13,13 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 In the world of cryptocurrency, staking is the process of locking up a digital asset to help run a blockchain network and verify transactions. Staking combines cryptography with economic incentives to reward honest participation and keep the network secure. In Ethereum, participants put their tokens *at stake* by running validators — nodes that take part in consensus by proposing and attesting to new blocks.
 
-Each validator is represented on-chain as a [validator object ↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36) — a record that stores its state on the Beacon Chain. One key field, the <code style={{backgroundColor: 'var(--ash)', color: 'var(--lavender)', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>, is the amount of ETH that counts toward a validator's rewards and consensus weight. This amount is capped: originally at 32 ETH, and at 2048 ETH since [EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251). The more effective balance a validator has, the more weight it carries when performing its duties:
+Each validator is represented on-chain as a [validator object ↗](https://github.com/sigp/lighthouse/blob/0d90135047519f4c2ee586d50e560f7bb2ff9b10/consensus/types/src/validator.rs#L26-L36) — a record that stores its state on the Beacon Chain. One key field, the <code style={{backgroundColor: 'var(--ash)', color: 'var(--lavender)', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace'}}>effective_balance</code><sup><a href="#user-content-fn-1" id="user-content-fnref-1">1</a></sup>, is the amount of ETH that counts toward a validator's rewards and consensus weight. This amount is capped at 32 ETH, or at 2048 ETH for validators that use compounding (`0x02`) withdrawal credentials, introduced by [EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251). The more effective balance a validator has, the more weight it carries when performing its duties:
 
 - Proposing new blocks
 - Attesting to blocks
 - Participating in <Tooltip content={<><strong>Sync Committee</strong> <br /> A sync committee is a special subset of 512 validators chosen pseudorandomly during each "sync committee period" (~1 day). These validators continually sign new Beacon block headers, enabling light clients "outside" the Beacon Chain to verify the consensus state with significantly reduced complexity.</>}>sync committees</Tooltip>
 
-Validators earn rewards for performing these duties well and face penalties when they don't. Reward amounts follow mathematical formulas that account for several variables, including participation rates, timing, and network conditions<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>. For a full breakdown of how these rewards and penalties are calculated, see [ethereum.org ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/).
+Validators earn rewards for performing these duties well and face penalties when they don't<sup><a href="#user-content-fn-2" id="user-content-fnref-2">2</a></sup>. Reward amounts follow mathematical formulas that account for several variables, including participation rates, timing, and network conditions<sup><a href="#user-content-fn-3" id="user-content-fnref-3">3</a></sup>. On top of these consensus rewards, validators also collect priority fees and MEV (Maximum Extractable Value) from the blocks they propose. For a full breakdown of how rewards and penalties are calculated, see [ethereum.org ↗](https://ethereum.org/en/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/).
 
 ## The Traditional Staking Dilemma
 Traditional staking follows a simple premise: lock tokens and earn rewards. This secures the network, but it comes with a major drawback. Once staked, ETH becomes illiquid and cannot be used elsewhere in decentralized finance (DeFi). Stakers are left with a fundamental dilemma, forced to choose between earning staking rewards and keeping their ETH liquid, never both.
@@ -54,7 +54,13 @@ StakeWise addresses these gaps with a different approach to liquid staking.
 
 <div id="user-content-fn-2" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>2.</span>
+  Receiving a penalty is not the same as being slashed. Penalties are small deductions from a validator's Beacon Chain balance for failing to perform its duties, and are effectively burned. Slashing is a severe punishment reserved for specific misbehaviours that could form part of an attack on the chain — it removes some or all of the validator's stake and ejects it from the protocol.
+  <a href="#user-content-fnref-2" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+</div>
+
+<div id="user-content-fn-3" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
+  <span>3.</span>
   For detailed reward calculations and formulas, see:
   <a href="https://eth2book.info/capella/part2/incentives/rewards/" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">eth2book ↗</a>
-  <a href="#user-content-fnref-2" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
+  <a href="#user-content-fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

@@ -44,9 +44,9 @@ LTV limits vary by Vault type:
 | Vault Type     | Ethereum (osETH) | Gnosis (osGNO) | Safety Mechanism                              |
 |----------------|------------------|----------------|-----------------------------------------------|
 | Standard       | 90% LTV          | 90% LTV        | 10% overcollateralization buffer              |
-| DAO-approved   | 100% LTV         | 99.95% LTV     | 5M SWISE operator bond |
+| DAO-approved   | 99.99% LTV       | 99.95% LTV     | 5M SWISE operator bond |
 
-To qualify for the 100% LTV, Vaults must meet strict performance criteria<sup><a href="#fn-1" id="fnref-1">1</a></sup> and post a SWISE operator bond.
+To qualify for the 99.99% LTV, Vaults must meet strict performance criteria<sup><a href="#fn-1" id="fnref-1">1</a></sup> and post a SWISE operator bond.
 StakeWise DAO can adjust any individual Vault's LTV based on its risk profile.
 
 The protocol continuously tracks each position's LTV against the liquidation threshold and puts it into one of four grades — Healthy, Moderate, Risky, and Unhealthy. A **Risky** position is subject to [redemption](#redemption); an **Unhealthy** one to [liquidation](#liquidation). These grades don't apply in **DAO-approved Vaults**.
@@ -81,15 +81,15 @@ This guarantees osToken appreciation never outpaces the collateral backing it: e
 
 Redemption is the process of converting osToken back to its underlying asset (ETH or GNO) at the protocol exchange rate.
 
-StakeWise manages redemptions through the [`OsTokenRedeemer` ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract. Vaults version 1 (mainnet only) retain a permissionless mechanism that's currently disabled.
+Redemptions run through the [`OsTokenRedeemer` ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract. Vaults version 1 (mainnet only) retain a separate position-level mechanism that's currently disabled.
 
-### Managed Redemption
+### Redeemer Redemption
 
-osToken's market price on DEXes can drift from the protocol exchange rate. StakeWise monitors this spread and performs redemptions whenever osToken trades at a discount.
+osToken's market price on DEXes can drift from the protocol exchange rate. Anyone holding osToken can redeem it at the protocol exchange rate by entering the `OsTokenRedeemer`'s exit queue — no whitelist, no privileged role — which is what makes a discount worth arbitraging away. Queue entry is open to all; only the on-chain execution against minters' positions is carried out by the Operator Service.
 
 See [osToken Redemptions](/docs/ostoken/ostoken-redemptions) for the exact mechanics.
 
-### Permissionless Redemption
+### Position-Level Redemption
 
 This mechanism exists only on Version 1 Vaults (mainnet) and is currently disabled. The description below covers how it works when active.
 
@@ -151,7 +151,7 @@ Over time, the exchange rate rises to **1.0735**, lifting her LTV past the **92%
 - Net loss: **~0.92 ETH** — the 1% premium on the liquidated debt, deducted from her collateral
 :::
 
-Positions in **100% LTV Vaults** are exempt: liquidations are disabled at the contract level. The exemption is safe because the exchange rate appreciation is capped at those Vaults' APY, so positions stay solvent by design.
+Positions in **99.99% LTV Vaults** are exempt: liquidations are disabled at the contract level. The exemption is safe because the exchange rate appreciation is capped at those Vaults' APY, so positions stay solvent by design.
 
 ## Burning
 
@@ -164,7 +164,7 @@ The full stake can only be withdrawn once the osToken position is fully burned. 
 The amount of ETH that can be unstaked at any moment is determined by maintaining the osToken position within its LTV cap. After unstaking, the value of minted osToken must remain at or below:
 
 - **90%** of staked ETH in a **90% LTV Vault**
-- **100%** of staked ETH in a **100% LTV Vault**
+- **99.99%** of staked ETH in a **99.99% LTV Vault**
 
 The protocol calculates the **maximum unstakable ETH** as:
 
@@ -174,9 +174,9 @@ $$
 $$
 :::
 
-:::custom-notes[Formula: 100% LTV]
+:::custom-notes[Formula: 99.99% LTV]
 $$
-{\small MaxUnstakableETH = StakedETH - osTokenMinted \times ExchangeRate}
+{\small MaxUnstakableETH = StakedETH - \dfrac{osTokenMinted \times ExchangeRate}{0.9999}}
 $$
 :::
 
@@ -190,14 +190,14 @@ Bob stakes **100 ETH** and mints **50 osToken** at an exchange rate of **1.05 ET
 After unstaking **41.667 ETH**, Bob's LTV = **90%**.
 :::
 
-:::custom-notes[Example: Alice's 100% LTV Position]
+:::custom-notes[Example: Alice's 99.99% LTV Position]
 Alice stakes **100 ETH** and mints **50 osToken** at the same **1.05** rate.
 
 - Value of minted osToken: `52.5 ETH`
-- LTV: `52.5 ÷ 100 = 52.5%` → well below **100%**
-- Maximum unstakable ETH: `100 − 52.5 = 47.5 ETH`
+- LTV: `52.5 ÷ 100 = 52.5%` → well below **99.99%**
+- Maximum unstakable ETH: `100 − (52.5 ÷ 0.9999) = 47.495 ETH`
 
-After unstaking **47.5 ETH**, Alice's LTV = **100%**.
+After unstaking **47.495 ETH**, Alice's LTV = **99.99%**.
 :::
 
 When a user exits a Vault while still holding osToken debt, the Vault may not have liquid ETH immediately available, since validators must go through the Ethereum exit queue. An escrow contract holds the osToken position alongside the underlying stake until ETH is freed, then unwinds both in lockstep. This keeps every osToken fully backed throughout the exit process.

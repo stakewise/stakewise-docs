@@ -21,7 +21,7 @@ A validator type that supports variable effective balances from 32 ETH up to 204
 The process of merging multiple legacy validators (0x01) into compound validators (0x02), or combining the balance of existing compound validators to improve capital efficiency and reduce infrastructure overhead.
 
 ### <img src="/icons/glossary/dao-approved-vault.png" alt="DAO-Approved Vault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> DAO-Approved Vault
-Vaults that meet stringent DAO criteria (defined in [SWIP-24 ↗](https://forum.stakewise.io/t/swip-24-establish-a-policy-for-enabling-100-oseth-minting-in-select-vaults/1724)) and qualify for 100% minting threshold (LTV) for osETH/osGNO—enabling automatic liquid staking token issuance without overcollateralization.
+Vaults that meet stringent DAO criteria (defined in [SWIP-24 ↗](https://forum.stakewise.io/t/swip-24-establish-a-policy-for-enabling-100-oseth-minting-in-select-vaults/1724)) and qualify for a near-100% minting threshold (LTV) for osETH/osGNO—enabling automatic liquid staking token issuance without overcollateralization.
 This maximizes capital efficiency and unlocks advanced use cases like consumer liquid staking, exchange integrations, and leveraged DeFi strategies.
 Requirements include substantial stake (≥10k ETH / ≥5k GNO), fee caps (≤5% / ≤15%), above-median performance, Vault v3, significant SWISE bond (5M / 1M), and DAO governance approval.
 
@@ -50,10 +50,10 @@ The StakeWise smart contract that coordinates communication between the Operator
 The original validator type with a fixed stake of 32 ETH (or 1 GNO on Gnosis Chain). These validators automatically sweep excess balance above 32 ETH back to the withdrawal address. No top-up funding is available for 0x01 validators.
 
 ### <img src="/icons/glossary/liquidation.png" alt="Liquidation" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> Liquidation
-In 90% LTV Vaults, the process of closing an unhealthy osToken position that exceeds 92% LTV. Anyone can liquidate by burning all minted osTokens against the collateral. The liquidator receives the underlying collateral value plus a 1% premium, with the penalty deducted from the staker's collateral. Positions in 100% LTV Vaults are exempt from liquidation.
+In 90% LTV Vaults, the process of closing an unhealthy osToken position that exceeds 92% LTV. Anyone can liquidate by burning all minted osTokens against the collateral. The liquidator receives the underlying collateral value plus a 1% premium, with the penalty deducted from the staker's collateral. Positions in 99.99% LTV Vaults are exempt from liquidation.
 
 ### <img src="/icons/glossary/ltv.png" alt="LTV (Loan-to-Value)" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> LTV (Loan-to-Value)
-The ratio of minted osToken value to staked collateral value, expressed as a percentage. Standard Vaults have 90% LTV, while DAO-approved Vaults can have up to 100% LTV (osETH) or 99.95% LTV (osGNO). This determines the maximum amount of osToken that can be minted against staked assets.
+The ratio of minted osToken value to staked collateral value, expressed as a percentage. Standard Vaults have 90% LTV, while DAO-approved Vaults can have up to 99.99% LTV (osETH) or 99.95% LTV (osGNO). This determines the maximum amount of osToken that can be minted against staked assets.
 
 ### <img src="/icons/glossary/metavault.png" alt="MetaVault" style={{width: '24px', height: '24px', display: 'inline', verticalAlign: 'middle'}} /> MetaVault
 A Vault type that does not register validators directly, instead delegating accumulated assets to sub-Vaults managed by the Vault Admin. Deposits are distributed across underlying sub-Vaults (up to 50 maximum) according to curator-defined allocation logic.

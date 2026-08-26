@@ -5,75 +5,96 @@ description: Learn about validator registration approval, reward distribution, v
 
 import Image from '@theme/IdealImage'
 
-# Oracle Duties
-
 Oracles run the [v3-oracle ↗](https://github.com/stakewise/v3-oracle) nodes and are responsible for validator registration, reward distribution, validator exits, and osToken redemptions.
+
+:::custom-info[Under the Hood]
+Oracles are off-chain nodes that bridge the Vault and the Beacon Chain. The smart contracts that define a Vault's behavior live on the Execution Layer, while the validators earning its rewards run on the Consensus Layer, and the Execution Layer cannot read Consensus Layer state. Oracles read that state, do the work it requires off-chain, and sign the result, so the Vault can act on it.
+
+Oracles never submit transactions themselves; they only sign messages and expose them over their HTTP APIs. Acting on those signatures is left to two off-chain services that fetch them:
+
+- The [Operator Service](/operator/launch-operator-service), a Vault's automation software, obtains Oracle approvals for the validator operations it submits, such as registration and consolidation, and includes those signatures in the transaction it sends to the Vault contract.
+- The [Keeper service ↗](https://github.com/stakewise/v3-keeper) handles reward distribution and validator exits. It polls each Oracle's API for signed reward votes, aggregates a threshold of them, and submits the transaction to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code); separately, it collects exit signature shares and submits the reconstructed exits to the Beacon Chain.
+:::
 
 ## Validator Registration Approval
 
-Oracles approve validator registration requests before they are submitted to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
-
 <Image img={require('./img/validator_registration_approval.png')} alt="Oracle validator registration approval process" />
 
-The [Operator Service →](../../operator/launch-operator-service) periodically checks whether its Vaults have accumulated enough ETH for registering new validator(s).
-When the Vault has enough ETH, the operator sends a registration approval request to Oracles that includes encrypted exit signature(s) for the validator(s) it is attempting to create.
-This is done to maintain the protocol's ability to exit validators on demand, and to perform checks against the front-running withdrawal credentials attack described [here ↗](https://blog.lido.fi/vulnerability-response-update/).
-The operator must receive **8 out of 11 approvals** from Oracles to register a validator for the Vault.
+Oracles approve validator registration requests before the Vault contract forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code).
 
-:::custom-notes[Approval Process]
-1. Operator sends the validator registration requests and encrypted exit signatures to the Oracles.
-2. Oracles sign approval messages that include the current tree root hash from the Beacon Chain Deposit Contract.
-3. Operator submits registration to the Vault contract with Oracle signatures.
-4. Vault contract calls the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) to validate Oracle signatures and confirm the tree root hash hasn't changed.
-5. Vault transfers ETH to the Beacon Chain deposit contract to complete validator registration.
-:::
+The [Operator Service](/operator/launch-operator-service) monitors the Vault and, once enough assets have accumulated (at least 32 ETH, or 1 GNO on Gnosis), prepares a registration and sends an **approval request** to all 11 Oracles. The request carries all the information each Oracle needs to verify the registration trustlessly, including the encrypted exit signature shares that let the protocol exit the validators on demand.
 
-This process ensures Oracles approve validators based on current Beacon Chain state, bridging the consensus and execution layers while preventing stale approvals and replay attacks.
+Each Oracle independently:
+
+1. confirms the caller is authorized to register these keys for the Vault and that the Vault holds enough assets to fund them;
+2. rebuilds each deposit message and verifies the deposit signature against it;
+3. decrypts its own exit signature share and verifies it is a valid BLS signature against the corresponding public key share;
+4. confirms that none of the public keys are already registered and that each validator is assigned the next expected index;
+5. signs an approval message that commits to the IPFS hash of the encrypted exit signature shares, the Deposit Contract's current root (`validatorsRegistryRoot`), the Vault address, the validators payload (public keys, deposit signatures, deposit data roots, and deposit amounts), and an expiration deadline. The shares themselves are uploaded to IPFS in the background.
+
+Once at least 6 Oracles have signed, the Operator Service bundles those signatures into a `registerValidators` transaction and sends it to the Vault contract, which in turn calls the [Keeper ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code) — the smart contract that enforces the rules on-chain.
+
+The Keeper confirms the 6-of-11 threshold is met, that the deadline has not passed, and that `validatorsRegistryRoot` still matches the Deposit Contract's current root, ensuring its state did not change since the Oracles approved — which also protects against the [front-running withdrawal credentials attack ↗](https://blog.lido.fi/vulnerability-response-update/).
+
+Once everything passes, the Vault forwards the deposit to the Beacon Chain [Deposit Contract ↗](https://etherscan.io/address/0x00000000219ab540356cbb839cbe05303d7705fa#code). The deposit enters the Beacon Chain's deposit queue, and the validator is created once the pending deposit is processed.
 
 :::custom-notes[Deep Dive]
-For details on how the Operator Service initiates and prepares validator registration, see the [Validator Registration →](../vaults/how-vaults-work#validator-registration) section in Vaults.
+For details on how the Operator Service initiates and prepares validator registration, see the [Validator Registration](../vaults/how-vaults-work#validator-registration) section in Vaults.
 :::
 
 ## Reward Distribution
 
 <Image img={require('./img/reward_distribution.png')} alt="Oracle reward distribution process for Vaults" />
 
-Oracles periodically vote on the consensus rewards/penalties accumulated by the Vaults in the Beacon Chain and execution rewards (MEV & priority fees) for the Vaults connected to the Smoothing Pool.
+Oracles periodically vote on the consensus rewards and penalties accumulated by each Vault's validators on the Beacon Chain.
 
-The reward distribution process consists of the following steps:
+Each Oracle independently:
 
-:::custom-info[Reward Distribution Process]
-1. Verify sufficient time has passed since the last reward distribution.
-2. Calculate rewards/penalties for all Vaults based on validator balances in the Beacon Chain.
-3. Calculate MEV and priority fee rewards for Vaults connected to the Smoothing Pool.
-4. Create Merkle trees from the reward calculations and upload them to IPFS. For example, <code>bafkreibqhdr6p5uh67ickt4dpppb525bwuofjocnpsx4dbl57llogfph2e</code>.
-5. Save the cryptographically signed vote to the local database and expose via API.
-6. The [Keeper service ↗](https://github.com/stakewise/v3-keeper/) fetches votes from Oracle APIs, concatenates them, and sends the resulting transaction to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code).
-7. Upon verification, the protocol updates global state.
-8. Individual Vaults can claim their rewards.
+1. computes each Vault's consensus rewards and penalties from its validators' Beacon Chain balances;
+2. computes each Vault's MEV rewards — for Smoothing Pool Vaults, a proportional slice of the shared escrow; for Vaults with their own MEV escrow, the on-chain unlocked amount;
+3. builds a Merkle tree of all per-Vault rewards and computes each Vault's proof;
+4. uploads the full snapshot (every Vault's rewards + every Vault's proof) to IPFS;
+5. signs an EIP-712 message that includes the Merkle root and the IPFS hash.
+
+Once enough Oracles have voted, the [Keeper service ↗](https://github.com/stakewise/v3-keeper/) polls each Oracle's API, collects a threshold of matching signatures (`rewardsMinOracles`, currently **6 of 11**), and submits them to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5#code). The Keeper contract verifies the signers, checks the threshold and nonce, and stores the new Merkle root. Individual Vaults can then harvest their rewards.
+
+:::custom-notes[How the Smoothing Pool share is calculated]
+Every 12 hours, Oracles:
+
+1. calculate the new MEV that arrived in the shared escrow since the last vote;
+2. reject misbehaving Vaults (e.g. redirecting the fee recipient, using an untrusted relay, or skimming rewards) and return their locked share to the pot;
+3. split the new MEV among Vaults, weighted by their validators' attestation rewards on the Beacon Chain;
+4. lock each Vault's newly distributed share, releasing it once the Vault produces its next correct MEV block (or once all its validators have fully withdrawn).
 :::
 
-The reward update process has protocol-wide impact.
+:::custom-notes[MetaVaults]
+MetaVaults have no validators of their own, so Oracles do not vote on their rewards and they carry no leaf in the Merkle tree. A MetaVault instead derives its state on-chain: its `SubVaultsRegistry` requires every sub-Vault to be harvested against the latest Oracle-signed root first, then recomputes the parent's total assets from the sub-Vaults' balances.
+:::
 
 ## Validator Exits
 
-The validator exit process is automated and trustless.
-Validator exits require exit signatures that are generated during the validator registration process.
+The validator exit process is automated and trustless. During validator registration, the Operator Service generates each validator's pre-signed exit message, splits it into BLS signature shares using a threshold scheme, and encrypts a share for every Oracle, so the validators can always be exited, even if the Vault operator disappears.
 
-As part of registration, the Operator Service encrypts exit signatures using Shamir's secret sharing and distributes them to all Oracles.
+When a Vault has unstake requests, the Operator Service covers them first, using partial withdrawals from its `0x02` validators rather than exiting them. Only if the operator has not freed enough assets within the `force_withdrawals_period` (24 hours) do the Oracles step in: they identify which validators must exit and publish their own share of each validator's exit signature over their APIs. The Keeper service collects those shares, reconstructs the full exit signature once it holds enough of them (`exit_signature_recover_threshold`, currently **4 of 11**), and submits it to the Beacon Chain as a voluntary exit.
 
-:::custom-notes[Key Benefit]
-This approach ensures validators can be exited on demand while maintaining protocol security through decentralized signature management.
-:::
+Because Oracles can only exit validators in full, this ordering matters. Covering a small unstake request with a full exit could withdraw an entire compounding validator of up to 2048 ETH, so a Vault relies on its Operator Service to meet requests precisely through partial withdrawals, leaving the Oracle path as a fallback.
+
+## Validator Consolidations
+
+The [Pectra upgrade ↗](https://ethereum.org/en/roadmap/pectra/) introduced compounding validators: validators with `0x02` withdrawal credentials that can hold up to 2048 ETH of effective balance, instead of the previous 32 ETH cap. A Vault can upgrade an existing `0x01` validator to `0x02`, or merge several validators into a single compounding validator.
+
+**Creating a new compounding validator** (upgrading `0x01` to `0x02`) requires Oracle approval, because it introduces a validator the protocol has not yet recorded. The Operator Service sends a **consolidation request**, each Oracle confirms the keys are active validators of the Vault and returns a signed approval, and the Vault contract submits the consolidation once the [ConsolidationsChecker contract ↗](https://etherscan.io/address/0x033E5BaE5bdc459CBb7d388b41a9d62020Be810F#code) verifies that a threshold of Oracles (currently 6 of 11) has signed.
+
+**Merging into an existing compounding validator**, by contrast, needs no Oracle approval: the Vault contract only checks that the destination is already a registered `0x02` validator.
 
 ## osToken Redemptions
 
 Oracles also watch the [OsTokenRedeemer ↗](https://etherscan.io/address/0xc43A7b16A7a167c0318390Cba16787C11e9e1FD0) contract, where osToken holders queue their tokens to be redeemed for ETH or GNO at the protocol exchange rate.
 
-Redemptions are paid out of the Vaults' liquid assets. If a queued redemption is still unfilled after the forced withdrawals period, Oracles calculate how much each Vault is short, add that amount to the Vault's withdrawal demand, and release exit signatures for as many of its validators as it takes to cover it — the same enforcement they apply to the Vault exit queue.
+Redemptions are paid out of the Vaults' liquid assets. If a queued redemption is still unfilled after the forced withdrawals period, Oracles calculate how much each Vault is short, add that amount to the Vault's withdrawal demand, and release exit signature shares for as many of its validators as it takes to cover it — the same enforcement they apply to the Vault exit queue.
 
 Oracles do not authorize redemptions. The list of redeemable positions is computed by the Operator Service and approved on-chain by StakeWise; Oracles only read it to work out which Vaults owe assets.
 
 :::custom-notes[Deep Dive]
-For the full redemption flow, from queue entry to claiming, see [osToken Redemptions →](../ostoken/ostoken-redemptions).
+For the full redemption flow, from queue entry to claiming, see [osToken Redemptions](../ostoken/ostoken-redemptions).
 :::

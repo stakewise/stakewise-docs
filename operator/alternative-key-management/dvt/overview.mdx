@@ -26,22 +26,23 @@ A DVT setup is made up of several components that work together:
 - **DVT cluster**: A group of connected nodes that together operate distributed validators (DVs).
 - [Operator Service ↗](https://github.com/stakewise/v3-operator): Registers DVs in the Vault. It has no access to the DVs' keystores.
 - [DVT Sidecar ↗](https://github.com/stakewise/dvt-operator-sidecar): Runs on each node with access to its key share. It retrieves validator data from the Relayer and submits the node's deposit and exit signature shares back to it.
-- [DVT Relayer ↗](https://github.com/stakewise/dvt-relayer): Collects deposit and exit signature shares from the Sidecars, reconstructs the full signatures, and serves the registration data to the Operator Service through its API.
+- [DVT Relayer ↗](https://github.com/stakewise/dvt-relayer): Collects deposit and exit signature shares from the Sidecars, reconstructs the full signatures, and serves the registration data to the Operator Service through its API. See [Relayer (API Mode)](/operator/alternative-key-management/api-mode) for that API and how the Operator Service consumes it.
 
 ## Validator Registration Process
 
 <Image img={require('./img/validator_registration_flow.png')} alt="DVT Validator Registration Flow" />
 
-During registration, the DVT Relayer coordinates the operators' Sidecars and collects their signature shares.
+During registration, the DVT Relayer coordinates the operators' Sidecars and collects their signature shares. The steps below are numbered to match the diagram.
 
-1. The Operator Service determines the starting validator index and deposit amounts and sends a **registration request** to the Relayer.
-2. The Relayer creates the corresponding **pending validators** and exposes them via its API to the Sidecars.
-3. The Sidecars poll the Relayer for pending validators that are awaiting signatures, create **deposit and exit signature shares** for those validators, and push the shares back to the Relayer.
-4. The Relayer processes the signature shares:
+1. The Vault holds at least the minimum activation balance (32 ETH) in withdrawable assets. The Operator Service determines the starting validator index and the deposit amount for each validator — for `0x02` validators an amount can be larger than 32 ETH, up to the maximum validator balance.
+2. The Operator Service sends a **registration request** with those values to the Relayer.
+3. The Relayer creates the corresponding **pending validators** and exposes them via its API, where the Sidecars poll for validators awaiting signatures.
+4. Each Sidecar creates **deposit and exit signature shares** for those validators with its node's key share, and pushes the shares back to the Relayer.
+5. The Relayer processes the signature shares and returns the completed registration data:
 
-    - Receives the signature shares from the Sidecars.
     - Restores the full **deposit and exit signatures** from the Sidecar shares and verifies the restored signatures.
-    - For the exit signature, splits that full signature into a new set of shares — one per Oracle — and encrypts each with that Oracle's public key; the raw exit signature is never exposed. The deposit signature is kept whole. It then fills in the signatures on the pending validators, and the **encrypted Oracle shares** are available through the Relayer API.
-5. The Operator Service repeats the registration request each block, polling until the Relayer has reconstructed every validator's signatures and returned the **Validators Manager signature** that authorizes the registration.
+    - For the exit signature, splits that full signature into a new set of shares — one per Oracle — and encrypts each with that Oracle's public key; the raw exit signature is never exposed. The deposit signature is kept whole.
+    - Fills in the signatures on the pending validators and returns the **Validators Manager signature** that authorizes the registration, alongside the **encrypted Oracle shares**. The Operator Service repeats its registration request each block until this data is ready.
 6. The Operator Service requests approval from the StakeWise Oracles, forwarding the validators and their encrypted Oracle shares. The Oracles validate the data and return a combined **approval** once enough of them vote.
-7. The Operator Service submits the registration to the Vault contract, providing both authorizations: the **Oracles' approval** and the **Validators Manager signature**. The Vault deposits the stake, and the validators join the Beacon Chain's activation queue. Each becomes active once its deposit is processed, which can take a while depending on how many deposits are ahead of it in the queue.
+7. The Operator Service submits the registration to the Vault contract, providing both authorizations: the **Oracles' approval** and the **Validators Manager signature**.
+8. The Vault deposits the stake, and the validators join the Beacon Chain's activation queue. Each becomes active once its deposit is processed, which can take a while depending on how many deposits are ahead of it in the queue.

@@ -13,7 +13,7 @@ Obol provides permissionless access to distributed validators. A distributed val
 
 The validator client talks to Charon instead of the beacon node. Charon runs a consensus algorithm letting the nodes agree on what data to sign (attestations and proposals). Each node's validator client signs that data with its key share, and Charon then aggregates a threshold of the nodes' partial signatures into the validator's final signature.
 
-These key shares are created through a Distributed Key Generation (DKG) ceremony: instead of one party generating the full private key and splitting it among the nodes, every operator's Charon client takes part so the shares are generated together. The full private key is never constructed on any machine.
+Key shares can be produced two ways. Splitting an existing validator key is simpler, but the full key has to exist on one machine first. A Distributed Key Generation (DKG) ceremony avoids that: rather than one party generating the full private key and splitting it among the nodes, every operator's Charon client takes part so the shares are generated together, and the full private key is never constructed on any machine.
 
 :::custom-info[Operator Service Role]
 The Operator Service's role depends on how the validator keys are generated:
@@ -35,6 +35,16 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 2. [Create Vault](/operator/create-regular-vault)
 3. [Launch Operator Service](/operator/launch-operator-service#installation)
+
+:::custom-warning[Keystore Password Configuration]
+If you intend to split existing validator keys (the [Create a DV Alone](#create-a-dv-alone) flow), generate them with the `--per-keystore-password` flag:
+
+```bash
+./operator create-keys --per-keystore-password
+```
+
+Charon expects a `keystore-*.txt` password file next to every `keystore-*.json` in `--split-keys-dir`. Without this flag `create-keys` writes a single shared `password.txt`, and the split fails.
+:::
 
 :::custom-notes[Hardware Requirements]
 Each node runs an execution and a consensus client, which need to sync the chain, so the disk, RAM, and CPU add up quickly, even on a testnet. Check Obol's [hardware specifications ↗](https://docs.obol.org/run-a-dv/prepare/deployment-best-practices#hardware-specifications) and size your machine(s) for the network you are validating.
@@ -64,6 +74,9 @@ EOF
 
 :::custom-warning[StakeWise Addresses]
 Set `VAULT_CONTRACT_ADDR` to your **Vault contract address** and `FEE_RECIPIENT_ADDR` to your **Block reward recipient**. These become the cluster's `--withdrawal-addresses` and `--fee-recipient-addresses`.
+
+- **Vault contract address** — in the Vault page URL, or its Details section.
+- **Block reward recipient** — the "Block reward recipient" field in your Vault page settings.
 :::
 
 2. Split your validator keys across multiple nodes, replacing the example values for `--nodes` and `--name`:
@@ -97,7 +110,7 @@ You should see `node0/`, `node1/`, `node2/`, and `node3/` subdirectories.
 | <nobr>`--cluster-dir`</nobr> | Target directory to write the cluster into; each node gets its own subfolder (default `"./"`) |
 | <nobr>`--withdrawal-addresses`</nobr> | Comma-separated list of Ethereum addresses to receive returned stake and rewards. Provide single address or one per validator |
 | <nobr>`--fee-recipient-addresses`</nobr> | Comma-separated list of fee recipient addresses. Provide single address or one per validator. **Must match** the "Block reward recipient" address on your Vault page |
-| <nobr>`--nodes`</nobr> | Number of Charon nodes in the cluster. Minimum is 4 |
+| <nobr>`--nodes`</nobr> | Number of Charon nodes in the cluster. Charon's minimum is 3; the examples here use 4, the smallest cluster whose consensus tolerates one faulty node |
 | <nobr>`--network`</nobr> | Ethereum network. Options: mainnet, hoodi, gnosis (default "mainnet") |
 | <nobr>`--split-existing-keys`</nobr> | Split existing validator private key into distributed key shares |
 | <nobr>`--split-keys-dir`</nobr> | Directory containing keys to split. Expects `keystore-*.json` and `keystore-*.txt`. Requires `--split-existing-keys` |
@@ -397,7 +410,7 @@ Step 1 produced one folder per node under `.charon/cluster/` (`node0/`, `node1/`
 
 1. On each machine, clone Obol's [charon-distributed-validator-node ↗](https://github.com/ObolNetwork/charon-distributed-validator-node) (CDVN) repository. Its `docker-compose.yml` runs a single node.
 2. Copy one node's folder into the clone, renamed from `nodeX/` to `.charon` (the directory CDVN expects). For example, machine 1 gets `node0/` → `.charon`, machine 2 gets `node1/` → `.charon`.
-3. On that machine, set your network in the repo's `.env` and run `docker compose up -d`.
+3. On that machine, copy the sample env file for your network (`.env.sample.mainnet` or `.env.sample.hoodi`) to `.env`, adjust it if needed, and run `docker compose up -d`.
 
 You don't set the Vault or fee recipient here; they're baked into the cluster files from Step 1, and Charon applies them automatically. The nodes discover each other through the relay and operate together as one distributed validator.
 
@@ -422,9 +435,17 @@ When creating the cluster definition, set the `--withdrawal-addresses` to your *
 
 After the ceremony, each operator's `.charon/` holds their `validator_keys/` (key shares), `cluster-lock.json`, and `deposit-data.json`.
 
+:::custom-warning[Do Not Submit the Deposit Data]
+Obol's guide finishes by activating the validators with the generated `deposit-data.json`. Do not do that here. The Vault holds the stake and makes the deposit itself, with withdrawal credentials derived from the Vault address, so the ceremony's deposit data goes unused. Activation happens through the registration flow in the steps below.
+:::
+
 ### Step 2: Run the DVT Sidecar
 
 Each operator runs one [DVT Sidecar ↗](https://github.com/stakewise/dvt-operator-sidecar) on the machine running their node. It loads the node's key shares, polls the Relayer for validator data, and submits deposit and exit signature shares back to it.
+
+:::custom-notes[Supported Networks]
+The DVT Sidecar supports Ethereum mainnet and Hoodi. Gnosis is not supported for this flow, even though Charon can create Gnosis clusters.
+:::
 
 1. Create the `.env` file from the repository's template:
 
@@ -432,7 +453,9 @@ Each operator runs one [DVT Sidecar ↗](https://github.com/stakewise/dvt-operat
 cp .env.example .env
 ```
 
-2. Set the values for your Obol node:
+2. In a `data/` directory next to the `.env`, place this node's `validator_keys/` directory and its `cluster-lock.json`.
+
+3. Set the values for your Obol node. The container runs from `/app`, so every path must point inside the mounted `/data`:
 
 ```ini
 # Network: mainnet or hoodi
@@ -445,25 +468,26 @@ CLUSTER_TYPE=OBOL
 RELAYER_ENDPOINT=http://relayer:8000
 
 # Directory with this node's key shares (keystore-*.json + keystore-*.txt)
-OBOL_KEYSTORES_DIR=validator_keys
+OBOL_KEYSTORES_DIR=/data/validator_keys
 # The cluster-lock.json from the DKG ceremony
-OBOL_CLUSTER_LOCK_FILE=cluster-lock.json
+OBOL_CLUSTER_LOCK_FILE=/data/cluster-lock.json
 # This node's index in the cluster (0-based), used to select its share from the cluster lock
 OBOL_NODE_INDEX=0
 
-# Your execution and consensus client endpoints
-EXECUTION_ENDPOINT=http://execution:8545
-CONSENSUS_ENDPOINT=http://consensus:5052
+# Local database file
+DATABASE=/data/dvt-operator-sidecar.db
 ```
 
-3. Run the container:
+The `EXECUTION_ENDPOINT` and `CONSENSUS_ENDPOINT` entries in `.env.example` are only read when `CLUSTER_TYPE=SSV`, so an Obol node can leave them unset.
+
+4. Run the container:
 
 ```bash
 docker run \
   -u $(id -u):$(id -g) \
   --env-file .env \
   -v $(pwd)/data:/data \
-  europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v2.0.0
+  europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-operator-sidecar:v2.1.0
 ```
 
 ### Step 3: Run the DVT Relayer
@@ -479,7 +503,11 @@ cp .env.example .env
 2. In a `data/` directory, place the files the Relayer reads:
 
    - `validators-manager-key.json` and `validators-manager-password.txt`: the wallet set as your Vault's [Validators Manager](/operator/validators-manager).
-   - `public_keys.txt`: the cluster's validator public keys, one per line.
+   - `public_keys.txt`: the cluster's distributed validator public keys, one per line. Extract them from the `cluster-lock.json` produced by the ceremony:
+
+     ```bash
+     jq -r '.distributed_validators[].distributed_public_key' cluster-lock.json > data/public_keys.txt
+     ```
 
 3. Set the values (file paths point inside the mounted `/data`):
 
@@ -495,8 +523,8 @@ SIGNATURE_THRESHOLD=3
 NETWORK=mainnet
 
 # Execution and consensus client endpoints
-EXECUTION_ENDPOINT=https://execution
-CONSENSUS_ENDPOINT=https://consensus
+EXECUTION_ENDPOINT=http://execution:8545
+CONSENSUS_ENDPOINT=http://consensus:5052
 
 # Validator public keys to register, one per line
 PUBLIC_KEYS_FILE=/data/public_keys.txt
@@ -509,7 +537,7 @@ VALIDATORS_MANAGER_PASSWORD_FILE=/data/validators-manager-password.txt
 4. Pull and run the Relayer:
 
 ```bash
-export DVT_RELAYER_VERSION=v1.0.0
+export DVT_RELAYER_VERSION=v1.1.0
 docker run --rm -ti \
   --env-file .env \
   -v $(pwd)/data:/data \
@@ -517,12 +545,22 @@ docker run --rm -ti \
   europe-west4-docker.pkg.dev/stakewiselabs/public/dvt-relayer:$DVT_RELAYER_VERSION
 ```
 
+:::custom-warning[Restrict Access to the Relayer]
+The Relayer has no authentication, and it signs funding, withdrawal, and consolidation requests with the Validators Manager wallet. Anyone who can reach it can obtain a signature authorizing your Vault's validators to be withdrawn. Keep it on a private network reachable only by the Sidecars and the Operator Service, and do not publish port 8000 to the internet.
+:::
+
 ### Step 4: Start the Operator Service
 
-Because the Operator Service has no keystores, start it in Relayer mode pointing at your DVT Relayer:
+The Operator Service has no keystores here, so it runs in [Relayer (API Mode)](/operator/alternative-key-management/api-mode) pointing at your DVT Relayer.
+
+First, set your Vault's [Validators Manager](/operator/validators-manager) to the address of the Relayer's `validators-manager-key.json` wallet. The Vault rejects registrations signed by any other address.
+
+Then start the service:
 
 ```bash
-./operator start-relayer
+./operator start-relayer --vault=[ENTER YOUR VAULT CONTRACT ADDRESS HERE] --relayer-endpoint=http://relayer:8000
 ```
 
-If you run the nodes with Obol's CDVN setup (the solo production tab above), it ships a local Grafana dashboard. Check your nodes' health at `http://localhost:3000/d/charonoverview/`. For hosted dashboards and alerting in any setup, see [Obol monitoring ↗](https://docs.obol.org/run-a-dv/start/obol-monitoring).
+See [Relayer (API Mode)](/operator/alternative-key-management/api-mode) for the remaining options and the environment-variable form.
+
+If you run the nodes with Obol's CDVN setup (the solo production tab above), it ships a local Grafana dashboard. Check your nodes' health at `http://localhost:3000/d/charon_overview/`. For hosted dashboards and alerting in any setup, see [Obol monitoring ↗](https://docs.obol.org/run-a-dv/start/obol-monitoring).

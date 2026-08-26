@@ -29,7 +29,7 @@ const AdmonitionTypes = {
   'custom-notes': (props) => <CustomAdmonition iconSrc="/icons/stakewise/notes.png" {...props} />,
   'custom-tips': (props) => <CustomAdmonition iconSrc="/icons/stakewise/tips.png" {...props} />,
   'custom-warning': (props) => <CustomAdmonition iconSrc="/icons/stakewise/warning.png" {...props} />,
-  'custom-stakewise': (props) => <CustomAdmonition iconSrc="/icons/stakewise/logo.png" {...props} />,
+  'custom-stakewise': (props) => <CustomAdmonition iconSrc="/icons/stakewise/sw_logo.gif" {...props} />,
 };
 
 export default AdmonitionTypes;

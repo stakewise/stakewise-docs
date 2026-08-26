@@ -14,7 +14,6 @@ const sidebars: SidebarsConfig = {
       items: [
         'docs/stakewise-protocol/understanding-liquid-staking',
         'docs/stakewise-protocol/what-is-stakewise',
-        'docs/stakewise-protocol/governance-swise-token',
       ],
     },
     {
@@ -26,11 +25,11 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/vaults/how-vaults-work',
-        'docs/vaults/customization',
+        'docs/vaults/vault-types',
+        'docs/vaults/configuration',
         'docs/vaults/vault-performance',
         'docs/vaults/boost',
         'docs/vaults/technical-architecture',
-        'docs/vaults/meta-vaults'
       ],
     },
     {
@@ -42,6 +41,7 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/ostoken/how-ostoken-works',
+        'docs/ostoken/ostoken-redemptions',
       ],
     },
     {
@@ -65,7 +65,10 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'docs/governance/stakewise-dao',
-        'docs/governance/dao-treasury',
+        'docs/governance/tokenomics',
+        'docs/governance/community-forum',
+        'docs/governance/voting-process',
+        'docs/governance/treasury',
       ],
     },
     'docs/glossary',

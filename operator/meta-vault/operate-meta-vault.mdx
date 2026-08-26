@@ -5,6 +5,7 @@ description: Install the Operator Service and run the process-meta-vaults comman
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { CommandSnippet } from '@site/src/components';
 
 # Operate MetaVault
 
@@ -43,9 +44,7 @@ Then create a wallet with:
 
 Export a private key from an existing wallet, then set it as an environment variable:
 
-```bash
-export WALLET_PRIVATE_KEY="0xyour_private_key_here"
-```
+<CommandSnippet template={`export WALLET_PRIVATE_KEY="{{0xyour_private_key_here}}"`} />
 
 :::custom-info[Fund Your Wallet]
 The wallet pays gas for every transaction the Operator Service submits. Make sure the wallet holds a small amount of ETH (or xDAI on Gnosis) to cover gas.
@@ -55,14 +54,12 @@ The wallet pays gas for every transaction the Operator Service submits. Make sur
 
 The `process-meta-vaults` command triggers transactions to update states and process deposits and exits for one or more MetaVaults.
 
-```bash
-./operator process-meta-vaults \
- --vaults=0x15639E82d2072Fa510E5d2b5F0db361c823bCad3 \
- --wallet-file=/home/user/.stakewise/0x15639e82d2072fa510e5d2b5f0db361c823bcad3/wallet/wallet.json \
- --wallet-password-file=/home/user/.stakewise/0x15639e82d2072fa510e5d2b5f0db361c823bcad3/wallet/password.txt \
- --execution-endpoints=https://execution-node \
- --network=mainnet
-```
+<CommandSnippet template={`./operator process-meta-vaults \\
+ --vaults={{0x15639E82d2072Fa510E5d2b5F0db361c823bCad3}} \\
+ --wallet-file={{/home/user/.stakewise/0x15639e82d2072fa510e5d2b5f0db361c823bcad3/wallet/wallet.json}} \\
+ --wallet-password-file={{/home/user/.stakewise/0x15639e82d2072fa510e5d2b5f0db361c823bcad3/wallet/password.txt}} \\
+ --execution-endpoints={{https://execution-node}} \\
+ --network={{mainnet}}`} />
 
 The following parameters are required:
 - `--vaults` — Comma separated addresses of MetaVaults to process

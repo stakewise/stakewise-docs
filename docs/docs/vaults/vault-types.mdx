@@ -17,7 +17,7 @@ A Vault's type is set once at deployment.
 
 ## Standard Vault
 
-The default Vault type. Accepts deposits from any wallet and issues non-transferable shares that represent each depositor's proportional stake and accrued rewards. Best suited for solo stakers and open pooled staking, where transferability of the staked position isn't required.
+The default Vault type, shown as **Regular Vault** in the StakeWise app and the [creation guide](/operator/create-regular-vault). Accepts deposits from any wallet and issues non-transferable shares that represent each depositor's proportional stake and accrued rewards. Best suited for solo stakers and open pooled staking, where transferability of the staked position isn't required.
 
 ## ERC-20 Vault
 
@@ -35,14 +35,18 @@ Open to any wallet by default, but the Blocklist Manager can block specific addr
 
 <Image img={require('./img/MetaVaults_Architecture_Diagram.png')} alt="MetaVaults Architecture Diagram" />
 
-A MetaVault is a specialized Vault that doesn't run validators itself. Instead, it accepts deposits and routes them across a set of underlying Vaults — called *sub-vaults* — which handle validator operations. Just like with a regular Vault, stakers can mint osToken against their position and burn it to unlock their stake at any time.
+A MetaVault is a specialized Vault that doesn't run validators itself. Instead, it accepts deposits and routes them across a set of underlying Vaults — called *sub-vaults* — which handle validator operations. Just like with a Standard Vault, stakers can mint osToken against their position and burn it to unlock their stake at any time.
+
+:::custom-notes[Ethereum Only]
+MetaVaults are currently available on Ethereum only — no MetaVault factory is deployed on Gnosis Chain.
+:::
 
 ### Use Cases
 
 Any third party can deploy a MetaVault permissionlessly, which opens up modular, layered staking strategies:
 
 - [Diversified staking ↗](https://blog.stakewise.io/guide/diversified-staking-with-metavaults) — spread stake across multiple operators through a single MetaVault, reducing single-operator exposure, optimizing fees, and giving stakers one place to deposit, withdraw, and manage their osToken position.
-- [Dedicated MetaVaults for clients ↗](https://blog.stakewise.io/guide/setting-up-per-client-metavaults) — create a separate MetaVault for each client while routing all deposits into a shared Regular Vault. This keeps client funds isolated, supports per-client fees, delivers higher and more stable APY, and simplifies operations by managing a single validator fleet.
+- [Dedicated MetaVaults for clients ↗](https://blog.stakewise.io/guide/setting-up-per-client-metavaults) — create a separate MetaVault for each client while routing all deposits into a shared Standard Vault. This keeps client funds isolated, supports per-client fees, delivers higher and more stable APY, and simplifies operations by managing a single validator fleet.
 
 ### How MetaVaults Work
 

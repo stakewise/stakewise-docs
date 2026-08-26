@@ -8,6 +8,8 @@ import Image from '@theme/IdealImage'
 
 Every Vault has [operator(s)](/operator/introduction) responsible for its validators. Operator(s) run the infrastructure directly or delegate it to a third party. Operating a Vault means running the [Operator Service ↗](https://github.com/stakewise/v3-operator) — StakeWise software that automates a Vault's day-to-day operations — alongside Ethereum [consensus](../../operator/staking-nodes#consensus-client) and [execution](../../operator/staking-nodes#execution-client) clients.
 
+A single Vault can be run by several node operators, and it supports <Tooltip content={<><strong>Distributed Validator Technology</strong> <br /> A solution designed to overcome the single-operator trust problem by splitting a validator's private key among multiple independent operators. <br /> More on DVT — <a href="https://ethereum.org/en/staking/dvt/" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">ethereum.org ↗</a></>}>Distributed Validator Technology</Tooltip> (DVT) for extra redundancy — see the [DVT overview](/operator/alternative-key-management/dvt/overview).
+
 Every Vault action — deposits, validator registration, reward distribution, and withdrawals — is executed on-chain by the Vault's smart contracts. The Operator Service runs off-chain and initiates these on-chain calls automatically. The sections below walk through each stage.
 
 ## Deposits
@@ -31,7 +33,7 @@ The Operator Service monitors Vault balances and submits validator registration 
 :::custom-notes[Validator Activation Waiting Times]
 Activation time depends on the Consensus Layer's [deposit queue ↗](https://www.validatorqueue.com/), which processes deposits at a capped rate. Once a deposit clears the queue, only a short fixed delay remains before the validator can participate.
 
-1. **Deposit queue** — the deposit joins the Consensus Layer's processing queue (`state.pending_deposits`), rate-limited to 16 deposits per epoch and a churn budget shared between activations and exits (256 ETH per epoch on Ethereum, 2 GNO per epoch on Gnosis Chain). Under heavy demand, deposits can wait weeks or months.
+1. **Deposit queue** — the deposit joins the Consensus Layer's processing queue (`state.pending_deposits`), rate-limited to 16 deposits per epoch and a per-epoch churn budget of 256 ETH on Ethereum or 2 GNO on Gnosis Chain. Exits draw on a separate budget of the same size, so a long exit queue does not slow deposits down. Under heavy demand, deposits can wait weeks or months.
 2. **Fixed delay** — once written into the registry, the validator waits a fixed ~7–8 epochs (~45–50 min on Ethereum, ~9–11 min on Gnosis Chain, whose epochs are shorter). Most of this is a lookahead delay that stops anyone predicting and gaming committee assignments.
 3. **Active** — the validator begins attesting and earning rewards.
 :::
@@ -78,7 +80,7 @@ A harvest does the following:
 The Vault then decides what to do with those assets (ETH or GNO):
 
 - **Top up** — e.g. add ETH to existing `0x02` validators, growing their effective balance up to the 2048 ETH maximum.
-- **Consolidate** — merge multiple `0x01` validators into a single `0x02` validator (`0x01` + `0x01` → `0x02`).
+- **Consolidate** — merge `0x01` validators into a single `0x02` validator. Because [EIP-7251 ↗](https://eips.ethereum.org/EIPS/eip-7251) requires the consolidation target to already be `0x02`, this runs in two steps: one validator is switched to `0x02` first, then the rest are merged into it. The Operator Service does both automatically.
 - **Keep assets as-is** — leave ETH or GNO in the Vault for greater liquidity.
 
 ## Withdrawals
@@ -101,8 +103,8 @@ When a user clicks [Unstake](/staker/vault-staking#how-to-unstake) or [Unboost](
 
 1. `enterExitQueue` is called on the Vault contract — for boosted positions, the call is routed through the Boost proxy.
 2. The user enters the Vault's **exit queue** — a first-in, first-out line fulfilled as ETH becomes available.
-3. The user's position is tracked by an **exit-queue ticket**, which is filled in whole or in part from that ETH; if filled partially, an updated ticket is issued for the remainder.
-4. Once a ticket is fully filled, the user calls `claimExitedAssets` (after a short claim delay) to withdraw the ETH.
+3. The user's position is tracked by an **exit-queue ticket**, which the Vault fills in whole or in part as ETH becomes available.
+4. Once a claim delay has elapsed since the user **entered** the queue — 15 hours on public Vaults — the user calls `claimExitedAssets` to withdraw whatever portion of the ticket has been filled. A partial claim pays out that portion and issues an updated ticket for the remainder.
 
 Staked assets continue earning rewards until validators complete the exit. Once a validator fully exits, its balance is [swept ↗](https://ethereum.org/en/staking/withdrawals/#validator-sweeping) to the Vault and becomes claimable by users in ticket order. Exit processing time depends on Ethereum network conditions — check the current [validator queue ↗](https://www.validatorqueue.com/) for up-to-date estimates.
 

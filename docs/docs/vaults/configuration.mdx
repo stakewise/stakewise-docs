@@ -27,53 +27,20 @@ Vaults can use either a **Smoothing Pool** or **Own Escrow** to collect MEV from
 
 #### Smoothing Pool {#smoothing-pool}
 
-Rewards are pooled across multiple Vaults and distributed in proportion to each Vault's total assets staked, providing more stable and predictable returns regardless of block proposal frequency.
+Rewards are pooled across multiple Vaults and distributed in proportion to the Consensus Layer attestation rewards each Vault's validators earned over the period, providing more stable and predictable returns regardless of block proposal frequency. Because the split follows earned attestation rewards rather than Vault size, assets sitting idle in a Vault and underperforming validators both reduce its share.
 
 For example, a Vault with only a few validators will still receive periodic small payouts from the Smoothing Pool.
 In return, when one of its validators does earn a block proposal reward, that reward flows to the Smoothing Pool to be shared among all participating Vaults.
 
-Vaults that use the Smoothing Pool must set every relay to one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints). This ensures that individual Vaults' contributions to the Smoothing Pool are tracked and the risk of non-contribution is mitigated.
+Vaults that use the Smoothing Pool must set every relay to one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints). This ensures that individual Vaults' contributions to the Smoothing Pool are tracked and the risk of non-contribution is mitigated. An accrued share counts toward the Vault's total assets straight away, but stays **locked** in the shared escrow until one of the Vault's validators proposes a block through an approved relay and routes the MEV to the pool. Proposing through an unapproved relay, or sending the MEV somewhere else, forfeits the locked balance — it is redistributed among the compliant Vaults.
 
 #### Own Escrow
 
 Each Vault keeps its own MEV rewards. Because nothing is shared, the Vault can pick any relay — targeting maximum value capture at the cost of higher variability.
 
-## Roles
+## Mutable Parameters
 
-<Image img={require('./img/roles.png')} alt="Protocol Roles Diagram" />
-
-Every Vault has several key roles for the internal management of the staking process. All are assigned by the **Admin** — through the **Settings → Roles** tab on the Vault page, or by calling the corresponding function on the Vault contract.
-
-### Admin
-
-Primary controller of the Vault, and its creator by default. An Admin can be a single wallet, multisig, or DAO. The Admin's authority covers:
-
-- Assigning and reassigning every role, including its own
-- Updating the Vault's branding and fees
-- Setting the fee recipient and shareholder splits
-- Upgrading the Vault to a new contract version
-
-### Vault Fee Claimer
-
-Triggers [claims of accumulated Vault fees](/operator/manage-vault/fee-claiming) on behalf of stakeholders.
-
-By default a Vault's fees go to a single recipient. To split them, the Admin submits the Fee Splitter address, a contract that divides incoming fees among multiple stakeholders according to specified proportions, as the Vault fee recipient, set on the Vault page under **Settings → Vault fee**.
-
-### Whitelist Manager
-
-Adds or removes the addresses authorized to deposit. Only present in Private Vaults.
-
-### Blocklist Manager
-
-Adds or removes the addresses blocked from depositing. Only present in Blocklist Vaults.
-
-### Validators Manager
-
-Authorizes the Vault's core validator operations — registration, funding, consolidation, and withdrawals. The [Operator Service automates most of the validator lifecycle](/operator/launch-operator-service#core-functions), and each on-chain action it submits must be signed by the address assigned to this role.
-
-## Settings
-
-Branding and fees are configurable parameters updated by the Admin.
+Branding, fees, and roles can all be changed after creation. All three are controlled by the Admin.
 
 ### Branding
 
@@ -90,3 +57,36 @@ A [percentage fee](../fees/intro) charged on staking rewards, ranging from 0% to
 Initially set during Vault creation and updated later on the Vault page under **Settings → Vault fee**, subject to protocol restrictions: each increase is capped at 20% relative to the current fee (e.g., a 10% fee can rise to at most 12%), with a 3-day delay between updates. If the current fee is 0%, it cannot exceed 1% on the first increase.
 
 The fee is automatically deducted from rewards when the Vault state is updated, and transferred to the Vault's fee recipient.
+
+## Roles
+
+<Image img={require('./img/roles.png')} alt="Vault Roles Diagram" />
+
+Every Vault has several key roles for the internal management of the staking process. All are assigned by the **Admin** through the **Settings → Roles** tab on the Vault page, or by calling the corresponding setter on the Vault contract — with one exception: the Vault Fee Claimer lives on the Vault's Fee Splitter contract rather than on the Vault itself.
+
+### Admin
+
+Primary controller of the Vault, and its creator by default. An Admin can be a single wallet, multisig, or DAO. The Admin's authority covers:
+
+- Assigning and reassigning every role, including its own
+- Updating the Vault's branding and fees
+- Setting the fee recipient and shareholder splits
+- Upgrading the Vault to a new contract version
+
+### Vault Fee Claimer
+
+Triggers [claims of accumulated Vault fees](/operator/manage-vault/fee-claiming) on behalf of shareholders.
+
+By default a Vault's fees go to a single recipient. To split them among several shareholders, the Admin sets a **Fee Splitter** — a contract that divides incoming fees according to configured proportions — as the Vault's fee recipient, under **Settings → Vault fee** on the Vault page.
+
+### Whitelist Manager
+
+Adds or removes the addresses authorized to deposit. Only present in Private Vaults.
+
+### Blocklist Manager
+
+Adds or removes the addresses blocked from depositing. Only present in Blocklist Vaults.
+
+### Validators Manager
+
+Authorizes the Vault's core validator operations — registration, funding, consolidation, and withdrawals. The [Operator Service automates most of the validator lifecycle](/operator/launch-operator-service#core-functions), and each on-chain action it submits must be signed by the address assigned to this role.

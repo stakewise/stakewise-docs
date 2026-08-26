@@ -29,7 +29,7 @@ To mitigate the [ERC-4626 ↗](https://github.com/OpenZeppelin/openzeppelin-cont
 
 <Image img={require('./img/modular_architecture.png')} alt="StakeWise Vault modular smart contract architecture" />
 
-At initialization, the Vault is linked to [StakeWise smart contracts](../../contracts/networks/) and the Ethereum or Gnosis Beacon Chain. These links are immutable: once set, they cannot be changed. Each Vault is then composed from specialized modules, each responsible for a distinct area:
+The addresses that link a Vault to the rest of the protocol — the [StakeWise smart contracts](../../contracts/networks/) and the Ethereum or Gnosis Beacon Chain — are constructor parameters of the *implementation*, compiled into its bytecode rather than stored per Vault. Every Vault sharing an implementation therefore resolves the same infrastructure, and those addresses can only change if the Vault is upgraded to a new implementation. Each Vault is composed from specialized modules, each responsible for a distinct area:
 
 **User deposits and exits** — minting shares for deposited assets and processing withdrawal requests against the exit queue.
 
@@ -42,3 +42,9 @@ At initialization, the Vault is linked to [StakeWise smart contracts](../../cont
 **osETH integration** — letting depositors mint osETH against their staked position without unstaking.
 
 Modules combine in different ways to produce the [Vault types](./vault-types). ERC-20, Private, and Blocklist Vaults are additive variants of the same staking core, layering tokenization or membership rules on top. MetaVaults reuse the same share-accounting, fee, and exit-queue logic, but delegate staking itself to a set of sub-vaults.
+
+## Upgrade Flexibility
+
+Upgrades are gated behind the Vault's own [Admin](./configuration#admin): `upgradeToAndCall` reverts for anyone else, so the StakeWise DAO cannot change or upgrade a Vault's contracts unilaterally.
+
+The DAO releases new Vault versions to improve efficiency or safety, and each release goes through community governance approval — but adopting one is always the Admin's decision, and a Vault can stay on its current version indefinitely. Because the proxy pattern separates storage from logic, an upgrade swaps only the implementation; the proxy holding all state and user balances is untouched.

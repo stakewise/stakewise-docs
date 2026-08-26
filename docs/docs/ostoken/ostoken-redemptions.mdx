@@ -53,7 +53,7 @@ It then checks whether there's enough queued osToken to submit a new redemption.
 
 ### 4. Operator Service Submits a Redemption
 
-The Operator Service downloads the published list from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from Sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then refreshes the state of the target Vaults in a separate multicall transaction, builds a Merkle multiproof against the published root, and calls `redeemOsTokenPositions` on `OsTokenRedeemer` for each position.
+The Operator Service downloads the published list from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then refreshes the state of the target Vaults in a separate multicall transaction, builds a Merkle multiproof against the published root, and calls `redeemOsTokenPositions` on `OsTokenRedeemer` for each position.
 
 The state refresh is only possible because the Oracles have voted on and signed a rewards root: a Vault that has fallen more than one reward update behind cannot be redeemed from until it is harvested against that root. See [Reward Distribution](/docs/oracles/oracle-duties#reward-distribution).
 

@@ -34,12 +34,14 @@ Each Vault gets one of four grades depending on the score:
     - Up to 3% missed attestations and/or blocks
   </TabItem>
   <TabItem value="bad" label={<span><img src="/icons/stakewise/red.png" alt="red" style={{width: '16px', height: '16px', display: 'inline', verticalAlign: 'middle', marginRight: '6px'}} />Bad</span>}>
-    **Ethereum: [0, 97.09)% · Gnosis: [0, 96.2)%**
+    **Ethereum: (0, 97.09)% · Gnosis: (0, 96.2)%**
 
     - Validators are not performing correctly
     - Missing blocks or poorly handling attestations
   </TabItem>
 </Tabs>
+
+A Vault with no score yet — one whose validators haven't been active long enough to produce one — shows `–` rather than a grade.
 
 Read on to see what makes up this score and how it is calculated.
 
@@ -53,7 +55,7 @@ Most of a validator's work is attesting. Once per epoch, the validator publishes
 - **Target vote**: a timely vote for the correct target checkpoint.
 - **Head vote**: a timely vote for the correct head block.
 
-These votes keep the network in agreement and are a validator's **primary source of income**. Each vote carries a certain weight toward the reward, and together the three make up **84.4% of total rewards**. Missing the source or target vote carries a penalty, while a missed head vote only forgoes its share.
+These votes keep the network in agreement and are a validator's **primary source of income**. Each vote carries a certain weight toward the reward, and together the three make up **84.4% of Consensus Layer rewards** — Execution Layer income (MEV and priority fees) sits outside this budget entirely. Missing the source or target vote carries a penalty, while a missed head vote only forgoes its share.
 
 The Beacon API provides `ideal_rewards` for an epoch — the most a validator could have earned with optimal performance. The attester score compares actual to ideal:
 
@@ -115,17 +117,17 @@ This is a deliberate simplification of beaconcha.in's [BeaconScore ↗](https://
 StakeWise uses just two components — **attester (80%)** and **proposer (20%)** — and leaves sync committee duty out of the score entirely, so a Vault's grade comes down to the two duties that dominate day to day and are most within an operator's control.
 
 :::custom-info[MetaVaults]
-A MetaVault has no validators of its own — it spreads deposits across several Sub-vaults. Its performance score is the **share-weighted average** of its Sub-vaults' scores, so each Sub-vault influences the grade in proportion to how much stake sits in it:
+A MetaVault has no validators of its own — it spreads deposits across several sub-vaults. Its performance score is the **share-weighted average** of its sub-vaults' scores, so each sub-vault influences the grade in proportion to how much stake sits in it:
 
 $$
 {\small \text{score}_{\text{meta}} = \frac{\sum_i \text{score}_i \times \text{shares}_i}{\sum_i \text{shares}_i}}
 $$
 
 **Where:**
-- $\text{score}_i$ – the performance score of Sub-vault $i$, computed with the 80/20 formula above
-- $\text{shares}_i$ – Sub-vault $i$'s total shares (its size)
+- $\text{score}_i$ – the performance score of sub-vault $i$, computed with the 80/20 formula above
+- $\text{shares}_i$ – sub-vault $i$'s total shares (its size)
 
-Larger Sub-vaults move the MetaVault's score more than smaller ones. A MetaVault is scored only once **all** of its Sub-vaults have a score; if any is still unscored, it stays unscored rather than showing a partial average. Nested MetaVaults resolve **bottom-up**: the innermost are scored first, feeding into their parents.
+Larger sub-vaults move the MetaVault's score more than smaller ones. A MetaVault is scored only once **all** of its sub-vaults have a score; if any is still unscored, it stays unscored rather than showing a partial average. Nested MetaVaults resolve **bottom-up**: the innermost are scored first, feeding into their parents.
 :::
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>

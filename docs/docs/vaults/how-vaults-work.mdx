@@ -63,7 +63,7 @@ Once active, validators earn:
 - **Consensus Layer rewards** — for block proposals, attestations, and sync-committee participation.
 - **Execution Layer rewards** — [MEV ↗](https://ethereum.org/developers/docs/mev/) and transaction priority fees.
 
-These rewards are [calculated off-chain](../oracles/oracle-duties#reward-distribution) by the StakeWise [Oracle network](../oracles/intro) every **12 hours**: Oracles publish per-Vault rewards to [IPFS ↗](https://ipfs.stakewise.io/ipfs/bafkreicoxcsrs652goyanvyjjhgljn6pqpf6zqweu7sobaeybdjrhqomfq), build a Merkle tree over that data, and submit a signed Merkle root to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5), which verifies the signatures and stores the root.
+These rewards are [calculated off-chain](../oracles/oracle-duties#reward-distribution) by the StakeWise [Oracle network](../oracles/intro) every **12 hours**: Oracles publish per-Vault rewards to [IPFS ↗](https://ipfs.tech/), build a Merkle tree over that data, and submit a signed Merkle root to the [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239d98Bb487b5), which verifies the signatures and stores the root.
 
 Each Vault then pulls in its own rewards through a **harvest**.
 
@@ -124,6 +124,6 @@ Staked assets continue earning rewards until validators complete the exit. Once 
 
 <div id="fn-3" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>3.</span>
-  BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">Computational Diffie–Hellman (CDH) problem</a> to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity. Learn more about BLS signatures <a href="https://www.iacr.org/archive/asiacrypt2001/22480516.pdf" className="tooltip-link" target="_blank" rel="noopener noreferrer nofollow">here</a>.
+  BLS (Boneh–Lynn–Shacham) is a digital signature scheme introduced in 2001. It relies on the hardness of the [Computational Diffie–Hellman (CDH) problem ↗](https://www.iacr.org/archive/asiacrypt2001/22480516.pdf) to prevent forgery. A user selects a secret key and derives the corresponding public key on an elliptic curve. To sign, the message is hashed to a curve point and multiplied by the secret key, producing the signature. Verification uses a bilinear pairing to confirm validity.
   <a href="#fnref-3" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>
 </div>

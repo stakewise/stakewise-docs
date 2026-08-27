@@ -36,6 +36,10 @@ Remember that in order to migrate, you will need to connect with the wallet that
 
 Once your wallet is connected to the StakeWise V3 interface, you will find the Migrate section at the top of your screen.
 
+:::custom-notes[Don't See the Migrate Option?]
+The Migrate entry point only appears when the connected wallet holds a non-zero StakeWise V2 balance. If it isn't there, check that you are connected with the wallet that holds the V2 tokens and are on the right network.
+:::
+
 <Image img={require('./img/ethereum/navigate_to_the_migrate_interface.png')} alt="Navigate to the Migrate interface" />
 
 Press the `Migrate` button to open the Migrate interface. You should see a floating module with blank fields for the amount of sETH2 and rETH2 tokens you would like to migrate to StakeWise V3.
@@ -50,7 +54,7 @@ Once you've entered the amounts, press the `Migrate` button and confirm the tran
 
 <Image img={require('./img/ethereum/confirm_the_transaction.png')} alt="Confirm the transaction" />
 
-Once the transaction is finalized, you should see the total amount of tokens you chose to migrate as ETH staked in the [Genesis Vault ↗](https://app.stakewise.io/vault/0xAC0F906E433d58FA868F936E8A43230473652885) on StakeWise V3.
+Once the transaction is finalized, you should see the total amount of tokens you chose to migrate as ETH staked in the [Genesis Vault ↗](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885) on StakeWise V3.
 
 <Image img={require('./img/ethereum/migration_complete.png')} alt="Migration complete" />
 

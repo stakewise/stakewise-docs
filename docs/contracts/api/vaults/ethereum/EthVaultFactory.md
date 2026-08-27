@@ -1,81 +1,68 @@
 ---
 title: EthVaultFactory
-sidebar_position: 8
+sidebar_position: 13
 description: "Factory for deploying Ethereum staking vaults"
 ---
 
 # EthVaultFactory
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthVaultFactory.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/ethereum/EthVaultFactory.sol)
 
 **Inherits:** IEthVaultFactory
 
-Factory for deploying Ethereum staking Vaults.
+Factory for deploying Ethereum staking Vaults
 
 
-## Events
-### VaultCreated
-Event emitted on a Vault creation
-
+## State Variables
+### _vaultsRegistry
 
 ```solidity
-event VaultCreated(address indexed admin, address indexed vault, address ownMevEscrow, bytes params);
+IVaultsRegistry internal immutable _vaultsRegistry
 ```
 
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`admin`|`address`|The address of the Vault admin|
-|`vault`|`address`|The address of the created Vault|
-|`ownMevEscrow`|`address`|The address of the own MEV escrow contract. Zero address if shared MEV escrow is used.|
-|`params`|`bytes`|The encoded parameters for initializing the Vault contract|
-
-## Functions
 
 ### implementation
-
 The address of the Vault implementation contract used for proxy creation
 
 
 ```solidity
-function implementation() external view returns (address);
+address public immutable override implementation
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the Vault implementation contract|
 
 
 ### ownMevEscrow
-
 The address of the own MEV escrow contract used for Vault creation
 
 
 ```solidity
-function ownMevEscrow() external view returns (address);
+address public override ownMevEscrow
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the MEV escrow contract|
 
 
 ### vaultAdmin
-
 The address of the Vault admin used for Vault creation
 
 
 ```solidity
-function vaultAdmin() external view returns (address);
+address public override vaultAdmin
 ```
-**Returns**
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(address _implementation, IVaultsRegistry vaultsRegistry) ;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|The address of the Vault admin|
+|`_implementation`|`address`|The implementation address of Vault|
+|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
 
 
 ### createVault

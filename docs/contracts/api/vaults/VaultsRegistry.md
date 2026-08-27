@@ -1,154 +1,56 @@
 ---
 title: VaultsRegistry
+sidebar_position: 3
 description: VaultsRegistry contract API reference for tracking StakeWise vaults, factories, and vault upgrades on Ethereum.
 ---
 
 # VaultsRegistry
-[Git Source](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/VaultsRegistry.sol)
 
-**Inherits:**
-[Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IVaultsRegistry
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/VaultsRegistry.sol)
 
-Defines the registry functionality that keeps track of Vaults, Factories and Vault upgrades.
+**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IVaultsRegistry
 
-
-## Events
-### VaultAdded
-Event emitted on a Vault addition
+Defines the registry functionality that keeps track of Vaults, Factories and Vault upgrades
 
 
-```solidity
-event VaultAdded(address indexed caller, address indexed vault);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address that has added the Vault|
-|`vault`|`address`|The address of the added Vault|
-
-### VaultImplAdded
-Event emitted on adding Vault implementation contract
-
-
-```solidity
-event VaultImplAdded(address indexed impl);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`impl`|`address`|The address of the new implementation contract|
-
-### VaultImplRemoved
-Event emitted on removing Vault implementation contract
-
-
-```solidity
-event VaultImplRemoved(address indexed impl);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`impl`|`address`|The address of the removed implementation contract|
-
-### FactoryAdded
-Event emitted on whitelisting the factory
-
-
-```solidity
-event FactoryAdded(address indexed factory);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`factory`|`address`|The address of the whitelisted factory|
-
-### FactoryRemoved
-Event emitted on removing the factory from the whitelist
-
-
-```solidity
-event FactoryRemoved(address indexed factory);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`factory`|`address`|The address of the factory removed from the whitelist|
-
-
-## Functions
-
+## State Variables
 ### vaults
 
-Registered Vaults
-
-
 ```solidity
-function vaults(address vault) external view returns (bool);
+mapping(address => bool) public override vaults
 ```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault to check whether it is registered|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|`true` for the registered Vault, `false` otherwise|
-
-
-### vaultImpls
-
-Registered Vault implementations
-
-
-```solidity
-function vaultImpls(address impl) external view returns (bool);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`impl`|`address`|The address of the vault implementation|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|`true` for the registered implementation, `false` otherwise|
 
 
 ### factories
 
-Registered Factories
+```solidity
+mapping(address => bool) public override factories
+```
+
+
+### vaultImpls
+
+```solidity
+mapping(address => bool) public override vaultImpls
+```
+
+
+### _initialized
+
+```solidity
+bool private _initialized
+```
+
+
+## Functions
+### constructor
+
+Constructor
 
 
 ```solidity
-function factories(address factory) external view returns (bool);
+constructor() Ownable(msg.sender);
 ```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`factory`|`address`|The address of the factory to check whether it is whitelisted|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|`true` for the whitelisted Factory, `false` otherwise|
-
 
 ### addVault
 
@@ -223,3 +125,18 @@ function removeFactory(address factory) external override onlyOwner;
 |Name|Type|Description|
 |----|----|-----------|
 |`factory`|`address`|The address of the factory to remove from the whitelist|
+
+
+### initialize
+
+Function for initializing the registry. Can only be called once during the deployment.
+
+
+```solidity
+function initialize(address _owner) external override onlyOwner;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_owner`|`address`|The address of the owner of the contract|

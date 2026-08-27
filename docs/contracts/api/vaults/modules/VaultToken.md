@@ -6,11 +6,23 @@ description: "Abstract contract defining ERC20 token functionality for vaults"
 
 # VaultToken
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultToken.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultToken.sol)
 
-**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [ERC20Upgradeable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/token/ERC20/ERC20Upgradeable.sol), [VaultState →](./VaultState), IVaultToken
+**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [ERC20Upgradeable](../../base/ERC20Upgradeable), [VaultState](./VaultState), IVaultToken
 
-Defines the token functionality for the Vault.
+Defines the token functionality for the Vault
+
+
+## State Variables
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+
+
+```solidity
+uint256[50] private __gap
+```
 
 
 ## Functions
@@ -31,3 +43,75 @@ Returns the amount of tokens owned by `account`.
 ```solidity
 function balanceOf(address account) external view returns (uint256);
 ```
+
+### _mintShares
+
+Internal function for minting shares
+
+
+```solidity
+function _mintShares(address owner, uint256 shares) internal virtual override;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The address of the owner to mint shares to|
+|`shares`|`uint256`|The number of shares to mint|
+
+
+### _burnShares
+
+Internal function for burning shares
+
+
+```solidity
+function _burnShares(address owner, uint256 shares) internal virtual override;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The address of the owner to burn shares for|
+|`shares`|`uint256`|The number of shares to burn|
+
+
+### _updateExitQueue
+
+Internal function that must be used to process exit queue
+
+
+```solidity
+function _updateExitQueue() internal virtual override returns (uint256 burnedShares);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`burnedShares`|`uint256`|The total amount of burned shares|
+
+
+### _transfer
+
+Moves `amount` of tokens from `from` to `to`.
+Emits a `Transfer` event.
+
+
+```solidity
+function _transfer(address from, address to, uint256 amount) internal virtual override;
+```
+
+### __VaultToken_init
+
+Initializes the VaultToken contract
+
+
+```solidity
+function __VaultToken_init(string memory _name, string memory _symbol) internal onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_name`|`string`|The name of the ERC20 token|
+|`_symbol`|`string`|The symbol of the ERC20 token|

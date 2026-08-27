@@ -6,231 +6,109 @@ description: "Abstract contract for initiating assets exits from the vault witho
 
 # OsTokenVaultEscrow
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsTokenVaultEscrow.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/tokens/OsTokenVaultEscrow.sol)
 
-**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [Multicall →](../base/Multicall), IOsTokenVaultEscrow
+**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [Multicall](../base/Multicall), IOsTokenVaultEscrow
 
-Used for initiating assets exits from the Vault without burning osToken.
-
-## Structs
-### Position
-Struct to store the escrow position details
+Used for initiating assets exits from the vault without burning osToken
 
 
-```solidity
-struct Position {
-    address owner;
-    uint96 exitedAssets;
-    uint128 osTokenShares;
-    uint128 cumulativeFeePerShare;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`owner`|`address`|The address of the assets owner|
-|`exitedAssets`|`uint96`|The amount of assets exited and ready to be claimed|
-|`osTokenShares`|`uint128`|The amount of osToken shares|
-|`cumulativeFeePerShare`|`uint128`|The cumulative fee per share used to calculate the osToken fee|
-
-
-## Events
-### PositionCreated
-Event emitted on position creation
-
+## State Variables
+### _maxPercent
 
 ```solidity
-event PositionCreated(
-    address indexed vault,
-    uint256 indexed exitPositionTicket,
-    address owner,
-    uint256 osTokenShares,
-    uint256 cumulativeFeePerShare
-);
+uint256 private constant _maxPercent = 1e18
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`exitPositionTicket`|`uint256`|The exit position ticket|
-|`owner`|`address`|The address of the assets owner|
-|`osTokenShares`|`uint256`|The amount of osToken shares|
-|`cumulativeFeePerShare`|`uint256`|The cumulative fee per share used to calculate the osToken fee|
-
-### ExitedAssetsProcessed
-Event emitted on assets exit processing
-
+### _wad
 
 ```solidity
-event ExitedAssetsProcessed(
-    address indexed vault, address indexed caller, uint256 indexed exitPositionTicket, uint256 exitedAssets
-);
+uint256 private constant _wad = 1e18
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`caller`|`address`|The address of the caller|
-|`exitPositionTicket`|`uint256`|The exit position ticket|
-|`exitedAssets`|`uint256`|The amount of exited assets claimed|
-
-### OsTokenLiquidated
-Event emitted on osToken liquidation
-
+### _hfLiqThreshold
 
 ```solidity
-event OsTokenLiquidated(
-    address indexed caller,
-    address indexed vault,
-    uint256 indexed exitPositionTicket,
-    address receiver,
-    uint256 osTokenShares,
-    uint256 receivedAssets
-);
+uint256 private constant _hfLiqThreshold = 1e18
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`vault`|`address`|The address of the vault|
-|`exitPositionTicket`|`uint256`|The exit position ticket|
-|`receiver`|`address`|The address of the receiver of the liquidated assets|
-|`osTokenShares`|`uint256`|The amount of osToken shares to liquidate|
-|`receivedAssets`|`uint256`|The amount of assets received|
-
-### OsTokenRedeemed
-Event emitted on osToken redemption
-
+### _osTokenVaultController
 
 ```solidity
-event OsTokenRedeemed(
-    address indexed caller,
-    address indexed vault,
-    uint256 indexed exitPositionTicket,
-    address receiver,
-    uint256 osTokenShares,
-    uint256 receivedAssets
-);
+IOsTokenVaultController private immutable _osTokenVaultController
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`vault`|`address`|The address of the vault|
-|`exitPositionTicket`|`uint256`|The exit position ticket|
-|`receiver`|`address`|The address of the receiver of the redeemed assets|
-|`osTokenShares`|`uint256`|The amount of osToken shares to redeem|
-|`receivedAssets`|`uint256`|The amount of assets received|
-
-### ExitedAssetsClaimed
-Event emitted on exited assets claim
-
+### _osTokenConfig
 
 ```solidity
-event ExitedAssetsClaimed(
-    address indexed receiver,
-    address indexed vault,
-    uint256 indexed exitPositionTicket,
-    uint256 osTokenShares,
-    uint256 assets
-);
+IOsTokenConfig private immutable _osTokenConfig
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`address`|The address of the receiver of the exited assets|
-|`vault`|`address`|The address of the vault|
-|`exitPositionTicket`|`uint256`|The exit position ticket|
-|`osTokenShares`|`uint256`|The amount of osToken shares burned|
-|`assets`|`uint256`|The amount of assets claimed|
-
-### LiqConfigUpdated
-Event emitted on liquidation configuration update
-
+### _positions
 
 ```solidity
-event LiqConfigUpdated(uint64 liqThresholdPercent, uint256 liqBonusPercent);
+mapping(address vault => mapping(uint256 positionTicket => Position)) private _positions
 ```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`liqThresholdPercent`|`uint64`|The liquidation threshold percent|
-|`liqBonusPercent`|`uint256`|The liquidation bonus percent|
-
-### AuthenticatorUpdated
-Event emitted on authenticator update
-
-
-```solidity
-event AuthenticatorUpdated(address newAuthenticator);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`newAuthenticator`|`address`|The address of the new authenticator|
-
-
-## Functions
-
-### liqThresholdPercent
-
-The liquidation threshold percent
-
-
-```solidity
-function liqThresholdPercent() external view returns (uint64);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint64`|The liquidation threshold percent starting from which the osToken shares can be liquidated|
 
 
 ### liqBonusPercent
-
 The liquidation bonus percent
 
 
 ```solidity
-function liqBonusPercent() external view returns (uint256);
+uint256 public override liqBonusPercent
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The liquidation bonus percent paid for liquidating the osToken shares|
 
 
 ### authenticator
-
 The address of the authenticator
 
 
 ```solidity
-function authenticator() external view returns (address);
+address public override authenticator
 ```
-**Returns**
+
+
+### liqThresholdPercent
+The liquidation threshold percent
+
+
+```solidity
+uint64 public override liqThresholdPercent
+```
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(
+    address osTokenVaultController,
+    address osTokenConfig,
+    address initialOwner,
+    address _authenticator,
+    uint64 _liqThresholdPercent,
+    uint256 _liqBonusPercent
+) Ownable(msg.sender);
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|The address of the authenticator contract|
+|`osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
+|`osTokenConfig`|`address`|The address of the OsTokenConfig contract|
+|`initialOwner`|`address`|The address of the contract owner|
+|`_authenticator`|`address`|The address of the OsTokenVaultEscrowAuth contract|
+|`_liqThresholdPercent`|`uint64`|The liquidation threshold percent|
+|`_liqBonusPercent`|`uint256`|The liquidation bonus percent|
 
 
 ### getPosition
@@ -392,3 +270,69 @@ function updateLiqConfig(uint64 _liqThresholdPercent, uint256 _liqBonusPercent) 
 |----|----|-----------|
 |`_liqThresholdPercent`|`uint64`|The liquidation threshold percent|
 |`_liqBonusPercent`|`uint256`|The liquidation bonus percent|
+
+
+### _redeemOsToken
+
+Internal function for redeeming osToken shares
+
+
+```solidity
+function _redeemOsToken(
+    address vault,
+    uint256 exitPositionTicket,
+    address receiver,
+    uint256 osTokenShares,
+    bool isLiquidation
+) private returns (uint256 receivedAssets);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`vault`|`address`|The address of the vault|
+|`exitPositionTicket`|`uint256`|The position ticket of the exit queue|
+|`receiver`|`address`|The address of the receiver of the redeemed assets|
+|`osTokenShares`|`uint256`|The amount of osToken shares to redeem|
+|`isLiquidation`|`bool`|Whether the redeem is a liquidation|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receivedAssets`|`uint256`|The amount of assets received|
+
+
+### _syncPositionFee
+
+Internal function for syncing the osToken fee
+
+
+```solidity
+function _syncPositionFee(Position memory position) private view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`position`|`Position`|The position to sync the fee for|
+
+
+### _transferAssets
+
+Internal function for transferring assets from the Vault to the receiver
+
+IMPORTANT: because control is transferred to the receiver, care must be
+taken to not create reentrancy vulnerabilities. The Vault must follow the checks-effects-interactions pattern:
+https://docs.soliditylang.org/en/v0.8.22/security-considerations.html#use-the-checks-effects-interactions-pattern
+
+
+```solidity
+function _transferAssets(address receiver, uint256 assets) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The address that will receive the assets|
+|`assets`|`uint256`|The number of assets to transfer|

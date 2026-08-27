@@ -1,40 +1,43 @@
 ---
 title: OsTokenUtils
-sidebar_position: 4
+sidebar_position: 5
 description: "Utility library for handling osToken redemption calculations"
 ---
 
 # OsTokenUtils
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/OsTokenUtils.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/libraries/OsTokenUtils.sol)
 
-Includes functionality for handling osToken redemptions.
+Includes functionality for handling osToken redemptions
 
 
-## Structs
-### RedemptionData
-Struct for storing redemption data
-
+## State Variables
+### _wad
 
 ```solidity
-struct RedemptionData {
-    uint256 mintedAssets;
-    uint256 depositedAssets;
-    uint256 redeemedOsTokenShares;
-    uint256 availableAssets;
-    bool isLiquidation;
-}
+uint256 private constant _wad = 1e18
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`mintedAssets`|`uint256`|The amount of minted assets|
-|`depositedAssets`|`uint256`|The amount of deposited assets|
-|`redeemedOsTokenShares`|`uint256`|The amount of redeemed osToken shares|
-|`availableAssets`|`uint256`|The amount of available assets|
-|`isLiquidation`|`bool`|Whether the redemption is a liquidation|
+### _hfLiqThreshold
+
+```solidity
+uint256 private constant _hfLiqThreshold = 1e18
+```
+
+
+### _maxPercent
+
+```solidity
+uint256 private constant _maxPercent = 1e18
+```
+
+
+### _disabledLiqThreshold
+
+```solidity
+uint256 private constant _disabledLiqThreshold = type(uint64).max
+```
 
 
 ## Functions
@@ -63,3 +66,29 @@ function calculateReceivedAssets(
 |Name|Type|Description|
 |----|----|-----------|
 |`receivedAssets`|`uint256`|The amount of received assets|
+
+
+## Structs
+### RedemptionData
+Struct for storing redemption data
+
+
+```solidity
+struct RedemptionData {
+    uint256 mintedAssets;
+    uint256 depositedAssets;
+    uint256 redeemedOsTokenShares;
+    uint256 availableAssets;
+    bool isLiquidation;
+}
+```
+
+**Properties**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`mintedAssets`|`uint256`|The amount of minted assets|
+|`depositedAssets`|`uint256`|The amount of deposited assets|
+|`redeemedOsTokenShares`|`uint256`|The amount of redeemed osToken shares|
+|`availableAssets`|`uint256`|The amount of available assets|
+|`isLiquidation`|`bool`|Whether the redemption is a liquidation|

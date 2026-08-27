@@ -6,11 +6,11 @@ description: "Price feed oracle for osToken compatible with Balancer and Chainli
 
 # PriceFeed
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/PriceFeed.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/tokens/PriceFeed.sol)
 
 **Inherits:** IBalancerRateProvider, IChainlinkAggregator, IChainlinkV3Aggregator
 
-Price feed for osToken (e.g osETH price in ETH).
+Price feed for osToken (e.g osETH price in ETH)
 
 
 ## State Variables
@@ -30,21 +30,30 @@ address public immutable osTokenVaultController
 ```
 
 
-## Functions
-
 ### description
-
 The description of the aggregator
 
 
 ```solidity
-function description() external view returns (string memory);
+string public override description
 ```
-**Returns**
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(address _osTokenVaultController, string memory _description) ;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`string`|The description string|
+|`_osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
+|`_description`|`string`|The description of the price feed|
 
 
 ### getRate

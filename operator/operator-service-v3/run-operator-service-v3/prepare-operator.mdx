@@ -37,7 +37,7 @@ Follow the command prompts.
 <details className="custom-details">
 <summary>Example Output</summary>
 ```
-Enter the network name (mainnet, hoodi, gnosis) [mainnet]: hoodi
+Enter the network name (mainnet, hoodi, gnosis, chiado) [mainnet]: hoodi
 Enter your vault address: 0xf27...10ad9
 Choose your mnemonic language (chinese_simplified, chinese_traditional, czech, english, italian, korean, portuguese, spanish) [english]: english
 
@@ -89,7 +89,7 @@ Deposit data saved to /Users/user/.stakewise/0xf27...10ad9/deposit_data.json fil
 This command generates the following files in your Vault directory (`~/.stakewise/[vault address]/`):
 
 1. `config.json` - Configuration file for your Vault.
-2. `deposit_data.json` - Contains validator registration information including public keys, withdrawal credentials, and cryptographic signatures. This file must be uploaded to your Vault ([Step 5: Upload Deposit Data File →](./prepare-operator#step-5-upload-deposit-data-file-to-vault)) to authorize the Operator Service to register your validators.
+2. `deposit_data.json` - Contains validator registration information including public keys, withdrawal credentials, and cryptographic signatures. This file must be uploaded to your Vault ([Step 5: Upload Deposit Data File](./prepare-operator#step-5-upload-deposit-data-file-to-vault)) to authorize the Operator Service to register your validators.
 3. `keystores/` directory containing: validator keystores and `password.txt` for all generated keystores.
 
 :::custom-notes[Per-Keystore Passwords]
@@ -105,7 +105,7 @@ This command generates the following files in your Vault directory (`~/.stakewis
 You can always add more validator keys to your Vault:
 
 1. Generate new validator keys and deposit data as described in the step above
-2. Upload the deposit data file to your Vault as described in [Step 5: Upload Deposit Data File →](./prepare-operator#step-5-upload-deposit-data-file-to-vault)
+2. Upload the deposit data file to your Vault as described in [Step 5: Upload Deposit Data File](./prepare-operator#step-5-upload-deposit-data-file-to-vault)
 
 :::custom-warning[Important]
 Uploading a new deposit data file will overwrite the existing file and consequently overwrite previously unused validator keys.
@@ -116,9 +116,9 @@ This can be done at any point, but only by the Vault Admin or Keys Manager.
 
 Validator keystores don't need to be stored locally. You can instead use:
 
-- **[Remote Signer →](../alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
-- **[HashiCorp Vault →](../alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
-- **[API Mode →](../alternative-key-management/api-mode)** — Run Operator as API service with external key management
+- **[Remote Signer](../alternative-key-management/remote-signer)** — Sign deposit/exit messages via a remote signer
+- **[HashiCorp Vault](../alternative-key-management/hashicorp-vault)** — Load keys from a remote Vault instance
+- **[API Mode](../alternative-key-management/api-mode)** — Run Operator as API service with external key management
 
 ## Step 3: Import Validator Keys
 

@@ -13,7 +13,7 @@ A Vault is a self-contained on-chain system: a proxy that holds state, an implem
 
 Each Vault is deployed as an upgradeable [ERC-1967 ↗](https://eips.ethereum.org/EIPS/eip-1967) proxy contract. The proxy is what users interact with — it holds all persistent state, including user balances and the Vault-specific configuration set during initialization. Logic lives in a separate implementation contract, so new Vault versions can be released without redeploying each Vault or migrating user data.
 
-Vaults are created through network-specific factory contracts. On Ethereum, an [`EthVaultFactory` ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) is deployed for each Vault variant (Standard, ERC-20, Private, Blocklist); on Gnosis, the equivalent [`GnoVaultFactory` ↗](https://gnosisscan.io/address/0x7A8cbBf690084E43De778173cfAcf7313c9122DD#code) plays the same role. Each call to `createVault`:
+Vaults are created through network-specific factory contracts — one per Vault variant. On Ethereum, an [`EthVaultFactory` ↗](https://etherscan.io/address/0x7a8cbbf690084e43de778173cfacf7313c9122dd#code) is deployed for each of the Standard, ERC-20, Private and Blocklist variants, alongside separate factories for the [MetaVault](./vault-types#metavault) variants; on Gnosis, the equivalent [`GnoVaultFactory` ↗](https://gnosisscan.io/address/0x7A8cbBf690084E43De778173cfAcf7313c9122DD#code) plays the same role. The full set is listed in the [contract addresses](../../contracts/networks/) for each network. Each call to `createVault`:
 
 1. Deploys a new ERC-1967 proxy pointing to the shared implementation contract.
 2. Calls the proxy's initializer to set the Vault's initial configuration.
@@ -48,3 +48,9 @@ Modules combine in different ways to produce the [Vault types](./vault-types). E
 Upgrades are gated behind the Vault's own [Admin](./configuration#admin): `upgradeToAndCall` reverts for anyone else, so the StakeWise DAO cannot change or upgrade a Vault's contracts unilaterally.
 
 The DAO releases new Vault versions to improve efficiency or safety, and each release goes through community governance approval — but adopting one is always the Admin's decision, and a Vault can stay on its current version indefinitely. Because the proxy pattern separates storage from logic, an upgrade swaps only the implementation; the proxy holding all state and user balances is untouched.
+
+Three further rules are enforced on-chain, so an Admin cannot upgrade to arbitrary code:
+
+- The new implementation must be **registered in the `VaultsRegistry`** by the DAO.
+- It must be the **same Vault type** — a Standard Vault cannot become an ERC-20 Vault.
+- It must be **exactly one version higher**. Versions cannot be skipped, so a Vault that has sat out several releases upgrades through them one at a time.

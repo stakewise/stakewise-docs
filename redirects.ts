@@ -51,4 +51,12 @@ export default [
     from: '/docs/stakewise-protocol/governance-swise-token',
     to: '/docs/governance/intro',
   },
+  {
+    from: '/contracts/api/vaults/ethereum/custom/EthMetaVault',
+    to: '/contracts/api/vaults/ethereum/EthMetaVault',
+  },
+  {
+    from: '/contracts/api/vaults/ethereum/custom/EthMetaVaultFactory',
+    to: '/contracts/api/vaults/ethereum/EthMetaVaultFactory',
+  },
 ]

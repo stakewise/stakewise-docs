@@ -25,7 +25,7 @@ The Operator Service connects to your Execution and Consensus nodes to read on-c
 Once started, the Operator Service automatically handles:
 
 - **Validator Registration** — Monitors Vault balance, prepares deposit data, obtains oracle approval, and submits registration transactions (requires at least 32 ETH in the Vault).
-- **Validator Funding** — Tops up existing `0x02` compound validators<sup><a href="#fn-1" id="fnref-1">1</a></sup> (up to 2048 ETH effective balance) before registering new ones.
+- **Validator Funding** — Tops up existing `0x02` compound validators<sup><a href="#fn-1" id="fnref-1">1</a></sup> before registering new ones, up to [`--max-validator-balance-gwei`](./start-operator#optional-flags) (300 ETH on Ethereum, 1800 GNO on Gnosis by default).
 - **Withdrawals** — Processes exit queue requests via partial withdrawals from `0x02` validators first, then full exits if needed.
 
 ## Additional Capabilities
@@ -37,7 +37,7 @@ The Operator Service also includes commands and flags to automate additional tas
 - **Automated Fee Claims** — Use `--claim-fee-splitter` to claim earned fees and send them to fee recipients.
 
 :::custom-notes[Deep Dive]
-For a deeper understanding of how Vaults work under the hood — validator registration, withdrawals, rewards, MEV, and more — see the [Concepts →](/docs/overview) section.
+For a deeper understanding of how Vaults work under the hood — validator registration, withdrawals, rewards, MEV, and more — see the [Concepts](/docs/overview) section.
 :::
 
 ## Installation
@@ -131,7 +131,7 @@ The Operator Service can be installed as a binary, via Docker, or built from sou
 
     Requirements:
 
-    - [Python 3.12+ ↗](https://www.python.org/downloads/)
+    - [Python 3.12 ↗](https://www.python.org/downloads/) (3.13 is not supported)
     - [Poetry ↗](https://python-poetry.org/docs/)
     - [Git ↗](https://git-scm.com/)
     - [Cargo ↗](https://doc.rust-lang.org/cargo/getting-started/installation.html) (for sw-milagro-bls-binding dependency)

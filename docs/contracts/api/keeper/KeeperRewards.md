@@ -6,291 +6,158 @@ description: "Rewards management system for updating Vault and osToken rewards"
 
 # KeeperRewards
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/keeper/KeeperRewards.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/keeper/KeeperRewards.sol)
 
-**Inherits:** [KeeperOracles →](./KeeperOracles), IKeeperRewards
+**Inherits:** [KeeperOracles](./KeeperOracles), IKeeperRewards
 
-Defines the functionality for updating Vaults' and OsToken rewards.
+Defines the functionality for updating Vaults' and OsToken rewards
 
 
-## Structs
-### Reward
-A struct containing the last synced Vault's cumulative reward
-
+## State Variables
+### _rewardsUpdateTypeHash
 
 ```solidity
-struct Reward {
-    int192 assets;
-    uint64 nonce;
-}
+bytes32 private constant _rewardsUpdateTypeHash = keccak256(
+    "KeeperRewards(bytes32 rewardsRoot,string rewardsIpfsHash,uint256 avgRewardPerSecond,uint64 updateTimestamp,uint64 nonce)"
+)
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`assets`|`int192`|The Vault cumulative reward earned since the start. Can be negative in case of penalty/slashing.|
-|`nonce`|`uint64`|The nonce of the last sync|
-
-### UnlockedMevReward
-A struct containing the last unlocked Vault's cumulative execution reward that can be withdrawn from shared MEV escrow. Only used by shared MEV Vaults.
-
+### _maxAvgRewardPerSecond
 
 ```solidity
-struct UnlockedMevReward {
-    uint192 assets;
-    uint64 nonce;
-}
+uint256 private immutable _maxAvgRewardPerSecond
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`assets`|`uint192`|The shared MEV Vault's cumulative execution reward that can be withdrawn|
-|`nonce`|`uint64`|The nonce of the last sync|
-
-### RewardsUpdateParams
-A struct containing parameters for rewards update
-
+### _sharedMevEscrow
 
 ```solidity
-struct RewardsUpdateParams {
-    bytes32 rewardsRoot;
-    uint256 avgRewardPerSecond;
-    uint64 updateTimestamp;
-    string rewardsIpfsHash;
-    bytes signatures;
-}
+address private immutable _sharedMevEscrow
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`rewardsRoot`|`bytes32`|The new rewards merkle root|
-|`avgRewardPerSecond`|`uint256`|The new average reward per second|
-|`updateTimestamp`|`uint64`|The update timestamp used for rewards calculation|
-|`rewardsIpfsHash`|`string`|The new IPFS hash with all the Vaults' rewards for the new root|
-|`signatures`|`bytes`|The concatenation of the Oracles' signatures|
-
-### HarvestParams
-A struct containing parameters for harvesting rewards. Can only be called by Vault.
-
+### _osTokenVaultController
 
 ```solidity
-struct HarvestParams {
-    bytes32 rewardsRoot;
-    int160 reward;
-    uint160 unlockedMevReward;
-    bytes32[] proof;
-}
+IOsTokenVaultController private immutable _osTokenVaultController
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`rewardsRoot`|`bytes32`|The rewards merkle root|
-|`reward`|`int160`|The Vault cumulative reward earned since the start. Can be negative in case of penalty/slashing.|
-|`unlockedMevReward`|`uint160`|The Vault cumulative execution reward that can be withdrawn from shared MEV escrow. Only used by shared MEV Vaults.|
-|`proof`|`bytes32[]`|The proof to verify that Vault's reward is correct|
-
-
-## Events
-### RewardsUpdated
-Event emitted on rewards update
-
+### _vaultsRegistry
 
 ```solidity
-event RewardsUpdated(
-    address indexed caller,
-    bytes32 indexed rewardsRoot,
-    uint256 avgRewardPerSecond,
-    uint64 updateTimestamp,
-    uint64 nonce,
-    string rewardsIpfsHash
-);
+IVaultsRegistry internal immutable _vaultsRegistry
 ```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`rewardsRoot`|`bytes32`|The new rewards merkle tree root|
-|`avgRewardPerSecond`|`uint256`|The new average reward per second|
-|`updateTimestamp`|`uint64`|The update timestamp used for rewards calculation|
-|`nonce`|`uint64`|The nonce used for verifying signatures|
-|`rewardsIpfsHash`|`string`|The new rewards IPFS hash|
-
-### Harvested
-Event emitted on Vault harvest
-
-
-```solidity
-event Harvested(
-    address indexed vault, bytes32 indexed rewardsRoot, int256 totalAssetsDelta, uint256 unlockedMevDelta
-);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the Vault|
-|`rewardsRoot`|`bytes32`|The rewards merkle tree root|
-|`totalAssetsDelta`|`int256`|The Vault total assets delta since last sync. Can be negative in case of penalty/slashing.|
-|`unlockedMevDelta`|`uint256`|The Vault execution reward that can be withdrawn from shared MEV escrow. Only used by shared MEV Vaults.|
-
-### RewardsMinOraclesUpdated
-Event emitted on rewards min oracles number update
-
-
-```solidity
-event RewardsMinOraclesUpdated(uint256 oracles);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`oracles`|`uint256`|The new minimum number of oracles required to update rewards|
-
-
-## Functions
-### prevRewardsRoot
-
-Previous Rewards Root
-
-
-```solidity
-function prevRewardsRoot() external view returns (bytes32);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes32`|The previous merkle tree root of the rewards accumulated by the Vaults|
-
-
-### rewardsRoot
-
-Rewards Root
-
-
-```solidity
-function rewardsRoot() external view returns (bytes32);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes32`|The latest merkle tree root of the rewards accumulated by the Vaults|
-
-
-### rewardsNonce
-
-Rewards Nonce
-
-
-```solidity
-function rewardsNonce() external view returns (uint64);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint64`|The nonce used for updating rewards merkle tree root|
-
-
-### lastRewardsTimestamp
-
-The last rewards update
-
-
-```solidity
-function lastRewardsTimestamp() external view returns (uint64);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint64`|The timestamp of the last rewards update|
-
-
-### rewardsMinOracles
-
-The minimum number of oracles required to update rewards
-
-
-```solidity
-function rewardsMinOracles() external view returns (uint256);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The minimum number of oracles|
 
 
 ### rewardsDelay
-
 The rewards delay
 
 
 ```solidity
-function rewardsDelay() external view returns (uint256);
+uint256 public immutable override rewardsDelay
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The delay in seconds between rewards updates|
 
 
 ### rewards
 
-Get last synced Vault cumulative reward
-
-
 ```solidity
-function rewards(address vault) external view returns (int192 assets, uint64 nonce);
+mapping(address => Reward) public override rewards
 ```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the Vault|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`assets`|`int192`|The last synced reward assets|
-|`nonce`|`uint64`|The last synced reward nonce|
 
 
 ### unlockedMevRewards
 
-Get last unlocked shared MEV Vault cumulative reward
+```solidity
+mapping(address => UnlockedMevReward) public override unlockedMevRewards
+```
+
+
+### prevRewardsRoot
+Previous Rewards Root
 
 
 ```solidity
-function unlockedMevRewards(address vault) external view returns (uint192 assets, uint64 nonce);
+bytes32 public override prevRewardsRoot
+```
+
+
+### rewardsRoot
+Rewards Root
+
+
+```solidity
+bytes32 public override rewardsRoot
+```
+
+
+### rewardsMinOracles
+The minimum number of oracles required to update rewards
+
+
+```solidity
+uint256 public override rewardsMinOracles
+```
+
+
+### lastRewardsTimestamp
+The last rewards update
+
+
+```solidity
+uint64 public override lastRewardsTimestamp
+```
+
+
+### rewardsNonce
+Rewards Nonce
+
+
+```solidity
+uint64 public override rewardsNonce
+```
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(
+    address sharedMevEscrow,
+    IVaultsRegistry vaultsRegistry,
+    IOsTokenVaultController osTokenVaultController,
+    uint256 _rewardsDelay,
+    uint256 maxAvgRewardPerSecond
+) ;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`vault`|`address`|The address of the Vault|
+|`sharedMevEscrow`|`address`|The address of the shared MEV escrow contract|
+|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
+|`osTokenVaultController`|`IOsTokenVaultController`|The address of the OsTokenVaultController contract|
+|`_rewardsDelay`|`uint256`|The delay in seconds between rewards updates|
+|`maxAvgRewardPerSecond`|`uint256`|The maximum possible average reward per second|
 
-**Returns**
+
+### updateRewards
+
+Update rewards data
+
+
+```solidity
+function updateRewards(RewardsUpdateParams calldata params) external override;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`assets`|`uint192`|The last synced reward assets|
-|`nonce`|`uint64`|The last synced reward nonce|
+|`params`|`RewardsUpdateParams`|The struct containing rewards update parameters|
 
 
 ### canUpdateRewards
@@ -371,21 +238,6 @@ function isCollateralized(address vault) public view override returns (bool);
 |`<none>`|`bool`|`true` if Vault is collateralized, `false` otherwise|
 
 
-### updateRewards
-
-Update rewards data
-
-
-```solidity
-function updateRewards(RewardsUpdateParams calldata params) external override;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`params`|`RewardsUpdateParams`|The struct containing rewards update parameters|
-
-
 ### harvest
 
 Harvest rewards. Can be called only by Vault.
@@ -425,3 +277,33 @@ function setRewardsMinOracles(uint256 _rewardsMinOracles) external override only
 |Name|Type|Description|
 |----|----|-----------|
 |`_rewardsMinOracles`|`uint256`|The new min number of oracles for confirming rewards update|
+
+
+### _setRewardsMinOracles
+
+Internal function for updating rewardsMinOracles
+
+
+```solidity
+function _setRewardsMinOracles(uint256 _rewardsMinOracles) private;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_rewardsMinOracles`|`uint256`|The new value of rewardsMinOracles|
+
+
+### _collateralize
+
+Collateralize Vault so that it must be harvested in future reward updates
+
+
+```solidity
+function _collateralize(address vault) internal;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`vault`|`address`|The address of the Vault|

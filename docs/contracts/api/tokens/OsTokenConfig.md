@@ -6,82 +6,67 @@ description: "Configuration contract for OsToken minting and liquidation paramet
 
 # OsTokenConfig
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsTokenConfig.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/tokens/OsTokenConfig.sol)
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IOsTokenConfig
 
-Configuration for minting and liquidating OsToken shares.
+Configuration for minting and liquidating OsToken shares
 
 
-## Events
-### OsTokenConfigUpdated
-Emitted when OsToken minting and liquidating configuration values are updated
-
+## State Variables
+### _maxPercent
 
 ```solidity
-event OsTokenConfigUpdated(address vault, uint128 liqBonusPercent, uint64 liqThresholdPercent, uint64 ltvPercent);
+uint256 private constant _maxPercent = 1e18
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault to update the config for. Will be zero address if it is a default config.|
-|`liqBonusPercent`|`uint128`|The new liquidation bonus percent value|
-|`liqThresholdPercent`|`uint64`|The new liquidation threshold percent value|
-|`ltvPercent`|`uint64`|The new loan-to-value (LTV) percent value|
-
-### RedeemerUpdated
-Emitted when the OsToken redeemer address is updated
-
+### _disabledLiqThreshold
 
 ```solidity
-event RedeemerUpdated(address newRedeemer);
+uint256 private constant _disabledLiqThreshold = type(uint64).max
 ```
 
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`newRedeemer`|`address`|The address of the new redeemer|
-
-## Structs
-### Config
-The OsToken minting and liquidating configuration values
-
-
-```solidity
-struct Config {
-    uint128 liqBonusPercent;
-    uint64 liqThresholdPercent;
-    uint64 ltvPercent;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`liqBonusPercent`|`uint128`|The minimal bonus percent that liquidator earns on OsToken position liquidation|
-|`liqThresholdPercent`|`uint64`|The liquidation threshold percent used to calculate health factor for OsToken position|
-|`ltvPercent`|`uint64`|The percent used to calculate how much user can mint OsToken shares|
-
-
-## Functions
 
 ### redeemer
-
 The address of the OsToken redeemer
 
 
 ```solidity
-function redeemer() external view returns (address);
+address public override redeemer
 ```
-**Returns**
+
+
+### _defaultConfig
+
+```solidity
+Config private _defaultConfig
+```
+
+
+### _vaultConfigs
+
+```solidity
+mapping(address vault => Config config) private _vaultConfigs
+```
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(address _owner, Config memory defaultConfig, address _redeemer) Ownable(msg.sender);
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|The address of the redeemer|
+|`_owner`|`address`|The address of the contract owner|
+|`defaultConfig`|`Config`|The OsToken default configuration|
+|`_redeemer`|`address`|The address of the redeemer|
 
 
 ### getConfig

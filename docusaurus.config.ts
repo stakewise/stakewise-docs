@@ -76,6 +76,7 @@ const config: Config = {
     [
       '@docusaurus/preset-classic',
       {
+        blog: false,
         sitemap: {
           lastmod: 'date',
           changefreq: 'weekly',

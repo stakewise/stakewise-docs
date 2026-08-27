@@ -1,81 +1,84 @@
 ---
 title: EthErc20Vault
-sidebar_position: 3
+sidebar_position: 4
 description: "Ethereum staking vault with ERC-20 token functionality"
 ---
 
 # EthErc20Vault
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthErc20Vault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/ethereum/EthErc20Vault.sol)
 
-**Inherits:** [VaultImmutables →](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../modules/VaultAdmin), [VaultVersion →](../modules/VaultVersion), [VaultFee →](../modules/VaultFee), [VaultState →](../modules/VaultState), [VaultValidators →](../modules/VaultValidators), [VaultEnterExit →](../modules/VaultEnterExit), [VaultOsToken →](../modules/VaultOsToken), [VaultMev →](../modules/VaultMev), [VaultToken →](../modules/VaultToken), [VaultEthStaking →](../modules/VaultEthStaking), [Multicall →](../../base/Multicall), IEthErc20Vault
+**Inherits:** [VaultImmutables](../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin](../modules/VaultAdmin), [VaultVersion](../modules/VaultVersion), [VaultFee](../modules/VaultFee), [VaultState](../modules/VaultState), [VaultValidators](../modules/VaultValidators), [VaultEnterExit](../modules/VaultEnterExit), [VaultOsToken](../modules/VaultOsToken), [VaultMev](../modules/VaultMev), [VaultToken](../modules/VaultToken), [VaultEthStaking](../modules/VaultEthStaking), [Multicall](../../base/Multicall), IEthErc20Vault
 
-Defines the Ethereum staking Vault with [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) token.
+Defines the Ethereum staking Vault with ERC-20 token
 
-## Structs
-### EthErc20VaultConstructorArgs
-Struct for deploying the EthErc20Vault contract
+
+## State Variables
+### _version
+
+```solidity
+uint8 private constant _version = 5
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 
 
 ```solidity
-struct EthErc20VaultConstructorArgs {
-    address keeper;
-    address vaultsRegistry;
-    address validatorsRegistry;
-    address validatorsWithdrawals;
-    address validatorsConsolidations;
-    address consolidationsChecker;
-    address osTokenVaultController;
-    address osTokenConfig;
-    address osTokenVaultEscrow;
-    address sharedMevEscrow;
-    address depositDataRegistry;
-    uint64 exitingAssetsClaimDelay;
-}
+uint256[50] private __gap
 ```
 
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`keeper`|`address`|The address of the Keeper contract|
-|`vaultsRegistry`|`address`|The address of the VaultsRegistry contract|
-|`validatorsRegistry`|`address`|The contract address used for registering validators in beacon chain|
-|`validatorsWithdrawals`|`address`|The contract address used for withdrawing validators in beacon chain|
-|`validatorsConsolidations`|`address`|The contract address used for consolidating validators in beacon chain|
-|`consolidationsChecker`|`address`|The contract address used for checking consolidations|
-|`osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
-|`osTokenConfig`|`address`|The address of the OsTokenConfig contract|
-|`osTokenVaultEscrow`|`address`|The address of the OsTokenVaultEscrow contract|
-|`sharedMevEscrow`|`address`|The address of the shared MEV escrow|
-|`depositDataRegistry`|`address`|The address of the DepositDataRegistry contract|
-|`exitingAssetsClaimDelay`|`uint64`|The delay after which the assets can be claimed after exiting from staking|
-
-### EthErc20VaultInitParams
-Struct for initializing the EthErc20Vault contract
-
-
-```solidity
-struct EthErc20VaultInitParams {
-    uint256 capacity;
-    uint16 feePercent;
-    string name;
-    string symbol;
-    string metadataIpfsHash;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`capacity`|`uint256`|The Vault stops accepting deposits after exceeding the capacity|
-|`feePercent`|`uint16`|The fee percent that is charged by the Vault|
-|`name`|`string`|The name of the ERC20 token|
-|`symbol`|`string`|The symbol of the ERC20 token|
-|`metadataIpfsHash`|`string`|The IPFS hash of the Vault's metadata file|
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(EthErc20VaultConstructorArgs memory args)
+    VaultImmutables(args.keeper, args.vaultsRegistry)
+    VaultValidators(
+        args.depositDataRegistry,
+        args.validatorsRegistry,
+        args.validatorsWithdrawals,
+        args.validatorsConsolidations,
+        args.consolidationsChecker
+    )
+    VaultEnterExit(args.exitingAssetsClaimDelay)
+    VaultOsToken(args.osTokenVaultController, args.osTokenConfig, args.osTokenVaultEscrow)
+    VaultMev(args.sharedMevEscrow);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`args`|`EthErc20VaultConstructorArgs`|The arguments for initializing the EthErc20Vault contract|
+
+
+### initialize
+
+Initializes or upgrades the EthErc20Vault contract. Must transfer security deposit during the deployment.
+
+
+```solidity
+function initialize(bytes calldata params) external payable virtual override reinitializer(_version);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`params`|`bytes`|The encoded parameters for initializing the EthErc20Vault contract|
+
 
 ### depositAndMintOsToken
 
@@ -156,9 +159,36 @@ function transferFrom(address from, address to, uint256 amount)
     returns (bool);
 ```
 
+### transferOsTokenPositionToEscrow
+
+Transfers minted osToken shares to the OsTokenVaultEscrow contract, enters the exit queue for staked assets
+
+
+```solidity
+function transferOsTokenPositionToEscrow(uint256 osTokenShares)
+    public
+    virtual
+    override(IVaultOsToken, VaultOsToken)
+    returns (uint256 positionTicket);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`osTokenShares`|`uint256`|The number of osToken shares to transfer|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`positionTicket`|`uint256`|The exit position ticket|
+
+
 ### enterExitQueue
 
 Locks shares to the exit queue. The shares continue earning rewards until they will be burned by the Vault.
+
+For ERC-20 vault variants, balanceOf(vault) does not reflect queued exit shares despite the emitted Transfer event.
 
 
 ```solidity
@@ -180,6 +210,22 @@ function enterExitQueue(uint256 shares, address receiver)
 |Name|Type|Description|
 |----|----|-----------|
 |`positionTicket`|`uint256`|The position ticket of the exit queue. Returns uint256 max if no ticket created.|
+
+
+### donateShares
+
+Donates shares to the Vault by burning them from the caller,
+increasing the value per share for remaining holders
+
+
+```solidity
+function donateShares(uint256 shares) public virtual override(IVaultState, VaultState, VaultOsToken);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`shares`|`uint256`|The number of shares to donate|
 
 
 ### vaultId
@@ -210,3 +256,78 @@ function version() public pure virtual override(IVaultVersion, VaultVersion) ret
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`uint8`|The version of the Vault implementation contract|
+
+
+### _updateExitQueue
+
+Internal function that must be used to process exit queue
+
+
+```solidity
+function _updateExitQueue() internal virtual override(VaultState, VaultToken) returns (uint256 burnedShares);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`burnedShares`|`uint256`|The total amount of burned shares|
+
+
+### _mintShares
+
+Internal function for minting shares
+
+
+```solidity
+function _mintShares(address owner, uint256 shares) internal virtual override(VaultState, VaultToken);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The address of the owner to mint shares to|
+|`shares`|`uint256`|The number of shares to mint|
+
+
+### _burnShares
+
+Internal function for burning shares
+
+
+```solidity
+function _burnShares(address owner, uint256 shares) internal virtual override(VaultState, VaultToken);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The address of the owner to burn shares for|
+|`shares`|`uint256`|The number of shares to burn|
+
+
+### __EthErc20Vault_upgrade
+
+Upgrades the EthErc20Vault contract
+
+
+```solidity
+function __EthErc20Vault_upgrade() internal;
+```
+
+### __EthErc20Vault_init
+
+Initializes the EthErc20Vault contract
+
+
+```solidity
+function __EthErc20Vault_init(address admin, address ownMevEscrow, EthErc20VaultInitParams memory params)
+    internal
+    onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`admin`|`address`|The address of the admin of the Vault|
+|`ownMevEscrow`|`address`|The address of the MEV escrow owned by the Vault. Zero address if shared MEV escrow is used.|
+|`params`|`EthErc20VaultInitParams`|The decoded parameters for initializing the EthErc20Vault contract|

@@ -44,7 +44,7 @@ LTV limits vary by Vault type:
 | Vault Type     | Ethereum (osETH) | Gnosis (osGNO) | Safety Mechanism                              |
 |----------------|------------------|----------------|-----------------------------------------------|
 | Standard       | 90% LTV          | 90% LTV        | 10% overcollateralization buffer              |
-| DAO-approved   | 99.99% LTV       | 99.95% LTV     | 5M SWISE operator bond |
+| DAO-approved   | 99.99% LTV       | 99.975% LTV    | 5M SWISE operator bond |
 
 To qualify for the 99.99% LTV, Vaults must meet strict performance criteria<sup><a href="#fn-1" id="fnref-1">1</a></sup> and post a SWISE operator bond.
 StakeWise DAO can adjust any individual Vault's LTV based on its risk profile.
@@ -166,7 +166,7 @@ The amount of ETH that can be unstaked at any moment is determined by maintainin
 - **90%** of staked ETH in a **90% LTV Vault**
 - **99.99%** of staked ETH in a **99.99% LTV Vault**
 
-The protocol calculates the **maximum unstakable ETH** as:
+The protocol calculates the **maximum unstakable ETH** as (the examples below use Ethereum's 99.99% cap; substitute 0.99975 on Gnosis Chain):
 
 :::custom-notes[Formula: 90% LTV]
 $$
@@ -200,7 +200,7 @@ Alice stakes **100 ETH** and mints **50 osToken** at the same **1.05** rate.
 After unstaking **47.495 ETH**, Alice's LTV = **99.99%**.
 :::
 
-When a user exits a Vault while still holding osToken debt, the Vault may not have liquid ETH immediately available, since validators must go through the Ethereum exit queue. An escrow contract holds the osToken position alongside the underlying stake until ETH is freed, then unwinds both in lockstep. This keeps every osToken fully backed throughout the exit process.
+When a user exits a Vault while still holding osToken debt, the Vault may not have liquid ETH immediately available, since validators must go through the Ethereum exit queue. The [`OsTokenVaultEscrow`](../../contracts/networks/) contract holds the osToken position alongside the underlying stake until ETH is freed, then unwinds both in lockstep. This keeps every osToken fully backed throughout the exit process. Positions inside the escrow have their own liquidation parameters, set separately from the Vault-level values above.
 
 <div id="fn-1" style={{fontSize: '0.85em', color: 'var(--ifm-color-content-secondary)', marginTop: '2rem', listStyle: 'none', fontFamily: 'Fragment Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'}}>
   <span>1.</span> DAO-approved Vault requirements: minimum 10,000 ETH staked, maximum 5% Vault fee, consistently above-median network performance, latest Vault version deployed, and 5M SWISE tokens locked as slashing insurance. <a href="#fnref-1" style={{color: 'var(--ifm-color-content-secondary)', textDecoration: 'none'}}>↩</a>

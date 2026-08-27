@@ -1,114 +1,83 @@
 ---
 title: EthFoxVault
-sidebar_position: 1
+sidebar_position: 2
 description: "Custom Ethereum non-ERC20 vault with blocklist, own MEV and without osToken minting"
 ---
 
 # EthFoxVault
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/custom/EthFoxVault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/ethereum/custom/EthFoxVault.sol)
 
-**Inherits:** [VaultImmutables →](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](../../modules/VaultAdmin), [VaultVersion →](../../modules/VaultVersion), [VaultFee →](../../modules/VaultFee), [VaultState →](../../modules/VaultState), [VaultValidators →](../../modules/VaultValidators), [VaultEnterExit →](../../modules/VaultEnterExit), [VaultMev →](../../modules/VaultMev), [VaultEthStaking →](../../modules/VaultEthStaking), [VaultBlocklist →](../../modules/VaultBlocklist), [Multicall →](../../../base/Multicall), IEthFoxVault
+**Inherits:** [VaultImmutables](../../modules/VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin](../../modules/VaultAdmin), [VaultVersion](../../modules/VaultVersion), [VaultFee](../../modules/VaultFee), [VaultState](../../modules/VaultState), [VaultValidators](../../modules/VaultValidators), [VaultEnterExit](../../modules/VaultEnterExit), [VaultMev](../../modules/VaultMev), [VaultEthStaking](../../modules/VaultEthStaking), [VaultBlocklist](../../modules/VaultBlocklist), [Multicall](../../../base/Multicall), IEthFoxVault
 
 Custom Ethereum non-ERC20 vault with blocklist, own MEV and without osToken minting.
 
 
-## Structs
-### EthFoxVaultConstructorArgs
-Struct for deploying the EthFoxVault contract
+## State Variables
+### _version
+
+```solidity
+uint8 private constant _version = 2
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 
 
 ```solidity
-struct EthFoxVaultConstructorArgs {
-    address keeper;
-    address vaultsRegistry;
-    address validatorsRegistry;
-    address validatorsWithdrawals;
-    address validatorsConsolidations;
-    address consolidationsChecker;
-    address sharedMevEscrow;
-    address depositDataRegistry;
-    uint64 exitingAssetsClaimDelay;
-}
+uint256[50] private __gap
 ```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`keeper`|`address`|The address of the Keeper contract|
-|`vaultsRegistry`|`address`|The address of the VaultsRegistry contract|
-|`validatorsRegistry`|`address`|The contract address used for registering validators in beacon chain|
-|`validatorsWithdrawals`|`address`|The contract address used for withdrawing validators in beacon chain|
-|`validatorsConsolidations`|`address`|The contract address used for consolidating validators in beacon chain|
-|`consolidationsChecker`|`address`|The contract address used for checking consolidations|
-|`sharedMevEscrow`|`address`|The address of the shared MEV escrow|
-|`depositDataRegistry`|`address`|The address of the DepositDataRegistry contract|
-|`exitingAssetsClaimDelay`|`uint64`|The delay after which the assets can be claimed after exiting from staking|
-
-### EthFoxVaultInitParams
-Struct for initializing the EthFoxVault contract
-
-
-```solidity
-struct EthFoxVaultInitParams {
-    address admin;
-    address ownMevEscrow;
-    uint256 capacity;
-    uint16 feePercent;
-    string metadataIpfsHash;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`admin`|`address`|The address of the Vault admin|
-|`ownMevEscrow`|`address`|The address of the MEV escrow contract|
-|`capacity`|`uint256`|The Vault stops accepting deposits after exceeding the capacity|
-|`feePercent`|`uint16`|The fee percent that is charged by the Vault|
-|`metadataIpfsHash`|`string`|The IPFS hash of the Vault's metadata file|
-
-
-## Events
-### UserEjected
-Event emitted when a user is ejected from the Vault
-
-
-```solidity
-event UserEjected(address user, uint256 shares);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`user`|`address`|The address of the user|
-|`shares`|`uint256`|The amount of shares ejected|
-
-### EthFoxVaultCreated
-Event emitted on EthFoxVault creation
-
-
-```solidity
-event EthFoxVaultCreated(
-    address admin, address ownMevEscrow, uint256 capacity, uint16 feePercent, string metadataIpfsHash
-);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`admin`|`address`|The address of the Vault admin|
-|`ownMevEscrow`|`address`|The address of the MEV escrow contract|
-|`capacity`|`uint256`|The capacity of the Vault|
-|`feePercent`|`uint16`|The fee percent of the Vault|
-|`metadataIpfsHash`|`string`|The IPFS hash of the Vault metadata|
 
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(EthFoxVaultConstructorArgs memory args)
+    VaultImmutables(args.keeper, args.vaultsRegistry)
+    VaultValidators(
+        args.depositDataRegistry,
+        args.validatorsRegistry,
+        args.validatorsWithdrawals,
+        args.validatorsConsolidations,
+        args.consolidationsChecker
+    )
+    VaultEnterExit(args.exitingAssetsClaimDelay)
+    VaultMev(args.sharedMevEscrow);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`args`|`EthFoxVaultConstructorArgs`|The arguments for initializing the EthFoxVault contract|
+
+
+### initialize
+
+Initializes or upgrades the EthFoxVault contract. Must transfer security deposit during the deployment.
+
+
+```solidity
+function initialize(bytes calldata) external payable virtual override reinitializer(_version);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bytes`||
+
 
 ### deposit
 

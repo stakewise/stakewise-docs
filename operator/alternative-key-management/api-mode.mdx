@@ -17,8 +17,8 @@ The Operator communicates with the Vault contract using data and signatures prov
 Complete the following steps before proceeding:
 
 
-1. [Installation →](/operator/launch-operator-service#installation) completed
-2. [Validators Manager →](/operator/validators-manager) set to the wallet address of the Relayer.
+1. [Installation](/operator/launch-operator-service#installation) completed
+2. [Validators Manager](/operator/validators-manager) set to the wallet address of the Relayer.
 
 ## Start Operator Service
 
@@ -47,7 +47,7 @@ For additional parameter information, use the `--help` flag:
 ```
 
 :::custom-info[Docker Configuration]
-For Docker-specific setup instructions, see the Docker Image tab in [Installation →](../launch-operator-service#installation)
+For Docker-specific setup instructions, see the Docker Image tab in [Installation](../launch-operator-service#installation)
 :::
 
 :::custom-info[Technical Implementation]
@@ -198,9 +198,14 @@ Response:
 Response:
 ```json
 {
-  "network": "mainnet"
+  "network": "mainnet",
+  "validators_manager_address": "0x1e3d..."
 }
 ```
+
+:::custom-warning[`validators_manager_address` Is Checked at Startup]
+The Operator Service compares this value against the Vault's on-chain Validators Manager and **refuses to start** if they differ. If the field is missing it logs a warning and continues, so return it to make misconfiguration obvious.
+:::
 
 :::custom-info[Multiple Relayers]
 Multiple relayers are possible for various use-cases. You can implement your own relayer using the API specification provided above to meet your specific requirements.

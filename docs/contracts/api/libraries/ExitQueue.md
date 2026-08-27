@@ -1,50 +1,14 @@
 ---
 title: ExitQueue
-sidebar_position: 3
+sidebar_position: 4
 description: "Library for managing exit queue checkpoints of burned shares and exited assets"
 ---
 
 # ExitQueue
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/ExitQueue.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/libraries/ExitQueue.sol)
 
-ExitQueue represent checkpoints of burned shares and exited assets.
-
-
-## Structs
-### Checkpoint
-A struct containing checkpoint data
-
-
-```solidity
-struct Checkpoint {
-    uint160 totalTickets;
-    uint96 exitedAssets;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`totalTickets`|`uint160`|The cumulative number of tickets (shares) exited|
-|`exitedAssets`|`uint96`|The number of assets that exited in this checkpoint|
-
-### History
-A struct containing the history of checkpoints data
-
-
-```solidity
-struct History {
-    Checkpoint[] checkpoints;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`checkpoints`|`Checkpoint[]`|An array of checkpoints|
+ExitQueue represent checkpoints of burned shares and exited assets
 
 
 ## Functions
@@ -136,3 +100,46 @@ function push(History storage self, uint256 shares, uint256 assets) internal;
 |`self`|`History`|An array containing checkpoints|
 |`shares`|`uint256`|The number of shares to add to the latest checkpoint|
 |`assets`|`uint256`|The number of assets that were exited for this checkpoint|
+
+
+### _unsafeAccess
+
+
+```solidity
+function _unsafeAccess(Checkpoint[] storage self, uint256 pos) private pure returns (Checkpoint storage result);
+```
+
+## Structs
+### Checkpoint
+A struct containing checkpoint data
+
+
+```solidity
+struct Checkpoint {
+    uint160 totalTickets;
+    uint96 exitedAssets;
+}
+```
+
+**Properties**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`totalTickets`|`uint160`|The cumulative number of tickets (shares) exited|
+|`exitedAssets`|`uint96`|The number of assets that exited in this checkpoint|
+
+### History
+A struct containing the history of checkpoints data
+
+
+```solidity
+struct History {
+    Checkpoint[] checkpoints;
+}
+```
+
+**Properties**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`checkpoints`|`Checkpoint[]`|An array of checkpoints|

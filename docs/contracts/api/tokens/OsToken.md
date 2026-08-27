@@ -6,51 +6,48 @@ description: "Over-collateralized staked token with controller-based minting and
 
 # OsToken
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsToken.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/tokens/OsToken.sol)
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [ERC20Permit ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/extensions/ERC20Permit.sol), IOsToken
 
-OsToken is an over-collateralized staked token.
+OsToken is an over-collateralized staked token
 
 
-## Events
-### ControllerUpdated
-Emitted when a controller is updated
-
+## State Variables
+### _vaultController
 
 ```solidity
-event ControllerUpdated(address indexed controller, bool registered);
+address private immutable _vaultController
 ```
 
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`controller`|`address`|The address of the controller|
-|`registered`|`bool`|Whether the controller is registered or not|
-
-
-## Functions
 
 ### controllers
 
-Returns whether controller is registered or not
+```solidity
+mapping(address controller => bool enabled) public override controllers
+```
+
+
+## Functions
+### constructor
+
+Constructor
 
 
 ```solidity
-function controllers(address controller) external view returns (bool);
+constructor(address _owner, address vaultController, string memory _name, string memory _symbol)
+    ERC20(_name, _symbol)
+    ERC20Permit(_name)
+    Ownable(_owner);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`controller`|`address`|The address of the controller|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|Whether the controller is registered or not|
+|`_owner`|`address`|The address of the contract owner|
+|`vaultController`|`address`|The address of the OsTokenVaultController contract|
+|`_name`|`string`|The name of the ERC20 token|
+|`_symbol`|`string`|The symbol of the ERC20 token|
 
 
 ### onlyController

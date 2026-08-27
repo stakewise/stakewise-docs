@@ -4,8 +4,9 @@ import { errorLabel, bold, cyan } from './colors'
 import { log } from './log'
 
 
+// Routes are case-sensitive in Docusaurus, so `from` values are compared as written.
 const normalizeFrom = (value: string): string =>
-  value.replace(/#.*$/, '').replace(/\/$/, '').toLowerCase()
+  value.replace(/#.*$/, '').replace(/\/$/, '')
 
 export const readRedirectsSource = (): string => {
   try {

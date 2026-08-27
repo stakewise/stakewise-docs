@@ -1,18 +1,78 @@
 ---
 title: EthPrivErc20Vault
-sidebar_position: 5
+sidebar_position: 9
 description: "Ethereum staking vault with ERC-20 token and whitelist functionality"
 ---
 
 # EthPrivErc20Vault
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/ethereum/EthPrivErc20Vault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/ethereum/EthPrivErc20Vault.sol)
 
-**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [EthErc20Vault →](./EthErc20Vault), [VaultWhitelist →](../modules/VaultWhitelist), IEthPrivErc20Vault
+**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [EthErc20Vault](./EthErc20Vault), [VaultWhitelist](../modules/VaultWhitelist), IEthPrivErc20Vault
 
-Defines the Ethereum staking Vault with whitelist and [ERC20 ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol) token.
+Defines the Ethereum staking Vault with whitelist and ERC-20 token
+
+
+## State Variables
+### _version
+
+```solidity
+uint8 private constant _version = 5
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+
+
+```solidity
+uint256[50] private __gap
+```
+
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(EthErc20VaultConstructorArgs memory args) EthErc20Vault(args);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`args`|`EthErc20VaultConstructorArgs`|The arguments for initializing the EthErc20Vault contract|
+
+
+### initialize
+
+Initializes or upgrades the EthErc20Vault contract. Must transfer security deposit during the deployment.
+
+
+```solidity
+function initialize(bytes calldata params)
+    external
+    payable
+    virtual
+    override(IEthErc20Vault, EthErc20Vault)
+    reinitializer(_version);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`params`|`bytes`|The encoded parameters for initializing the EthErc20Vault contract|
+
 
 ### vaultId
 
@@ -105,3 +165,14 @@ function mintOsToken(address receiver, uint256 osTokenShares, address referrer)
 |Name|Type|Description|
 |----|----|-----------|
 |`assets`|`uint256`|The number of assets minted to the receiver|
+
+
+### _transfer
+
+Moves `amount` of tokens from `from` to `to`.
+Emits a `Transfer` event.
+
+
+```solidity
+function _transfer(address from, address to, uint256 amount) internal virtual override;
+```

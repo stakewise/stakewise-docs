@@ -77,7 +77,7 @@ Primary controller of the Vault, and its creator by default. An Admin can be a s
 
 Triggers [claims of accumulated Vault fees](/operator/manage-vault/fee-claiming) on behalf of shareholders.
 
-By default a Vault's fees go to a single recipient. To split them among several shareholders, the Admin sets a **Fee Splitter** — a contract that divides incoming fees according to configured proportions — as the Vault's fee recipient, under **Settings → Vault fee** on the Vault page.
+By default a Vault's fees go to a single recipient. To split them among several shareholders, the Admin sets a **Fee Splitter** — on-chain, a `RewardSplitter` contract deployed by the `RewardSplitterFactory`, which divides incoming fees according to configured proportions — as the Vault's fee recipient, under **Settings → Vault fee** on the Vault page.
 
 ### Whitelist Manager
 
@@ -90,3 +90,17 @@ Adds or removes the addresses blocked from depositing. Only present in Blocklist
 ### Validators Manager
 
 Authorizes the Vault's core validator operations — registration, funding, consolidation, and withdrawals. The [Operator Service automates most of the validator lifecycle](/operator/launch-operator-service#core-functions), and each on-chain action it submits must be signed by the address assigned to this role.
+
+### Deposit Data Manager
+
+Sets the Vault's deposit data root in the `DepositDataRegistry`, which is how Vaults on the older deposit-data flow pre-approve the validator keys that may be registered. Defaults to the Admin when unset, and only the Admin can reassign it. Vaults using a [Validators Manager](#validators-manager) do not need this role.
+
+## MetaVault Configuration
+
+A [MetaVault](./vault-types#metavault) has the same capacity, fee, branding and role settings as any other Vault, plus its own sub-vault set. That set lives in a `SubVaultsRegistry` contract deployed alongside the MetaVault, and only the MetaVault's Admin can change it:
+
+- **Curator** — the contract that decides how deposits and withdrawals are spread across sub-vaults. Must be DAO-approved and registered in the `CuratorsRegistry`.
+- **Add a sub-vault** — adds a Vault to the set, up to 50. Adding a MetaVault as a sub-vault requires that MetaVault to accept the link.
+- **Eject a sub-vault** — removes a Vault from the set and queues an exit for the assets held in it.
+
+MetaVaults do not run validators, so they have no Validators Manager or Deposit Data Manager role.

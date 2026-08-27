@@ -6,46 +6,37 @@ description: "Factory contract for deploying RewardSplitter proxies"
 
 # RewardSplitterFactory
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/misc/RewardSplitterFactory.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/misc/RewardSplitterFactory.sol)
 
 **Inherits:** IRewardSplitterFactory
 
-Factory for deploying the RewardSplitter contract.
+Factory for deploying the RewardSplitter contract
 
 
-## Events
-### RewardSplitterCreated
-Event emitted on a RewardSplitter creation
-
-
-```solidity
-event RewardSplitterCreated(address owner, address vault, address rewardSplitter);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`owner`|`address`|The address of the RewardSplitter owner|
-|`vault`|`address`|The address of the connected vault|
-|`rewardSplitter`|`address`|The address of the created RewardSplitter|
-
-
-## Functions
-
+## State Variables
 ### implementation
-
 The address of the RewardSplitter implementation contract used for proxy creation
 
 
 ```solidity
-function implementation() external view returns (address);
+address public immutable override implementation
 ```
-**Returns**
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(address _implementation) ;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|The address of the RewardSplitter proxy contract|
+|`_implementation`|`address`|The implementation address of RewardSplitter|
 
 
 ### createRewardSplitter

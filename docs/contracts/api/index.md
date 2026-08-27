@@ -15,6 +15,7 @@ Welcome to the StakeWise Contracts API documentation. This section contains comp
 - **Keeper** - Oracle system for updating Vault rewards and approving validator registrations
 - **Libraries** - Shared utility libraries used across contracts
 - **Misc** - Reward distribution and fee splitting contracts
+- **Nodes** - Delegation of validator operations to node operators
 - **Tokens** - Over-collateralized staking token (osToken) system and controllers
 - **Validators** - Validator lifecycle management, registry interfaces, and deposit data validation
-- **Vaults** - Modular staking Vault contracts for Ethereum and Gnosis Chain
+- **Vaults** - Modular staking Vault contracts for Ethereum and Gnosis Chain, including MetaVaults and the sub-vaults registry

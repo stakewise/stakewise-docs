@@ -15,7 +15,7 @@ In the standard setup, the Operator Service holds validator keystores locally an
 
 Every time a validator is registered, the Vault contract needs to verify that the registration is authorized. There are two ways this can work:
 
-**Default (deposit data file)** — You generate validator keys and a deposit data file with the Operator Service, then upload it to your Vault. On each registration, the Vault contract checks that the submitted validator was pre-approved in the uploaded file (using a Merkle proof — a compact cryptographic check against the file contents). This is the standard setup described in [Prepare Operator →](../run-operator-service-v3/prepare-operator).
+**Default (deposit data file)** — You generate validator keys and a deposit data file with the Operator Service, then upload it to your Vault. On each registration, the Vault contract checks that the submitted validator was pre-approved in the uploaded file (using a Merkle proof — a compact cryptographic check against the file contents). This is the standard setup described in [Prepare Operator](../run-operator-service-v3/prepare-operator).
 
 **Validators Manager signature (required for API mode)** — Instead of checking a deposit data file, the Vault contract verifies a cryptographic signature from a designated wallet called the **Validators Manager**. The Relayer signs each registration with this wallet using the [EIP-712 ↗](https://eips.ethereum.org/EIPS/eip-712) standard (a structured way to sign typed data on Ethereum). If the signature is valid, the registration is approved. Since the Relayer provides all data and signatures on demand, you don't need to generate or upload a deposit data file.
 
@@ -42,8 +42,8 @@ To produce exit signatures, the Relayer must use the validator index passed in t
 
 Complete the following steps before proceeding:
 
-1. [Installation completed →](../run-operator-service-v3/installation)
-2. [Operator Service prepared →](../run-operator-service-v3/prepare-operator)
+1. [Installation completed](../run-operator-service-v3/installation)
+2. [Operator Service prepared](../run-operator-service-v3/prepare-operator)
 
 ### Configure Validators Manager
 
@@ -79,7 +79,7 @@ For additional parameter information, use the `--help` flag:
 ```
 
 :::custom-info[Docker Configuration]
-For Docker-specific setup instructions, see the Docker Image tab in [Installation →](../run-operator-service-v3/installation)
+For Docker-specific setup instructions, see the Docker Image tab in [Installation](../run-operator-service-v3/installation)
 :::
 
 ## API Specification

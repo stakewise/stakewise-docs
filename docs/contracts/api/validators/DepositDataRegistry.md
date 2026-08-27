@@ -6,62 +6,47 @@ description: "Contract for managing Vault's deposit data and validator registrat
 
 # DepositDataRegistry
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/validators/DepositDataRegistry.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/validators/DepositDataRegistry.sol)
 
-**Inherits:** [Multicall →](../base/Multicall), IDepositDataRegistry
+**Inherits:** [Multicall](../base/Multicall), IDepositDataRegistry
 
-Defines the functionality for the Vault's deposit data management.
+Defines the functionality for the Vault's deposit data management
 
 
-## Events
-### DepositDataManagerUpdated
-Event emitted on deposit data manager update
-
+## State Variables
+### _vaultsRegistry
 
 ```solidity
-event DepositDataManagerUpdated(address indexed vault, address depositDataManager);
+IVaultsRegistry private immutable _vaultsRegistry
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`depositDataManager`|`address`|The address of the new deposit data manager|
-
-### DepositDataRootUpdated
-Event emitted on deposit data root update
-
+### depositDataIndexes
 
 ```solidity
-event DepositDataRootUpdated(address indexed vault, bytes32 depositDataRoot);
+mapping(address => uint256) public override depositDataIndexes
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`depositDataRoot`|`bytes32`|The new deposit data Merkle tree root|
-
-### DepositDataMigrated
-Event emitted on deposit data migration
-
+### depositDataRoots
 
 ```solidity
-event DepositDataMigrated(
-    address indexed vault, bytes32 depositDataRoot, uint256 validatorIndex, address depositDataManager
-);
+mapping(address => bytes32) public override depositDataRoots
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`depositDataRoot`|`bytes32`|The deposit data root|
-|`validatorIndex`|`uint256`|The index of the next validator to be registered|
-|`depositDataManager`|`address`|The address of the deposit data manager|
+### _depositDataManagers
+
+```solidity
+mapping(address => address) private _depositDataManagers
+```
+
+
+### _migrated
+
+```solidity
+mapping(address => bool) private _migrated
+```
 
 
 ## Functions
@@ -80,46 +65,19 @@ modifier onlyValidVault(address vault) ;
 |`vault`|`address`|The address of the vault|
 
 
-### depositDataIndexes
+### constructor
 
-The vault deposit data index
+Constructor
 
 
 ```solidity
-function depositDataIndexes(address vault) external view returns (uint256 validatorIndex);
+constructor(address vaultsRegistry) ;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`vault`|`address`|The address of the vault|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`validatorIndex`|`uint256`|The index of the next validator to be registered|
-
-
-### depositDataRoots
-
-The vault deposit data root
-
-
-```solidity
-function depositDataRoots(address vault) external view returns (bytes32 depositDataRoot);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`depositDataRoot`|`bytes32`|The deposit data root|
+|`vaultsRegistry`|`address`|The address of the vaults registry contract|
 
 
 ### getDepositDataManager

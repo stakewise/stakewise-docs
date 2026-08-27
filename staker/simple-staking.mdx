@@ -8,7 +8,7 @@ import Tooltip from '@site/src/components/Tooltip/Tooltip';
 
 # Simple Staking
 
-The simplest way to stake with StakeWise is through the [StakeWise App ↗](https://app.stakewise.io) — deposit any amount of ETH and stake it in a single click. Your assets are routed through a [MetaVault](/docs/vaults/vault-types#metavault) that distributes them across the best-performing sub-vaults — currently just the [Genesis Vault ↗](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885), with more to come.
+The simplest way to stake with StakeWise is through the [StakeWise App ↗](https://app.stakewise.io) — deposit any amount of ETH and stake it in a single click. Your assets are routed through a [MetaVault](/docs/vaults/vault-types#metavault) that distributes them across the best-performing sub-vaults. Today that chain resolves to the [Genesis Vault ↗](https://app.stakewise.io/vault/mainnet/0xac0f906e433d58fa868f936e8a43230473652885), with more sub-vaults to come.
 
 When staking, you'll automatically receive [osETH](/docs/ostoken/intro), which represents your staked assets plus accumulated rewards. osETH can be used [across DeFi to boost your yield ↗](https://app.stakewise.io/ecosystem).
 
@@ -22,12 +22,16 @@ Stake your ETH and start earning rewards immediately.
 
 1. Open [app.stakewise.io ↗](https://app.stakewise.io) and connect your wallet.
 2. Select the **Stake** tab and enter the amount of ETH you want to stake.
-3. Review the details.
-4. Click **Stake** and confirm the transaction in your wallet.
-5. Once confirmed, osETH will appear in your wallet and immediately start earning rewards.
+3. Choose what happens to the stake:
+    - **Stake only** — your ETH is staked and no osETH is minted.
+    - **Receive osETH** — osETH is minted against your stake. This is the default.
+    - **Receive and boost osETH** — the newly minted osETH is locked as [Boost](/staker/boost) collateral in the same transaction. Available from 0.05 ETH.
+4. Review the details.
+5. Click **Stake** and confirm the transaction in your wallet.
+6. Once confirmed, your stake immediately starts earning rewards. Unless you chose **Stake only**, osETH appears in your wallet.
 
 :::custom-tips[Track Your Position Anytime]
-In the **Balance** tab you can view your <Tooltip content="The percentage you earn on your staked ETH after fees.">APY</Tooltip>, <Tooltip content="The total amount of ETH that is earning rewards.">total staked</Tooltip>, and <Tooltip content="The total amount of ETH and osETH locked in the boost.">total boosted</Tooltip> amounts.
+In the **Balance** tab you can view your <Tooltip content="The total amount of ETH that is earning rewards.">total staked</Tooltip> amount and your <Tooltip content="The percentage you earn on your staked ETH after fees.">APY</Tooltip>. If you have an active Boost position, the APY figure reflects it.
 :::
 
 ## Boost
@@ -45,13 +49,12 @@ Before unstaking, make sure the amount of osETH you want to unstake is in your w
 <Image img={require('./img/unstaking_flow.png')} alt="Unstaking flow explanation diagram" />
 
 1. Open [app.stakewise.io ↗](https://app.stakewise.io) and connect your wallet.
-2. Click the **flip** button <img src="/icons/stakewise/flip_button.png" alt="flip button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> to switch from staking to unstaking mode.
-3. Select the **Unstake** tab and enter the amount of osETH you want to convert back to ETH.
-4. Review the details.
-5. Click **Unstake** and confirm the transaction in your wallet.
-6. Your request enters the Vault's [exit queue](/docs/vaults/how-vaults-work#withdrawals). Waiting time is at least 24 hours and depends on [current network conditions ↗](https://www.validatorqueue.com/). Your assets keep earning rewards until the exit completes.
-7. Once the request is processed, click **Claim** and confirm the transaction to receive your ETH (original stake plus accumulated rewards).
+2. Select the **Unstake** tab and enter the amount of osETH you want to convert back to ETH.
+3. Review the details.
+4. Click **Unstake** and confirm the transaction in your wallet.
+5. Your request enters the Vault's [exit queue](/docs/vaults/how-vaults-work#withdrawals). The app shows a live estimate of how long it will take, along with the average over the past month — how long it actually takes depends on the network's validator exit queue. Your assets keep earning rewards until the exit completes.
+6. Once the request is processed, click **Claim** and confirm the transaction to receive your ETH (original stake plus accumulated rewards).
 
 :::custom-tips[Get a Claim Alert]
-You can add your email address to receive a notification as soon as your unstaked assets are ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**.
+You can set up an email or browser notification to be alerted as soon as your unstaked assets are ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**, or enable browser notifications.
 :::

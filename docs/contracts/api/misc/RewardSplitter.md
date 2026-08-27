@@ -6,159 +6,82 @@ description: "Abstract contract for splitting vault rewards among shareholders b
 
 # RewardSplitter
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/misc/RewardSplitter.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/misc/RewardSplitter.sol)
 
-**Inherits:** IRewardSplitter, [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [Multicall →](../base/Multicall)
+**Inherits:** IRewardSplitter, [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [Multicall](../base/Multicall)
 
-The RewardSplitter can be used to split the rewards of the fee recipient of the Vault based on configured shares.
+The RewardSplitter can be used to split the rewards of the fee recipient of the vault based on configured shares
 
 
-## Structs
-### ShareHolder
-Structure for storing information about share holder
+## State Variables
+### _wad
+
+```solidity
+uint256 private constant _wad = 1e18
+```
+
+
+### vault
+The vault to which the RewardSplitter is connected
 
 
 ```solidity
-struct ShareHolder {
-    uint128 shares;
-    uint128 rewardPerShare;
-}
+address public override vault
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`shares`|`uint128`|The amount of shares the account has|
-|`rewardPerShare`|`uint128`|The last synced reward per share|
-
-
-## Events
-### ClaimerUpdated
-Event emitted when the claim on behalf flag is updated
+### totalShares
+The total number of shares in the splitter
 
 
 ```solidity
-event ClaimerUpdated(address indexed caller, address indexed claimer);
+uint256 public override totalShares
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the account that called the function|
-|`claimer`|`address`|The address of the claimer that can claim rewards on behalf of shareholders|
-
-### SharesIncreased
-Event emitted when the number of shares is increased for an account
+### claimer
+Returns the address of the claimer that can claim rewards on behalf of shareholders
 
 
 ```solidity
-event SharesIncreased(address indexed account, uint256 amount);
+address public override claimer
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`account`|`address`|The address of the account for which the shares were increased|
-|`amount`|`uint256`|The amount of shares that were added|
-
-### SharesDecreased
-Event emitted when the number of shares is decreased for an account
-
+### _shareHolders
 
 ```solidity
-event SharesDecreased(address indexed account, uint256 amount);
+mapping(address => ShareHolder) private _shareHolders
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`account`|`address`|The address of the account for which the shares were decreased|
-|`amount`|`uint256`|The amount of shares that were deducted|
-
-### RewardsSynced
-Event emitted when the rewards are synced from the vault.
-
+### _unclaimedRewards
 
 ```solidity
-event RewardsSynced(uint256 totalRewards, uint256 rewardPerShare);
+mapping(address => uint256) private _unclaimedRewards
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`totalRewards`|`uint256`|The new total amount of rewards|
-|`rewardPerShare`|`uint256`|The new reward per share|
-
-### RewardsWithdrawn
-Event emitted when the rewards are withdrawn from the splitter
-
+### exitPositions
 
 ```solidity
-event RewardsWithdrawn(address indexed account, uint256 amount);
+mapping(uint256 positionTicket => address onBehalf) public override exitPositions
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`account`|`address`|The address of the account for which the rewards were withdrawn|
-|`amount`|`uint256`|The amount of rewards that were withdrawn|
-
-### ExitQueueEnteredOnBehalf
-Event emitted when the rewards are claimed on behalf
-
+### _totalRewards
 
 ```solidity
-event ExitQueueEnteredOnBehalf(address indexed onBehalf, uint256 positionTicket, uint256 amount);
+uint128 private _totalRewards
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`onBehalf`|`address`|The address of the account on behalf of which the rewards were claimed|
-|`positionTicket`|`uint256`|The position ticket in the exit queue|
-|`amount`|`uint256`|The amount of rewards that were claimed|
-
-### ExitedAssetsClaimedOnBehalf
-Event emitted when the exited assets are claimed on behalf
-
+### _rewardPerShare
 
 ```solidity
-event ExitedAssetsClaimedOnBehalf(address indexed onBehalf, uint256 positionTicket, uint256 amount);
+uint128 private _rewardPerShare
 ```
 
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`onBehalf`|`address`|The address of the account on behalf of which the assets were claimed|
-|`positionTicket`|`uint256`|The position ticket in the exit queue|
-|`amount`|`uint256`|The amount of assets that were claimed|
-
-## Errors
-### NotHarvested
-
-```solidity
-error NotHarvested();
-```
-
-### InvalidAccount
-
-```solidity
-error InvalidAccount();
-```
-
-### InvalidAmount
-
-```solidity
-error InvalidAmount();
-```
 
 ## Functions
 ### onlyVaultAdmin
@@ -168,6 +91,13 @@ Modifier to check if the caller is the vault admin
 
 ```solidity
 modifier onlyVaultAdmin() ;
+```
+
+### constructor
+
+
+```solidity
+constructor() ;
 ```
 
 ### setClaimer
@@ -377,6 +307,22 @@ function claimExitedAssetsOnBehalf(uint256 positionTicket, uint256 timestamp, ui
 |`exitQueueIndex`|`uint256`|The exit queue index of the exit request|
 
 
+### _transferRewards
+
+Transfers the specified amount of rewards to the shareholder
+
+
+```solidity
+function _transferRewards(address shareholder, uint256 amount) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`shareholder`|`address`|The address of the shareholder|
+|`amount`|`uint256`|The amount of rewards to transfer|
+
+
 ### syncRewards
 
 Syncs the rewards from the vault to the splitter. The vault state must be up-to-date.
@@ -385,3 +331,39 @@ Syncs the rewards from the vault to the splitter. The vault state must be up-to-
 ```solidity
 function syncRewards() public override;
 ```
+
+### _withdrawRewards
+
+Withdraws rewards for the given account
+
+
+```solidity
+function _withdrawRewards(address account, uint256 rewards) private returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`account`|`address`|The address of the account to withdraw rewards for|
+|`rewards`|`uint256`|The amount of rewards to withdraw|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The actual amount of rewards withdrawn|
+
+
+### __RewardSplitter_init
+
+Initializes the RewardSplitter contract
+
+
+```solidity
+function __RewardSplitter_init(address _vault) internal onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_vault`|`address`|The address of the vault to which the RewardSplitter will be connected|

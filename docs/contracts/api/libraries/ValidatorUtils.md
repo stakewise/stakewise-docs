@@ -1,26 +1,64 @@
 ---
 title: ValidatorUtils
-sidebar_position: 5
+sidebar_position: 6
 description: "Utility library for managing validator operations and deposits"
 ---
 
 # ValidatorUtils
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/ValidatorUtils.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/libraries/ValidatorUtils.sol)
 
-Includes functionality for managing the validators.
+Includes functionality for managing the validators
 
-## Structs
-### ValidatorDeposit
+
+## State Variables
+### _validatorsManagerTypeHash
 
 ```solidity
-struct ValidatorDeposit {
-    bytes publicKey;
-    bytes signature;
-    bytes withdrawalCredentials;
-    bytes32 depositDataRoot;
-    uint256 depositAmount;
-}
+bytes32 private constant _validatorsManagerTypeHash =
+    keccak256("VaultValidators(bytes32 validatorsRegistryRoot,bytes validators)")
+```
+
+
+### _validatorV1DepositLength
+
+```solidity
+uint256 private constant _validatorV1DepositLength = 176
+```
+
+
+### _validatorV2DepositLength
+
+```solidity
+uint256 private constant _validatorV2DepositLength = 184
+```
+
+
+### _validatorWithdrawalLength
+
+```solidity
+uint256 private constant _validatorWithdrawalLength = 56
+```
+
+
+### _validatorConsolidationLength
+
+```solidity
+uint256 private constant _validatorConsolidationLength = 96
+```
+
+
+### _validatorMinEffectiveBalance
+
+```solidity
+uint256 private constant _validatorMinEffectiveBalance = 32 ether
+```
+
+
+### _validatorMaxEffectiveBalance
+
+```solidity
+uint256 private constant _validatorMaxEffectiveBalance = 2048 ether
 ```
 
 
@@ -184,3 +222,17 @@ function consolidateValidators(
 |`validators`|`bytes`|The validators data|
 |`consolidationsApproved`|`bool`|Whether the consolidations are approved|
 |`validatorsConsolidations`|`address`|The address of the validators consolidations contract|
+
+
+## Structs
+### ValidatorDeposit
+
+```solidity
+struct ValidatorDeposit {
+    bytes publicKey;
+    bytes signature;
+    bytes withdrawalCredentials;
+    bytes32 depositDataRoot;
+    uint256 depositAmount;
+}
+```

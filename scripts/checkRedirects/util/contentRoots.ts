@@ -13,9 +13,9 @@ export const contentRoots: ContentRoot[] = [
 ]
 
 export const pathToUrl = (filePath: string): string => {
-  const stripped = filePath
-    .replace(/\.(mdx|md)$/, '')
-    .toLowerCase()
+  // Docusaurus preserves path casing in routes (e.g. /contracts/networks/Mainnet),
+  // so the URL must not be lowercased here.
+  const stripped = filePath.replace(/\.(mdx|md)$/, '')
 
   const root = contentRoots.find(({ dir }) => stripped.startsWith(dir + '/'))
 

@@ -8,7 +8,7 @@ description: Trigger manual validator exits by index or count for emergency, mai
 Manual exits should only be used in specific scenarios: emergency, maintenance, or testing.
 
 :::custom-warning[Validators Manager Required]
-The wallet executing this command must be set as the [Validators Manager →](/operator/validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+The wallet executing this command must be set as the [Validators Manager](/operator/validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
 :::
 
 ```bash
@@ -36,3 +36,9 @@ Exits for validators with index(es) 513571, 513572, 513861 are successfully init
 | <nobr>`--count`</nobr> | Number of validators to exit (default: all active). Cannot be used with `--indexes` |
 | <nobr>`--relayer-endpoint`</nobr> | Relayer endpoint URL for API mode operations |
 | <nobr>`--no-confirm`</nobr> | Skips confirmation prompts |
+| <nobr>`--max-withdrawal-request-fee-gwei`</nobr> | Maximum fee per withdrawal request. Default: 1000 Gwei |
+| <nobr>`--vault-first-block`</nobr> | Block the Vault was created at. Speeds up event fetching considerably on long-lived Vaults |
+| <nobr>`--network`</nobr> | Network of the Vault. Default: the network chosen during `init` |
+| <nobr>`--data-dir`</nobr> | Path where keystores and config data are placed. Default: `~/.stakewise` |
+| <nobr>`-v`, `--verbose`</nobr> | Enable debug mode, prints full output on error |
+| <nobr>`--log-level`</nobr> | Set logging level: ERROR, WARNING, INFO, DEBUG. Default: INFO |

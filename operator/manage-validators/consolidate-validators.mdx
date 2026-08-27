@@ -11,7 +11,7 @@ The Operator Service supports consolidation of legacy `0x01` validators to `0x02
 This reduces the validator count and infrastructure overhead by merging multiple 32 ETH validators into fewer, higher-balance validators.
 
 :::custom-warning[Validators Manager Required]
-  The wallet executing this command must be set as the [Validators Manager →](/operator/validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
+  The wallet executing this command must be set as the [Validators Manager](/operator/validators-manager) in the Vault settings. If the Validators Manager is set to the wallet address of the Relayer, you have to add the `--relayer-endpoint` parameter.
 :::
 
 ## Consolidate Specific Validators
@@ -86,5 +86,7 @@ The consolidation process requires Oracle signatures in case of switching from `
 
 ## Optional Flags
 
-- `--max-validator-balance-gwei` - Maximum balance for a single validator in Gwei (default: 1945000000000 Gwei for Ethereum, 1800000000000 Gwei for Gnosis). You can override this value to set a custom maximum balance.
+- `--max-validator-balance-gwei` - Maximum balance for a single validator in Gwei (default: 300000000000 Gwei for Ethereum, 1800000000000 Gwei for Gnosis). You can override this value to set a custom maximum balance.
 - `--max-consolidation-request-fee-gwei` - Maximum fee (in Gwei) for submitting a consolidation request per validator (default: 1000 Gwei). You can override this value to set a custom maximum fee.
+- `--no-switch-consolidation` - Disables switching a `0x01` validator to `0x02` when no public keys are provided. Without this flag, a lone `0x01` validator is switched automatically so it can act as a consolidation target.
+- `--vault-first-block` - Block the Vault was created at. Speeds up event fetching considerably on long-lived Vaults.

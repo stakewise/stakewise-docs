@@ -6,49 +6,90 @@ description: "Genesis vault for Gnosis staking migrated from StakeWise Legacy"
 
 # GnoGenesisVault
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoGenesisVault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/gnosis/GnoGenesisVault.sol)
 
-**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [GnoVault →](./GnoVault), IGnoGenesisVault
+**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [GnoVault](./GnoVault), IGnoGenesisVault
 
-Defines the Genesis Vault for Gnosis staking migrated from StakeWise Legacy.
+Defines the Genesis Vault for Gnosis staking migrated from StakeWise Legacy
 
 
-## Events
-### Migrated
-Event emitted on migration from StakeWise Legacy
+## State Variables
+### _version
+
+```solidity
+uint8 private constant _version = 4
+```
+
+
+### _poolEscrow
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event Migrated(address receiver, uint256 assets, uint256 shares);
+IGnoPoolEscrow private immutable _poolEscrow
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`address`|The address of the shares receiver|
-|`assets`|`uint256`|The amount of assets migrated|
-|`shares`|`uint256`|The amount of shares migrated|
-
-### GenesisVaultCreated
-Event emitted on GnoGenesisVault creation (deprecated)
+### _rewardGnoToken
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event GenesisVaultCreated(address admin, uint256 capacity, uint16 feePercent, string metadataIpfsHash);
+IRewardGnoToken private immutable _rewardGnoToken
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`admin`|`address`|The address of the Vault admin|
-|`capacity`|`uint256`|The capacity of the Vault|
-|`feePercent`|`uint16`|The fee percent of the Vault|
-|`metadataIpfsHash`|`string`|The IPFS hash of the Vault metadata|
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+
+
+```solidity
+uint256[50] private __gap
+```
 
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(GnoVaultConstructorArgs memory args, address poolEscrow, address rewardGnoToken) GnoVault(args);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`args`|`GnoVaultConstructorArgs`|The arguments for initializing the GnoVault contract|
+|`poolEscrow`|`address`|The address of the pool escrow from StakeWise Legacy|
+|`rewardGnoToken`|`address`|The address of the rGNO token from StakeWise Legacy|
+
+
+### initialize
+
+Initializes or upgrades the GnoVault contract. Must transfer security deposit during the deployment.
+
+
+```solidity
+function initialize(bytes calldata) external virtual override(IGnoVault, GnoVault) reinitializer(_version);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bytes`||
+
 
 ### vaultId
 
@@ -100,3 +141,58 @@ function migrate(address receiver, uint256 assets) external override returns (ui
 |Name|Type|Description|
 |----|----|-----------|
 |`shares`|`uint256`|The amount of shares minted|
+
+
+### _calcMaxMintOsTokenShares
+
+Internal function for calculating the maximum amount of osToken shares that can be minted
+based on the current user balance
+
+
+```solidity
+function _calcMaxMintOsTokenShares(address user) private view returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`user`|`address`|The address of the user|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The maximum amount of osToken shares that can be minted|
+
+
+### _vaultAssets
+
+Internal function for retrieving the total assets stored in the Vault.
+NB! Assets can be forcibly sent to the vault, the returned value must be used with caution
+
+
+```solidity
+function _vaultAssets() internal view virtual override(VaultState, VaultGnoStaking) returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The total amount of assets stored in the Vault|
+
+
+### _pullWithdrawals
+
+Pulls assets from withdrawal contract
+
+
+```solidity
+function _pullWithdrawals() internal override;
+```
+
+## Errors
+### InvalidInitialHarvest
+
+```solidity
+error InvalidInitialHarvest();
+```

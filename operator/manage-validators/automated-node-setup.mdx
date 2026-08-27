@@ -25,10 +25,10 @@ Installs Reth and Lighthouse binaries to the data directory.
 
 | Flag | Description |
 |------|-------------|
-| <nobr>`--network`</nobr> | Network for your vault: `mainnet`, `hoodi`, or `gnosis` (required) |
-| <nobr>`--data-dir`</nobr> | Path where node data will be placed. Default: `~/.stakewise` |
-| <nobr>`--lighthouse-version`</nobr> | Lighthouse version to install. Default: `v8.0.0` |
-| <nobr>`--reth-version`</nobr> | Reth version to install. Default: `v1.8.2` |
+| <nobr>`--network`</nobr> | Network for your vault: `mainnet`, `hoodi`, or `gnosis`. Prompted if not supplied. Default: `mainnet` |
+| <nobr>`--data-dir`</nobr> | Path where node data will be placed — the directory must already exist. Default: `~/.stakewise` |
+| <nobr>`--lighthouse-version`</nobr> | Lighthouse version to install. Default: `v8.0.1` |
+| <nobr>`--reth-version`</nobr> | Reth version to install. Default: `v1.9.3` |
 
 ## `node-start`
 
@@ -39,7 +39,7 @@ To start the node services and begin syncing:
 | Flag | Description |
 |------|-------------|
 | <nobr>`--vault`</nobr> | Your Vault contract address (required) |
-| <nobr>`--data-dir`</nobr> | Path where node data will be placed. Default: `~/.stakewise` |
+| <nobr>`--data-dir`</nobr> | Path where node data will be placed — the directory must already exist. Default: `~/.stakewise` |
 | <nobr>`--print-execution-logs`</nobr> | Print execution node logs |
 | <nobr>`--print-consensus-logs`</nobr> | Print consensus node logs |
 | <nobr>`--print-validator-logs`</nobr> | Print validator node logs |

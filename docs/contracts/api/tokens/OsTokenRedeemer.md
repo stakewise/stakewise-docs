@@ -6,405 +6,177 @@ description: "Abstract contract for redeeming osTokens through exit queue or dir
 
 # OsTokenRedeemer
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsTokenRedeemer.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/tokens/OsTokenRedeemer.sol)
 
-**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [Multicall →](../base/Multicall), IOsTokenRedeemer
+**Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), [Multicall](../base/Multicall), IOsTokenRedeemer
 
 This contract is used to redeem OsTokens for the underlying asset.
 
 
-## Events
-### PositionsManagerUpdated
-Event emitted when the positions manager is updated
-
+## State Variables
+### _vaultsRegistry
 
 ```solidity
-event PositionsManagerUpdated(address indexed positionsManager);
+IVaultsRegistry private immutable _vaultsRegistry
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`positionsManager`|`address`|The address of the new positions manager|
-
-### RedeemablePositionsProposed
-Event emitted when new redeemable positions are proposed
-
+### _osToken
 
 ```solidity
-event RedeemablePositionsProposed(bytes32 indexed merkleRoot, string ipfsHash);
+IERC20 private immutable _osToken
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`merkleRoot`|`bytes32`|The Merkle root of the redeemable positions|
-|`ipfsHash`|`string`|The IPFS hash of the redeemable positions|
-
-### RedeemablePositionsAccepted
-Event emitted when the pending redeemable positions are accepted
-
+### _osTokenVaultController
 
 ```solidity
-event RedeemablePositionsAccepted(bytes32 indexed merkleRoot, string ipfsHash);
+IOsTokenVaultController private immutable _osTokenVaultController
 ```
 
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`merkleRoot`|`bytes32`|The Merkle root of the accepted redeemable positions|
-|`ipfsHash`|`string`|The IPFS hash of the accepted redeemable positions|
-
-### RedeemablePositionsDenied
-Event emitted when the new redeemable positions are denied
-
-
-```solidity
-event RedeemablePositionsDenied(bytes32 indexed merkleRoot, string ipfsHash);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`merkleRoot`|`bytes32`|The Merkle root of the denied redeemable positions|
-|`ipfsHash`|`string`|The IPFS hash of the denied redeemable positions|
-
-### RedeemablePositionsRemoved
-Event emitted when the redeemable positions are removed
-
-
-```solidity
-event RedeemablePositionsRemoved(bytes32 indexed merkleRoot, string ipfsHash);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`merkleRoot`|`bytes32`|The Merkle root of the removed redeemable positions|
-|`ipfsHash`|`string`|The IPFS hash of the removed redeemable positions|
-
-### ExitQueueEntered
-Event emitted on shares added to the exit queue
-
-
-```solidity
-event ExitQueueEntered(address indexed owner, address indexed receiver, uint256 positionTicket, uint256 shares);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`owner`|`address`|The address that owns the shares|
-|`receiver`|`address`|The address that will receive withdrawn assets|
-|`positionTicket`|`uint256`|The exit queue ticket that was assigned to the position|
-|`shares`|`uint256`|The number of shares that queued for the exit|
-
-### ExitedAssetsClaimed
-Event emitted on claim of the exited assets
-
-
-```solidity
-event ExitedAssetsClaimed(
-    address indexed receiver, uint256 prevPositionTicket, uint256 newPositionTicket, uint256 withdrawnAssets
-);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`address`|The address that has received withdrawn assets|
-|`prevPositionTicket`|`uint256`|The exit queue ticket received after the `enterExitQueue` call|
-|`newPositionTicket`|`uint256`|The new exit queue ticket in case not all the shares were withdrawn. Otherwise 0.|
-|`withdrawnAssets`|`uint256`|The total number of assets withdrawn|
-
-### OsTokenSharesSwapped
-Event emitted on shares swapped for assets
-
-
-```solidity
-event OsTokenSharesSwapped(address indexed sender, address indexed receiver, uint256 shares, uint256 assets);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sender`|`address`|The address that initiated the swap|
-|`receiver`|`address`|The address that will receive the shares|
-|`shares`|`uint256`|The number of shares received|
-|`assets`|`uint256`|The number of assets spent|
-
-### CheckpointCreated
-Event emitted on checkpoint creation
-
-
-```solidity
-event CheckpointCreated(uint256 shares, uint256 assets);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`shares`|`uint256`|The number of burned shares|
-|`assets`|`uint256`|The amount of exited assets|
-
-### OsTokenPositionsRedeemed
-Event emitted when OsToken positions are redeemed
-
-
-```solidity
-event OsTokenPositionsRedeemed(uint256 shares, uint256 assets);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`shares`|`uint256`|The number of shares redeemed|
-|`assets`|`uint256`|The number of assets redeemed|
-
-## Structs
-### RedeemablePositions
-Struct to store the redeemable positions Merkle root and IPFS hash
-
-
-```solidity
-struct RedeemablePositions {
-    bytes32 merkleRoot;
-    string ipfsHash;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`merkleRoot`|`bytes32`|The Merkle root of the redeemable positions|
-|`ipfsHash`|`string`|The IPFS hash of the redeemable positions|
-
-### OsTokenPosition
-Struct to store the redeemed OsToken position details
-
-
-```solidity
-struct OsTokenPosition {
-    address vault;
-    address owner;
-    uint256 leafShares;
-    uint256 sharesToRedeem;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the Vault|
-|`owner`|`address`|The address of the position owner|
-|`leafShares`|`uint256`|The amount of OsToken shares used to calculate the merkle leaf|
-|`sharesToRedeem`|`uint256`||
-
-
-## Functions
 
 ### exitQueueUpdateDelay
-
 The delay in seconds for the exit queue updates
 
 
 ```solidity
-function exitQueueUpdateDelay() external view returns (uint256);
+uint256 public immutable override exitQueueUpdateDelay
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The delay in seconds|
-
-
-### queuedShares
-
-The number of queued OsToken shares
-
-
-```solidity
-function queuedShares() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The number of queued shares|
-
-
-### unclaimedAssets
-
-The number of unclaimed assets in the exit queue
-
-
-```solidity
-function unclaimedAssets() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The number of unclaimed assets|
-
-
-### redeemedShares
-
-The number of redeemed OsToken shares
-
-
-```solidity
-function redeemedShares() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The number of redeemed shares|
-
-
-### redeemedAssets
-
-The number of redeemed assets
-
-
-```solidity
-function redeemedAssets() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The number of redeemed assets|
-
-
-### swappedShares
-
-The number of swapped OsToken shares
-
-
-```solidity
-function swappedShares() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The number of swapped shares|
-
-
-### swappedAssets
-
-The number of swapped assets
-
-
-```solidity
-function swappedAssets() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The number of swapped assets|
-
-
-### leafToProcessedShares
-
-Maps a Merkle tree leaf to processed shares
-
-
-```solidity
-function leafToProcessedShares(bytes32 leaf) external view returns (uint256 processedShares);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`leaf`|`bytes32`|The leaf of the Merkle tree|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`processedShares`|`uint256`|The number of processed shares corresponding to the leaf|
-
-
-### exitRequests
-
-Maps a exit request hash to the number of exiting shares
-
-
-```solidity
-function exitRequests(bytes32 exitRequestHash) external view returns (uint256 shares);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`exitRequestHash`|`bytes32`|The hash of the exit request|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`shares`|`uint256`|The number of shares that are exiting for the given exit request hash|
-
-
-### exitQueueTimestamp
-
-The timestamp when the exit queue was last updated
-
-
-```solidity
-function exitQueueTimestamp() external view returns (uint256);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The timestamp of the last exit queue update|
 
 
 ### positionsManager
-
-The address that can propose redeemable OsToken positions
+The address authorized to redeem OsToken positions
 
 
 ```solidity
-function positionsManager() external view returns (address);
+address public override positionsManager
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the positions manager|
 
 
 ### nonce
-
 The current nonce for the redemptions
 
 
 ```solidity
-function nonce() external view returns (uint256);
+uint256 public override nonce
 ```
-**Returns**
+
+
+### queuedShares
+The number of queued OsToken shares
+
+
+```solidity
+uint128 public override queuedShares
+```
+
+
+### unclaimedAssets
+The number of unclaimed assets in the exit queue
+
+
+```solidity
+uint128 public override unclaimedAssets
+```
+
+
+### redeemedShares
+The number of redeemed OsToken shares
+
+
+```solidity
+uint128 public override redeemedShares
+```
+
+
+### redeemedAssets
+The number of redeemed assets
+
+
+```solidity
+uint128 public override redeemedAssets
+```
+
+
+### swappedShares
+The number of swapped OsToken shares
+
+
+```solidity
+uint128 public override swappedShares
+```
+
+
+### swappedAssets
+The number of swapped assets
+
+
+```solidity
+uint128 public override swappedAssets
+```
+
+
+### leafToProcessedShares
+
+```solidity
+mapping(bytes32 leaf => uint256 processedShares) public override leafToProcessedShares
+```
+
+
+### exitRequests
+
+```solidity
+mapping(bytes32 exitRequestHash => uint256 shares) public override exitRequests
+```
+
+
+### exitQueueTimestamp
+The timestamp when the exit queue was last updated
+
+
+```solidity
+uint256 public override exitQueueTimestamp
+```
+
+
+### _redeemablePositions
+
+```solidity
+RedeemablePositions private _redeemablePositions
+```
+
+
+### _exitQueue
+
+```solidity
+ExitQueue.History private _exitQueue
+```
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(
+    address vaultsRegistry_,
+    address osToken_,
+    address osTokenVaultController_,
+    address owner_,
+    uint256 exitQueueUpdateDelay_
+) Ownable(owner_);
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint256`|The current nonce value|
+|`vaultsRegistry_`|`address`|The address of the VaultsRegistry contract|
+|`osToken_`|`address`|The address of the OsToken contract|
+|`osTokenVaultController_`|`address`|The address of the OsTokenVaultController contract|
+|`owner_`|`address`|The address of the owner|
+|`exitQueueUpdateDelay_`|`uint256`|The delay in seconds for exit queue updates|
 
 
 ### getExitQueueData
@@ -413,7 +185,7 @@ Get the current exit queue data
 
 
 ```solidity
-function getExitQueueData() external view override returns (uint256, uint256, uint256);
+function getExitQueueData() public view override returns (uint256, uint256, uint256);
 ```
 **Returns**
 
@@ -422,6 +194,21 @@ function getExitQueueData() external view override returns (uint256, uint256, ui
 |`<none>`|`uint256`|queuedShares The total number of shares currently queued for exit|
 |`<none>`|`uint256`|unclaimedAssets The total number of assets that have not been claimed yet|
 |`<none>`|`uint256`|totalTickets The total number of tickets (shares) processed in the exit queue|
+
+
+### getExitQueueCumulativeTickets
+
+Gets the cumulative tickets in the exit queue
+
+
+```solidity
+function getExitQueueCumulativeTickets() external view override returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The cumulative tickets in the exit queue|
 
 
 ### redeemablePositions
@@ -438,22 +225,6 @@ function redeemablePositions() external view override returns (bytes32 merkleRoo
 |----|----|-----------|
 |`merkleRoot`|`bytes32`|The Merkle root of the redeemable positions|
 |`ipfsHash`|`string`|The IPFS hash of the redeemable positions|
-
-
-### pendingRedeemablePositions
-
-The pending redeemable positions Merkle root and IPFS hash that is waiting to be accepted
-
-
-```solidity
-function pendingRedeemablePositions() external view override returns (bytes32 merkleRoot, string memory ipfsHash);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`merkleRoot`|`bytes32`|The Merkle root of the pending redeemable positions|
-|`ipfsHash`|`string`|The IPFS hash of the pending redeemable positions|
 
 
 ### getExitQueueIndex
@@ -536,47 +307,45 @@ function setPositionsManager(address positionsManager_) external override onlyOw
 |`positionsManager_`|`address`|The address of the new positions manager|
 
 
-### proposeRedeemablePositions
+### getExitQueueMissingAssets
 
-Proposes new redeemable positions. Can only be called by the positions manager.
+Calculates the missing assets in the exit queue for a target cumulative tickets.
 
 
 ```solidity
-function proposeRedeemablePositions(RedeemablePositions calldata newPositions) external override;
+function getExitQueueMissingAssets(uint256 targetCumulativeTickets)
+    external
+    view
+    override
+    returns (uint256 missingAssets);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`newPositions`|`RedeemablePositions`|The new redeemable positions to propose|
+|`targetCumulativeTickets`|`uint256`|The target cumulative tickets in the exit queue|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`missingAssets`|`uint256`|The number of missing assets in the exit queue|
 
 
-### acceptRedeemablePositions
+### setRedeemablePositions
 
-Accepts the pending redeemable positions. Can only be called by the owner.
-
-
-```solidity
-function acceptRedeemablePositions() external override onlyOwner;
-```
-
-### denyRedeemablePositions
-
-Denies the pending redeemable positions. Can only be called by the owner.
+Set new redeemable positions. Can only be called by the owner.
 
 
 ```solidity
-function denyRedeemablePositions() external override onlyOwner;
+function setRedeemablePositions(RedeemablePositions calldata newPositions) external override onlyOwner;
 ```
+**Parameters**
 
-### removeRedeemablePositions
+|Name|Type|Description|
+|----|----|-----------|
+|`newPositions`|`RedeemablePositions`|The new redeemable positions|
 
-Removes the redeemable positions. Can only be called by the owner.
-
-
-```solidity
-function removeRedeemablePositions() external override onlyOwner;
-```
 
 ### permitOsToken
 
@@ -635,7 +404,56 @@ function claimExitedAssets(uint256 positionTicket, uint256 exitQueueIndex) exter
 |`exitQueueIndex`|`uint256`|The index of the exit queue to claim exited assets for|
 
 
+### redeemSubVaultsAssets
+
+Redeem assets from the sub-vaults to the meta vault. Can only be called by the positions manager.
+
+
+```solidity
+function redeemSubVaultsAssets(address metaVault, uint256 assetsToRedeem)
+    external
+    override
+    returns (uint256 totalRedeemedAssets);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`metaVault`|`address`|The address of the meta vault|
+|`assetsToRedeem`|`uint256`|The number of assets to redeem|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`totalRedeemedAssets`|`uint256`|The total number of redeemed assets|
+
+
+### redeemSubVaultOsToken
+
+Redeem OsToken shares from a specific sub-vault. Can only be called by the meta vault.
+
+
+```solidity
+function redeemSubVaultOsToken(address subVault, uint256 osTokenShares) external override returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`subVault`|`address`|The address of the sub-vault|
+|`osTokenShares`|`uint256`|The number of OsToken shares to redeem|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The amount of redeemed assets|
+
+
 ### redeemOsTokenPositions
+
+Redeem OsToken shares from the vault positions.
 
 
 ```solidity
@@ -645,6 +463,14 @@ function redeemOsTokenPositions(
     bool[] calldata proofFlags
 ) external override;
 ```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`positions`|`OsTokenPosition[]`|The array of OsToken positions to redeem|
+|`proof`|`bytes32[]`|The Merkle proof for the positions root|
+|`proofFlags`|`bool[]`|The flags for the Merkle proof|
+
 
 ### processExitQueue
 
@@ -654,3 +480,102 @@ Process the exit queue and checkpoint swapped or redeemed shares. Can only be ca
 ```solidity
 function processExitQueue() external override;
 ```
+
+### updateVaultState
+
+Updates the vault state. To be used in multicall to update state and redeem positions.
+
+
+```solidity
+function updateVaultState(address vault, IKeeperRewards.HarvestParams calldata harvestParams) external override;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`vault`|`address`|The address of the vault to update|
+|`harvestParams`|`IKeeperRewards.HarvestParams`|The harvest parameters for the vault state update|
+
+
+### _swapAssetsToOsTokenShares
+
+Internal function to swap assets to OsToken shares
+
+
+```solidity
+function _swapAssetsToOsTokenShares(address receiver, uint256 assets) internal returns (uint256 osTokenShares);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The address that will receive the OsToken shares|
+|`assets`|`uint256`|The number of assets to swap|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`osTokenShares`|`uint256`|The number of OsToken shares swapped|
+
+
+### _isMetaVault
+
+Internal function to check whether the caller is a meta vault
+
+
+```solidity
+function _isMetaVault(address vault) private view returns (bool);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`vault`|`address`|The address of the vault to check|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bool`|True if the caller is a meta vault, false otherwise|
+
+
+### _getAssets
+
+Internal function that must be implemented to return the account assets
+
+
+```solidity
+function _getAssets(address account) internal view virtual returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`account`|`address`|The address of the account|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The amount of assets in the vault|
+
+
+### _transferAssets
+
+Internal function for transferring assets to the receiver
+
+IMPORTANT: because control is transferred to the receiver, care must be
+taken to not create reentrancy vulnerabilities. The Vault must follow the checks-effects-interactions pattern:
+https://docs.soliditylang.org/en/v0.8.22/security-considerations.html#use-the-checks-effects-interactions-pattern
+
+
+```solidity
+function _transferAssets(address receiver, uint256 assets) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The address that will receive the assets|
+|`assets`|`uint256`|The number of assets to transfer|

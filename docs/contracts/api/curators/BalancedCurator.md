@@ -6,49 +6,11 @@ description: "Curator for evenly managing assets in sub-vaults"
 
 # BalancedCurator
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/curators/BalancedCurator.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/curators/BalancedCurator.sol)
 
 **Inherits:** ISubVaultsCurator
 
 Defines the functionality for evenly managing assets in sub-vaults.
-
-
-## Structs
-### Deposit
-Struct for storing deposit data
-
-
-```solidity
-struct Deposit {
-    address vault;
-    uint256 assets;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`assets`|`uint256`|The amount of assets to deposit|
-
-### ExitRequest
-Struct for storing exit request data
-
-
-```solidity
-struct ExitRequest {
-    address vault;
-    uint256 assets;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the vault|
-|`assets`|`uint256`|The amount of assets to exit|
 
 
 ## Functions
@@ -60,7 +22,7 @@ Function to get the deposits to the sub-vaults
 ```solidity
 function getDeposits(uint256 assetsToDeposit, address[] calldata subVaults, address ejectingVault)
     external
-    pure
+    view
     override
     returns (Deposit[] memory deposits);
 ```
@@ -106,5 +68,3 @@ function getExitRequests(
 |Name|Type|Description|
 |----|----|-----------|
 |`exitRequests`|`ExitRequest[]`|An array of ExitRequest structs containing the vault addresses and the amounts to exit|
-
-

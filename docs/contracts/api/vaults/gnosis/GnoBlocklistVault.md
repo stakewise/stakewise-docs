@@ -6,13 +6,68 @@ description: "Gnosis staking vault with blocklist functionality"
 
 # GnoBlocklistVault
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoBlocklistVault.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/gnosis/GnoBlocklistVault.sol)
 
-**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [GnoVault →](./GnoVault), [VaultBlocklist →](../modules/VaultBlocklist), IGnoBlocklistVault
+**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [GnoVault](./GnoVault), [VaultBlocklist](../modules/VaultBlocklist), IGnoBlocklistVault
 
-Defines the Gnosis staking Vault with blocking addresses functionality.
+Defines the Gnosis staking Vault with blocking addresses functionality
+
+
+## State Variables
+### _version
+
+```solidity
+uint8 private constant _version = 3
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+
+
+```solidity
+uint256[50] private __gap
+```
+
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(GnoVaultConstructorArgs memory args) GnoVault(args);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`args`|`GnoVaultConstructorArgs`|The arguments for initializing the GnoVault contract|
+
+
+### initialize
+
+Initializes or upgrades the GnoVault contract. Must transfer security deposit during the deployment.
+
+
+```solidity
+function initialize(bytes calldata params) external virtual override(IGnoVault, GnoVault) reinitializer(_version);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`params`|`bytes`|The encoded parameters for initializing the GnoVault contract|
+
 
 ### deposit
 

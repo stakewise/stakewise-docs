@@ -1,82 +1,83 @@
 ---
 title: GnoVaultFactory
-sidebar_position: 8
+sidebar_position: 10
 description: "Factory for deploying Gnosis staking Vaults"
 ---
 
 # GnoVaultFactory
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/gnosis/GnoVaultFactory.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/gnosis/GnoVaultFactory.sol)
 
 **Inherits:** IGnoVaultFactory
 
-Factory for deploying Gnosis staking Vaults.
+Factory for deploying Gnosis staking Vaults
 
 
-## Events
-### VaultCreated
-Event emitted on a Vault creation
-
+## State Variables
+### _securityDeposit
 
 ```solidity
-event VaultCreated(address indexed admin, address indexed vault, address ownMevEscrow, bytes params);
+uint256 private constant _securityDeposit = 1e9
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`admin`|`address`|The address of the Vault admin|
-|`vault`|`address`|The address of the created Vault|
-|`ownMevEscrow`|`address`|The address of the own MEV escrow contract. Zero address if shared MEV escrow is used.|
-|`params`|`bytes`|The encoded parameters for initializing the Vault contract|
+### _vaultsRegistry
+
+```solidity
+IVaultsRegistry internal immutable _vaultsRegistry
+```
 
 
-## Functions
+### _gnoToken
+
+```solidity
+IERC20 internal immutable _gnoToken
+```
+
 
 ### implementation
-
 The address of the Vault implementation contract used for proxy creation
 
 
 ```solidity
-function implementation() external view returns (address);
+address public immutable override implementation
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the Vault implementation contract|
 
 
 ### ownMevEscrow
-
 The address of the own MEV escrow contract used for Vault creation
 
 
 ```solidity
-function ownMevEscrow() external view returns (address);
+address public override ownMevEscrow
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the MEV escrow contract|
 
 
 ### vaultAdmin
-
 The address of the Vault admin used for Vault creation
 
 
 ```solidity
-function vaultAdmin() external view returns (address);
+address public override vaultAdmin
 ```
-**Returns**
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(address _implementation, IVaultsRegistry vaultsRegistry, address gnoToken) ;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|The address of the Vault admin|
+|`_implementation`|`address`|The implementation address of Vault|
+|`vaultsRegistry`|`IVaultsRegistry`|The address of the VaultsRegistry contract|
+|`gnoToken`|`address`|The address of the GNO token|
 
 
 ### createVault

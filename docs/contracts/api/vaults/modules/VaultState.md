@@ -6,73 +6,107 @@ description: "Abstract contract defining state manipulation functionality for va
 
 # VaultState
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultState.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultState.sol)
 
-**Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultFee →](./VaultFee), IVaultState
+**Inherits:** [VaultImmutables](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [VaultFee](./VaultFee), IVaultState
 
-Defines Vault's state manipulation.
+Defines Vault's state manipulation
 
 
-## Events
-### CheckpointCreated
-Event emitted on checkpoint creation
+## State Variables
+### _totalShares
+
+```solidity
+uint128 internal _totalShares
+```
+
+
+### _totalAssets
+
+```solidity
+uint128 internal _totalAssets
+```
+
+
+### _queuedShares
+
+```solidity
+uint128 internal _queuedShares
+```
+
+
+### _unclaimedAssets
+
+```solidity
+uint128 internal _unclaimedAssets
+```
+
+
+### _exitQueue
+
+```solidity
+ExitQueue.History internal _exitQueue
+```
+
+
+### _exitRequests
+
+```solidity
+mapping(bytes32 => uint256) internal _exitRequests
+```
+
+
+### _balances
+
+```solidity
+mapping(address => uint256) internal _balances
+```
+
+
+### _capacity
+
+```solidity
+uint256 private _capacity
+```
+
+
+### _totalExitingAssets
+
+```solidity
+uint128 internal _totalExitingAssets
+```
+
+
+### _totalExitingTickets
+
+```solidity
+uint128 internal _totalExitingTickets
+```
+
+
+### _totalExitedTickets
+
+```solidity
+uint256 internal _totalExitedTickets
+```
+
+
+### _donatedAssets
+
+```solidity
+uint256 internal _donatedAssets
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 
 
 ```solidity
-event CheckpointCreated(uint256 shares, uint256 assets);
+uint256[47] private __gap
 ```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`shares`|`uint256`|The number of burned shares|
-|`assets`|`uint256`|The amount of exited assets|
-
-### FeeSharesMinted
-Event emitted on minting fee recipient shares
-
-
-```solidity
-event FeeSharesMinted(address receiver, uint256 shares, uint256 assets);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`address`|The address of the fee recipient|
-|`shares`|`uint256`|The number of minted shares|
-|`assets`|`uint256`|The amount of minted assets|
-
-### ExitingAssetsPenalized
-Event emitted when exiting assets are penalized (deprecated)
-
-
-```solidity
-event ExitingAssetsPenalized(uint256 penalty);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`penalty`|`uint256`|The total penalty amount|
-
-### AssetsDonated
-Event emitted when the assets are donated to the Vault
-
-
-```solidity
-event AssetsDonated(address sender, uint256 assets);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sender`|`address`|The address of the sender|
-|`assets`|`uint256`|The amount of donated assets|
 
 
 ## Functions
@@ -198,6 +232,22 @@ function convertToAssets(uint256 shares) public view override returns (uint256 a
 |`assets`|`uint256`|The amount of assets that the Vault would exchange for the amount of shares provided|
 
 
+### donateShares
+
+Donates shares to the Vault by burning them from the caller,
+increasing the value per share for remaining holders
+
+
+```solidity
+function donateShares(uint256 shares) public virtual override;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`shares`|`uint256`|The number of shares to donate|
+
+
 ### capacity
 
 The Vault's capacity
@@ -256,3 +306,137 @@ function updateState(IKeeperRewards.HarvestParams calldata harvestParams) public
 |Name|Type|Description|
 |----|----|-----------|
 |`harvestParams`|`IKeeperRewards.HarvestParams`|The parameters for harvesting Keeper rewards|
+
+
+### _processTotalAssetsDelta
+
+Internal function for processing rewards and penalties
+
+
+```solidity
+function _processTotalAssetsDelta(int256 totalAssetsDelta) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`totalAssetsDelta`|`int256`|The number of assets earned or lost|
+
+
+### _updateExitQueue
+
+Internal function that must be used to process exit queue
+
+Make sure that sufficient time passed between exit queue updates (at least 12 hours).
+Currently it's restricted by the keeper's harvest interval
+
+
+```solidity
+function _updateExitQueue() internal virtual returns (uint256 burnedShares);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`burnedShares`|`uint256`|The total amount of burned shares|
+
+
+### _mintShares
+
+Internal function for minting shares
+
+
+```solidity
+function _mintShares(address owner, uint256 shares) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The address of the owner to mint shares to|
+|`shares`|`uint256`|The number of shares to mint|
+
+
+### _burnShares
+
+Internal function for burning shares
+
+
+```solidity
+function _burnShares(address owner, uint256 shares) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The address of the owner to burn shares for|
+|`shares`|`uint256`|The number of shares to burn|
+
+
+### _convertToShares
+
+Internal conversion function (from assets to shares) with support for rounding direction.
+
+
+```solidity
+function _convertToShares(uint256 assets, Math.Rounding rounding) internal view returns (uint256 shares);
+```
+
+### _harvestAssets
+
+Internal function for harvesting Vaults' new assets
+
+
+```solidity
+function _harvestAssets(IKeeperRewards.HarvestParams calldata harvestParams)
+    internal
+    virtual
+    returns (int256 totalAssetsDelta, bool harvested);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`totalAssetsDelta`|`int256`|The total assets delta after harvest|
+|`harvested`|`bool`|`true` when the rewards were harvested, `false` otherwise|
+
+
+### _vaultAssets
+
+Internal function for retrieving the total assets stored in the Vault.
+NB! Assets can be forcibly sent to the vault, the returned value must be used with caution
+
+
+```solidity
+function _vaultAssets() internal view virtual returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The total amount of assets stored in the Vault|
+
+
+### __VaultState_init
+
+Initializes the VaultState contract
+
+
+```solidity
+function __VaultState_init(uint256 capacity_) internal onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`capacity_`|`uint256`|The amount after which the Vault stops accepting deposits|
+
+
+### __VaultState_upgrade
+
+Upgrades the VaultState contract
+
+
+```solidity
+function __VaultState_upgrade() internal onlyInitializing;
+```

@@ -36,3 +36,20 @@ Vault has 1 registered validator(s), recover active keystores from provided mnem
 Successfully recovered 1 keystores for vaults 0x001...
 ```
 </details>
+
+## `recover` flags
+
+The command prompts for anything it needs, so all flags are optional.
+
+| Flag | Description |
+|------|-------------|
+| <nobr>`--mnemonic`</nobr> | Mnemonic used to generate the validator keys. Prompted if omitted |
+| <nobr>`--vault`</nobr> | Address of the Vault to recover keystores for. Prompted if omitted |
+| <nobr>`--per-keystore-password`</nobr> | Creates a separate password file for each keystore instead of one shared `password.txt` |
+| <nobr>`--vault-first-block`</nobr> | Block the Vault was created at. Without it, `recover` scans from the Keeper's genesis block, which can take a long time |
+| <nobr>`--no-confirm`</nobr> | Skips confirmation prompts |
+| <nobr>`--execution-endpoints`</nobr> | Comma-separated API endpoints for execution nodes. Prompted if omitted |
+| <nobr>`--consensus-endpoints`</nobr> | Comma-separated API endpoints for consensus nodes. Prompted if omitted |
+| <nobr>`--network`</nobr> | Network of the Vault. Default: the network chosen during `init` |
+| <nobr>`--data-dir`</nobr> | Path where keystores and config data are placed. Default: `~/.stakewise` |
+| <nobr>`--log-level`</nobr> | Set logging level: ERROR, WARNING, INFO, DEBUG. Default: INFO |

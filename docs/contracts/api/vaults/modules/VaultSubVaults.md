@@ -6,263 +6,252 @@ description: "Abstract contract defining sub-vaults management functionality for
 
 # VaultSubVaults
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultSubVaults.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultSubVaults.sol)
 
-**Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [ReentrancyGuardUpgradeable ↗](https://github.com/Badger-Finance/badger-system/blob/master/deps/@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol), [VaultAdmin →](./VaultAdmin), [VaultState →](./VaultState), IVaultSubVaults
+**Inherits:** [VaultImmutables](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [VaultState](./VaultState), IVaultSubVaults
 
-Defines the functionality for managing the Vault sub-vaults.
-
-## Structs
-### SubVaultState
-Struct for sub vault state
+Defines the functionality for managing the Vault sub-vaults
 
 
-```solidity
-struct SubVaultState {
-    uint128 stakedShares;
-    uint128 queuedShares;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`stakedShares`|`uint128`|The number of shares staked in the sub vault|
-|`queuedShares`|`uint128`|The number of shares queued for exit in the sub vault|
-
-### SubVaultExitRequest
-Struct for submitting sub vault exit request
-
-```solidity
-struct SubVaultExitRequest {
-    uint256 exitQueueIndex;
-    address vault;
-    uint64 timestamp;
-}
-```
-
-**Properties**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`exitQueueIndex`|`uint256`|The index of the exit queue|
-|`vault`|`address`|The address of the vault|
-|`timestamp`|`uint64`|The timestamp of the exit request|
-
-## Events
-### RewardsNonceUpdated
-Emitted when the rewards nonce is updated
-
-```solidity
-event RewardsNonceUpdated(uint256 rewardsNonce);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`rewardsNonce`|`uint256`|The new rewards nonce|
-
-### SubVaultsHarvested
-Emitted when the sub vaults are harvested
-
-```solidity
-event SubVaultsHarvested(int256 totalAssetsDelta);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`totalAssetsDelta`|`int256`|The change in total assets after the harvest|
-
-### SubVaultAdded
-Emitted when the new sub-vault is added
-
-```solidity
-event SubVaultAdded(address indexed caller, address indexed vault);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the caller|
-|`vault`|`address`|The address of the sub-vault|
-
-### SubVaultEjecting
-Emitted when the sub-vault is ejecting
+## State Variables
+### _subVaultsRegistryFactory
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event SubVaultEjecting(address indexed caller, address indexed vault);
+address private immutable _subVaultsRegistryFactory
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the caller|
-|`vault`|`address`|The address of the sub-vault|
-
-### SubVaultEjected
-Emitted when the sub-vault is ejected
+### __deprecated__subVaultsCurator
+Deprecated: moved to SubVaultsRegistry
 
 
 ```solidity
-event SubVaultEjected(address indexed caller, address indexed vault);
+address private __deprecated__subVaultsCurator
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the caller|
-|`vault`|`address`|The address of the sub-vault|
-
-### SubVaultsCuratorUpdated
-Emitted when the sub-vaults curator is updated
+### __deprecated__ejectingSubVault
+Deprecated: moved to SubVaultsRegistry
 
 
 ```solidity
-event SubVaultsCuratorUpdated(address indexed caller, address indexed curator);
+address private __deprecated__ejectingSubVault
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the caller|
-|`curator`|`address`|The address of the new sub-vaults curator|
+### __deprecated__subVaults
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+EnumerableSet.AddressSet private __deprecated__subVaults
+```
+
+
+### __deprecated__subVaultsExits
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+mapping(address vault => DoubleEndedQueue.Bytes32Deque) private __deprecated__subVaultsExits
+```
+
+
+### __deprecated__subVaultsStates
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+mapping(address vault => ISubVaultsRegistry.SubVaultState state) private __deprecated__subVaultsStates
+```
+
+
+### __deprecated__subVaultsRewardsNonce
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+uint128 private __deprecated__subVaultsRewardsNonce
+```
+
+
+### __deprecated__subVaultsTotalAssets
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+uint128 private __deprecated__subVaultsTotalAssets
+```
+
+
+### __deprecated__totalProcessedExitQueueTickets
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+uint256 private __deprecated__totalProcessedExitQueueTickets
+```
+
+
+### __deprecated__ejectingSubVaultShares
+Deprecated: moved to SubVaultsRegistry
+
+
+```solidity
+uint256 private __deprecated__ejectingSubVaultShares
+```
+
+
+### subVaultsRegistry
+Returns the address of the SubVaultsRegistry contract
+
+
+```solidity
+address public override subVaultsRegistry
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+
+
+```solidity
+uint256[49] private __gap
+```
+
 
 ## Functions
+### constructor
 
-### subVaultsCurator
+Constructor
 
-Sub-vaults curator contract
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
 
 
 ```solidity
-function subVaultsCurator() external view returns (address);
+constructor(address subVaultsRegistryFactory) ;
 ```
-**Returns**
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address`|The address of the Sub-vaults curator contract|
+|`subVaultsRegistryFactory`|`address`|The address of the factory used to deploy SubVaultsRegistry contract|
 
 
-### ejectingSubVault
+### depositToSubVault
 
-Ejecting sub-vault
-
-
-```solidity
-function ejectingSubVault() external view returns (address);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the ejecting sub-vault|
-
-
-### subVaultsRewardsNonce
-
-Function to get the rewards nonce of the sub-vaults
+Function to deposit assets to a sub vault. Can only be called by SubVaultsRegistry contract.
 
 
 ```solidity
-function subVaultsRewardsNonce() external view returns (uint128);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint128`|The rewards nonce|
-
-
-### subVaultsStates
-
-Function to get the state of a sub-vault
-
-
-```solidity
-function subVaultsStates(address vault) external view override returns (SubVaultState memory);
+function depositToSubVault(address vault, uint256 assets) external override returns (uint256);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`vault`|`address`|The address of the sub-vault|
+|`assets`|`uint256`|The amount of assets to deposit|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`SubVaultState`|The state of the sub-vault|
+|`<none>`|`uint256`|shares The amount of vault shares received|
 
 
-### getSubVaults
+### enterSubVaultExitQueue
 
-Function to get the list sub-vaults
+Function to enter sub-vault exit queue. Can only be called by SubVaultsRegistry contract.
 
 
 ```solidity
-function getSubVaults() public view override returns (address[] memory);
+function enterSubVaultExitQueue(address vault, uint256 shares) external override returns (uint256 positionTicket);
 ```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`vault`|`address`|The address of the sub-vault|
+|`shares`|`uint256`|The amount of shares to exit|
+
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`address[]`|An array of addresses of the sub-vaults|
+|`positionTicket`|`uint256`|The position ticket in the exit queue|
 
 
-### setSubVaultsCurator
+### claimSubVaultExitedAssets
 
-Function to update the the sub-vaults curator. Can only be called by the admin.
+Function to claim exited assets from a sub-vault. Can only be called by SubVaultsRegistry contract.
 
 
 ```solidity
-function setSubVaultsCurator(address curator) external override;
+function claimSubVaultExitedAssets(address vault, uint256 positionTicket, uint256 timestamp, uint256 exitQueueIndex)
+    external
+    override;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`curator`|`address`|The address of the new sub-vaults curator|
+|`vault`|`address`|The address of the sub-vault|
+|`positionTicket`|`uint256`|The position ticket in the exit queue|
+|`timestamp`|`uint256`|The timestamp of the exit request|
+|`exitQueueIndex`|`uint256`|The index of the exit queue|
 
 
-### addSubVault
+### mintSubVaultOsToken
 
-Function to add a new sub-vault. Can only be called by the admin.
+Function to mint osToken for a sub-vault. Can only be called by SubVaultsRegistry contract.
 
 
 ```solidity
-function addSubVault(address vault) public virtual override;
+function mintSubVaultOsToken(address vault, address receiver, uint256 osTokenShares) external override;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`vault`|`address`|The address of the sub-vault to add|
+|`vault`|`address`|The address of the sub-vault|
+|`receiver`|`address`|The address that will receive the minted osToken shares|
+|`osTokenShares`|`uint256`|The amount of osToken shares to mint|
 
 
-### ejectSubVault
+### redeemSubVaultOsToken
 
-Function to remove a sub-vault. Can only be called by the admin.
-All the sub-vault shares will be added to the exit queue.
+Function to redeem osToken from a sub-vault. Can only be called by SubVaultsRegistry contract.
 
 
 ```solidity
-function ejectSubVault(address vault) public virtual override;
+function redeemSubVaultOsToken(address vault, address redeemer, uint256 osTokenShares)
+    external
+    override
+    returns (uint256 assets);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`vault`|`address`|The address of the sub-vault to remove|
+|`vault`|`address`|The address of the sub-vault|
+|`redeemer`|`address`|The address of the OsToken redeemer|
+|`osTokenShares`|`uint256`|The amount of osToken shares to redeem|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`assets`|`uint256`|The amount of assets redeemed|
 
 
 ### isStateUpdateRequired
@@ -271,7 +260,7 @@ Check whether state update is required
 
 
 ```solidity
-function isStateUpdateRequired() public view virtual override returns (bool);
+function isStateUpdateRequired() public view virtual override(IVaultState, VaultState) returns (bool);
 ```
 **Returns**
 
@@ -280,70 +269,116 @@ function isStateUpdateRequired() public view virtual override returns (bool);
 |`<none>`|`bool`|`true` if state update is required, `false` otherwise|
 
 
-### canUpdateState
-
-Checks whether the meta vault can be updated
-
-
-```solidity
-function canUpdateState() external view override returns (bool);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|`true` if the meta vault can be updated, `false` otherwise|
-
-
-### isCollateralized
-
-Checks whether the vault is collateralized
-
-
-```solidity
-function isCollateralized() external view override returns (bool);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|`true` if the vault is collateralized, `false` otherwise|
-
-
-### depositToSubVaults
-
-Deposit available assets to the sub vaults
-
-
-```solidity
-function depositToSubVaults() external override nonReentrant;
-```
-
-### claimSubVaultsExitedAssets
-
-Claim the exited assets from the sub vaults
-
-
-```solidity
-function claimSubVaultsExitedAssets(SubVaultExitRequest[] calldata exitRequests) external override;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`exitRequests`|`SubVaultExitRequest[]`|The array of exit requests to claim|
-
-
 ### updateState
 
 Updates the total amount of assets in the Vault and its exit queue
 
 
 ```solidity
-function updateState(IKeeperRewards.HarvestParams calldata) public virtual override;
+function updateState(IKeeperRewards.HarvestParams calldata) public virtual override(IVaultState, VaultState);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`IKeeperRewards.HarvestParams`||
+
+
+### _harvestAssets
+
+Internal function for harvesting Vaults' new assets
+
+
+```solidity
+function _harvestAssets(IKeeperRewards.HarvestParams calldata)
+    internal
+    pure
+    override
+    returns (int256 totalAssetsDelta, bool harvested);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`totalAssetsDelta`|`int256`|The total assets delta after harvest|
+|`harvested`|`bool`|`true` when the rewards were harvested, `false` otherwise|
+
+
+### _checkHarvested
+
+Internal method for checking whether the vault is harvested
+
+
+```solidity
+function _checkHarvested() internal view virtual override;
+```
+
+### _isCollateralized
+
+Returns whether the vault is collateralized
+
+
+```solidity
+function _isCollateralized() internal view virtual override returns (bool);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bool`|true if the vault is collateralized|
+
+
+### _depositToVault
+
+Internal function to deposit assets to the sub-vault
+
+
+```solidity
+function _depositToVault(address vault, uint256 assets) internal virtual returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`vault`|`address`|The address of the vault|
+|`assets`|`uint256`|The amount of assets to deposit|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The amount of vault shares received|
+
+
+### _checkSubVaultsRegistry
+
+Internal function to check if the caller is the SubVaultsRegistry
+
+
+```solidity
+function _checkSubVaultsRegistry() private view;
+```
+
+### __VaultSubVaults_init
+
+Initializes the VaultSubVaults contract
+
+
+```solidity
+function __VaultSubVaults_init(address curator) internal onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`curator`|`address`|The address of initial sub-vaults curator|
+
+
+### __VaultSubVaults_upgrade
+
+Upgrades the VaultSubVaults contract by upgrading the SubVaultsRegistry proxy to the latest implementation
+
+
+```solidity
+function __VaultSubVaults_upgrade() internal onlyInitializing;
+```

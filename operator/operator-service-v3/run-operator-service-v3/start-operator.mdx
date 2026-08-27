@@ -25,7 +25,7 @@ Run the Operator Service using the `start` command with your Vault address and n
 -u $(id -u):$(id -g) \\
 -v ~/.stakewise/:/data \\
 europe-west4-docker.pkg.dev/stakewiselabs/public/v3-operator:v3.1.10 \\
-src/main.py start-local \\
+src/main.py start \\
 --vault={{0xf27...10ad9}} \\
 --data-dir=/data \\
 --consensus-endpoints={{http://localhost:5052}} \\
@@ -33,7 +33,7 @@ src/main.py start-local \\
   </TabItem>
 
   <TabItem value="source" label="Source Files">
-    <CommandSnippet template={`PYTHONPATH=. poetry run python src/main.py start-local \\
+    <CommandSnippet template={`PYTHONPATH=. poetry run python src/main.py start \\
 --vault={{0xf27...10ad9}} \\
 --consensus-endpoints={{http://localhost:5052}} \\
 --execution-endpoints={{http://localhost:8545}}`} />
@@ -51,7 +51,7 @@ export $(grep -v '^#' .env | xargs)
 
 | Flag | Description |
 |------|-------------|
-| <nobr>`--network`</nobr> | Network of the Vault: `mainnet`, `hoodi`, or `gnosis`. Default: network specified at `init` command |
+| <nobr>`--network`</nobr> | Network of the Vault: `mainnet`, `hoodi`, `gnosis`, or `chiado`. Default: network specified at `init` command |
 | <nobr>`--data-dir`</nobr> | Path where the Vault data will be placed. Default: `~/.stakewise` |
 | <nobr>`--database-dir`</nobr> | Directory where the database will be created or read from. Default: `~/.stakewise/<vault>` |
 | <nobr>`--execution-jwt-secret`</nobr> | JWT secret key used for signing and verifying JSON Web Tokens when connecting to execution nodes |

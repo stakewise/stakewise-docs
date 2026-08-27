@@ -6,87 +6,56 @@ description: "Abstract contract defining enter and exit functionality for vaults
 
 # VaultEnterExit
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultEnterExit.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultEnterExit.sol)
 
-**Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultState →](./VaultState), IVaultEnterExit
+**Inherits:** [VaultImmutables](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [VaultState](./VaultState), IVaultEnterExit
 
-Defines the functionality for entering and exiting the Vault.
-
-
-## Events
-### Deposited
-Event emitted on deposit
+Defines the functionality for entering and exiting the Vault
 
 
-```solidity
-event Deposited(address indexed caller, address indexed receiver, uint256 assets, uint256 shares, address referrer);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address that called the deposit function|
-|`receiver`|`address`|The address that received the shares|
-|`assets`|`uint256`|The number of assets deposited by the caller|
-|`shares`|`uint256`|The number of shares received|
-|`referrer`|`address`|The address of the referrer|
-
-### Redeemed
-Event emitted on redeem
+## State Variables
+### _exitingAssetsClaimDelay
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event Redeemed(address indexed owner, address indexed receiver, uint256 assets, uint256 shares);
+uint256 private immutable _exitingAssetsClaimDelay
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`owner`|`address`|The address that owns the shares|
-|`receiver`|`address`|The address that received withdrawn assets|
-|`assets`|`uint256`|The total number of withdrawn assets|
-|`shares`|`uint256`|The total number of withdrawn shares|
-
-### ExitQueueEntered
-Event emitted on shares added to the exit queue
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 
 
 ```solidity
-event ExitQueueEntered(address indexed owner, address indexed receiver, uint256 positionTicket, uint256 shares);
+uint256[50] private __gap
 ```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`owner`|`address`|The address that owns the shares|
-|`receiver`|`address`|The address that will receive withdrawn assets|
-|`positionTicket`|`uint256`|The exit queue ticket that was assigned to the position|
-|`shares`|`uint256`|The number of shares queued for exit|
-
-### ExitedAssetsClaimed
-Event emitted on claim of the exited assets
-
-
-```solidity
-event ExitedAssetsClaimed(
-    address indexed receiver, uint256 prevPositionTicket, uint256 newPositionTicket, uint256 withdrawnAssets
-);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`receiver`|`address`|The address that has received withdrawn assets|
-|`prevPositionTicket`|`uint256`|The exit queue ticket received after the enterExitQueue call|
-|`newPositionTicket`|`uint256`|The new exit queue ticket in case not all the shares were withdrawn|
-|`withdrawnAssets`|`uint256`|The total number of assets withdrawn|
 
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(uint256 exitingAssetsClaimDelay) ;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`exitingAssetsClaimDelay`|`uint256`|The minimum delay after which the assets can be claimed after joining the exit queue|
+
 
 ### getExitQueueIndex
 
@@ -112,6 +81,8 @@ function getExitQueueIndex(uint256 positionTicket) external view override return
 ### enterExitQueue
 
 Locks shares to the exit queue. The shares continue earning rewards until they will be burned by the Vault.
+
+For ERC-20 vault variants, balanceOf(vault) does not reflect queued exit shares despite the emitted Transfer event.
 
 
 ```solidity
@@ -148,9 +119,9 @@ function calculateExitedAssets(address receiver, uint256 positionTicket, uint256
 |Name|Type|Description|
 |----|----|-----------|
 |`receiver`|`address`|The address that will receive assets upon withdrawal|
-|`positionTicket`|`uint256`|The exit queue ticket received after the enterExitQueue call|
+|`positionTicket`|`uint256`|The exit queue ticket received after the `enterExitQueue` call|
 |`timestamp`|`uint256`|The timestamp when the shares entered the exit queue|
-|`exitQueueIndex`|`uint256`|The exit queue index at which the shares were burned|
+|`exitQueueIndex`|`uint256`|The exit queue index at which the shares were burned. It can be looked up by calling `getExitQueueIndex`.|
 
 **Returns**
 
@@ -163,7 +134,7 @@ function calculateExitedAssets(address receiver, uint256 positionTicket, uint256
 
 ### claimExitedAssets
 
-Claims assets that were withdrawn by the Vault. It can be called only after the enterExitQueue call by the receiver.
+Claims assets that were withdrawn by the Vault. It can be called only after the `enterExitQueue` call by the `receiver`.
 
 
 ```solidity
@@ -173,17 +144,86 @@ function claimExitedAssets(uint256 positionTicket, uint256 timestamp, uint256 ex
 
 |Name|Type|Description|
 |----|----|-----------|
-|`positionTicket`|`uint256`|The exit queue ticket received after the enterExitQueue call|
+|`positionTicket`|`uint256`|The exit queue ticket received after the `enterExitQueue` call|
 |`timestamp`|`uint256`|The timestamp when the assets entered the exit queue|
-|`exitQueueIndex`|`uint256`|The exit queue index at which the shares were burned|
+|`exitQueueIndex`|`uint256`|The exit queue index at which the shares were burned. It can be looked up by calling `getExitQueueIndex`.|
 
 
 ### rescueAssets
 
 Rescue any assets that are not backing shares when the vault is not collateralized.
+
 Can be called only by the admin when the vault is not collateralized.
 
 
 ```solidity
 function rescueAssets() external override;
 ```
+
+### _deposit
+
+Internal function that must be used to process user deposits
+
+
+```solidity
+function _deposit(address to, uint256 assets, address referrer) internal virtual returns (uint256 shares);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|The address to mint shares to|
+|`assets`|`uint256`|The number of assets deposited|
+|`referrer`|`address`|The address of the referrer. Set to zero address if not used.|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`shares`|`uint256`|The total amount of shares minted|
+
+
+### _enterExitQueue
+
+Internal function for sending user shares to the exit queue
+
+
+```solidity
+function _enterExitQueue(address user, uint256 shares, address receiver)
+    internal
+    virtual
+    returns (uint256 positionTicket);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`user`|`address`|The address of the user|
+|`shares`|`uint256`|The number of shares to send to exit queue|
+|`receiver`|`address`|The address that will receive the assets|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`positionTicket`|`uint256`|The position ticket in the exit queue. Returns max uint256 if no ticket is created.|
+
+
+### _transferVaultAssets
+
+Internal function for transferring assets from the Vault to the receiver
+
+IMPORTANT: because control is transferred to the receiver, care must be
+taken to not create reentrancy vulnerabilities. The Vault must follow the checks-effects-interactions pattern:
+https://docs.soliditylang.org/en/v0.8.22/security-considerations.html#use-the-checks-effects-interactions-pattern
+
+
+```solidity
+function _transferVaultAssets(address receiver, uint256 assets) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`receiver`|`address`|The address that will receive the assets|
+|`assets`|`uint256`|The number of assets to transfer|

@@ -1,8 +1,11 @@
 @use 'mixins' as *;
 
 .theme-admonition {
+  --admonition-accent: var(--lavender-rgb);
+
   background: var(--fog);
   border-radius: 0.5rem;
+  border-left: 4px solid rgb(var(--admonition-accent));
   padding: 1rem;
   margin: 1.5rem 0;
 
@@ -18,6 +21,39 @@
   }
 }
 
+// Per-type accents. Without these every custom admonition renders identically,
+// so a warning reads the same as a note.
+.theme-admonition-info {
+  --admonition-accent: 74, 144, 226;
+}
+
+.theme-admonition-tips {
+  --admonition-accent: 56, 161, 105;
+}
+
+.theme-admonition-warning {
+  --admonition-accent: 221, 141, 42;
+}
+
+.theme-admonition-notes,
+.theme-admonition-stakewise {
+  --admonition-accent: var(--lavender-rgb);
+}
+
+.theme-admonition-info,
+.theme-admonition-tips,
+.theme-admonition-warning {
+  background:
+    linear-gradient(rgba(var(--admonition-accent), 0.06), rgba(var(--admonition-accent), 0.06)),
+    var(--fog);
+
+  @include dark-theme {
+    background:
+      linear-gradient(rgba(var(--admonition-accent), 0.14), rgba(var(--admonition-accent), 0.14)),
+      var(--fog);
+  }
+}
+
 .admonition-heading {
   margin-bottom: 0.75rem;
 
@@ -25,10 +61,21 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--lavender);
+    color: rgb(var(--admonition-accent));
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+}
+
+.theme-admonition-info,
+.theme-admonition-tips,
+.theme-admonition-warning {
+  @include dark-theme {
+    .admonition-heading h5 {
+      // Lighten the accent so the heading keeps contrast on the dark surface.
+      color: color-mix(in srgb, rgb(var(--admonition-accent)) 65%, white);
+    }
   }
 }
 

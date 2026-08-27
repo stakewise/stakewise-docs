@@ -6,118 +6,92 @@ description: "Abstract contract defining OsToken minting functionality for vault
 
 # VaultOsToken
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultOsToken.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultOsToken.sol)
 
-**Inherits:** [VaultImmutables →](./VaultImmutables), [VaultState →](./VaultState), [VaultEnterExit →](./VaultEnterExit), IVaultOsToken
+**Inherits:** [VaultImmutables](./VaultImmutables), [VaultState](./VaultState), [VaultEnterExit](./VaultEnterExit), IVaultOsToken
 
-Defines the functionality for minting OsToken.
+Defines the functionality for minting OsToken
 
-## Structs
-### OsTokenPosition
-Struct of osToken position
+
+## State Variables
+### _maxPercent
 
 ```solidity
-struct OsTokenPosition {
-    uint128 shares;
-    uint128 cumulativeFeePerShare;
-}
+uint256 private constant _maxPercent = 1e18
 ```
 
-**Properties**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`shares`|`uint128`|The total number of minted osToken shares. Will increase based on the treasury fee.|
-|`cumulativeFeePerShare`|`uint128`|The cumulative fee per share|
-
-## Events
-### OsTokenMinted
-Event emitted on minting osToken
+### _osTokenVaultController
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event OsTokenMinted(address indexed caller, address receiver, uint256 assets, uint256 shares, address referrer);
+IOsTokenVaultController private immutable _osTokenVaultController
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`receiver`|`address`|The address of the osToken receiver|
-|`assets`|`uint256`|The amount of minted assets|
-|`shares`|`uint256`|The amount of minted shares|
-|`referrer`|`address`|The address of the referrer|
-
-### OsTokenBurned
-Event emitted on burning OsToken
+### _osTokenConfig
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event OsTokenBurned(address indexed caller, uint256 assets, uint256 shares);
+IOsTokenConfig private immutable _osTokenConfig
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`assets`|`uint256`|The amount of burned assets|
-|`shares`|`uint256`|The amount of burned shares|
-
-### OsTokenLiquidated
-Event emitted on osToken position liquidation
+### _osTokenVaultEscrow
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event OsTokenLiquidated(
-    address indexed caller,
-    address indexed user,
-    address receiver,
-    uint256 osTokenShares,
-    uint256 shares,
-    uint256 receivedAssets
-);
+IOsTokenVaultEscrow private immutable _osTokenVaultEscrow
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`user`|`address`|The address of the user liquidated|
-|`receiver`|`address`|The address of the receiver of the liquidated assets|
-|`osTokenShares`|`uint256`|The amount of osToken shares to liquidate|
-|`shares`|`uint256`|The amount of vault shares burned|
-|`receivedAssets`|`uint256`|The amount of assets received|
+### _positions
 
-### OsTokenRedeemed
-Event emitted on osToken position redemption
+```solidity
+mapping(address => OsTokenPosition) private _positions
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 
 
 ```solidity
-event OsTokenRedeemed(
-    address indexed caller,
-    address indexed user,
-    address receiver,
-    uint256 osTokenShares,
-    uint256 shares,
-    uint256 assets
-);
+uint256[50] private __gap
 ```
 
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`user`|`address`|The address of the position owner to redeem from|
-|`receiver`|`address`|The address of the receiver of the redeemed assets|
-|`osTokenShares`|`uint256`|The amount of osToken shares to redeem|
-|`shares`|`uint256`|The amount of vault shares burned|
-|`assets`|`uint256`|The amount of assets received|
 
 ## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(address osTokenVaultController, address osTokenConfig, address osTokenVaultEscrow) ;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`osTokenVaultController`|`address`|The address of the OsTokenVaultController contract|
+|`osTokenConfig`|`address`|The address of the OsTokenConfig contract|
+|`osTokenVaultEscrow`|`address`|The address of the OsTokenVaultEscrow contract|
+
 
 ### osTokenPositions
 
@@ -229,7 +203,11 @@ Transfers minted osToken shares to the OsTokenVaultEscrow contract, enters the e
 
 
 ```solidity
-function transferOsTokenPositionToEscrow(uint256 osTokenShares) external override returns (uint256 positionTicket);
+function transferOsTokenPositionToEscrow(uint256 osTokenShares)
+    public
+    virtual
+    override
+    returns (uint256 positionTicket);
 ```
 **Parameters**
 
@@ -244,9 +222,27 @@ function transferOsTokenPositionToEscrow(uint256 osTokenShares) external overrid
 |`positionTicket`|`uint256`|The exit position ticket|
 
 
+### donateShares
+
+Donates shares to the Vault by burning them from the caller,
+increasing the value per share for remaining holders
+
+
+```solidity
+function donateShares(uint256 shares) public virtual override(IVaultState, VaultState);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`shares`|`uint256`|The number of shares to donate|
+
+
 ### enterExitQueue
 
 Locks shares to the exit queue. The shares continue earning rewards until they will be burned by the Vault.
+
+For ERC-20 vault variants, balanceOf(vault) does not reflect queued exit shares despite the emitted Transfer event.
 
 
 ```solidity
@@ -268,3 +264,107 @@ function enterExitQueue(uint256 shares, address receiver)
 |Name|Type|Description|
 |----|----|-----------|
 |`positionTicket`|`uint256`|The position ticket of the exit queue. Returns uint256 max if no ticket created.|
+
+
+### _mintOsToken
+
+Internal function for minting osToken shares
+
+
+```solidity
+function _mintOsToken(address owner, address receiver, uint256 osTokenShares, address referrer)
+    internal
+    returns (uint256 assets);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The owner of the osToken position|
+|`receiver`|`address`|The receiver of the osToken shares|
+|`osTokenShares`|`uint256`|The amount of osToken shares to mint|
+|`referrer`|`address`|The address of the referrer|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`assets`|`uint256`|The amount of assets minted|
+
+
+### _redeemOsToken
+
+Internal function for redeeming and liquidating osToken shares
+
+
+```solidity
+function _redeemOsToken(address owner, address receiver, uint256 osTokenShares, bool isLiquidation)
+    private
+    returns (uint256 burnedShares, uint256 receivedAssets);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`owner`|`address`|The minter of the osToken shares|
+|`receiver`|`address`|The receiver of the assets|
+|`osTokenShares`|`uint256`|The amount of osToken shares to redeem or liquidate|
+|`isLiquidation`|`bool`|Whether the liquidation or redemption is being performed|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`burnedShares`|`uint256`|The amount of shares burned|
+|`receivedAssets`|`uint256`|The amount of assets received|
+
+
+### _syncPositionFee
+
+Internal function for syncing the osToken fee
+
+
+```solidity
+function _syncPositionFee(OsTokenPosition memory position) private view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`position`|`OsTokenPosition`|The position to sync the fee for|
+
+
+### _checkOsTokenPosition
+
+Internal function for checking position validity. Reverts if it is invalid.
+
+
+```solidity
+function _checkOsTokenPosition(address user) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`user`|`address`|The address of the user|
+
+
+### _calcMaxOsTokenShares
+
+Internal function for calculating the maximum amount of osToken shares that can be minted
+
+
+```solidity
+function _calcMaxOsTokenShares(uint256 assets) internal view returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`assets`|`uint256`|The amount of assets to convert to osToken shares|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|maxOsTokenShares The maximum amount of osToken shares that can be minted|

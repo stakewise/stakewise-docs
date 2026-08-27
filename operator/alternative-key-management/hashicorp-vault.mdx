@@ -13,8 +13,8 @@ The Operator supports loading signing keys from a remote [HashiCorp Vault ↗](h
 
 Complete the following steps before proceeding:
 
-1. [Installation →](/operator/launch-operator-service#installation) completed
-2. [Validators Manager →](/operator/validators-manager) set
+1. [Installation](/operator/launch-operator-service#installation) completed
+2. [Validators Manager](/operator/validators-manager) set
 3. Validator keys stored in your [HashiCorp Vault ↗](https://developer.hashicorp.com/vault/docs) instance
 
 ## Key Storage Format
@@ -57,5 +57,9 @@ Passing the following options to the `start-hashi-vault` command will enable loa
 | <nobr>`--hashi-vault-key-path`</nobr> | Key path(s) in the K/V secret engine where validator signing keys are stored. Can be repeated for multiple paths |
 | <nobr>`--hashi-vault-key-prefix`</nobr> | Key prefix(es) in the K/V secret engine. Can be repeated for multiple prefixes |
 | <nobr>`--hashi-vault-parallelism`</nobr> | Number of parallel requests to K/V secrets engine |
+
+:::custom-warning[Secrets Engine Must Be Mounted at `secret`]
+Keys are read from `/v1/secret/data/<key-path>`, and the engine name is not configurable in Operator Service v4 — the `--hashi-vault-engine-name` option available in v3 was removed. If your K/V engine is mounted somewhere other than `secret`, mount a copy at `secret` for the Operator Service to use.
+:::
 
 For additional configuration, see the full list of [optional flags](../start-operator#optional-flags).

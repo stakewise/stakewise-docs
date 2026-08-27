@@ -6,83 +6,42 @@ description: "Abstract contract defining blocklisting functionality for vaults"
 
 # VaultBlocklist
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultBlocklist.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultBlocklist.sol)
 
-**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin →](./VaultAdmin), IVaultBlocklist
+**Inherits:** [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [VaultAdmin](./VaultAdmin), IVaultBlocklist
 
-Defines the functionality for blocking addresses for the Vault.
-
-
-## Events
-### BlocklistUpdated
-Event emitted on blocklist update
+Defines the functionality for blocking addresses for the Vault
 
 
-```solidity
-event BlocklistUpdated(address indexed caller, address indexed account, bool isBlocked);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`account`|`address`|The address of the account updated|
-|`isBlocked`|`bool`|Whether account is blocked or not|
-
-### BlocklistManagerUpdated
-Event emitted when blocklist manager address is updated
-
-
-```solidity
-event BlocklistManagerUpdated(address indexed caller, address indexed blocklistManager);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`blocklistManager`|`address`|The address of the new blocklist manager|
-
-
-## Functions
+## State Variables
 ### blocklistManager
-
 Blocklist manager address
 
 
 ```solidity
-function blocklistManager() external view returns (address);
+address public override blocklistManager
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the blocklist manager|
 
 
 ### blockedAccounts
 
-Checks whether account is blocked or not
+```solidity
+mapping(address => bool) public override blockedAccounts
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
 
 
 ```solidity
-function blockedAccounts(address account) external view returns (bool);
+uint256[50] private __gap
 ```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`account`|`address`|The account to check|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|`true` for the blocked account, `false` otherwise|
 
 
+## Functions
 ### updateBlocklist
 
 Add or remove account from the blocklist. Can only be called by the blocklist manager.
@@ -112,3 +71,48 @@ function setBlocklistManager(address _blocklistManager) external override;
 |Name|Type|Description|
 |----|----|-----------|
 |`_blocklistManager`|`address`|The address of the new blocklist manager|
+
+
+### _checkBlocklist
+
+Internal function for checking blocklist
+
+
+```solidity
+function _checkBlocklist(address account) internal view;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`account`|`address`|The address of the account to check|
+
+
+### _setBlocklistManager
+
+Internal function for updating the blocklist manager externally or from the initializer
+
+
+```solidity
+function _setBlocklistManager(address _blocklistManager) private;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_blocklistManager`|`address`|The address of the new blocklist manager|
+
+
+### __VaultBlocklist_init
+
+Initializes the VaultBlocklist contract
+
+
+```solidity
+function __VaultBlocklist_init(address _blocklistManager) internal onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_blocklistManager`|`address`|The address of the blocklist manager|

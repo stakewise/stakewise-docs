@@ -6,9 +6,9 @@ description: "Custom error definitions used across contracts"
 
 # Errors
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/Errors.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/libraries/Errors.sol)
 
-Contains all the custom errors.
+Contains all the custom errors
 
 
 ## Errors
@@ -330,14 +330,26 @@ error RewardsNonceIsHigher();
 error InvalidRedeemablePositions();
 ```
 
-### RedeemablePositionsProposed
-
-```solidity
-error RedeemablePositionsProposed();
-```
-
 ### InvalidDelay
 
 ```solidity
 error InvalidDelay();
+```
+
+### InvalidTicket
+
+```solidity
+error InvalidTicket();
+```
+
+### LowBalance
+
+```solidity
+error LowBalance();
+```
+
+### InvalidMinBalancePercent
+
+```solidity
+error InvalidMinBalancePercent();
 ```

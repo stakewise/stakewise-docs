@@ -15,7 +15,7 @@ Each Vault is fully isolated — poor performance in one Vault has no effect on 
 
 ## <img src="/icons/risks/smart-contract.png" alt="Smart Contract" style={{width: '32px', height: '32px', display: 'inline', verticalAlign: 'middle'}} /> Smart Contract
 
-All DeFi protocols carry smart contract risk. StakeWise runs on battle-tested, [regularly audited](/contracts/audits) contracts that secure over $1B in staked assets. The protocol has been live since 2021 with no security incidents.
+All DeFi protocols carry smart contract risk. StakeWise runs on battle-tested, [regularly audited](/contracts/audits) contracts securing hundreds of millions of US dollars' worth of stake. The protocol has been live since 2021 with no security incidents.
 
 ## <img src="/icons/risks/oseth-depeg.png" alt="osETH Depeg" style={{width: '32px', height: '32px', display: 'inline', verticalAlign: 'middle'}} /> osETH Depeg
 
@@ -23,4 +23,13 @@ osETH could temporarily trade below its fair value on secondary markets. The pro
 
 ## <img src="/icons/risks/boost.png" alt="Boost" style={{width: '32px', height: '32px', display: 'inline', verticalAlign: 'middle'}} /> Boost
 
-As with any leveraged strategy, [Boost](/docs/vaults/boost) carries liquidation and penalty risks. If Aave's borrow rate exceeds the staking rate for too long, your Boost APY turns negative and your position loses value every day it stays open, while your LTV drifts toward Aave's liquidation threshold. A [2% safety buffer](/docs/vaults/boost#safety) between max borrow LTV and the liquidation threshold gives your position room to absorb this drift, and StakeWise automatically unboosts as you approach the threshold. Stay updated via [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g).
+As with any leveraged strategy, [Boost](/docs/vaults/boost) carries liquidation and penalty risks. If Aave's borrow rate exceeds the staking rate for too long, your Boost APY turns negative and your position loses value every day it stays open, while your LTV drifts toward Aave's liquidation threshold. A [2% safety buffer](/docs/vaults/boost#safety) between max borrow LTV and the liquidation threshold gives your position room to absorb this drift. Above 94.5% LTV anyone can unboost the position on your behalf, and the StakeWise team monitors positions to do so when needed — but this is a permissionless safeguard, not a protocol guarantee. The Vault page shows a borrow status (*Healthy* / *Moderate* / *Risky*) so you can see where your position sits. Stay updated via [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g).
+
+## <img src="/icons/stakewise/clock.png" alt="Unstaking" style={{width: '32px', height: '32px', display: 'inline', verticalAlign: 'middle'}} /> Unstaking
+
+Unstaking is not instant. Your request joins the Vault's [exit queue](/docs/vaults/how-vaults-work#withdrawals), which is served first from assets already liquid in the Vault and then from validator exits. Two things set the pace:
+
+- **A fixed claim delay.** Assets cannot be claimed until 15 hours after you entered the queue, even if the Vault could cover the request immediately.
+- **The network's validator exit queue.** If validators have to exit to fund your request, you also wait for Ethereum to process them. This varies with network demand — the app shows a live estimate and the average over the past month.
+
+Your assets keep earning rewards for the whole wait, and StakeWise Oracles force validator exits if a Vault's operator does not free up assets within 24 hours, so a request cannot be stalled indefinitely by an unresponsive operator. Vaults that hold most of their assets in active validators will still be slower to exit than Vaults holding a liquidity buffer.

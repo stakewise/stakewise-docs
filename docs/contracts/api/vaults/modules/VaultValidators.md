@@ -6,187 +6,165 @@ description: "Abstract contract defining validators management functionality for
 
 # VaultValidators
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/vaults/modules/VaultValidators.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/vaults/modules/VaultValidators.sol)
 
-**Inherits:** [VaultImmutables →](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/utils/Initializable.sol), [ReentrancyGuardUpgradeable ↗](https://github.com/Badger-Finance/badger-system/blob/master/deps/@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol), [VaultAdmin →](./VaultAdmin), [VaultState →](./VaultState), IVaultValidators
+**Inherits:** [VaultImmutables](./VaultImmutables), [Initializable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/proxy/utils/Initializable.sol), [ReentrancyGuardUpgradeable ↗](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/utils/ReentrancyGuardUpgradeable.sol), [VaultAdmin](./VaultAdmin), [VaultState](./VaultState), IVaultValidators
 
-Defines the validators functionality for the Vault.
-
-
-## Events
-### ValidatorRegistered
-Event emitted on V1 validator registration
+Defines the validators functionality for the Vault
 
 
-```solidity
-event ValidatorRegistered(bytes publicKey);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`publicKey`|`bytes`|The public key of the validator that was registered|
-
-### V2ValidatorRegistered
-Event emitted on V2 validator registration
+## State Variables
+### _depositDataRegistry
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event V2ValidatorRegistered(bytes publicKey, uint256 amount);
+address private immutable _depositDataRegistry
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`publicKey`|`bytes`|The public key of the validator that was registered|
-|`amount`|`uint256`|The amount of assets that was registered|
-
-### ValidatorWithdrawalSubmitted
-Event emitted on validator withdrawal
+### _initialChainId
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event ValidatorWithdrawalSubmitted(bytes publicKey, uint256 amount, uint256 feePaid);
+uint256 private immutable _initialChainId
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`publicKey`|`bytes`|The public key of the validator that was withdrawn|
-|`amount`|`uint256`|The amount of assets that was withdrawn|
-|`feePaid`|`uint256`|The amount of fee that was paid|
-
-### ValidatorFunded
-Event emitted on validator balance top-up
+### _validatorsRegistry
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event ValidatorFunded(bytes publicKey, uint256 amount);
+address internal immutable _validatorsRegistry
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`publicKey`|`bytes`|The public key of the validator that was funded|
-|`amount`|`uint256`|The amount of assets that was funded|
-
-### ValidatorConsolidationSubmitted
-Event emitted on validators consolidation
+### _validatorsWithdrawals
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event ValidatorConsolidationSubmitted(bytes fromPublicKey, bytes toPublicKey, uint256 feePaid);
+address private immutable _validatorsWithdrawals
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`fromPublicKey`|`bytes`|The public key of the validator that was consolidated|
-|`toPublicKey`|`bytes`|The public key of the validator that was consolidated to|
-|`feePaid`|`uint256`|The amount of fee that was paid|
-
-### KeysManagerUpdated
-Event emitted on keys manager address update (deprecated)
+### _validatorsConsolidations
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event KeysManagerUpdated(address indexed caller, address indexed keysManager);
+address private immutable _validatorsConsolidations
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`keysManager`|`address`|The address of the new keys manager|
-
-### ValidatorsRootUpdated
-Event emitted on validators merkle tree root update (deprecated)
+### _consolidationsChecker
+**Note:**
+oz-upgrades-unsafe-allow: state-variable-immutable
 
 
 ```solidity
-event ValidatorsRootUpdated(address indexed caller, bytes32 indexed validatorsRoot);
+address private immutable _consolidationsChecker
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`validatorsRoot`|`bytes32`|The new validators merkle tree root|
-
-### ValidatorsManagerUpdated
-Event emitted on validators manager address update
+### __deprecated__validatorsRoot
+deprecated. Deposit data management is moved to DepositDataRegistry contract
 
 
 ```solidity
-event ValidatorsManagerUpdated(address indexed caller, address indexed validatorsManager);
+bytes32 private __deprecated__validatorsRoot
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`caller`|`address`|The address of the function caller|
-|`validatorsManager`|`address`|The address of the new validators manager|
+### __deprecated__validatorIndex
+deprecated. Deposit data management is moved to DepositDataRegistry contract
 
 
-## Functions
+```solidity
+uint256 private __deprecated__validatorIndex
+```
+
 
 ### validatorsManager
-
 The Vault validators manager address
 
 
 ```solidity
-function validatorsManager() external view returns (address);
+address public override validatorsManager
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address that can register validators|
 
 
-### validatorsManagerNonce
-
-The nonce for the validators manager used for signing
-
+### _initialDomainSeparator
 
 ```solidity
-function validatorsManagerNonce() external view returns (uint256);
+bytes32 private _initialDomainSeparator
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The nonce for the validators manager|
 
 
 ### v2Validators
 
-Function for checking if the validator is tracked V2 validator
+```solidity
+mapping(bytes32 publicKeyHash => bool isRegistered) public override v2Validators
+```
+
+
+### validatorsManagerNonce
+The nonce for the validators manager used for signing
 
 
 ```solidity
-function v2Validators(bytes32 publicKeyHash) external view returns (bool);
+uint256 public override validatorsManagerNonce
+```
+
+
+### __gap
+This empty reserved space is put in place to allow future versions to add new
+variables without shifting down storage in the inheritance chain.
+See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+
+
+```solidity
+uint256[47] private __gap
+```
+
+
+## Functions
+### constructor
+
+Constructor
+
+Since the immutable variable value is stored in the bytecode,
+its value would be shared among all proxies pointing to a given contract instead of each proxy’s storage.
+
+**Note:**
+oz-upgrades-unsafe-allow: constructor
+
+
+```solidity
+constructor(
+    address depositDataRegistry,
+    address validatorsRegistry,
+    address validatorsWithdrawals,
+    address validatorsConsolidations,
+    address consolidationsChecker
+) ;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`publicKeyHash`|`bytes32`|The keccak256 hash of the public key of the validator|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|Whether the validator is tracked V2 validator|
+|`depositDataRegistry`|`address`|The address of the deposit data registry contract|
+|`validatorsRegistry`|`address`|The contract address used for registering validators in beacon chain|
+|`validatorsWithdrawals`|`address`|The contract address used for withdrawing validators in beacon chain|
+|`validatorsConsolidations`|`address`|The contract address used for consolidating validators in beacon chain|
+|`consolidationsChecker`|`address`|The contract address used for verifying consolidation approvals|
 
 
 ### registerValidators
@@ -271,10 +249,96 @@ Function for updating the validators manager. Can only be called by the admin. D
 
 
 ```solidity
-function setValidatorsManager(address _validatorsManager) external override;
+function setValidatorsManager(address _validatorsManager) external virtual override;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`_validatorsManager`|`address`|The new validators manager address|
+
+
+### _registerValidators
+
+Internal function for registering validators
+
+
+```solidity
+function _registerValidators(ValidatorUtils.ValidatorDeposit[] memory deposits) internal virtual;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`deposits`|`ValidatorUtils.ValidatorDeposit[]`|The validators registration data|
+
+
+### _isValidatorsManager
+
+Internal function for checking whether the caller is the validators manager.
+If the valid signature is provided, update the nonce.
+
+
+```solidity
+function _isValidatorsManager(bytes calldata validators, bytes32 nonce, bytes calldata validatorsManagerSignature)
+    internal
+    returns (bool);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`validators`|`bytes`|The concatenated validators data|
+|`nonce`|`bytes32`|The nonce of the signature|
+|`validatorsManagerSignature`|`bytes`|The optional signature from the validators manager|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bool`|true if the caller is the validators manager|
+
+
+### _computeVaultValidatorsDomain
+
+Computes the hash of the EIP712 typed data
+
+This function is used to compute the hash of the EIP712 typed data
+
+
+```solidity
+function _computeVaultValidatorsDomain() private view returns (bytes32);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`bytes32`|The hash of the EIP712 typed data|
+
+
+### __VaultValidators_upgrade
+
+Upgrades the VaultValidators contract
+
+
+```solidity
+function __VaultValidators_upgrade() internal onlyInitializing;
+```
+
+### __VaultValidators_init
+
+Initializes the VaultValidators contract
+
+
+```solidity
+function __VaultValidators_init() internal onlyInitializing;
+```
+
+### __VaultValidators_init_common
+
+Common initialization for gas optimization
+
+
+```solidity
+function __VaultValidators_init_common() private;
+```

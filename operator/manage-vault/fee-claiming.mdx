@@ -24,7 +24,7 @@ A **Fee Splitter** is a smart contract that can take the place of that fee recip
 :::custom-notes[Under the Hood]
 Saving runs three on-chain actions, each requiring a separate wallet confirmation:
 
-1. **Create reward splitter** — deploys the [Fee Splitter ↗](https://etherscan.io/address/0xDA7F4d74649d042b871e479835C8D262C7a1515f) contract for your Vault.
+1. **Create reward splitter** — deploys the [`RewardSplitter` ↗](https://etherscan.io/address/0xd12Df8543e0522CCbF12d231e822B7264c634775) contract for your Vault (the address shown is the factory that deploys one splitter per Vault).
 2. **Apply new settings** — points the Vault's fee recipient at the Splitter so future fees flow into it.
 3. **Update fee splitter** — registers shareholders and their shares on the Splitter.
 :::

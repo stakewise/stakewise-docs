@@ -22,9 +22,10 @@ Pick a Vault that matches your preferences and start staking in just a few steps
 
 1. Open [app.stakewise.io ↗](https://app.stakewise.io) and connect your wallet.
 2. Navigate to **Vaults** and browse the available options.
-3. Select a Vault and review its details, including MEV strategy, TVL, APY, performance, and staking fee.
-4. Click the **(+)** button next to **Staked ETH**, enter the amount of ETH you want to stake, and confirm the transaction in your wallet.
-5. (Optional) Click the **(+)** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
+3. Use the **Verified** filter to limit the list to Vaults the StakeWise team has reviewed, and compare the APY, TVL and uptime shown on each card.
+4. Open a Vault and review its **Details** — Vault type, capacity, contract address, admin, fee recipient, **MEV recipient**, **Staking fee**, and version.
+5. Click the **(+)** button next to **Staked ETH**, enter the amount of ETH you want to stake, and confirm the transaction in your wallet.
+6. (Optional) Click the **(+)** button next to **Minted osETH** to mint osETH and stay liquid while your ETH keeps earning.
 
 Your stake starts earning rewards as soon as the Vault's validators are active.
 
@@ -48,11 +49,11 @@ Before unstaking, make sure the amount of osETH you want to burn is in your wall
 
 <Image img={require('./img/unstaking_flow_with_a_vault.png')} alt="Unstaking flow with a Vault explanation diagram" />
 
-1. If you've minted osETH, click the **(–)** button next to **Minted osETH**, enter the amount to burn (or click **Max**), and confirm the transaction.
+1. If you've minted osETH, click the **(–)** button next to **Minted osETH**, enter the amount to burn (or click **Max**), and confirm the transaction. The app also offers a combined **Burn & Unstake** option that does both in one step.
 2. Click the **(–)** button next to **Staked ETH**, enter the amount you want to withdraw, and click **Unstake**.
-3. Your request enters the Vault's [exit queue](/docs/vaults/how-vaults-work#withdrawals). Waiting time is at least 24 hours and depends on [current network conditions ↗](https://www.validatorqueue.com/). Your assets keep earning rewards until the exit completes.
+3. Your request enters the Vault's [exit queue](/docs/vaults/how-vaults-work#withdrawals). The app shows a live estimate of how long it will take, along with the average over the past month — how long it actually takes depends on the network's validator exit queue. Your assets keep earning rewards until the exit completes.
 4. Once your assets have exited, click **Claim** to receive your ETH.
 
 :::custom-tips[Get a Claim Alert]
-You can add your email address to receive a notification as soon as your unstaked assets are ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**.
+You can set up an email or browser notification to be alerted as soon as your unstaked assets are ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**, or enable browser notifications.
 :::

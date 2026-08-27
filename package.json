@@ -14,7 +14,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "prepare": "husky",
-    "checkRedirects": "tsx scripts/checkRedirects/index.ts"
+    "checkRedirects": "tsx scripts/checkRedirects/index.ts",
+    "generateContractsApi": "tsx scripts/generateContractsApi/index.ts"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.0",

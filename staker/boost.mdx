@@ -1,18 +1,22 @@
 ---
-title: Boost
+title: Using Boost
 description: Amplify your staking yield with Boost — use osETH as collateral to borrow and restake more ETH. Historically 4–6% APY.
 ---
 
 import Image from '@theme/IdealImage';
 
-# Boost
+# Using Boost
 
-[Boost](/docs/vaults/boost) is a yield amplification strategy built into every Vault. It uses your osETH as collateral on Aave to borrow additional ETH, which is then staked back into the Vault on your behalf. This looping process repeats automatically, amplifying your staking position with a single click — no manual DeFi steps required. Over the mid-term, Boost historically delivers a total APY of approximately **4–6%**.
+[Boost](/docs/vaults/boost) is a yield amplification strategy available on **Ethereum**. It uses your osETH as collateral on Aave to borrow additional ETH, which is then staked back into the Vault on your behalf. This looping process repeats automatically, amplifying your staking position with a single click — no manual DeFi steps required.
+
+How far the loop goes depends on the Vault's osETH LTV: roughly **6x** in a 90% LTV Vault and up to **14x** in a Vault with near-100% LTV. Over the mid-term, Boost historically delivers a total APY of approximately **4–6%**.
 
 <Image img={require('./img/boost_flow.png')} alt="Boost flow diagram" />
 
 :::custom-info[Prerequisites]
-To use Boost, you need osETH in your wallet.
+Boost is available on Ethereum only, and starts from **0.05 ETH**.
+
+You can either boost osETH you already hold, or go straight from ETH to a boosted position in one transaction by picking **Receive and boost osETH** on the [Stake page](/staker/simple-staking#how-to-stake).
 :::
 
 ## How to Boost
@@ -43,6 +47,12 @@ To use Boost, you need osETH in your wallet.
 
 :::custom-warning[Monitor Your Position]
 Periodically check on your position to ensure the Boost APY is positive. If you see a negative Boost APY for longer than 7 days in a row, consider unboosting your position. Stay informed for real-time updates via the [StakeWise Discord ↗](https://discord.com/invite/2BSdr2g).
+
+The Vault page also shows a **borrow status** for the position — *Healthy* up to 93.8% LTV, *Moderate* up to 94.5%, and *Risky* above that. See [Boost safety](/docs/vaults/boost#safety) for what those thresholds mean.
+:::
+
+:::custom-notes[Wallet Warning About an EOA]
+When boosting, your wallet may warn you that you are transacting with an externally owned account. This is expected — it is the deterministically calculated address of your own Boost position contract, which does not exist on-chain until the first transaction.
 :::
 
 ## How to Unboost
@@ -54,8 +64,8 @@ Periodically check on your position to ensure the Boost APY is positive. If you 
 1. Open [app.stakewise.io ↗](https://app.stakewise.io) and connect your wallet.
 2. Select the **Unboost** tab.
 3. Enter the percentage of the position you want to exit.
-4. Confirm the transaction. Your request enters the unboost queue, where processing time depends on the network exit queue. Only one unboost request can be active at a time.
-5. Once processing is complete, click the **Claim** button to receive your assets. Claim as soon as they become available to maximize your rewards.
+4. Confirm the transaction. Your request enters the unboost queue, where processing time depends on the network exit queue. Only one unboost request can be active at a time, and it must be claimed before you can boost or unboost again.
+5. Once processing is complete, click the **Claim** button to receive your assets. Claim as soon as they become claimable — leaving a completed request unclaimed incurs penalties.
 
 </div>
 
@@ -66,11 +76,11 @@ Periodically check on your position to ensure the Boost APY is positive. If you 
 1. Head to the Vault page.
 2. Click the minus **(–)** button to start the unboost process.
 3. Enter the percentage of the position you want to exit.
-4. Confirm the transaction. Your request enters the unboost queue, where processing time depends on the network exit queue. Only one unboost request can be active at a time.
-5. Once processing is complete, click the **Claim** button on the Vault page. Claim as soon as assets become available to maximize your rewards.
+4. Confirm the transaction. Your request enters the unboost queue, where processing time depends on the network exit queue. Only one unboost request can be active at a time, and it must be claimed before you can boost or unboost again.
+5. Once processing is complete, click the **Claim** button on the Vault page. Claim as soon as assets become claimable — leaving a completed request unclaimed incurs penalties.
 
 </div>
 
 :::custom-tips[Get a Claim Alert]
-You can add your email address to receive a notification as soon as your unboosted position is ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**.
+You can set up an email or browser notification to be alerted as soon as your unboosted position is ready to be claimed. Click your wallet address in the top-right corner, then click the alert button <img src="/icons/stakewise/alert_button.png" alt="alert button icon" style={{height: '2.5em', verticalAlign: 'middle', display: 'inline-block'}} /> next to your address. In the **Configure alerts** pop-up, enter your email and click **Save**, or enable browser notifications.
 :::

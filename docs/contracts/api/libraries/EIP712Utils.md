@@ -6,9 +6,25 @@ description: "Utility library for calculating EIP712 typed data hashes"
 
 # EIP712Utils
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/libraries/EIP712Utils.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/libraries/EIP712Utils.sol)
 
-Includes functionality for calculating [EIP712 ↗](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md) hashes.
+Includes functionality for calculating EIP712 hashes
+
+
+## State Variables
+### _domainTypeHash
+
+```solidity
+bytes32 private constant _domainTypeHash =
+    keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)")
+```
+
+
+### _versionHash
+
+```solidity
+bytes32 private constant _versionHash = keccak256("1")
+```
 
 
 ## Functions

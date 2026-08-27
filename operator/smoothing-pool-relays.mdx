@@ -5,18 +5,29 @@ description: Configure DAO-approved MEV relays for StakeWise Smoothing Pool Vaul
 
 # Smoothing Pool Relays
 
-The Smoothing Pool is a shared MEV escrow where execution-layer rewards from all participating Vaults are pooled and redistributed proportionally based on each Vault's stake. This smooths out the inherent variance of MEV — instead of receiving large, unpredictable payouts only when your validators propose blocks, your Vault earns a steady, proportional share of the total pool.
+The Smoothing Pool is a shared MEV escrow where execution-layer rewards from all participating Vaults are pooled and redistributed in proportion to the Consensus Layer attestation rewards each Vault's validators earned over the period. This smooths out the inherent variance of MEV — instead of receiving large, unpredictable payouts only when your validators propose blocks, your Vault earns a steady share of the total pool.
 
 If you selected the **Smoothing Pool** during Vault creation, you must use one or multiple StakeWise DAO-approved MEV relays.
 
 :::custom-warning[Required Fee Recipient]
-You must specify the Smoothing Pool address as the fee recipient for your Vault validators:
-**`0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86`**
+You must set the Smoothing Pool address **for your network** as the fee recipient for your Vault validators:
+
+| Network | Smoothing Pool (`SharedMevEscrow`) |
+|---------|------------------------------------|
+| Ethereum Mainnet | [`0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86` ↗](https://etherscan.io/address/0x48319f97E5Da1233c21c48b80097c0FB7a20Ff86) |
+| Gnosis Chain | [`0x30db0d10d3774e78f8cB214b9e8B72D4B402488a` ↗](https://gnosisscan.io/address/0x30db0d10d3774e78f8cB214b9e8B72D4B402488a) |
+| Hoodi | [`0x51FD45BAEfB12f54766B5C4d639b360Ea50063bd` ↗](https://hoodi.etherscan.io/address/0x51FD45BAEfB12f54766B5C4d639b360Ea50063bd) |
+
+Setting the wrong address forfeits your Vault's locked share of the pool.
 :::
 
 One instance of MEV-Boost can connect to multiple relays. Use the `-relays` flag with comma-separated relay URLs (e.g., `-relays https://relay1,https://relay2`), or use the `-relay` flag multiple times for individual relays.
 
 ## Approved relay endpoints
+
+:::custom-info[Ethereum Only]
+The approved-relay requirement applies to Ethereum. Gnosis Chain has no relay allowlist, so Gnosis Smoothing Pool Vaults are not restricted to a specific set of relays.
+:::
 
 **Flashbots**
 ```
@@ -51,4 +62,14 @@ https://0xa15b52576bcbf1072f4a011c0f99f9fb6c66f3e1ff321f11f461d15e31b1cb359caa09
 **Titan Relay**
 ```
 https://0x8c4ed5e24fe5c6ae21018437bde147693f68cda427cd1122cf20819c30eda7ed74f72dece09bb313f2a1855595ab677d@titanrelay.xyz
+```
+
+**Eden Network**
+```
+https://0xb3ee7afcf27f1f1259ac1787876318c6584ee353097a50ed84f51a1f21a323b3736f271a895c7ce918c038e4265918be@relay.edennetwork.io
+```
+
+**SecureRPC**
+```
+https://0x98650451ba02064f7b000f5768cf0cf4d4e492317d82871bdc87ef841a0743f69f0f1eea11168503240ac35d101c9135@mainnet-relay.securerpc.com
 ```

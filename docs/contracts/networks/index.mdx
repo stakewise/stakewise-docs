@@ -6,16 +6,53 @@ description: StakeWise V3 smart contract addresses deployed on Ethereum Mainnet,
 
 # Networks
 
-This section provides the complete list of StakeWise V3 smart contract addresses deployed across 3 supported networks: [Mainnet →](./Mainnet.mdx), [Gnosis →](./Gnosis.mdx), and [Hoodi →](./Hoodi.mdx).
-Each network page contains a table of all core protocol contracts including:
-- Different Vault factory types (ERC20, Blocklist, MetaVault)
-- Vault registry keeping track of all registered Vaults
-- osToken contracts with minting, liquidation, and redemption mechanisms
-- Vault deposit data management
-- Functionality for updating Vaults' rewards and approving validator registrations
-- Curator strategy for managing assets in sub-vaults
+This section provides the complete list of StakeWise V3 smart contract addresses deployed across 3 supported networks: [Mainnet](./Mainnet.mdx), [Gnosis](./Gnosis.mdx), and [Hoodi](./Hoodi.mdx).
+Each network page lists every core protocol contract. What they do:
 
-Use these addresses when integrating with StakeWise V4 contracts or verifying deployments on each respective network.
+## Vaults
+
+| Contract | Purpose |
+|----------|---------|
+| `VaultFactory`, `Erc20VaultFactory`, `PrivVaultFactory`, `BlocklistVaultFactory`, `BlocklistErc20VaultFactory`, `PrivErc20VaultFactory` | Deploy new Vaults of each [Vault type](/docs/vaults/vault-types) and register them in the `VaultsRegistry` |
+| `MetaVaultFactory`, `Erc20MetaVaultFactory`, `PrivMetaVaultFactory`, `PrivErc20MetaVaultFactory` | Deploy [MetaVaults](/docs/vaults/vault-types#metavault), which delegate staking to sub-vaults |
+| `VaultsRegistry` | The canonical on-chain list of valid Vaults and approved Vault implementations |
+| `SubVaultsRegistryFactory` | Deploys the per-MetaVault registry that holds sub-vault positions, exit queues and capacities |
+| `CuratorsRegistry`, `BalancedCurator` | DAO-approved allocation strategies that decide how a MetaVault spreads assets across its sub-vaults |
+| `GenesisVault` | The Vault that succeeded StakeWise V2, holding stake migrated from the legacy pool |
+| `CommunityVault`, `FoxVault` | Custom Vaults deployed for specific partners, built on the same modules as standard Vaults |
+| `RewardSplitterFactory` | Deploys the `RewardSplitter` contracts that divide a Vault's fees among several [shareholders](/operator/manage-vault/fee-claiming) |
+
+## osToken
+
+| Contract | Purpose |
+|----------|---------|
+| `OsToken` | The osETH / osGNO ERC-20 token itself |
+| `OsTokenVaultController` | Tracks total osToken supply and backing assets, and so sets the [exchange rate](/docs/ostoken/how-ostoken-works#exchange-rate) |
+| `OsTokenConfig` | Per-Vault [LTV, liquidation threshold and liquidation bonus](/docs/ostoken/how-ostoken-works#ltv-ratio) |
+| `OsTokenRedeemer` | The queue through which osToken is [redeemed](/docs/ostoken/ostoken-redemptions) for ETH or GNO at the protocol rate |
+| `OsTokenVaultEscrow` | Holds an osToken position alongside its stake while a user exits a Vault with osToken still minted, so the token stays backed throughout |
+| `OsTokenFlashLoans` | Uncollateralised same-transaction osToken loans, capped at 100,000 osToken |
+| `PriceFeed` | Reports the osToken exchange rate to external protocols — this is the feed [Aave uses to value Boost collateral](/docs/vaults/boost#safety) |
+
+## Validators and rewards
+
+| Contract | Purpose |
+|----------|---------|
+| `Keeper` | Verifies [Oracle](/docs/oracles/intro) signatures, stores the rewards Merkle root, and approves validator registrations |
+| `ConsolidationsChecker` | Verifies Oracle signatures for [validator consolidations](/operator/manage-validators/consolidate-validators) |
+| `ValidatorsChecker` | Read-only helper that reports whether a Vault's validator registration would currently succeed |
+| `DepositDataRegistry` | Stores the deposit data root pre-approving which validator keys a Vault may register |
+| `SharedMevEscrow` | The [Smoothing Pool](/docs/vaults/configuration#smoothing-pool) — shared MEV escrow for participating Vaults |
+| `NodesManager` | Delegates a Vault's validator operations to registered node operators |
+| `MerkleDistributor` | Distributes [extra token rewards](/operator/manage-vault/add-extra-rewards) to Vault stakers |
+
+## Legacy
+
+| Contract | Purpose |
+|----------|---------|
+| `LegacyPoolEscrow`, `LegacyRewardToken` | StakeWise V2 contracts retained for [migration](/staker/stakewise-v2/migrate-to-stakewise-v3-on-ethereum) into the Genesis Vault |
+
+Use these addresses when integrating with StakeWise V3 contracts or verifying deployments on each respective network.
 
 :::custom-info[Usage]
 To find any contract, copy its address and paste it into the appropriate block explorer for that network.

@@ -6,225 +6,143 @@ description: "Controller contract for managing osToken minting, burning, and rew
 
 # OsTokenVaultController
 
-[Git Source ↗](https://github.com/stakewise/v3-core/blob/c511cd912cb881f60cf2a32d6c5d5f533e5d04b5/contracts/tokens/OsTokenVaultController.sol)
+[Git Source ↗](https://github.com/stakewise/v3-core/blob/fc70cbe1b3d41bc5f78434830d837aa270ca33bc/contracts/tokens/OsTokenVaultController.sol)
 
 **Inherits:** [Ownable2Step ↗](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol), IOsTokenVaultController
 
-Over-collateralized staked token controller.
+Over-collateralized staked token controller
 
 
-## Events
-### Mint
-Event emitted on minting shares
-
+## State Variables
+### _wad
 
 ```solidity
-event Mint(address indexed vault, address indexed receiver, uint256 assets, uint256 shares);
+uint256 private constant _wad = 1e18
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the Vault|
-|`receiver`|`address`|The address that received the shares|
-|`assets`|`uint256`|The number of assets collateralized|
-|`shares`|`uint256`|The number of tokens the owner received|
-
-### Burn
-Event emitted on burning shares
-
+### _maxFeePercent
 
 ```solidity
-event Burn(address indexed vault, address indexed owner, uint256 assets, uint256 shares);
+uint256 private constant _maxFeePercent = 10_000
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`vault`|`address`|The address of the Vault|
-|`owner`|`address`|The address that owns the shares|
-|`assets`|`uint256`|The total number of assets withdrawn|
-|`shares`|`uint256`|The total number of shares burned|
-
-### StateUpdated
-Event emitted on state update
-
+### _registry
 
 ```solidity
-event StateUpdated(uint256 profitAccrued, uint256 treasuryShares, uint256 treasuryAssets);
+address private immutable _registry
 ```
 
-**Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`profitAccrued`|`uint256`|The profit accrued since the last update|
-|`treasuryShares`|`uint256`|The number of shares minted for the treasury|
-|`treasuryAssets`|`uint256`|The number of assets minted for the treasury|
-
-### CapacityUpdated
-Event emitted on capacity update
-
+### _osToken
 
 ```solidity
-event CapacityUpdated(uint256 capacity);
+address private immutable _osToken
 ```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`capacity`|`uint256`|The amount after which the OsToken stops accepting deposits|
-
-### TreasuryUpdated
-Event emitted on treasury address update
-
-
-```solidity
-event TreasuryUpdated(address indexed treasury);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`treasury`|`address`|The new treasury address|
-
-### FeePercentUpdated
-Event emitted on fee percent update
-
-
-```solidity
-event FeePercentUpdated(uint16 feePercent);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`feePercent`|`uint16`|The new fee percent|
-
-### AvgRewardPerSecondUpdated
-Event emitted on average reward per second update
-
-
-```solidity
-event AvgRewardPerSecondUpdated(uint256 avgRewardPerSecond);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`avgRewardPerSecond`|`uint256`|The new average reward per second|
-
-### KeeperUpdated
-Event emitted on keeper address update
-
-
-```solidity
-event KeeperUpdated(address keeper);
-```
-
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`keeper`|`address`|The new keeper address|
-
-
-## Functions
-
-### capacity
-
-The OsToken capacity
-
-
-```solidity
-function capacity() external view returns (uint256);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The amount after which the OsToken stops accepting deposits|
-
-
-### treasury
-
-The DAO treasury address that receives OsToken fees
-
-
-```solidity
-function treasury() external view returns (address);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the treasury|
-
-
-### feePercent
-
-The fee percent (multiplied by 100)
-
-
-```solidity
-function feePercent() external view returns (uint64);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint64`|The fee percent applied by the OsToken on the rewards|
 
 
 ### keeper
-
 The address that can update avgRewardPerSecond
 
 
 ```solidity
-function keeper() external view returns (address);
+address public override keeper
 ```
-**Returns**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`address`|The address of the keeper contract|
+
+### capacity
+The OsToken capacity
+
+
+```solidity
+uint256 public override capacity
+```
 
 
 ### avgRewardPerSecond
-
 The average reward per second used to mint OsToken rewards
 
 
 ```solidity
-function avgRewardPerSecond() external view returns (uint256);
+uint256 public override avgRewardPerSecond
 ```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|The average reward per second earned by the Vaults|
 
 
-### cumulativeFeePerShare
-
-The fee per share used for calculating the fee for every position
+### treasury
+The DAO treasury address that receives OsToken fees
 
 
 ```solidity
-function cumulativeFeePerShare() external view returns (uint256);
+address public override treasury
 ```
-**Returns**
+
+
+### feePercent
+The fee percent (multiplied by 100)
+
+
+```solidity
+uint64 public override feePercent
+```
+
+
+### _cumulativeFeePerShare
+
+```solidity
+uint192 private _cumulativeFeePerShare = uint192(_wad)
+```
+
+
+### _lastUpdateTimestamp
+
+```solidity
+uint64 private _lastUpdateTimestamp
+```
+
+
+### _totalShares
+
+```solidity
+uint128 private _totalShares
+```
+
+
+### _totalAssets
+
+```solidity
+uint128 private _totalAssets
+```
+
+
+## Functions
+### constructor
+
+Constructor
+
+
+```solidity
+constructor(
+    address _keeper,
+    address registry,
+    address osToken,
+    address _treasury,
+    address _owner,
+    uint16 _feePercent,
+    uint256 _capacity
+) Ownable(msg.sender);
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint256`|The cumulative fee per share|
+|`_keeper`|`address`|The address of the Keeper contract|
+|`registry`|`address`|The address of the VaultsRegistry contract|
+|`osToken`|`address`|The address of the OsToken contract|
+|`_treasury`|`address`|The address of the DAO treasury|
+|`_owner`|`address`|The address of the owner of the contract|
+|`_feePercent`|`uint16`|The fee percent applied on the rewards|
+|`_capacity`|`uint256`|The amount after which the osToken stops accepting deposits|
 
 
 ### totalShares
@@ -418,6 +336,21 @@ function setKeeper(address _keeper) external override onlyOwner;
 |`_keeper`|`address`|The new keeper address|
 
 
+### cumulativeFeePerShare
+
+The fee per share used for calculating the fee for every position
+
+
+```solidity
+function cumulativeFeePerShare() external view override returns (uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|The cumulative fee per share|
+
+
 ### updateState
 
 Updates rewards and treasury fee checkpoint for the OsToken
@@ -425,4 +358,37 @@ Updates rewards and treasury fee checkpoint for the OsToken
 
 ```solidity
 function updateState() public override;
+```
+
+### _convertToShares
+
+Internal conversion function (from assets to shares) with support for rounding direction.
+
+
+```solidity
+function _convertToShares(uint256 assets, uint256 totalShares_, uint256 totalAssets_, Math.Rounding rounding)
+    internal
+    pure
+    returns (uint256 shares);
+```
+
+### _convertToAssets
+
+Internal conversion function (from shares to assets) with support for rounding direction.
+
+
+```solidity
+function _convertToAssets(uint256 shares, uint256 totalShares_, uint256 totalAssets_, Math.Rounding rounding)
+    internal
+    pure
+    returns (uint256);
+```
+
+### _unclaimedAssets
+
+Internal function for calculating assets accumulated since last update
+
+
+```solidity
+function _unclaimedAssets() internal view returns (uint256);
 ```

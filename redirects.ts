@@ -59,4 +59,20 @@ export default [
     from: '/contracts/api/vaults/ethereum/custom/EthMetaVaultFactory',
     to: '/contracts/api/vaults/ethereum/EthMetaVaultFactory',
   },
+  {
+    from: '/sdk/api/vault/requests/getmaxwithdraw',
+    to: '/sdk/api/vault/requests/getmaxwithdrawamount',
+  },
+  {
+    from: '/sdk/api/osToken/requests/getmaxmint',
+    to: '/sdk/api/osToken/requests/getmaxmintamount',
+  },
+  {
+    from: '/sdk/api/osToken/requests/getposition',
+    to: '/sdk/api/osToken/requests/getbalance',
+  },
+  {
+    from: '/sdk/api/osToken/helpers/getburnamount',
+    to: '/sdk/api/osToken/helpers/getburnamountforunstake',
+  },
 ]

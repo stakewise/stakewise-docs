@@ -1,5 +1,6 @@
 export * from './colors'
 export * from './contentRoots'
+export * from './slugs'
 export * from './diff'
 export * from './log'
 export * from './parser'

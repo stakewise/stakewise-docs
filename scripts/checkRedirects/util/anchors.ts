@@ -2,6 +2,7 @@ import { readFileSync } from 'fs'
 
 import { resolveToFilePath } from './contentRoots'
 import { printBrokenAnchors } from './output'
+import { findFileBySlug } from './slugs'
 
 import type { BrokenAnchor } from './output'
 
@@ -59,7 +60,7 @@ export const validateAnchors = (redirectsSource: string): void => {
 
   for (const [ target, fromList ] of Object.entries(fromByTarget)) {
     const [ pathPart, anchor ] = target.split('#')
-    const filePath = resolveToFilePath(pathPart)
+    const filePath = resolveToFilePath(pathPart) || findFileBySlug(pathPart)
 
     if (!filePath) {
       broken.push({ target, anchor, filePath: null, fromList })

@@ -47,7 +47,7 @@ Adding a page to a manually-listed sidebar (`docsSidebar`, `operatorSidebar`, `s
 
 Moving, renaming, or deleting any file under `docs/`, `operator/`, or `staker/` requires an entry in `redirects.ts`. This is enforced twice: the husky `pre-commit` hook runs `yarn checkRedirects`, and `.github/workflows/check-redirects.yml` pipes a rename-aware `git diff` into `yarn checkRedirects --stdin`.
 
-`scripts/checkRedirects/` also rejects duplicate `from` values and verifies that any `#anchor` in a `to` target actually exists as a heading in the destination file. URL derivation (`util/contentRoots.ts`): strip the extension, lowercase, drop a trailing `/index`, and map `docs/` → ``, `operator/` → `/operator`, `staker/` → `/staker`.
+`scripts/checkRedirects/` also rejects duplicate `from` values and verifies that any `#anchor` in a `to` target actually exists as a heading in the destination file. URL derivation: a page with an explicit `slug` in its frontmatter (all synced SDK pages) uses that slug verbatim — `util/slugs.ts` reads the old frontmatter back out of git for deleted/renamed files, and a move that keeps the slug needs no redirect. Otherwise (`util/contentRoots.ts`) strip the extension, drop a trailing `/index`, and map `docs/` → ``, `operator/` → `/operator`, `staker/` → `/staker`; casing is preserved.
 
 ## MDX conventions
 

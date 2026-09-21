@@ -1,6 +1,6 @@
 import {
-  green, pathToUrl, validateAnchors, printMissingRedirects, readDiff, parseDiff, isContentFile,
-  readRedirectsSource, parseRedirectFroms, checkDuplicates, log,
+  green, previousUrl, currentUrl, validateAnchors, printMissingRedirects, readDiff, parseDiff,
+  isContentFile, readRedirectsSource, parseRedirectFroms, checkDuplicates, log,
 } from './util'
 
 import type { Missing } from './util'
@@ -24,15 +24,16 @@ const main = (): void => {
   const missing: Missing[] = []
 
   for (const { oldPath, newPath } of entries) {
-    const expectedUrl = pathToUrl(oldPath)
+    const expectedUrl = previousUrl(oldPath)
+    const toUrl = newPath ? currentUrl(newPath) : 'TODO_DESTINATION'
+
+    // A file can move on disk while keeping its `slug`, which leaves the route untouched.
+    if (newPath && toUrl === expectedUrl) {
+      continue
+    }
 
     if (!redirectFroms.includes(expectedUrl)) {
-      missing.push({
-        oldPath,
-        expectedUrl,
-        newPath,
-        toUrl: newPath ? pathToUrl(newPath) : 'TODO_DESTINATION',
-      })
+      missing.push({ oldPath, expectedUrl, newPath, toUrl })
     }
   }
 

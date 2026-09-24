@@ -25,8 +25,15 @@ Your execution node must be fully synced and running. Any client that supports t
 - **[Reth ↗](https://github.com/paradigmxyz/reth)** — (Ethereum)
 
 :::custom-warning[Configure execution client]
-Preserve event logs to ensure the Operator Service functions correctly.
-Some clients require specific configuration to sync event logs and prevent event log pruning:
+The Operator Service needs event logs from a network checkpoint onward. If your execution client prunes history, retain receipts and logs from at least the following blocks:
+
+| Network | Required from block | Recommended setting |
+| --- | --- | --- |
+| Ethereum | 25,933,938 | 25,900,000 |
+| Hoodi | 3,583,807 | 3,580,000 |
+| Gnosis | 48,127,042 | 48,100,000 |
+
+The recommended value rounds down to leave a safety margin; any block at or below it works.
 
 <Tabs groupId="special-config" defaultValue="erigon">
   <TabItem value="nethermind" label="Nethermind">
@@ -39,28 +46,22 @@ Some clients require specific configuration to sync event logs and prevent event
   <TabItem value="erigon" label="Erigon">
     ```bash
     # Ethereum Mainnet
-    erigon --prune=receipts --prune.to=18470089
-
-    # For other networks, adjust the block number to the Keeper contract creation block
+    erigon --prune=receipts --prune.to=25900000
     ```
-
-  These flags prevent pruning of event logs as required by the Operator Service.
   </TabItem>
   <TabItem value="reth" label="Reth">
     Add the following option to Reth command:
 
     ```bash
     # Ethereum Mainnet
-    --prune.receiptslogfilter=0x6b5815467da09daa7dc83db21c9239d98bb487b5:before:18470089
-
-    # For other networks, adjust the block number to the Keeper contract creation block
+    --prune.receipts.before=25900000
     ```
-
-    The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239D98Bb487b5#code) on Ethereum Mainnet is located at
-    `0x6b5815467da09daa7dc83db21c9239d98bb487b5` (must be provided in lowercase).
   </TabItem>
 </Tabs>
 
+For other networks, use the recommended setting from the table above.
+
+Operator Service versions before v5.1.0 still require the full event log history since the Keeper contract deployment. Upgrade the Operator Service before pruning.
 :::
 
 ## Consensus Client

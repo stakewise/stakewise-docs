@@ -34,7 +34,7 @@ Some clients require specific configuration to sync event logs and prevent event
 
 <Tabs groupId="special-config" defaultValue="nethermind">
   <TabItem value="nethermind" label="Nethermind">
-    Nethermind must be run in FastSync mode. The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
+    The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
     ```bash
     # Ethereum Mainnet
     nethermind --Sync.FastSync=true \

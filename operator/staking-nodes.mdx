@@ -45,7 +45,6 @@ The recommended value rounds down to leave a safety margin; any block at or belo
       --Sync.AncientReceiptsBarrier=25900000 \
       --History.Pruning=UseAncientBarriers
     ```
-    Avoid SnapSync mode as it skips historical event logs, keeping only recent ones.
   </TabItem>
   <TabItem value="erigon" label="Erigon">
     Erigon does not support pruning from a fixed block. It only keeps a rolling window of the latest N blocks:

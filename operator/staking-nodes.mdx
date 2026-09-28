@@ -35,33 +35,38 @@ The Operator Service needs event logs from a network checkpoint onward. If your 
 
 The recommended value rounds down to leave a safety margin; any block at or below it works.
 
-<Tabs groupId="special-config" defaultValue="erigon">
+<Tabs groupId="special-config" defaultValue="nethermind">
   <TabItem value="nethermind" label="Nethermind">
-    Nethermind must be run in FastSync mode:
-    ```bash
-    nethermind --Sync.FastSync=true
-    ```
-    Avoid SnapSync mode as it skips historical event logs, keeping only recent ones.
-  </TabItem>
-  <TabItem value="erigon" label="Erigon">
+    The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
     ```bash
     # Ethereum Mainnet
-    erigon --prune=receipts --prune.to=25900000
+    nethermind --Sync.FastSync=true \
+      --Sync.AncientBodiesBarrier=25900000 \
+      --Sync.AncientReceiptsBarrier=25900000 \
+      --History.Pruning=UseAncientBarriers
     ```
   </TabItem>
+  <TabItem value="erigon" label="Erigon">
+    Erigon does not support pruning from a fixed block. It only keeps a rolling window of the latest N blocks:
+    ```bash
+    # Keep the latest N blocks
+    erigon --prune.mode=full --prune.distance=N --prune.distance.blocks=N
+    ```
+    Set N to at least the current block minus the recommended block from the table above.
+  </TabItem>
   <TabItem value="reth" label="Reth">
-    Add the following option to Reth command:
+    Add the following options to Reth command:
 
     ```bash
     # Ethereum Mainnet
-    --prune.receipts.before=25900000
+    --prune.bodies.before=25900000 --prune.receipts.before=25900000
     ```
   </TabItem>
 </Tabs>
 
 For other networks, use the recommended setting from the table above.
 
-Operator Service versions before v5.1.0 still require the full event log history since the Keeper contract deployment. Upgrade the Operator Service before pruning.
+Operator Service versions before v5.1.1 still require the full event log history since the Keeper contract deployment. Upgrade the Operator Service before pruning.
 :::
 
 ## Consensus Client

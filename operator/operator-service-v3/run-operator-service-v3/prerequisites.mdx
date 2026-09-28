@@ -32,36 +32,36 @@ Your execution node must be fully synced and running. Any client that supports t
 Preserve event logs to ensure the Operator Service functions correctly.
 Some clients require specific configuration to sync event logs and prevent event log pruning:
 
-<Tabs groupId="special-config" defaultValue="erigon">
+<Tabs groupId="special-config" defaultValue="nethermind">
   <TabItem value="nethermind" label="Nethermind">
-    Nethermind must be run in FastSync mode:
+    The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
     ```bash
-    nethermind --Sync.FastSync=true
+    # Ethereum Mainnet
+    nethermind --Sync.FastSync=true \
+      --Sync.AncientBodiesBarrier=18470089 \
+      --Sync.AncientReceiptsBarrier=18470089 \
+      --History.Pruning=UseAncientBarriers
+
+    # For other networks, adjust the block number to the Keeper contract creation block
     ```
-    Avoid SnapSync mode as it skips historical event logs, keeping only recent ones.
   </TabItem>
   <TabItem value="erigon" label="Erigon">
+    Erigon does not support pruning from a fixed block. It only keeps a rolling window of the latest N blocks:
     ```bash
-    # Ethereum Mainnet
-    erigon --prune=receipts --prune.to=18470089
-
-    # For other networks, adjust the block number to the Keeper contract creation block
+    # Keep the latest N blocks
+    erigon --prune.mode=full --prune.distance=N --prune.distance.blocks=N
     ```
-
-  These flags prevent pruning of event logs as required by the Operator Service.
+    Set N to at least the current block minus the Keeper contract creation block (18470089 on Ethereum Mainnet).
   </TabItem>
   <TabItem value="reth" label="Reth">
-    Add the following option to Reth command:
+    Add the following options to Reth command:
 
     ```bash
     # Ethereum Mainnet
-    --prune.receiptslogfilter=0x6b5815467da09daa7dc83db21c9239d98bb487b5:before:18470089
+    --prune.bodies.before=18470089 --prune.receipts.before=18470089
 
     # For other networks, adjust the block number to the Keeper contract creation block
     ```
-
-    The [Keeper contract ↗](https://etherscan.io/address/0x6B5815467da09DaA7DC83Db21c9239D98Bb487b5#code) on Ethereum Mainnet is located at
-    `0x6b5815467da09daa7dc83db21c9239d98bb487b5` (must be provided in lowercase).
   </TabItem>
 </Tabs>
 
@@ -79,7 +79,7 @@ Your consensus node must be fully synced and running. Any client that supports t
 
 ### Validator Client
 
-Configure the `suggested-fee-recipient` of your validator client with the correct fee recipient address.
+Set the `suggested-fee-recipient` flag in your validator client to the correct fee recipient address.
 This is the **Block reward recipient** shown in the **Details** section at the bottom of your Vault page.
 An incorrect value will result in penalties for your Vault in the Smoothing Pool and will trigger a warning on the Vault page, alerting users to an invalid validator setup.
 
@@ -88,4 +88,4 @@ An incorrect value will result in penalties for your Vault in the Smoothing Pool
 Set up [MEV-Boost ↗](https://github.com/flashbots/mev-boost) to capture execution layer rewards.
 MEV-Boost is open source middleware that connects your validator to a network of block builders competing to produce the most profitable block, maximizing your Vault's execution-layer revenue.
 
-If your Vault uses the Smoothing Pool, you must use one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays).
+If your Vault uses the Smoothing Pool, you must use one of the [StakeWise DAO-approved MEV relays](/operator/smoothing-pool-relays#approved-relay-endpoints).

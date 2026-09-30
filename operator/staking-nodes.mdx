@@ -24,25 +24,41 @@ Your execution node must be fully synced and running. Any client that supports t
 - **[Geth ↗](https://launchpad.ethereum.org/en/geth)** — (Ethereum)
 - **[Reth ↗](https://github.com/paradigmxyz/reth)** — (Ethereum)
 
-:::custom-warning[Configure execution client]
-The Operator Service needs event logs from a network checkpoint onward. If your execution client prunes history, retain receipts and logs from at least the following blocks:
+### Event log retention
 
-| Network | Required from block | Recommended setting |
+The Operator Service reads event logs from the execution client. How much history your node must keep depends on which of two modes you run it in:
+
+- **Pruned mode** — keeps event logs from a recent network checkpoint onward. Core Operator Service functionality works in this mode.
+- **Full mode** — keeps event logs from the Keeper contract genesis block onward. Required for the secondary commands that scan the full event history: [`recover`](/operator/manage-validators/recover-validators), [`validators-exit`](/operator/manage-validators/manually-exit-validators), and [`consolidate`](/operator/manage-validators/consolidate-validators).
+
+Retain receipts and logs from at least the following blocks:
+
+| Network | Pruned mode | Full mode (Keeper genesis block) |
 | --- | --- | --- |
-| Ethereum | 25,933,938 | 25,900,000 |
-| Hoodi | 3,583,807 | 3,580,000 |
-| Gnosis | 48,127,042 | 48,100,000 |
+| Ethereum | 25,900,000 | 18,470,089 |
+| Hoodi | 3,580,000 | 94,074 |
+| Gnosis | 48,100,000 | 34,778,552 |
 
-The recommended value rounds down to leave a safety margin; any block at or below it works.
+Any block at or below the value in the table works. The pruned-mode values are rounded down from the actual checkpoint to leave a safety margin.
+
+:::custom-warning[Operator Service version]
+Pruned mode requires Operator Service v5.1.1 or later. Earlier versions need full mode.
+:::
+
+### Configure pruning
 
 <Tabs groupId="special-config" defaultValue="nethermind">
   <TabItem value="nethermind" label="Nethermind">
     The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
     ```bash
-    # Ethereum Mainnet
-    nethermind --Sync.FastSync=true \
-      --Sync.AncientBodiesBarrier=25900000 \
+    # Ethereum Mainnet, pruned mode
+    nethermind --Sync.AncientBodiesBarrier=25900000 \
       --Sync.AncientReceiptsBarrier=25900000 \
+      --History.Pruning=UseAncientBarriers
+
+    # Ethereum Mainnet, full mode
+    nethermind --Sync.AncientBodiesBarrier=18470089 \
+      --Sync.AncientReceiptsBarrier=18470089 \
       --History.Pruning=UseAncientBarriers
     ```
   </TabItem>
@@ -52,22 +68,22 @@ The recommended value rounds down to leave a safety margin; any block at or belo
     # Keep the latest N blocks
     erigon --prune.mode=full --prune.distance=N --prune.distance.blocks=N
     ```
-    Set N to at least the current block minus the recommended block from the table above.
+    Set N to at least the current block minus the block for your mode from the table above. The window moves forward as the chain grows, so in full mode increase N over time, or run Erigon without history pruning.
   </TabItem>
   <TabItem value="reth" label="Reth">
     Add the following options to Reth command:
 
     ```bash
-    # Ethereum Mainnet
+    # Ethereum Mainnet, pruned mode
     --prune.bodies.before=25900000 --prune.receipts.before=25900000
+
+    # Ethereum Mainnet, full mode
+    --prune.bodies.before=18470089 --prune.receipts.before=18470089
     ```
   </TabItem>
 </Tabs>
 
-For other networks, use the recommended setting from the table above.
-
-Operator Service versions before v5.1.1 still require the full event log history since the Keeper contract deployment. Upgrade the Operator Service before pruning.
-:::
+For other networks, use the block for your mode from the table above.
 
 ## Consensus Client
 

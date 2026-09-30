@@ -37,8 +37,7 @@ Some clients require specific configuration to sync event logs and prevent event
     The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
     ```bash
     # Ethereum Mainnet
-    nethermind --Sync.FastSync=true \
-      --Sync.AncientBodiesBarrier=18470089 \
+    nethermind --Sync.AncientBodiesBarrier=18470089 \
       --Sync.AncientReceiptsBarrier=18470089 \
       --History.Pruning=UseAncientBarriers
 

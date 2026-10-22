@@ -28,20 +28,32 @@ Your execution node must be fully synced and running. Any client that supports t
 - **[Geth ↗](https://launchpad.ethereum.org/en/geth)** — (Ethereum)
 - **[Reth ↗](https://github.com/paradigmxyz/reth)** — (Ethereum)
 
-:::custom-warning[Configure execution client]
-Preserve event logs to ensure the Operator Service functions correctly.
-Some clients require specific configuration to sync event logs and prevent event log pruning:
+### Event log retention
+
+The Operator Service reads event logs from the execution client. It only needs event logs from a recent network checkpoint onward, so you can run it against a pruned node. Retain receipts and logs from at least the following blocks:
+
+| Network | Retain from block |
+| --- | --- |
+| Ethereum | 25,900,000 |
+| Hoodi | 3,580,000 |
+| Gnosis | 48,100,000 |
+
+Any block at or below the value in the table works. The values are rounded down from the actual checkpoint to leave a safety margin.
+
+:::custom-warning[Operator Service version]
+Pruned nodes require Operator Service v3.1.14 or later. Earlier versions need the full event log history from the Keeper contract genesis block, so upgrade before pruning your node.
+:::
+
+### Configure pruning
 
 <Tabs groupId="special-config" defaultValue="nethermind">
   <TabItem value="nethermind" label="Nethermind">
     The barrier flags set the first block whose bodies and receipts are kept, and `--History.Pruning=UseAncientBarriers` removes older history from an already synced node:
     ```bash
     # Ethereum Mainnet
-    nethermind --Sync.AncientBodiesBarrier=18470089 \
-      --Sync.AncientReceiptsBarrier=18470089 \
+    nethermind --Sync.AncientBodiesBarrier=25900000 \
+      --Sync.AncientReceiptsBarrier=25900000 \
       --History.Pruning=UseAncientBarriers
-
-    # For other networks, adjust the block number to the Keeper contract creation block
     ```
   </TabItem>
   <TabItem value="erigon" label="Erigon">
@@ -50,21 +62,19 @@ Some clients require specific configuration to sync event logs and prevent event
     # Keep the latest N blocks
     erigon --prune.mode=full --prune.distance=N --prune.distance.blocks=N
     ```
-    Set N to at least the current block minus the Keeper contract creation block (18470089 on Ethereum Mainnet).
+    Set N to at least the current block minus the block from the table above. The window moves forward as the chain grows, so increase N over time.
   </TabItem>
   <TabItem value="reth" label="Reth">
     Add the following options to Reth command:
 
     ```bash
     # Ethereum Mainnet
-    --prune.bodies.before=18470089 --prune.receipts.before=18470089
-
-    # For other networks, adjust the block number to the Keeper contract creation block
+    --prune.bodies.before=25900000 --prune.receipts.before=25900000
     ```
   </TabItem>
 </Tabs>
 
-:::
+For other networks, use the block from the table above.
 
 ### Consensus Client
 

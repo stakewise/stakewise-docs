@@ -39,6 +39,7 @@ const config: Config = {
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Organization',
+        '@id': 'https://stakewise.io/',
         name: 'StakeWise',
         url: 'https://stakewise.io',
         logo: 'https://stakewise.io/logo512.png',
@@ -47,7 +48,12 @@ const config: Config = {
           'https://x.com/stakewise_io',
           'https://github.com/stakewise',
           'https://discord.gg/stakewise',
-          'https://t.me/stakewise',
+          'https://t.me/stakewise_io',
+          'https://blog.stakewise.io',
+          'https://forum.stakewise.io',
+          'https://www.linkedin.com/company/stakewise',
+          'https://www.coingecko.com/en/coins/stakewise',
+          'https://defillama.com/protocol/stakewise',
         ],
       }),
     },
@@ -82,6 +88,7 @@ const config: Config = {
           changefreq: 'weekly',
           priority: 0.5,
           filename: 'sitemap.xml',
+          ignorePatterns: ['/search', '/search/**'],
         },
         docs: {
           path: 'docs',
@@ -142,6 +149,41 @@ const config: Config = {
     [
       '@docusaurus/plugin-client-redirects',
       { redirects },
+    ],
+    [
+      'docusaurus-plugin-llms',
+      {
+        title: 'StakeWise Docs',
+        description: 'StakeWise is a non-custodial liquid staking protocol on Ethereum and Gnosis Chain. Stakers deposit ETH or GNO into Vaults and can mint osToken (osETH or osGNO), a liquid staking token that keeps earning staking rewards.',
+        rootContent: [
+          '- App: https://app.stakewise.io',
+          '- Website: https://stakewise.io',
+          '- Source code: https://github.com/stakewise',
+        ].join('\n'),
+        docsDir: [
+          { path: 'docs', routeBasePath: '/', label: 'Protocol, contracts and SDK' },
+          { path: 'staker', routeBasePath: 'staker', label: 'Staker guides' },
+          { path: 'operator', routeBasePath: 'operator', label: 'Operator guides' },
+        ],
+        // NatSpec mirror of v3-core: too large for llms-full.txt, the source is on GitHub
+        ignoreFiles: [ 'docs/contracts/api/**' ],
+        includeOrder: [
+          'docs/docs/stakewise-protocol/what-is-stakewise.mdx',
+          'docs/docs/overview.mdx',
+          'docs/docs/stakewise-protocol/**',
+          'docs/docs/vaults/**',
+          'docs/docs/ostoken/**',
+          'docs/docs/oracles/**',
+          'docs/docs/fees/**',
+          'docs/docs/governance/**',
+          'docs/docs/**',
+          'docs/contracts/**',
+          'docs/sdk/**',
+        ],
+        excludeImports: true,
+        removeDuplicateHeadings: true,
+        addMdExtension: false,
+      },
     ],
     [
       '@docusaurus/plugin-content-docs',

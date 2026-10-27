@@ -1,6 +1,6 @@
 ---
 title: How osToken Works
-description: Learn how osToken works.
+description: "How osToken works: minting against staked ETH or GNO, the LTV ratio, the exchange rate and soft peg, redemptions, liquidations, and burning."
 ---
 
 import Image from '@theme/IdealImage'
@@ -100,6 +100,8 @@ $$
 {\small Redeemable\ osToken = \frac{Minted\ osToken \times Exchange\ Rate - 0.9 \times Staked\ ETH}{0.1 \times Exchange\ Rate}}
 $$
 
+In plain terms: `Redeemable osToken = (Minted osToken × Exchange Rate − 0.9 × Staked ETH) ÷ (0.1 × Exchange Rate)`.
+
 Derived by solving `(Minted − R) × Rate / (Staked − R × Rate) = 0.9`, where `R` is the redeemable osToken amount.
 :::
 
@@ -172,12 +174,16 @@ The protocol calculates the **maximum unstakable ETH** as (the examples below us
 $$
 {\small MaxUnstakableETH = StakedETH - \dfrac{osTokenMinted \times ExchangeRate}{0.9}}
 $$
+
+In plain terms: `MaxUnstakableETH = StakedETH − osTokenMinted × ExchangeRate ÷ 0.9`.
 :::
 
 :::custom-notes[Formula: 99.99% LTV]
 $$
 {\small MaxUnstakableETH = StakedETH - \dfrac{osTokenMinted \times ExchangeRate}{0.9999}}
 $$
+
+In plain terms: `MaxUnstakableETH = StakedETH − osTokenMinted × ExchangeRate ÷ 0.9999`.
 :::
 
 :::custom-notes[Example: Bob's 90% LTV Position]

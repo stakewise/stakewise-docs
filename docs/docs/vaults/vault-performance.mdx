@@ -1,6 +1,6 @@
 ---
 title: Vault Performance
-description: Understand StakeWise Vault performance scoring, including proposer and attester metrics, calculation formulas, and performance grade thresholds.
+description: "How StakeWise scores Vault performance from Beacon API rewards: 80% attester and 20% proposer weighting, the final formula, and grade thresholds."
 ---
 
 import Tabs from '@theme/Tabs';
@@ -63,6 +63,8 @@ $$
 {\small \text{attester\_score} = \frac{\text{total\_rewards}}{\text{ideal\_rewards}}}
 $$
 
+In plain terms: `attester_score = total_rewards ÷ ideal_rewards`, the share of the maximum possible attestation rewards that the Vault's validators actually earned.
+
 **Where:**
 - `total_rewards` – sum of the Vault's validator rewards, from the Beacon API
 - `ideal_rewards` – sum of the corresponding ideal rewards
@@ -92,6 +94,8 @@ $$
 {\small \text{proposal\_score} = \frac{\text{proposed\_block\_count}}{\text{proposed\_block\_count} + \text{missed\_block\_count}}}
 $$
 
+In plain terms: `proposal_score = proposed_block_count ÷ (proposed_block_count + missed_block_count)`, the share of assigned blocks that the Vault's validators actually proposed.
+
 **Where:**
 - `proposed_block_count` – Number of blocks the validator successfully proposed
 - `missed_block_count` – Number of blocks the validator was assigned but missed
@@ -105,6 +109,8 @@ The overall Vault score combines the two components by weight:
 $$
 {\small \text{score} = \left( \frac{8}{10} \times \text{attester\_score} + \frac{2}{10} \times \text{proposal\_score} \right) \times 100}
 $$
+
+In plain terms: `score = (0.8 × attester_score + 0.2 × proposal_score) × 100`.
 
 The **80/20 split is StakeWise's own choice**, not the protocol's exact reward split. It keeps the metric simple while still reflecting reality: attestations do most of the work and are the steadiest signal of real performance, whereas proposals — and the MEV attached to them — are unpredictable, since a validator can be offline for five minutes and miss its only block of the week.
 

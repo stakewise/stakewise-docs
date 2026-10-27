@@ -158,6 +158,7 @@ const config: Config = {
         rootContent: [
           '- App: https://app.stakewise.io',
           '- Website: https://stakewise.io',
+          '- Blog: https://blog.stakewise.io',
           '- Source code: https://github.com/stakewise',
         ].join('\n'),
         docsDir: [

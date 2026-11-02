@@ -46,7 +46,7 @@ The command prompts for anything it needs, so all flags are optional.
 | <nobr>`--mnemonic`</nobr> | Mnemonic used to generate the validator keys. Prompted if omitted |
 | <nobr>`--vault`</nobr> | Address of the Vault to recover keystores for. Prompted if omitted |
 | <nobr>`--per-keystore-password`</nobr> | Creates a separate password file for each keystore instead of one shared `password.txt` |
-| <nobr>`--vault-first-block`</nobr> | Block the Vault was created at. Without it, `recover` scans from the Keeper's genesis block, which can take a long time |
+| <nobr>`--vault-first-block`</nobr> | Block the Vault was created at. If passed, it is used as the starting point for the event scan. If not passed, the network-wide checkpoint block is used |
 | <nobr>`--no-confirm`</nobr> | Skips confirmation prompts |
 | <nobr>`--execution-endpoints`</nobr> | Comma-separated API endpoints for execution nodes. Prompted if omitted |
 | <nobr>`--consensus-endpoints`</nobr> | Comma-separated API endpoints for consensus nodes. Prompted if omitted |

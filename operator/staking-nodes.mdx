@@ -28,8 +28,8 @@ Your execution node must be fully synced and running. Any client that supports t
 
 The Operator Service reads event logs from the execution client. How much history your node must keep depends on which of two modes you run it in:
 
-- **Pruned mode** — keeps event logs from a recent network checkpoint onward. Core Operator Service functionality works in this mode.
-- **Full mode** — keeps event logs from the Keeper contract genesis block onward. Required for the secondary commands that scan the full event history: [`recover`](/operator/manage-validators/recover-validators), [`validators-exit`](/operator/manage-validators/manually-exit-validators), and [`consolidate`](/operator/manage-validators/consolidate-validators).
+- **Pruned mode** — keeps event logs from a recent network checkpoint onward. All Operator Service functionality works in this mode.
+- **Full mode** — keeps event logs from the Keeper contract genesis block onward. Required for Operator Service versions earlier than v5.1.2.
 
 Retain receipts and logs from at least the following blocks:
 
@@ -42,7 +42,7 @@ Retain receipts and logs from at least the following blocks:
 Any block at or below the value in the table works. The pruned-mode values are rounded down from the actual checkpoint to leave a safety margin.
 
 :::custom-warning[Operator Service version]
-Pruned mode requires Operator Service v5.1.1 or later. Earlier versions need full mode.
+Pruned mode requires Operator Service v5.1.2 or later. Earlier versions need full mode.
 :::
 
 ### Configure pruning

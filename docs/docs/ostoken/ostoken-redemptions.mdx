@@ -19,22 +19,26 @@ Redemption burns the missing portion of the minter's debt against their collater
 
 <Image img={require('./img/redemptions.png')} alt="osToken redemption flow between the Operator Service and the OsTokenRedeemer contract" />
 
-The redemption flow is coordinated between five actors: **osToken holders**, who supply the osToken to redeem by entering the redeemer's exit queue; the [Operator Service ↗](https://github.com/stakewise/v3-operator), which computes who can be redeemed and by how much, and executes the redemptions on-chain as the redeemer's `positionsManager`; **StakeWise**, which authorizes the list of redeemable positions on-chain; the [Oracle network](/docs/oracles/oracle-duties), which keeps Vault state current and forces validator exits when queued redemptions go unfilled; and the [OsTokenRedeemer ↗](https://etherscan.io/address/0x9Fc8C7F3C1ff6d0DF39EcB5870884d59777Ea2Bb) contract, which verifies and settles them.
+The redemption flow is coordinated between six actors: **osToken holders**, who supply the osToken to redeem by entering the redeemer's exit queue; the StakeWise backend, which prepares and stages eligible positions and finalizes them after review; **StakeWise**, which authorizes the list of redeemable positions on-chain; the [Operator Service ↗](https://github.com/stakewise/v3-operator), which processes authorized positions as the redeemer’s `positionsManager`;  the [Oracle network](/docs/oracles/oracle-duties), which keeps Vault state current and forces validator exits when queued redemptions go unfilled; and the [OsTokenRedeemer ↗](https://etherscan.io/address/0x9Fc8C7F3C1ff6d0DF39EcB5870884d59777Ea2Bb) contract, which verifies and settles them.
 
-The flow draws on two independent tracks that converge once both are ready: the Operator Service publishes the list of redeemable positions (Step 1), while osToken holders queue osToken for redemption (Step 2). The remaining steps consume both. In full, it runs in eight steps:
+The flow draws on two independent tracks that converge once both are ready: the backend prepares the list of redeemable positions for confirmation and on-chain authorization (Step 1), while osToken holders queue osToken for redemption (Step 2). The remaining steps consume both. In full, it runs in eight steps:
 
-### 1. Operator Service Computes the Redeemable Positions
+### 1. Backend Computes the Redeemable Positions
 
-The Operator Service uploads the list of eligible positions to [IPFS ↗](https://ipfs.stakewise.io/ipfs/bafkreihbwhyaqskcczhuanu2nbdgdlfbwfwgbirue6kvlw4nrc5d2snqxa) and builds a Merkle tree that commits to each entry. StakeWise then submits the root and IPFS hash on-chain to authorize the listed positions for redemption.
+The StakeWise backend prepares daily snapshots of redeemable positions, sorted by LTV descending. For each redemption round, eligible positions are selected from the top of the list until their cumulative redeemable amount reaches the configured batch size—1,500 osETH by default, configurable by the StakeWise DAO—with the last position partially included if necessary. Before their position is staged, minters can voluntarily reduce their LTV by adding collateral or burning osETH to repay debt, potentially moving below the cutoff. The change must be reflected in the snapshot used for selection; the candidates list does not update immediately. Selected positions enter a staged review period, three days by default, configurable by the StakeWise DAO. During this period, adding collateral does not remove a position from the list, but minters can voluntarily burn osETH to repay their debt: partial repayment can reduce the amount redeemable, while full repayment prevents the position from being redeemed. After the review period, the backend checks the remaining debt and finalizes the list, reducing or removing positions as needed. The round becomes confirmed following admin confirmation.
+
+Once the list is confirmed, it is uploaded to [IPFS ↗](https://ipfs.stakewise.io/ipfs/bafkreihbwhyaqskcczhuanu2nbdgdlfbwfwgbirue6kvlw4nrc5d2snqxa), and a Merkle tree is built that commits to each entry. StakeWise then submits the root and IPFS hash on-chain to authorize the listed positions for redemption.
 
 :::custom-notes[Under the Hood]
-The Operator Service computes the redeemable positions in five steps:
+The backend computes the redeemable positions in five steps:
 
 1. Pin the snapshot to a finalized block so all the following steps read the same on-chain state.
 2. Fetch all allocators (addresses that have minted osToken) from the subgraph.
 3. Skip [Boost](/docs/vaults/boost) positions. Each Boost leverage position has its own proxy contract that holds the osToken on the user's behalf, so those proxy addresses are removed from the minters list, and each user's leveraged shares are subtracted from their balance to avoid double-counting.
-4. Compute `kept` shares — osToken in trackable locations: wallet balances on the Vault's own chain and DeFi protocols on that chain indexed by DeBank or Rabby. Anything held elsewhere, including on other chains, is treated as missing.
-5. Compute `redeemable = minted − kept`, split it across the user's Vaults proportionally to where they minted, and sort by LTV descending then amount descending so the riskiest positions are drawn down first.
+4. Compute `kept` shares from the minter’s wallet balance, with Boost exposure accounted for separately.
+5. Compute the remaining candidate amount, split it across the user’s Vaults proportionally to their post-Boost minted positions, and sort by LTV descending then amount descending. Cap the resulting amounts using traced osToken sales net of subsequent purchases, plus traced entries into the redeemer’s exit queue.
+
+A position must also appear in an eligibility snapshot at least 20 hours older before it can be staged. The candidates countdown indicates the expected next snapshot refresh, rather than a guaranteed waiting period before staging.
 :::
 
 ### 2. osToken Enters the Queue
@@ -53,7 +57,7 @@ It then checks whether there's enough queued osToken to submit a new redemption.
 
 ### 4. Operator Service Submits a Redemption
 
-The Operator Service downloads the published list from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then refreshes the state of the target Vaults in a separate multicall transaction, builds a Merkle multiproof against the published root, and calls `redeemOsTokenPositions` on `OsTokenRedeemer` for each position.
+The Operator Service downloads the confirmed list authorized on-chain from IPFS, picks a batch of eligible positions, and decides how much to redeem from each. If a target Vault is a MetaVault without enough liquidity on hand, the Operator Service first pulls assets up from sub-vaults via a separate `redeemSubVaultsAssets` transaction. It then refreshes the state of the target Vaults in a separate multicall transaction, builds a Merkle multiproof against the published root, and calls `redeemOsTokenPositions` on `OsTokenRedeemer` for each position.
 
 The state refresh is only possible because the Oracles have voted on and signed a rewards root: a Vault that has fallen more than one reward update behind cannot be redeemed from until it is harvested against that root. See [Reward Distribution](/docs/oracles/oracle-duties#reward-distribution).
 

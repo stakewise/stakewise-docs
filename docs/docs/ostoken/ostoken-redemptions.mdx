@@ -3,8 +3,6 @@ title: osToken Redemptions
 description: "osToken redemptions convert osToken back to ETH or GNO at the protocol exchange rate: which positions are redeemable, the exit queue, the flow."
 ---
 
-import Image from '@theme/IdealImage';
-
 # osToken Redemptions
 
 Redemptions are an in-protocol peg-maintenance mechanism that converts osToken back to ETH or GNO at the protocol [exchange rate](/docs/ostoken/how-ostoken-works#exchange-rate).
@@ -16,8 +14,6 @@ If the minter transfers the osToken away, the minter's on-chain debt in the Vaul
 Redemption burns the missing portion of the minter's debt against their collateral and releases the corresponding ETH/GNO at the protocol exchange rate.
 
 ## How Redemptions Work
-
-<Image img={require('./img/redemptions.png')} alt="osToken redemption flow between the Operator Service and the OsTokenRedeemer contract" />
 
 The redemption flow is coordinated between six actors: **osToken holders**, who supply the osToken to redeem by entering the redeemer's exit queue; the StakeWise backend, which prepares and stages eligible positions and finalizes them after review; **StakeWise**, which authorizes the list of redeemable positions on-chain; the [Operator Service ↗](https://github.com/stakewise/v3-operator), which processes authorized positions as the redeemer’s `positionsManager`;  the [Oracle network](/docs/oracles/oracle-duties), which keeps Vault state current and forces validator exits when queued redemptions go unfilled; and the [OsTokenRedeemer ↗](https://etherscan.io/address/0x9Fc8C7F3C1ff6d0DF39EcB5870884d59777Ea2Bb) contract, which verifies and settles them.
 
